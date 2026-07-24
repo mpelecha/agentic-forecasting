@@ -259,7 +259,7 @@ def _build_wti_analyst_instruction_factors_v2() -> str:
         "the test for inclusion is durability, not topic; do not default to a "
         "fixed checklist.\n"
         "- **Transitory factors**: macro, financial, or geopolitical factors "
-        "that do NOT meet that decade-plus durability bar — situational "
+        "that do NOT meet that five-year-plus durability bar — situational "
         "developments that could plausibly resolve, reverse, or become "
         "irrelevant within months. Identify 1-2 from the current search "
         "context. For each, assign an impact score (low / medium / high) "
@@ -374,7 +374,7 @@ def _build_wti_analyst_instruction_scenario_schema() -> str:
         "matter in five years or more. The test for inclusion is durability, "
         "not topic; do not default to a fixed checklist.\n"
         "- **Transitory factors** (1-2 entries, `tier: \"transitory\"`): macro, "
-        "financial, or geopolitical factors that do NOT meet that decade-plus "
+        "financial, or geopolitical factors that do NOT meet that five-year-plus "
         "durability bar — situational developments that could plausibly "
         "resolve, reverse, or become irrelevant within months. Each requires "
         "an `impact_score` (low/medium/high) reflecting how large a price "
@@ -709,7 +709,7 @@ class WtiFactor(BaseModel):
     name: str = Field(min_length=1, description="Short factor label.")
     category: Literal["macro", "financial", "geopolitical"] = Field(description="Broad category type.")
     tier: Literal["core", "transitory"] = Field(
-        description="'core' for decade-plus durable themes; 'transitory' for situational developments."
+        description="'core' for five-year-plus durable themes; 'transitory' for situational developments."
     )
     impact_score: Literal["low", "medium", "high"] | None = Field(
         default=None, description="Required for transitory factors; omit for core factors."
