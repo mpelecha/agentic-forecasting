@@ -696,7 +696,7 @@ class WtiFactor(BaseModel):
         Broad category type — deliberately generic; the model chooses the
         specific factor freely within these three types.
     tier : Literal["core", "transitory"]
-        ``"core"`` for themes durable enough to plausibly matter in ten
+        ``"core"`` for themes durable enough to plausibly matter in five
         years or more; ``"transitory"`` for situational developments that
         could resolve, reverse, or become irrelevant within months.
     impact_score : Literal["low", "medium", "high"] or None
