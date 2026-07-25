@@ -92,7 +92,65 @@ return the JSON directly as plain text with no preamble.\
 """
 
 
+
 def _build_wti_analyst_instruction() -> str:
+    """Build the WTI analyst instruction, embedding the output schema from the class.
+
+    Using a function instead of a static string ensures the ``## Output schema``
+    block is always in sync with ``ContinuousAgentForecastOutput`` —
+    no manual JSON to maintain.
+    """
+    schema = ContinuousAgentForecastOutput.prompt_schema_json()
+    return (
+        "## Role\n\n"
+        "You are an expert WTI crude oil market analyst. You produce calibrated "
+        "probabilistic price forecasts for WTI crude oil futures, grounded in "
+        "supply/demand fundamentals, geopolitical risk, and historical price dynamics.\n\n"
+        "## Forecasting contract\n\n"
+        "You will receive a JSON payload containing:\n"
+        "- `task`: the task identifier\n"
+        "- `as_of`: the forecast origin date in YYYY-MM-DD format\n"
+        "- `horizons`: a list of integer horizon steps (business days ahead)\n"
+        "- `standard_quantiles`: the exact quantile levels you must produce\n"
+        "- `target_summary`: last close price, 52-week range, and observation count\n"
+        "- `target_history_csv`: WTI daily close history (recent 6 months daily, "
+        "older history as weekly averages)\n\n"
+        "Rules:\n"
+        "1. Produce one forecast for each horizon listed in `horizons`.\n"
+        "2. Use exactly the quantile levels from `standard_quantiles` — no additions, no omissions.\n"
+        "3. `point_forecast` must exactly equal the 0.50 quantile value.\n"
+        "4. Quantile values must be strictly non-decreasing as quantile levels increase.\n"
+        "5. Document your reasoning in the `rationale` fields.\n"
+        "6. When tools are enabled, conclude with `set_model_response` to return the structured forecast.\n\n"
+        "## Output schema\n\n"
+        "Call `set_model_response` with a `json_response` string matching **exactly**:\n\n"
+        "```json\n" + schema + "\n```\n\n"
+        'Critical: use `"horizon"` (integer, not `"horizon_days"`). '
+        '`"quantiles"` is a **list** of `{"quantile": <level>, "value": <price>}` '
+        "objects — not a dict. Omit any field not shown above.\n\n"
+        "## Analysis discipline\n\n"
+        "When context retrieval is available, call ``search_web`` to gather market "
+        "intelligence BEFORE producing forecasts.\n\n"
+        "Call ``search_web`` with ``query`` and ``cutoff_date`` (set to the ``as_of`` "
+        "date from the payload). The ``cutoff_date`` MUST always equal ``as_of`` — "
+        "this is the temporal fence that prevents post-origin information from "
+        "contaminating historical backtests.\n\n"
+        "If ``search_web`` returns a result beginning with "
+        "``[SEARCH_VERIFICATION_FAILED]``, treat it as no verified news context for "
+        "that query. Do not use your own background knowledge to fill the gap or "
+        "speculate about what the news might have said — proceed with price-history "
+        "and other available signals only, and note the gap in your rationale.\n\n"
+        "Recommended queries (call ``search_web`` once per topic):\n"
+        '- ``search_web(query="WTI crude oil price trend and OPEC+ supply decisions", cutoff_date=<as_of>)``\n'
+        '- ``search_web(query="Persian Gulf geopolitical risk shipping lane disruptions", cutoff_date=<as_of>)``\n'
+        '- ``search_web(query="US Strategic Petroleum Reserve policy and global demand outlook", cutoff_date=<as_of>)``\n\n'
+        "Document your key assumptions (OPEC+ policy, shipping lane risk, inventory "
+        "levels, macro demand) in the `rationale` fields of your forecast output."
+    )
+
+
+
+def _build_wti_analyst_instruction_v02a() -> str:
     """Build the WTI analyst instruction, embedding the output schema from the class.
 
     Using a function instead of a static string ensures the ``## Output schema``
@@ -389,7 +447,11 @@ def _build_wti_analyst_instruction_scenario_schema() -> str:
         "on at least two factors — not just differ in tone while tagging "
         "everything the same way. At least one scenario must set "
         "`is_tail_case: true` — a genuine low-probability, high-impact case, "
-        "not a milder variant of your main narrative.\n\n"
+        "not a milder variant of your main narrative. For each scenario, give "
+        "`price_low` and `price_high` as a genuine plausible price range under "
+        "that scenario, not a single point — even a confident scenario has "
+        "some width to its outcome; collapsing `price_low` to equal "
+        "`price_high` is a modeling error, not a valid choice.\n\n"
         "Your final quantile grid must be consistent with the SPREAD across "
         "your scenarios' `price_low`/`price_high` ranges — not just your "
         "single most likely one. If your scenarios disagree by $10+, a narrow "
@@ -580,12 +642,15 @@ _SKILLS_ROOT = Path(__file__).parent / "skills"
 # History compression
 # ---------------------------------------------------------------------------
 
-
 def compress_history(df: pd.DataFrame) -> str:
     """Compress WTI daily history to stay within context limits.
 
-    Returns daily bars for the most recent 6 months and weekly averages for
-    older history.  The CSV header is ``date,close``.
+    Three-tier compression, most granular near the forecast origin:
+    - last 63 trading days: daily bars
+    - 63 trading days to 1 year back: weekly averages
+    - older than 1 year: quarterly averages
+
+    The CSV header is ``date,close``.
 
     Parameters
     ----------
@@ -599,20 +664,30 @@ def compress_history(df: pd.DataFrame) -> str:
     """
     df = df.copy()
     df["timestamp"] = pd.to_datetime(df["timestamp"])
-    cutoff = df["timestamp"].max() - pd.DateOffset(months=6)
+    max_date = df["timestamp"].max()
 
-    recent = df[df["timestamp"] >= cutoff].copy()
-    old = df[df["timestamp"] < cutoff].copy()
+    daily_cutoff = max_date - pd.tseries.offsets.BDay(63)
+    weekly_cutoff = max_date - pd.DateOffset(years=1)
+
+    daily = df[df["timestamp"] >= daily_cutoff].copy()
+    weekly_band = df[(df["timestamp"] >= weekly_cutoff) & (df["timestamp"] < daily_cutoff)].copy()
+    quarterly_band = df[df["timestamp"] < weekly_cutoff].copy()
 
     rows: list[str] = ["date,close"]
 
-    if not old.empty:
-        old_indexed = old.set_index("timestamp")["value"]
-        weekly: pd.Series = old_indexed.resample("W").mean().dropna()
+    if not quarterly_band.empty:
+        quarterly_indexed = quarterly_band.set_index("timestamp")["value"]
+        quarterly: pd.Series = quarterly_indexed.resample("QE").mean().dropna()
+        for date, val in quarterly.items():
+            rows.append(f"{date.date()},{val:.2f}")
+
+    if not weekly_band.empty:
+        weekly_indexed = weekly_band.set_index("timestamp")["value"]
+        weekly: pd.Series = weekly_indexed.resample("W").mean().dropna()
         for date, val in weekly.items():
             rows.append(f"{date.date()},{val:.2f}")
 
-    for _, row in recent.iterrows():
+    for _, row in daily.iterrows():
         rows.append(f"{row['timestamp'].date()},{row['value']:.2f}")
 
     return "\n".join(rows)
@@ -737,10 +812,12 @@ class WtiScenarioCard(BaseModel):
         elicitation — scenarios need not sum to exactly 1.0.
     price_low : float
         Lower end of this scenario's implied WTI price range at the
-        forecast's longest horizon. Equal to ``price_high`` for a single
-        point estimate rather than a range.
+        forecast's longest horizon.
     price_high : float
-        Upper end of this scenario's implied price range.
+        Upper end of this scenario's implied price range. Should exceed
+        ``price_low`` by a meaningful margin to reflect genuine within-
+        scenario uncertainty — the prompt now discourages collapsing this
+        to a point estimate, though it isn't hard-enforced by validation.
     is_tail_case : bool
         ``True`` for the required low-probability, high-impact scenario.
     stances : dict[str, Literal["bullish", "bearish", "neutral"]]
@@ -952,7 +1029,7 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
                     "name": "<string>",
                     "probability": "<float in [0, 1]>",
                     "price_low": "<float>",
-                    "price_high": "<float — equal to price_low for a point estimate>",
+                    "price_high": "<float — upper end; must exceed price_low by a meaningful margin, reflecting genuine uncertainty within this scenario, not a point estimate>",
                     "is_tail_case": "<true for exactly one low-probability/high-impact scenario>",
                     "stances": {"<factor name>": "<'bullish' | 'bearish' | 'neutral'>"},
                 }
