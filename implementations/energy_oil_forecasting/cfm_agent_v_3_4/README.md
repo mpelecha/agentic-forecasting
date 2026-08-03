@@ -1,5 +1,12 @@
 ## CFM Agent v3.4
 
+> **Status: proposed, not approved.** This package changes files that *CFM
+> Agent v3.3 — Prompt and Skill Work Guidelines* protects: `schemas.py`,
+> `outputs.py`, `policy/constrained.py`, `predictor.py`, and `config.py`. Under
+> those guidelines it belongs to the "separately approved development task"
+> lane, not the prompt-work lane. Read `PROPOSAL.md` first: it states each
+> change, its cost, and a suggested adoption order. v3.3 itself is untouched.
+
 Self-contained successor to v3.3. V3.4 keeps v3.3's numerical architecture,
 graduated evidence policy, and sanitizer unchanged, and merges three ideas from
 the v2.2 event-scoring line: a pillar boundary, a competing-scenario contract,
