@@ -159,6 +159,27 @@ class WtiEventScoreOutput(BaseModel):
             "scenarios must genuinely disagree, not just differ in tone."
         )
 
+    @model_validator(mode="after")
+    def _scenarios_are_not_duplicates(self) -> "WtiEventScoreOutput":
+        """Reject scenarios identical in both stances and conditional impact.
+
+        Same stances alone are allowed — an intensity ladder (de-escalation /
+        sustained / escalation) legitimately shares stances and differs only
+        in impact_score. Identical on both axes means the scenario is a
+        reworded copy, not a different storyline.
+        """
+        seen: dict[tuple, str] = {}
+        for scenario in self.scenarios:
+            key = (tuple(sorted(scenario.stances.items())), scenario.impact_score)
+            if key in seen:
+                raise ValueError(
+                    f"Scenarios '{seen[key]}' and '{scenario.name}' have identical stances and "
+                    "identical impact_score — differentiate the storylines by stance or by "
+                    "conditional impact."
+                )
+            seen[key] = scenario.name
+        return self
+
     def calibration_features(self) -> dict[str, float]:
         """Return the flat numeric features the calibration layer consumes.
 

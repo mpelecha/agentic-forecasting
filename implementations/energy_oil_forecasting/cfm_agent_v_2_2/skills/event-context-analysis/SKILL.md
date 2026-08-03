@@ -22,22 +22,40 @@ categories:
   infrastructure.
 - `policy`: domestic government action — SPR releases and refills,
   drilling rules, tariffs, price caps.
-- `demand_expectations`: headline shocks to expected demand — stimulus or
-  lockdown news, recession fear waves — before any indicator prints.
+- `demand_expectations`: sudden headline shocks to expected demand — a
+  stimulus announcement, a lockdown, a fast-moving recession scare.
+  Agency demand forecasts and their revisions (IEA, EIA, OPEC) are NOT
+  in this category — they are fundamentals data, not news events.
 
-Do not restate a driver already covered by structured data: dollar index,
-VIX, oil curve contango, cross-commodity returns, EIA inventory, CFTC
-positioning. Never derive a factor from the price history itself. If a
-candidate factor is just structured data restated in words, drop it.
+Do not restate a driver another pillar already covers. Two banned
+classes, not just the named examples:
+
+- Structured market data: dollar index, VIX, oil curve contango,
+  cross-commodity returns, CFTC positioning, and the price history
+  itself.
+- Supply/demand statistics and agency publications: EIA, IEA, or OPEC
+  inventory levels, production and supply figures, demand forecasts and
+  their revisions, and any number taken from a weekly or monthly report.
+
+The boundary test for every candidate factor: it must be an event or a
+situation, not a statistic or a forecast. Ask: "Would the quant pillar
+or the physical fundamentals pillar eventually see this in its input
+data?" If yes, drop the factor.
 
 ## Search strategy
 
-1. Start broad: search current market drivers as of the cutoff date.
+1. Search for current *events* that could move oil — conflict, storms,
+   strikes, sanctions, policy action — as of the cutoff date. Do not
+   search for "market drivers" or "market outlook": those queries return
+   market-wrap articles dominated by supply/demand framing.
 2. Run 1-2 follow-up searches on whatever the first search actually
    surfaced as relevant — do not default to a fixed topic list.
 3. Actively search for sources that disagree with each other, and for a
    past episode that resembles the current situation. Report both sides
    when sources conflict; do not report only the majority view.
+4. Use a market-overview article only to discover that an event exists.
+   Never cite one as factor evidence — verify each event from primary
+   reporting about that specific event.
 
 ## Scoring rubric
 
@@ -83,5 +101,11 @@ scores to prices.
 4. Exactly the tail role: at least one scenario sets `is_tail_case: true`.
    A tail case must be genuinely low-probability (never the most likely
    scenario) and genuinely high-impact (|impact_score| of 2 or 3).
+5. An intensity ladder (de-escalation / sustained / escalation) is a
+   valid scenario set: those scenarios may share stances, but must then
+   differ in impact_score — the mainline is not the most extreme case,
+   so do not give it the same score as the tail. Two scenarios that are
+   identical in both stances and impact_score are one scenario written
+   twice, and will be rejected.
 
 **No scripts in this skill. Do not call `run_skill_script`.**

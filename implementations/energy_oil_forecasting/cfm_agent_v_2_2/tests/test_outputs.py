@@ -231,3 +231,18 @@ def test_scenario_probability_must_be_positive() -> None:
                 "rationale": "Zero-probability scenarios are not allowed.",
             }
         )
+
+
+def test_duplicate_scenarios_are_rejected() -> None:
+    raw = copy.deepcopy(valid_output())
+    raw["scenarios"][0]["stances"] = dict(raw["scenarios"][1]["stances"])
+    raw["scenarios"][0]["impact_score"] = raw["scenarios"][1]["impact_score"]
+    with pytest.raises(ValidationError, match="identical stances"):
+        WtiEventScoreOutput.model_validate(raw)
+
+
+def test_intensity_ladder_with_shared_stances_is_allowed() -> None:
+    raw = copy.deepcopy(valid_output())
+    raw["scenarios"][2]["stances"] = dict(raw["scenarios"][1]["stances"])
+    raw["scenarios"][2]["impact_score"] = -3  # same stances, different impact — valid ladder
+    assert WtiEventScoreOutput.model_validate(raw)
