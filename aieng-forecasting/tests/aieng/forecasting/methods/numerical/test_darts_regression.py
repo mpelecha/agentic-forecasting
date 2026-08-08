@@ -111,3 +111,54 @@ def test_lightgbm_with_covariates(svc: DataService, task: ForecastingTask) -> No
     ).predict(task, svc.context(AS_OF))
     assert len(preds) == 1, "Single-horizon task should yield exactly one Prediction."
     _assert_valid_probabilistic(preds[0], "darts_lightgbm_cov")
+
+
+# ---------------------------------------------------------------------------
+# Recipe seam: variant_tag keeps distinct covariate panels off each other's cache
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("covariates", "variant_tag", "expected_id"),
+    [
+        (None, None, "darts_lightgbm"),
+        (["cov_a"], None, "darts_lightgbm_cov"),
+        (["cov_a"], "expanded", "darts_lightgbm_cov_expanded"),
+        (None, "expanded", "darts_lightgbm_expanded"),
+    ],
+)
+def test_lightgbm_predictor_id_folds_variant_tag(
+    covariates: list[str] | None,
+    variant_tag: str | None,
+    expected_id: str,
+) -> None:
+    """``variant_tag`` is folded into ``predictor_id`` after the covariate suffix.
+
+    ``cached_multi_backtest`` keys its cache on ``predictor_id`` alone (plus
+    spec and task), so two covariate panels sharing an id would silently reuse
+    each other's results.  The first two rows pin the pre-existing ids so
+    callers that never pass a tag keep their cached backtests valid.
+    """
+    predictor = DartsLightGBMPredictor(covariate_series_ids=covariates, variant_tag=variant_tag)
+    assert predictor.predictor_id == expected_id
+
+
+def test_lightgbm_variant_tag_reaches_prediction_metadata(svc: DataService, task: ForecastingTask) -> None:
+    """A tagged run records its recipe in metadata; an untagged run omits the key."""
+    tagged = DartsLightGBMPredictor(
+        lags=12,
+        lags_past_covariates=12,
+        covariate_series_ids=["cov_a", "cov_b"],
+        num_samples=50,
+        variant_tag="expanded",
+    ).predict(task, svc.context(AS_OF))
+    assert tagged[0].metadata["variant_tag"] == "expanded"
+    _assert_valid_probabilistic(tagged[0], "darts_lightgbm_cov_expanded")
+
+    untagged = DartsLightGBMPredictor(
+        lags=12,
+        lags_past_covariates=12,
+        covariate_series_ids=["cov_a", "cov_b"],
+        num_samples=50,
+    ).predict(task, svc.context(AS_OF))
+    assert "variant_tag" not in untagged[0].metadata

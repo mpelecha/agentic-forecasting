@@ -19,6 +19,16 @@ class CfmAgentSettings(BaseModel):
 
     model_num_samples: int = Field(default=200, ge=50, le=5_000)
     lightgbm_lags: int = Field(default=21, ge=3)
+    # Held at 21 (one trading month) deliberately, and reviewed when the
+    # expanded covariate panel was added in NB04. Mixing weekly/monthly series
+    # into a daily lag window is redundant rather than harmful: a monthly series
+    # expanded onto business days is constant across all 21 lags, so it
+    # contributes ~21 near-identical columns that dilute LightGBM's per-split
+    # feature sampling without adding information. It is not a sample-size
+    # problem — the panel spans thousands of aligned business days. Revisit
+    # against measured feature importances rather than lowering it pre-emptively;
+    # note this setting drives the CFM agent only, not the NB04 backtest, which
+    # carries its own LAGS constant.
     lightgbm_covariate_lags: int = Field(default=21, ge=3)
     kalman_dim_x: int = Field(default=2, ge=1, le=20)
     max_data_rows_per_series: int = Field(default=520, ge=1, le=5_000)

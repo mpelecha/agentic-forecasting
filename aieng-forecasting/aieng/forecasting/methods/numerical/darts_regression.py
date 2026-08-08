@@ -337,6 +337,17 @@ class DartsLightGBMPredictor(Predictor):
         :class:`darts.models.LightGBMModel`.  Use this to tune tree depth,
         leaf count, regularisation, etc.  ``verbose=-1`` is always injected
         unless the caller overrides it.
+    variant_tag : str or None
+        Optional short identifier for a covariate recipe (e.g. ``"expanded"``).
+        When set, it is folded into :attr:`predictor_id` so cached backtests
+        and leaderboard rows keep recipes distinct — necessary because
+        :func:`~aieng.forecasting.evaluation.artifacts.cached_multi_backtest`
+        keys its cache files on ``predictor_id`` alone (plus spec and task),
+        so two different covariate panels sharing one id would silently reuse
+        each other's results.  Mirrors
+        :attr:`~aieng.forecasting.methods.llm_processes.base.LLMPredictorConfig.variant_tag`.
+        ``None`` (default) preserves the bare identifier used by existing
+        callers.
 
     Notes
     -----
@@ -352,6 +363,7 @@ class DartsLightGBMPredictor(Predictor):
         covariate_series_ids: list[str] | None = None,
         num_samples: int = 500,
         lgbm_kwargs: dict[str, Any] | None = None,
+        variant_tag: str | None = None,
     ) -> None:
         self._lags = lags
         self._lags_past_covariates = lags_past_covariates
@@ -360,12 +372,25 @@ class DartsLightGBMPredictor(Predictor):
         kwargs = dict(lgbm_kwargs or {})
         kwargs.setdefault("verbose", -1)
         self._lgbm_kwargs = kwargs
+        self._variant_tag = variant_tag
 
     @property
     def predictor_id(self) -> str:
-        """Return a stable identifier, suffixed ``_cov`` when covariates are used."""
+        """Return a stable identifier folding covariate use and any variant tag.
+
+        Format:
+
+        - ``darts_lightgbm`` — univariate, no variant tag.
+        - ``darts_lightgbm_cov`` — covariates, no variant tag.
+        - ``darts_lightgbm_cov_<variant_tag>`` — covariates plus a variant tag,
+          e.g. ``darts_lightgbm_cov_expanded``.
+
+        Callers that do not pass ``variant_tag`` keep their existing id
+        unchanged, so previously cached backtests stay valid.
+        """
         suffix = "_cov" if self._covariate_series_ids else ""
-        return f"darts_lightgbm{suffix}"
+        tag = f"_{self._variant_tag}" if self._variant_tag else ""
+        return f"darts_lightgbm{suffix}{tag}"
 
     def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
         """Produce probabilistic LightGBM forecasts for every horizon in the task."""
@@ -388,10 +413,14 @@ class DartsLightGBMPredictor(Predictor):
             num_samples=self._num_samples,
         )
 
+        metadata: dict[str, Any] = {"covariates": self._covariate_series_ids or []}
+        if self._variant_tag is not None:
+            metadata["variant_tag"] = self._variant_tag
+
         return _build_predictions(
             predictor_id=self.predictor_id,
             task=task,
             context=context,
             samples_by_horizon=samples_by_horizon,
-            metadata={"covariates": self._covariate_series_ids or []},
+            metadata=metadata,
         )
