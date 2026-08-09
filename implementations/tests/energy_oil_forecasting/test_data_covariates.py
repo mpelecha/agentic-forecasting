@@ -6,9 +6,12 @@ point-in-time discipline of the new FRED/EIA covariates is verifiable offline.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 import pytest
 from aieng.forecasting.data.features import business_daily_expand_from_releases
+from energy_oil_forecasting import data as data_module
 from energy_oil_forecasting.data import (
     _DURABLE_GOODS_RELEASE_BDAYS_AFTER_MONTH_END,
     _INDPRO_RELEASE_BDAYS_AFTER_MONTH_END,
@@ -196,3 +199,40 @@ def test_monthly_expansion_hides_the_value_until_its_release() -> None:
     january_release = stamped["released_at"].iloc[0]
     before_release = feature[feature["timestamp"] < january_release]
     assert not (before_release["value"] == 100.0).any(), "January value leaked before its release date."
+
+
+# ---------------------------------------------------------------------------
+# Yahoo weekend bars vs. the freq="B" TimeSeries grid
+# ---------------------------------------------------------------------------
+
+
+def test_yahoo_loader_strips_stray_weekend_bars(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A stray Yahoo weekend session must never reach a ``freq="B"`` covariate.
+
+    ``RB=F`` carries a real Sunday bar on 2005-09-25.  Darts raises
+    ``Could not correctly fill missing dates with the observed/passed frequency
+    'B'`` when any input stamp is off the Mon-Fri grid, so one bad bar breaks
+    every backtest origin whose cutoff includes it.
+    """
+    raw = pd.DataFrame(
+        {
+            "timestamp": pd.to_datetime(["2005-09-23", "2005-09-25", "2005-09-26"]),
+            "value": [1.9, 1.95, 2.0],
+            "released_at": pd.NaT,
+        }
+    )
+
+    class _StubAdapter:
+        def __init__(self, *args: object, **kwargs: object) -> None:
+            pass
+
+        def fetch(self) -> pd.DataFrame:
+            return raw.copy()
+
+    monkeypatch.setattr(data_module, "YFinanceDailyAdapter", _StubAdapter)
+    frame = data_module._load_yahoo_close_frame("RB=F", cache_dir=Path("unused"), start="2004-01-01")
+
+    stamps = pd.to_datetime(frame["timestamp"])
+    assert pd.Timestamp("2005-09-25") not in set(stamps), "Sunday bar survived the loader."
+    assert (stamps.dt.dayofweek < 5).all()
+    assert len(frame) == 2

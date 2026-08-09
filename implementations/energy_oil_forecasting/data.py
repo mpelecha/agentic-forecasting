@@ -274,12 +274,22 @@ def _load_yahoo_close_frame(
     cache_dir: Path,
     start: str,
 ) -> pd.DataFrame:
-    """Fetch a daily adjusted-close ``(timestamp, value)`` frame from Yahoo Finance."""
+    """Fetch a daily adjusted-close ``(timestamp, value)`` frame from Yahoo Finance.
+
+    Weekend bars are stripped.  Yahoo occasionally emits a stray Saturday or
+    Sunday session for futures contracts — ``RB=F`` carries one on 2005-09-25,
+    a Sunday.  Darts builds every covariate with ``freq="B"`` and raises
+    ``Could not correctly fill missing dates`` if any input stamp is off that
+    grid, so a single bad bar anywhere in history fails every origin whose
+    cutoff includes it.  The FRED loaders already guard this way; the Yahoo
+    path needs the same treatment.
+    """
     adapter = YFinanceDailyAdapter(ticker, field="Adj Close", start=start, cache_dir=cache_dir)
     raw = adapter.fetch()
     frame = raw[["timestamp", "value"]].copy().sort_values("timestamp").reset_index(drop=True)
     frame["value"] = pd.to_numeric(frame["value"], errors="coerce")
-    return frame.dropna(subset=["value"]).reset_index(drop=True)
+    frame = frame.dropna(subset=["value"]).reset_index(drop=True)
+    return drop_weekend_timestamp_rows(frame)
 
 
 def _load_fred_frame(fred_id: str, *, cache_dir: Path) -> pd.DataFrame:
