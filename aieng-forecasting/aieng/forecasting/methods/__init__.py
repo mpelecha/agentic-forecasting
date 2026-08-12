@@ -61,6 +61,7 @@ from .numerical import (
     DartsKalmanForecasterPredictor,
     DartsLightGBMPredictor,
     DartsLinearRegressionPredictor,
+    ErrorCorrectionRegressionPredictor,
 )
 
 
@@ -75,6 +76,7 @@ __all__ = [
     "DartsKalmanForecasterPredictor",
     "DartsLightGBMPredictor",
     "DartsLinearRegressionPredictor",
+    "ErrorCorrectionRegressionPredictor",
     "HistoricalFrequencyPredictor",
     "LastValuePredictor",
     "QuantileGridLLMPredictor",

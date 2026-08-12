@@ -39,6 +39,11 @@ llm = [
 numerical = [
     "darts>=0.44.1",
     "lightgbm>=4.6.0",
+    # Imported directly by methods/numerical/error_correction_regression.py
+    # (ElasticNetCV / TimeSeriesSplit, and adfuller / coint respectively).
+    # Previously only transitive via darts and statsforecast.
+    "scikit-learn>=1.7",
+    "statsmodels>=0.14",
     "statsforecast>=2.0.1",
 ]
 
