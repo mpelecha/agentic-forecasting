@@ -1,0 +1,326 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-07-06T00:00:00'
+  end: '2026-08-06T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: darts_lightgbm_cov_expanded
+predictions:
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:05:32.709873'
+  as_of: '2026-07-06T00:00:00'
+  forecast_date: '2026-07-13T00:00:00'
+  payload:
+    point_forecast: 70.53980400379672
+    quantiles:
+      '0.05': 66.2727359729871
+      '0.1': 66.9735822590257
+      '0.2': 68.8103422248866
+      '0.3': 69.72809903441737
+      '0.4': 70.31333869102384
+      '0.5': 70.53980400379672
+      '0.6': 70.60303394849001
+      '0.7': 71.96094257089516
+      '0.8': 80.66231096996366
+      '0.9': 87.47374236191283
+      '0.95': 88.42394433729886
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:05:32.709873'
+  as_of: '2026-07-06T00:00:00'
+  forecast_date: '2026-07-20T00:00:00'
+  payload:
+    point_forecast: 70.3125478855078
+    quantiles:
+      '0.05': 66.29061544639855
+      '0.1': 66.37334676192265
+      '0.2': 67.39690161989967
+      '0.3': 68.89367218815266
+      '0.4': 69.61210742079963
+      '0.5': 70.3125478855078
+      '0.6': 72.21252139599426
+      '0.7': 72.47039864222091
+      '0.8': 74.64094729422234
+      '0.9': 77.4803789554343
+      '0.95': 88.45063100795828
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:05:32.709873'
+  as_of: '2026-07-06T00:00:00'
+  forecast_date: '2026-08-04T00:00:00'
+  payload:
+    point_forecast: 74.79277156587813
+    quantiles:
+      '0.05': 67.64142950622833
+      '0.1': 69.11370758948402
+      '0.2': 69.57929767548501
+      '0.3': 69.95199095580537
+      '0.4': 73.37908796389624
+      '0.5': 74.79277156587813
+      '0.6': 75.42180808574358
+      '0.7': 75.46031997742044
+      '0.8': 77.82382582671286
+      '0.9': 80.13500953839174
+      '0.95': 87.90321128613901
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:18:28.014168'
+  as_of: '2026-07-13T00:00:00'
+  forecast_date: '2026-07-20T00:00:00'
+  payload:
+    point_forecast: 69.14034371370518
+    quantiles:
+      '0.05': 61.98935829263835
+      '0.1': 63.62252669941963
+      '0.2': 66.00783477114888
+      '0.3': 67.40077894352484
+      '0.4': 68.18010847815252
+      '0.5': 69.14034371370518
+      '0.6': 70.9468752127837
+      '0.7': 72.33969956756417
+      '0.8': 72.85343936907526
+      '0.9': 80.62197125906627
+      '0.95': 81.14943844944914
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:18:28.014168'
+  as_of: '2026-07-13T00:00:00'
+  forecast_date: '2026-07-27T00:00:00'
+  payload:
+    point_forecast: 75.25326636636241
+    quantiles:
+      '0.05': 66.33766250942905
+      '0.1': 68.02316818085994
+      '0.2': 69.65809046969726
+      '0.3': 71.17766466646141
+      '0.4': 72.55815329240563
+      '0.5': 75.25326636636241
+      '0.6': 81.42552702887846
+      '0.7': 83.75680674752786
+      '0.8': 85.5281580959467
+      '0.9': 93.71296937679604
+      '0.95': 93.77586082209572
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:29:56.202895'
+  as_of: '2026-07-20T00:00:00'
+  forecast_date: '2026-07-27T00:00:00'
+  payload:
+    point_forecast: 81.8196553678091
+    quantiles:
+      '0.05': 71.81325060468359
+      '0.1': 76.57146259080349
+      '0.2': 79.11926022016448
+      '0.3': 80.74086605701737
+      '0.4': 81.72283709412163
+      '0.5': 81.8196553678091
+      '0.6': 83.44446976403047
+      '0.7': 83.60270231107371
+      '0.8': 87.39352043098376
+      '0.9': 89.77382638827292
+      '0.95': 90.19488050297673
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:29:56.202895'
+  as_of: '2026-07-20T00:00:00'
+  forecast_date: '2026-08-03T00:00:00'
+  payload:
+    point_forecast: 81.97296008660237
+    quantiles:
+      '0.05': 75.29931253410516
+      '0.1': 76.00593979899577
+      '0.2': 77.36391662703298
+      '0.3': 77.64206653383228
+      '0.4': 77.96837088467252
+      '0.5': 81.97296008660237
+      '0.6': 85.21687785400371
+      '0.7': 86.59910679021934
+      '0.8': 94.29428323574764
+      '0.9': 95.92036387414896
+      '0.95': 97.11969501993507
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:41:09.359610'
+  as_of: '2026-07-27T00:00:00'
+  forecast_date: '2026-08-03T00:00:00'
+  payload:
+    point_forecast: 90.3481728234971
+    quantiles:
+      '0.05': 78.18116359363877
+      '0.1': 84.43706838180141
+      '0.2': 85.1094373943871
+      '0.3': 85.99480251503256
+      '0.4': 87.4312097002612
+      '0.5': 90.3481728234971
+      '0.6': 90.73411154801778
+      '0.7': 91.35195040107581
+      '0.8': 93.98406016151819
+      '0.9': 97.18847659888762
+      '0.95': 97.61103971708191
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+scores:
+- 4.516556474655579
+- 8.89901684902147
+- 1.4604431684718109
+- 9.58756266337933
+- 3.790915650444063
+- 1.1866228745482545
+- 2.5794539959453053
+- 6.238421701341944
+metric: crps
+mean_score: 4.782374172225969
+ran_at: '2026-08-09T06:52:59.418645'
+skipped_origins: 1

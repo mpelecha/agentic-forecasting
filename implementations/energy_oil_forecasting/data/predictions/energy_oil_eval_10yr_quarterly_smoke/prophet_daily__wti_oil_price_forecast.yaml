@@ -1,0 +1,156 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-07-06T00:00:00'
+  end: '2026-08-06T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: prophet_daily
+predictions:
+- predictor_id: prophet_daily
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:53:16.419567'
+  as_of: '2026-07-06T00:00:00'
+  forecast_date: '2026-07-16T00:00:00'
+  payload:
+    point_forecast: 68.0068755159039
+    quantiles:
+      '0.05': 58.04901880299552
+      '0.1': 60.24843023494089
+      '0.2': 62.9117451571054
+      '0.3': 64.83218259480763
+      '0.4': 66.47312557589714
+      '0.5': 68.0068755159039
+      '0.6': 69.54062545591066
+      '0.7': 71.18156843700017
+      '0.8': 73.1020058747024
+      '0.9': 75.7653207968669
+      '0.95': 77.96473222881228
+  metadata: {}
+- predictor_id: prophet_daily
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:53:16.419933'
+  as_of: '2026-07-06T00:00:00'
+  forecast_date: '2026-07-27T00:00:00'
+  payload:
+    point_forecast: 67.88112157535862
+    quantiles:
+      '0.05': 57.809741502605455
+      '0.1': 60.03422706271254
+      '0.2': 62.72790478954534
+      '0.3': 64.67023594560335
+      '0.4': 66.32988630177344
+      '0.5': 67.88112157535862
+      '0.6': 69.4323568489438
+      '0.7': 71.09200720511387
+      '0.8': 73.0343383611719
+      '0.9': 75.7280160880047
+      '0.95': 77.95250164811178
+  metadata: {}
+- predictor_id: prophet_daily
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:53:18.289127'
+  as_of: '2026-07-13T00:00:00'
+  forecast_date: '2026-07-23T00:00:00'
+  payload:
+    point_forecast: 67.54685203603572
+    quantiles:
+      '0.05': 57.52732598565364
+      '0.1': 59.74035844567268
+      '0.2': 62.420167365639024
+      '0.3': 64.35249813619966
+      '0.4': 66.00360353169152
+      '0.5': 67.54685203603572
+      '0.6': 69.09010054037991
+      '0.7': 70.74120593587178
+      '0.8': 72.6735367064324
+      '0.9': 75.35334562639875
+      '0.95': 77.56637808641779
+  metadata: {}
+- predictor_id: prophet_daily
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:53:18.289487'
+  as_of: '2026-07-13T00:00:00'
+  forecast_date: '2026-08-03T00:00:00'
+  payload:
+    point_forecast: 67.41391094908144
+    quantiles:
+      '0.05': 57.176267855759775
+      '0.1': 59.43747625680452
+      '0.2': 62.175622466811035
+      '0.3': 64.15001852783915
+      '0.4': 65.83706716302473
+      '0.5': 67.41391094908144
+      '0.6': 68.99075473513815
+      '0.7': 70.67780337032373
+      '0.8': 72.65219943135185
+      '0.9': 75.39034564135837
+      '0.95': 77.6515540424031
+  metadata: {}
+- predictor_id: prophet_daily
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:53:19.723110'
+  as_of: '2026-07-20T00:00:00'
+  forecast_date: '2026-07-30T00:00:00'
+  payload:
+    point_forecast: 67.59029927425932
+    quantiles:
+      '0.05': 57.16209363085083
+      '0.1': 59.46539195779482
+      '0.2': 62.25450577035722
+      '0.3': 64.26565305867868
+      '0.4': 65.98410426251323
+      '0.5': 67.59029927425932
+      '0.6': 69.19649428600542
+      '0.7': 70.91494548983995
+      '0.8': 72.92609277816142
+      '0.9': 75.71520659072382
+      '0.95': 78.01850491766781
+  metadata: {}
+- predictor_id: prophet_daily
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T06:53:21.217109'
+  as_of: '2026-07-27T00:00:00'
+  forecast_date: '2026-08-06T00:00:00'
+  payload:
+    point_forecast: 67.57490374359452
+    quantiles:
+      '0.05': 57.8359645112784
+      '0.1': 59.98702320795664
+      '0.2': 62.59178675610627
+      '0.3': 64.47000453373327
+      '0.4': 66.07487237199109
+      '0.5': 67.57490374359452
+      '0.6': 69.07493511519795
+      '0.7': 70.67980295345576
+      '0.8': 72.55802073108276
+      '0.9': 75.1627842792324
+      '0.95': 77.31384297591063
+  metadata: {}
+scores:
+- 7.5053828688014725
+- 11.251948942269454
+- 21.184121812690574
+- 9.391756519021797
+- 12.399580520242411
+- 6.357270139674491
+metric: crps
+mean_score: 11.3483434671167
+ran_at: '2026-08-09T06:53:22.466547'
+skipped_origins: 1

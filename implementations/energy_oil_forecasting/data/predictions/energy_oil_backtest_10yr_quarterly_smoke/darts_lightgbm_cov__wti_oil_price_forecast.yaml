@@ -1,0 +1,118 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2021-08-06T00:00:00'
+  end: '2021-08-07T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: darts_lightgbm_cov
+predictions:
+- predictor_id: darts_lightgbm_cov
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T04:45:21.545446'
+  as_of: '2021-08-06T00:00:00'
+  forecast_date: '2021-08-13T00:00:00'
+  payload:
+    point_forecast: 67.77785513922913
+    quantiles:
+      '0.05': 61.59850890628944
+      '0.1': 63.97146118847673
+      '0.2': 66.32121921683039
+      '0.3': 67.03635066184337
+      '0.4': 67.68328102779758
+      '0.5': 67.77785513922913
+      '0.6': 67.94832456195878
+      '0.7': 68.24208352657135
+      '0.8': 70.1266201511117
+      '0.9': 76.11675122785853
+      '0.95': 80.33157127002686
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+- predictor_id: darts_lightgbm_cov
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T04:45:21.545446'
+  as_of: '2021-08-06T00:00:00'
+  forecast_date: '2021-08-20T00:00:00'
+  payload:
+    point_forecast: 65.29530632772841
+    quantiles:
+      '0.05': 51.81345525870437
+      '0.1': 60.600452352830885
+      '0.2': 64.69236106274205
+      '0.3': 64.83102112030609
+      '0.4': 64.9872043839902
+      '0.5': 65.29530632772841
+      '0.6': 69.29227387964949
+      '0.7': 69.88237132287685
+      '0.8': 70.99685827782949
+      '0.9': 77.44386489419054
+      '0.95': 81.1127991902297
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+- predictor_id: darts_lightgbm_cov
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T04:45:21.545446'
+  as_of: '2021-08-06T00:00:00'
+  forecast_date: '2021-11-03T00:00:00'
+  payload:
+    point_forecast: 63.010578060802594
+    quantiles:
+      '0.05': 53.55015457309171
+      '0.1': 54.14484060025582
+      '0.2': 57.21278933926302
+      '0.3': 59.20890187220632
+      '0.4': 61.459890786185575
+      '0.5': 63.010578060802594
+      '0.6': 64.62954034644724
+      '0.7': 71.85282162823368
+      '0.8': 72.95984316551139
+      '0.9': 83.74426927437248
+      '0.95': 87.92321289941218
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+scores:
+- 0.8882331306776559
+- 3.176020182548442
+- 10.283603909574131
+metric: crps
+mean_score: 4.782619074266743
+ran_at: '2026-08-09T04:45:21.675127'
+skipped_origins: 0

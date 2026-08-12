@@ -1,0 +1,142 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2021-08-06T00:00:00'
+  end: '2021-08-07T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: darts_lightgbm_cov_expanded
+predictions:
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T04:57:52.810419'
+  as_of: '2021-08-06T00:00:00'
+  forecast_date: '2021-08-13T00:00:00'
+  payload:
+    point_forecast: 67.66044382027222
+    quantiles:
+      '0.05': 60.87021031589608
+      '0.1': 65.9600079314035
+      '0.2': 66.70938117668172
+      '0.3': 67.30676993482632
+      '0.4': 67.59342956295608
+      '0.5': 67.66044382027222
+      '0.6': 68.012858489766
+      '0.7': 68.68992417332436
+      '0.8': 70.91557452537288
+      '0.9': 74.18013664924237
+      '0.95': 80.04387702525236
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T04:57:52.810419'
+  as_of: '2021-08-06T00:00:00'
+  forecast_date: '2021-08-20T00:00:00'
+  payload:
+    point_forecast: 64.58630225405952
+    quantiles:
+      '0.05': 58.84879044854352
+      '0.1': 61.93614877479892
+      '0.2': 62.60341419383063
+      '0.3': 63.3010659504427
+      '0.4': 64.54810203862966
+      '0.5': 64.58630225405952
+      '0.6': 68.44123642317977
+      '0.7': 70.84851514002001
+      '0.8': 72.15828223708041
+      '0.9': 76.2141178472052
+      '0.95': 77.2802888959121
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+- predictor_id: darts_lightgbm_cov_expanded
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-09T04:57:52.810419'
+  as_of: '2021-08-06T00:00:00'
+  forecast_date: '2021-11-03T00:00:00'
+  payload:
+    point_forecast: 70.20094056899225
+    quantiles:
+      '0.05': 60.48721026024842
+      '0.1': 62.18120644053146
+      '0.2': 66.73034176515716
+      '0.3': 67.91868902974198
+      '0.4': 69.21514794150715
+      '0.5': 70.20094056899225
+      '0.6': 71.48738856666469
+      '0.7': 72.74360785009418
+      '0.8': 72.85226685084947
+      '0.9': 79.32597716007999
+      '0.95': 81.47435387190883
+  metadata:
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    - ovx_level_l1b
+    - crude_stocks_ex_spr_wl
+    - refinery_utilization_wl
+    - fin_stress_index_wl
+    - indpro_ml
+    - durable_goods_orders_ml
+    - crack_spread_l1b
+    variant_tag: expanded
+scores:
+- 0.795820424674909
+- 2.468398809800695
+- 7.1833231679702285
+metric: crps
+mean_score: 3.482514134148611
+ran_at: '2026-08-09T04:57:52.943750'
+skipped_origins: 0
