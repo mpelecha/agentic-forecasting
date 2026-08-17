@@ -13,6 +13,19 @@ For multi-horizon tasks, the model is fitted once to ``n = max(task.horizons)``
 and samples are extracted at each requested horizon index from the resulting
 trajectory. This is more efficient than fitting once per horizon.
 
+Log levels
+----------
+By default the model is fit on the raw target level, whatever that happens to
+be (e.g. USD/bbl for WTI).  ``use_log_levels=True`` instead fits AutoARIMA on
+the natural log of the target and exponentiates the sampled trajectories back
+before computing quantiles.  This gives a fairer baseline against
+:class:`~aieng.forecasting.methods.numerical.error_correction_regression.ErrorCorrectionRegressionPredictor`
+run with its own ``use_log_levels=True`` — both then model the same
+constant-elasticity space instead of one being on levels and the other on
+logs.  AutoARIMA still self-selects its own differencing order in whichever
+space it is given; log levels only changes *what* is differenced, not
+whether.
+
 Usage::
 
     from aieng.forecasting.methods.darts_arima import DartsAutoARIMAPredictor
@@ -50,6 +63,18 @@ class DartsAutoARIMAPredictor(Predictor):
         Number of Monte Carlo samples used to build the predictive distribution.
         Higher values give smoother quantile estimates at the cost of compute.
         Default: 500.
+    use_log_levels : bool
+        When ``True``, fit AutoARIMA on the natural log of the target and
+        exponentiate the sampled trajectories back before computing quantiles.
+        Raises ``ValueError`` at predict time if the target contains any
+        non-positive value rather than silently dropping or clipping rows.
+        Default: ``False``.
+
+    Raises
+    ------
+    ValueError
+        If ``use_log_levels`` is set and the target series contains a
+        non-positive value.
 
     Notes
     -----
@@ -61,13 +86,15 @@ class DartsAutoARIMAPredictor(Predictor):
       instead.
     """
 
-    def __init__(self, num_samples: int = 500) -> None:
+    def __init__(self, num_samples: int = 500, *, use_log_levels: bool = False) -> None:
         self._num_samples = num_samples
+        self._use_log_levels = use_log_levels
 
     @property
     def predictor_id(self) -> str:
-        """Return a stable string identifier for this predictor."""
-        return "darts_autoarima"
+        """Return a stable identifier, suffixed ``_log`` under log levels."""
+        suffix = "_log" if self._use_log_levels else ""
+        return f"darts_autoarima{suffix}"
 
     def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
         """Produce probabilistic AutoARIMA forecasts for every horizon in the task.
@@ -91,6 +118,15 @@ class DartsAutoARIMAPredictor(Predictor):
         from darts.models import AutoARIMA  # noqa: PLC0415  # type: ignore[import-untyped]
 
         series_df = context.get_series(task.target_series_id)
+
+        if self._use_log_levels:
+            values = series_df["value"].to_numpy(dtype=float)
+            if np.any(values <= 0):
+                raise ValueError(
+                    f"use_log_levels=True but target {task.target_series_id!r} contains non-positive "
+                    "values; refusing to take logs. Use use_log_levels=False for series that can be <= 0."
+                )
+            series_df = series_df.assign(value=np.log(values))
 
         ts = TimeSeries.from_dataframe(
             series_df,
@@ -116,6 +152,8 @@ class DartsAutoARIMAPredictor(Predictor):
 
         for h in task.horizons:
             samples: np.ndarray = forecast_ts.all_values()[h - 1, 0, :]
+            if self._use_log_levels:
+                samples = np.exp(samples)
             payload = ContinuousForecast(
                 point_forecast=float(np.median(samples)),
                 quantiles={q: float(np.quantile(samples, q)) for q in STANDARD_QUANTILES},

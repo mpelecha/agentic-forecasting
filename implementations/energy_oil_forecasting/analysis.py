@@ -379,6 +379,44 @@ def extract_ecm_diagnostics(results_by_predictor: dict[str, dict[str, BacktestRe
     return pd.DataFrame(rows)
 
 
+def extract_ecm_diagnostics(results_by_predictor: dict[str, dict[str, BacktestResult]]) -> pd.DataFrame:
+    """Pull ``ErrorCorrectionRegressionPredictor``'s stationarity/selection metadata.
+
+    Only predictions whose ``metadata`` carries ``use_log_levels`` (a key only
+    the ECM predictor sets) produce rows. One row per scored prediction, so the
+    result can be grouped by ``predictor``/``horizon`` to check how often the
+    cointegration test actually reports a stationary equilibrium, and which
+    covariates ElasticNet keeps, without re-running any backtest.
+    """
+    rows: list[dict[str, Any]] = []
+    for predictor_name, task_results in results_by_predictor.items():
+        for result in task_results.values():
+            for pred in result.predictions:
+                meta = pred.metadata or {}
+                if "use_log_levels" not in meta:
+                    continue
+                rows.append(
+                    {
+                        "predictor": predictor_name,
+                        "as_of": pd.Timestamp(pred.as_of),
+                        "horizon": _business_horizon(pd.Timestamp(pred.as_of), pd.Timestamp(pred.forecast_date)),
+                        "adf_pvalue": meta.get("adf_pvalue", float("nan")),
+                        "adf_stationary": meta.get("adf_stationary"),
+                        "coint_pvalue": meta.get("coint_pvalue", float("nan")),
+                        "coint_stationary": meta.get("coint_stationary"),
+                        "coint_basis": meta.get("coint_basis", ""),
+                        "cointegration_warning": meta.get("cointegration_warning"),
+                        "ecm_coefficient": meta.get("ecm_coefficient", float("nan")),
+                        "ecm_coefficient_zeroed": meta.get("ecm_coefficient_zeroed"),
+                        "ecm_sign_warning": meta.get("ecm_sign_warning"),
+                        "n_observations": meta.get("n_observations"),
+                        "n_selected": meta.get("n_selected"),
+                        "selected_covariates": tuple(meta.get("selected_covariates", ())),
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
 def eval_narrative_md(
     pred_frame: pd.DataFrame,
     *,
