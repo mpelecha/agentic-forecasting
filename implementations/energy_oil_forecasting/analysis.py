@@ -66,10 +66,13 @@ def score_backtest_results(
                 continue
             median = pred.payload.point_forecast
             mae_errors.append(abs(median - actual))
-            q80 = pred.payload.quantiles.get(0.80)
-            q20 = pred.payload.quantiles.get(0.20)
-            if q80 is not None and q20 is not None:
-                coverage_hits.append(float(q20 <= actual <= q80))
+            # The 80% central interval is P10..P90. This previously read
+            # P20..P80 — a 60% band reported under an "80% coverage" label,
+            # which inverts the diagnosis: a model whose intervals are too
+            # wide looks merely "a little under target" instead of over-wide.
+            lo80, hi80 = _qval(pred.payload.quantiles, 0.1), _qval(pred.payload.quantiles, 0.9)
+            if not (np.isnan(lo80) or np.isnan(hi80)):
+                coverage_hits.append(float(lo80 <= actual <= hi80))
 
     return {
         "mean_crps": float(np.mean(all_scores)) if all_scores else float("nan"),
@@ -226,7 +229,10 @@ def predictions_to_frame(
         Columns: ``predictor``, ``family``, ``as_of``, ``forecast_date``,
         ``horizon`` (trading days), ``point``, ``q10``/``q20``/``q50``/``q80``/
         ``q90``, ``actual``, ``crps``, ``abs_error``, ``signed_error``,
-        ``width80`` (80% interval width), and ``inside80`` (1.0/0.0/NaN).
+        ``width80`` (P90 − P10), and ``inside80`` (1.0/0.0/NaN).
+
+        The ``q20`` and ``q80`` columns are still emitted for inspection, but
+        the 80% band columns are built from ``q10``/``q90``.
     """
     resolved_as_of = actuals_as_of or datetime.now(tz=timezone.utc).replace(tzinfo=None)
     actual_cache: dict[str, dict[pd.Timestamp, float]] = {}
@@ -249,7 +255,8 @@ def predictions_to_frame(
                 as_of = pd.Timestamp(pred.as_of)
                 fdate = pd.Timestamp(pred.forecast_date).normalize()
                 q = pred.payload.quantiles
-                lo80, hi80 = _qval(q, 0.2), _qval(q, 0.8)
+                # 80% central interval = P10..P90 (see score_backtest_results).
+                lo80, hi80 = _qval(q, 0.1), _qval(q, 0.9)
                 point = float(pred.payload.point_forecast)
                 actual = actual_by_date.get(fdate)
                 rows.append(
@@ -260,11 +267,11 @@ def predictions_to_frame(
                         "forecast_date": fdate,
                         "horizon": _business_horizon(as_of, fdate),
                         "point": point,
-                        "q10": _qval(q, 0.1),
-                        "q20": lo80,
+                        "q10": lo80,
+                        "q20": _qval(q, 0.2),
                         "q50": _qval(q, 0.5),
-                        "q80": hi80,
-                        "q90": _qval(q, 0.9),
+                        "q80": _qval(q, 0.8),
+                        "q90": hi80,
                         "actual": actual,
                         "crps": float(score),
                         "abs_error": abs(point - actual) if actual is not None else float("nan"),
