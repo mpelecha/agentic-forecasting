@@ -11,7 +11,7 @@ is not: the only AutoARIMA run we have came off the local machine's grid
 This script rebuilds the agent grid exactly, computes AutoARIMA on it, and
 scores every predictor cached under that spec_id together. Nothing else
 recomputes: cached_multi_backtest loads the agents from disk, so this costs no
-tokens. Run it from the repository root.
+tokens. Working directory does not matter - all paths are absolute.
 
     python implementations/energy_oil_forecasting/scripts/run_autoarima_agent_grid.py
 
@@ -36,7 +36,8 @@ from scipy import stats
 
 warnings.filterwarnings("ignore")
 
-sys.path.insert(0, "implementations")
+_HERE = Path(__file__).resolve()
+sys.path.insert(0, str(_HERE.parents[2]))  # <repo>/implementations
 
 import energy_oil_forecasting  # noqa: E402
 from aieng.forecasting.evaluation import (  # noqa: E402
@@ -59,7 +60,16 @@ from energy_oil_forecasting.data import (  # noqa: E402
 # The anchor that reproduces the grid the cached agents were computed on.
 ANCHOR_END = pd.Timestamp("2026-07-23")
 EXPECTED_GRID = ("2014-04-14", "2024-07-23")
-STORE = Path("implementations/energy_oil_forecasting/data/predictions")
+
+# Absolute, so the working directory cannot change where results are read or
+# written. The library's DEFAULT_STORE_DIR is the *relative* Path
+# ("data/predictions"), which resolves correctly only when the process runs
+# from implementations/energy_oil_forecasting/ (as the notebook does). Running
+# from the repo root instead silently wrote a completed backtest to
+# <repo>/data/predictions/ while this script read from the package directory —
+# no error, no warning, just a missing row. So STORE is derived from this
+# file's own location and passed explicitly to every cache call below.
+STORE = _HERE.parents[1] / "data" / "predictions"
 
 
 def build_specs(data_service):
@@ -166,10 +176,20 @@ def main() -> None:
 
         print("Running AutoARIMA (agents load from cache — no tokens spent)...")
         cached_multi_backtest(
-            DartsAutoARIMAPredictor(), spec, data_service, force_refresh=False
+            DartsAutoARIMAPredictor(),
+            spec,
+            data_service,
+            store_dir=STORE,  # never rely on cwd — see the STORE comment above
+            force_refresh=False,
         )
 
         results = load_cached(spec.spec_id)
+        if "darts_autoarima" not in results:
+            print(
+                f"  WARNING: AutoARIMA is still missing from {STORE / spec.spec_id}. "
+                "It neither loaded nor computed — check for a stray copy under "
+                f"{Path.cwd() / 'data' / 'predictions' / spec.spec_id}."
+            )
         frame = predictions_to_frame(results, data_service)
         if frame.empty:
             print(f"{label}: no scoreable predictions (horizons may not have resolved yet).")
