@@ -195,7 +195,25 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         (default) freezes covariates at their last observed level;  ``"last"``
         repeats the most recent observed difference at every step, which
         extrapolates one day's move linearly across the horizon.
-
+    long_run_only_covariate_series_ids : list[str] or None
+        Subset of ``covariate_series_ids`` (must be a subset — unknown ids raise)
+        to use **only** in the long-run (levels) step, excluded from the
+        short-run (differenced) step. Intended for covariates that are
+        genuinely low-frequency (monthly/weekly) but forward-filled onto a
+        daily grid upstream: their day-to-day ``Δx`` is zero on every day but
+        the rare release day, which the short-run equation can't distinguish
+        from real signal. ``None`` (default) keeps every covariate in both
+        steps, preserving existing behaviour.
+    variant_tag : str or None
+        Optional short identifier for a covariate recipe (e.g. ``"expanded"``).
+        When set, it is folded into :attr:`predictor_id` so cached backtests
+        keep recipes distinct — necessary because
+        :func:`~aieng.forecasting.evaluation.artifacts.cached_multi_backtest`
+        keys its cache files on ``predictor_id`` alone (plus spec and task),
+        so two different covariate panels sharing one id would silently reuse
+        each other's results.  ``None`` (default) preserves the bare
+        identifier used by existing callers.
+        
     Raises
     ------
     ValueError
@@ -216,6 +234,8 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         adf_pvalue_threshold: float = DEFAULT_ADF_PVALUE_THRESHOLD,
         max_iter: int = 10_000,
         covariate_diff_path: Literal["zero", "last"] = "zero",
+        long_run_only_covariate_series_ids: list[str] | None = None,
+        variant_tag: str | None = None,
     ) -> None:
         if not covariate_series_ids:
             raise ValueError(
@@ -232,11 +252,22 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         self._max_iter = max_iter
         self._covariate_diff_path = covariate_diff_path
 
+        long_run_only = set(long_run_only_covariate_series_ids or [])
+        unknown = long_run_only - set(self._covariate_series_ids)
+        if unknown:
+            raise ValueError(
+                f"long_run_only_covariate_series_ids contains ids not present in "
+                f"covariate_series_ids: {sorted(unknown)}"
+            )
+        self._long_run_only_covariate_series_ids = long_run_only
+        self._variant_tag = variant_tag
+
     @property
     def predictor_id(self) -> str:
-        """Return a stable identifier, suffixed ``_log`` under log levels."""
+        """Return a stable identifier, suffixed ``_log`` under log levels and any variant tag."""
         suffix = "_log" if self._use_log_levels else ""
-        return f"ecm_regression{suffix}"
+        tag = f"_{self._variant_tag}" if self._variant_tag else ""
+        return f"ecm_regression{suffix}{tag}"
 
     # ── data assembly ────────────────────────────────────────────────────────
 
@@ -336,7 +367,7 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         try:
             adf_result = adfuller(residuals, regression="c", autolag="AIC")
             adf_stat, adf_pvalue = float(adf_result[0]), float(adf_result[1])
-        except (ValueError, np.linalg.LinAlgError):
+        except (ValueError, np.linalg.LinAlgError, IndexError):
             pass
 
         coint_basis = "selected" if x_selected.size else "all"
@@ -347,7 +378,7 @@ class ErrorCorrectionRegressionPredictor(Predictor):
             try:
                 coint_result = coint(y, coint_inputs, trend="c", autolag="AIC")
                 coint_stat, coint_pvalue = float(coint_result[0]), float(coint_result[1])
-            except (ValueError, np.linalg.LinAlgError):
+            except (ValueError, np.linalg.LinAlgError, IndexError):
                 pass
 
         adf_stationary = bool(adf_pvalue <= self._adf_pvalue_threshold) if np.isfinite(adf_pvalue) else False
@@ -373,16 +404,18 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         y_last: float,
         x_last: np.ndarray,
         dx_future: np.ndarray,
+        short_run_mask: np.ndarray,
         max_horizon: int,
     ) -> dict[int, float]:
         """Step the short-run equation forward, re-deriving ``u`` each step."""
         y_cur = float(y_last)
         x_cur = x_last.astype(float).copy()
+        dx_future_short = dx_future[short_run_mask]
         path: dict[int, float] = {}
 
         for step in range(1, max_horizon + 1):
             equilibrium_error = y_cur - float(long_run.predict(x_cur.reshape(1, -1))[0])
-            features = np.concatenate(([equilibrium_error], dx_future))
+            features = np.concatenate(([equilibrium_error], dx_future_short))
             delta_y = float(short_run.predict(features.reshape(1, -1))[0])
             y_cur = y_cur + delta_y
             x_cur = x_cur + dx_future
@@ -406,6 +439,11 @@ class ErrorCorrectionRegressionPredictor(Predictor):
 
         y, x = self._to_model_arrays(frame)
 
+        short_run_mask = np.array(
+            [sid not in self._long_run_only_covariate_series_ids for sid in self._covariate_series_ids],
+            dtype=bool,
+        )
+        
         # Step 1 — long-run relation on levels; u is the equilibrium error.
         long_run = self._build_pipeline()
         long_run.fit(x, y)
@@ -419,9 +457,10 @@ class ErrorCorrectionRegressionPredictor(Predictor):
 
         # Step 2 — short-run dynamics on differences, driven by the lagged error.
         delta_y = np.diff(y)
-        delta_x = np.diff(x, axis=0)
+        delta_x_all = np.diff(x, axis=0)
+        delta_x_short = delta_x_all[:, short_run_mask]
         lagged_error = equilibrium_error[:-1]
-        short_run_features = np.column_stack([lagged_error, delta_x])
+        short_run_features = np.column_stack([lagged_error, delta_x_short])
 
         short_run = self._build_pipeline()
         short_run.fit(short_run_features, delta_y)
@@ -432,13 +471,14 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         scale = np.asarray(short_run["scale"].scale_, dtype=float)
         phi = float(np.asarray(short_run["model"].coef_, dtype=float)[0] / scale[0]) if scale[0] else 0.0
 
-        dx_future = np.zeros(x.shape[1]) if self._covariate_diff_path == "zero" else delta_x[-1]
+        dx_future = np.zeros(x.shape[1]) if self._covariate_diff_path == "zero" else delta_x_all[-1]
         path = self._iterate_forward(
             long_run=long_run,
             short_run=short_run,
             y_last=y[-1],
             x_last=x[-1],
             dx_future=dx_future,
+            short_run_mask=short_run_mask,
             max_horizon=task.horizon,
         )
 
@@ -457,6 +497,7 @@ class ErrorCorrectionRegressionPredictor(Predictor):
             "short_run_residual_std": residual_std,
             "use_log_levels": self._use_log_levels,
             "covariate_diff_path": self._covariate_diff_path,
+            "long_run_only_covariates": sorted(self._long_run_only_covariate_series_ids),
         }
 
         offset = pd.tseries.frequencies.to_offset(task.frequency)
