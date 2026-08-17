@@ -48,11 +48,15 @@ from aieng.forecasting.evaluation.backtest import BacktestResult  # noqa: E402
 from aieng.forecasting.methods.numerical.darts_arima import (  # noqa: E402
     DartsAutoARIMAPredictor,
 )
+from aieng.forecasting.methods.numerical.error_correction_regression import (  # noqa: E402
+    ErrorCorrectionRegressionPredictor,
+)
 from energy_oil_forecasting.analysis import (  # noqa: E402
     per_horizon_crps,
     predictions_to_frame,
 )
 from energy_oil_forecasting.data import (  # noqa: E402
+    DEFAULT_WTI_COVARIATE_SERIES_IDS,
     WTI_SERIES_ID,
     build_wti_multivariate_service,
 )
@@ -164,32 +168,73 @@ def report(frame: pd.DataFrame, label: str) -> None:
     )
 
 
+def build_numerical_predictors(data_service) -> list:
+    """The token-free methods to place on the agent grid.
+
+    Only the *base* ECM is here. Its configuration is fully recoverable from
+    the local-run cache metadata (the seven standard yfinance covariates,
+    use_log_levels=False, covariate_diff_path="zero"), and every one of those
+    series is available from build_wti_multivariate_service().
+
+    The four "expanded" ECM variants are deliberately absent. They need nine
+    further series (OVX, EIA crude stocks, refinery utilization, the financial
+    stress index, INDPRO, durable goods, the crack spread, and two Treasury
+    series) that this data.py does not define. Their configs also cannot be
+    fully recovered: ecm_regression_expanded and ecm_regression_expanded_
+    levelonly record byte-identical metadata - same covariates, same flags -
+    so whatever separates them lives in code that was never committed.
+    Reproducing them needs the local machine's data.py plus its data/eia/ and
+    data/fred/ caches.
+
+    That is a smaller loss than it sounds: on the local grid the expanded
+    variants scored 3.83-3.85 against the base ECM's 3.89 overall, a gap well
+    inside the noise. The base is a fair stand-in for the family.
+    """
+    covariates = [c for c in DEFAULT_WTI_COVARIATE_SERIES_IDS if c in set(data_service.series_ids)]
+    missing = sorted(set(DEFAULT_WTI_COVARIATE_SERIES_IDS) - set(covariates))
+    if missing:
+        print(f"  note: {len(missing)} covariate(s) unavailable, ECM will run without them: {missing}")
+    return [
+        DartsAutoARIMAPredictor(),
+        ErrorCorrectionRegressionPredictor(covariate_series_ids=covariates),
+    ]
+
+
 def main() -> None:
     data_service = build_wti_multivariate_service()
     backtest_spec, eval_spec = build_specs(data_service)
     print(f"Backtest grid: {backtest_spec.start} -> {backtest_spec.end}  (stride {backtest_spec.stride})")
     print(f"Eval grid:     {eval_spec.start} -> {eval_spec.end}  (stride {eval_spec.stride})")
 
+    predictors = build_numerical_predictors(data_service)
+    print(f"Numerical predictors to place on the grid: {[p.predictor_id for p in predictors]}")
+
     for spec, label in ((backtest_spec, "BACKTEST"), (eval_spec, "EVAL")):
         cached_before = set(load_cached(spec.spec_id))
         print(f"\nAlready cached under {spec.spec_id}: {sorted(cached_before) or '(none)'}")
 
-        print("Running AutoARIMA (agents load from cache — no tokens spent)...")
-        cached_multi_backtest(
-            DartsAutoARIMAPredictor(),
-            spec,
-            data_service,
-            store_dir=STORE,  # never rely on cwd — see the STORE comment above
-            force_refresh=False,
-        )
+        for predictor in predictors:
+            pid = predictor.predictor_id
+            if pid in cached_before:
+                print(f"  {pid}: already cached, loading")
+                continue
+            print(f"  {pid}: computing (agents load from cache — no tokens spent)...")
+            cached_multi_backtest(
+                predictor,
+                spec,
+                data_service,
+                store_dir=STORE,  # never rely on cwd — see the STORE comment above
+                force_refresh=False,
+            )
 
         results = load_cached(spec.spec_id)
-        if "darts_autoarima" not in results:
-            print(
-                f"  WARNING: AutoARIMA is still missing from {STORE / spec.spec_id}. "
-                "It neither loaded nor computed — check for a stray copy under "
-                f"{Path.cwd() / 'data' / 'predictions' / spec.spec_id}."
-            )
+        for predictor in predictors:
+            if predictor.predictor_id not in results:
+                print(
+                    f"  WARNING: {predictor.predictor_id} is still missing from "
+                    f"{STORE / spec.spec_id}. It neither loaded nor computed — check for a "
+                    f"stray copy under {Path.cwd() / 'data' / 'predictions' / spec.spec_id}."
+                )
         frame = predictions_to_frame(results, data_service)
         if frame.empty:
             print(f"{label}: no scoreable predictions (horizons may not have resolved yet).")
