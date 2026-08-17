@@ -1,267 +1,521 @@
-"""Single-equation Engle-Granger error-correction predictor.
+r"""Regularized single-equation error-correction model (ECM) for level targets.
 
-``ErrorCorrectionRegressionPredictor`` models the target series as being tied
-to one or more covariate series by a long-run equilibrium relationship, with
-short-run dynamics that correct back toward that equilibrium whenever the
-series drifts away from it. This is the classic two-step Engle-Granger ECM,
-scoped to a single equation (the target) rather than a full VECM system —
-appropriate for any :class:`~aieng.forecasting.evaluation.task.ForecastingTask`,
-since the harness only ever asks a predictor to forecast
-``task.target_series_id``, not the covariates themselves. Like the Darts
-regression predictors in this package, it is **task-agnostic**: point it at
-any target with one or more covariate series that plausibly share a long-run
-equilibrium (gasoline CPI vs. crude oil, an exchange rate vs. rate
-differentials, equity levels vs. a valuation anchor, etc.).
+:class:`ErrorCorrectionRegressionPredictor` is a bespoke Engle-Granger
+two-step error-correction model, not a wrapper around a Darts estimator —
+hence no ``darts_`` prefix, which this package reserves for thin adapters over
+the Darts library.
 
-Step 1 (long-run / cointegrating relationship)
-    OLS of the target level on covariate levels, fit on all data available at
-    ``context.as_of``::
+The model
+---------
+Step 1 (**long run**, on levels) estimates a candidate cointegrating relation
 
-        y_t = c + b_1 * x1_t + b_2 * x2_t + ... + e_t
+.. math:: y_t = \alpha + \beta' x_t + u_t
 
-    The residual ``e_t`` is the "equilibrium error" — how far the target
-    currently sits above or below the level implied by its long-run
-    relationship with the covariates.
+and keeps the equilibrium error :math:`u_t`.  Step 2 (**short run**, on first
+differences) regresses the change in the target on the *lagged* equilibrium
+error plus contemporaneous covariate changes
 
-Step 2 (short-run / error-correction regression)
-    OLS of the target's period-over-period change on the covariates' changes
-    and the *lagged* equilibrium error::
+.. math::
 
-        dy_{t+1} = a * e_t + b_1 * dx1_t + b_2 * dx2_t + ... + eps_t
+    \Delta y_t = \gamma + \varphi u_{t-1} + \theta' \Delta x_t + \varepsilon_t
 
-    The coefficient ``a`` is the error-correction speed: how much of the
-    current disequilibrium gets closed off in the next period. Only
-    already-realized values (``e_t``, ``dx_t``) are used as inputs, so
-    forecasting ``dy_{t+1}`` from information available at ``t`` requires no
-    future covariate data.
+:math:`\varphi` is the error-correction speed: negative means the target is
+pulled back toward the long-run relation, and its magnitude sets how fast.
 
-Multi-step horizons
-    Forecasts beyond one step are produced by iterating the fitted short-run
-    equation forward, holding each covariate's rate of change fixed at its
-    last observed value (a flat / random-walk-in-differences assumption for
-    the exogenous drivers) and updating the equilibrium error at each step
-    from the projected covariate levels. Forecast uncertainty is widened with
-    the square root of the horizon, the standard random-walk error-growth
-    heuristic.
+This targets the **price level** (e.g. ``wti_crude_oil_price`` at horizons
+5/10/21 business days), not a cumulative return — the long-run/short-run
+decomposition is only meaningful for a levels target.
 
-Log levels
-    Price-like series (CPI, commodity prices, equity levels) are often
-    modeled in logs so the long-run relationship is linear in growth rates
-    rather than levels. Set ``use_log_levels=True`` when the target and every
-    covariate are strictly positive; this is **off by default** since not
-    every series qualifies (returns, rate differentials, and other series
-    that can go negative would raise on the log transform). A clear
-    ``ValueError`` is raised if you request logs on non-positive data.
+Why regularized, and why these particular checks
+------------------------------------------------
+**ElasticNet instead of OLS, in both steps.**  A levels-on-levels regression
+between trending series is the textbook setup for *spurious regression*: OLS
+will report a high :math:`R^2` and confident coefficients between series that
+share nothing but a trend.  Shrinkage does not make the relation real, but it
+stops a wide covariate panel from manufacturing an arbitrarily good in-sample
+fit, and the L1 component performs covariate selection so the caller need not
+hand-pick a short list.
 
-Choosing covariates
-    Any series available from the ``ForecastContext`` can be used, but the
-    ECM specification only makes economic sense when the target and
-    covariates are plausibly cointegrated — i.e. individually non-stationary
-    but tied together by a stable long-run relationship. Feeding it
-    unrelated or already-stationary covariates won't break the code, but the
-    "long-run equilibrium" the model fits won't mean anything.
+**TimeSeriesSplit, never plain k-fold.**  The penalty is chosen by
+cross-validation, and ordinary k-fold trains on future blocks to score earlier
+ones.  That leaks information the model would not have had at the forecast
+origin — the penalty ends up tuned with hindsight.  ``TimeSeriesSplit`` only
+ever trains on the past of each validation block.
 
-Usage::
+**Feature standardization.**  A penalty on unscaled coefficients is really a
+penalty on units: a covariate panel mixing log returns (:math:`10^{-3}`) with
+inventory levels (:math:`10^{5}`) would have its small-scale members zeroed
+out by L1 regardless of signal.  Both steps therefore run inside a
+:class:`~sklearn.pipeline.Pipeline` with a
+:class:`~sklearn.preprocessing.StandardScaler`, which also refits the scaler
+within each CV fold so no scaling statistics cross the split boundary.
 
-    from aieng.forecasting.methods.numerical import ErrorCorrectionRegressionPredictor
+**Stationarity of the residual, reported not assumed.**  Fitting a regression
+does not establish cointegration.  If :math:`u_t` carries a unit root, the
+"equilibrium" is an artifact and the ECM rests on nothing.  The residual is
+therefore tested two ways and both land in
+:attr:`~aieng.forecasting.evaluation.prediction.Prediction.metadata`:
+
+- ``adf_pvalue`` — a plain augmented Dickey-Fuller test on :math:`u_t`.
+- ``coint_pvalue`` — the Engle-Granger test (:func:`statsmodels.tsa.stattools.coint`).
+
+The two differ, and the difference matters.  Standard ADF critical values
+assume the tested series is *observed*; :math:`u_t` is instead *estimated*
+from a fitted regression, which shifts the null distribution.  Applied to
+regression residuals, ADF is **anti-conservative** — it reports cointegration
+more readily than it should.  The Engle-Granger test uses MacKinnon critical
+values built for exactly this case and is the one to believe.  ``adf_pvalue``
+is retained as a diagnostic, not as a valid hypothesis test.  Neither figure
+is exact here anyway, because ElasticNet's data-dependent variable selection
+distorts both null distributions further; treat them as flags, not proofs.
+
+Non-stationary residuals never raise.  The forecast is still returned and
+``cointegration_warning`` is set, leaving the caller to decide.
+
+Known limitations
+-----------------
+**Covariates are held flat when forecasting forward.**  The short-run equation
+needs :math:`\Delta x` at each future step, which is unknown.  By default
+(``covariate_diff_path="zero"``) future covariate differences are set to zero,
+i.e. every covariate is assumed to follow a random walk and stay at its last
+observed level.  ``"last"`` instead repeats the most recent observed
+difference at every step — be aware this extrapolates a single day's move
+linearly, so over 21 steps one large last move produces a large drift.
+Either way the covariate path is an assumption, not a forecast, and its error
+is not reflected in the predictive intervals.
+
+**Single-equation, so weak exogeneity is assumed.**  Estimating one equation
+rather than a full VECM presumes the covariates are weakly exogenous for the
+long-run parameters — that they do not themselves adjust to the equilibrium
+error.  For a panel containing Brent or the crack spread, both plainly
+co-determined with WTI, that assumption is violated in principle.  The
+practical consequence is bias in :math:`\beta`; a VECM would be the
+principled fix and is out of scope here.
+
+**Intervals are Gaussian and scale as** :math:`\sqrt{h}`.  Uncertainty comes
+from the in-sample short-run residual standard deviation widened by
+:math:`\sqrt{h}`, which assumes homoskedastic, serially uncorrelated
+:math:`\varepsilon`.  Oil returns are neither.  Expect intervals that are too
+narrow in high-volatility regimes.
+
+Usage
+-----
+::
+
+    from aieng.forecasting.methods import ErrorCorrectionRegressionPredictor
     from aieng.forecasting.evaluation import backtest
 
-    # Gasoline CPI vs. crude oil + industrial production (log levels)
     predictor = ErrorCorrectionRegressionPredictor(
-        covariate_series_ids=["crude", "indpro"],
-        use_log_levels=True,
+        covariate_series_ids=["brent_log_ret_1b_l1b", "vix_level_l1b"],
     )
     result = backtest(predictor=predictor, spec=spec, data_service=svc)
-    print(f"ECM mean CRPS: {result.mean_score:.4f}")
 
-    # A different task: e.g. an FX rate vs. a rate differential (raw levels,
-    # since a rate differential can be negative)
-    fx_predictor = ErrorCorrectionRegressionPredictor(
-        covariate_series_ids=["rate_differential"],
-    )
+    # Inspect the cointegration diagnostics carried on each prediction.
+    meta = result.predictions[0].metadata
+    print(meta["coint_pvalue"], meta["ecm_coefficient"])
 """
 
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from typing import Any, Literal
 
 import numpy as np
 import pandas as pd
-from scipy.stats import norm
-from sklearn.linear_model import LinearRegression
-
 from aieng.forecasting.data.context import ForecastContext
 from aieng.forecasting.evaluation.prediction import STANDARD_QUANTILES, ContinuousForecast, Prediction
 from aieng.forecasting.evaluation.predictor import Predictor
 from aieng.forecasting.evaluation.task import ForecastingTask
 
 
+_TARGET_COLUMN = "__target__"
+
+DEFAULT_MIN_OBSERVATIONS = 120
+"""Minimum aligned observations required to fit.
+
+Set by the binding constraint, which is ADF power: the residual stationarity
+test is the point of the design, and ADF has poor power below roughly 100
+observations — it would fail to reject a unit root even under real
+cointegration, making the flag noise.  ``TimeSeriesSplit(n_splits=5)`` also
+needs workable folds (at n=120 the first fold trains on ~20 rows), and a
+14-covariate panel puts ~15 regressors in the short-run step, so 120 leaves
+~8 observations each.  120 business days is about six months and sits well
+inside the ``warmup: 250`` used by the daily WTI specs.
+"""
+
+DEFAULT_ADF_PVALUE_THRESHOLD = 0.10
+"""Residuals with ``p`` above this are flagged as not credibly stationary."""
+
+
 class ErrorCorrectionRegressionPredictor(Predictor):
-    """Single-equation Engle-Granger ECM: long-run levels + short-run corrections.
+    """Engle-Granger two-step ECM with ElasticNet long-run and short-run steps.
+
+    Forecasts the **level** of the target by iterating the short-run equation
+    forward to ``max(task.horizons)``, re-deriving the equilibrium error at
+    each step from the updated target level.
 
     Parameters
     ----------
     covariate_series_ids : list[str]
-        Series ids fetched from the ``ForecastContext`` and used as the
-        long-run / short-run explanatory variables. At least one required.
-        Choose series plausibly cointegrated with the target — see "Choosing
-        covariates" above.
+        Series ids fetched from the :class:`ForecastContext` and used as the
+        long-run regressors (on levels) and short-run regressors (on
+        differences).  Required, and must contain at least one id — an ECM
+        with no covariates has no equilibrium relation to correct toward.
+        ElasticNet's L1 component selects among them, so the list does not
+        need to be pre-pruned; note however that the cointegration
+        diagnostics then describe only the *selected* subset, not everything
+        passed in.
     use_log_levels : bool
-        If True, fit the long-run relationship in log space (appropriate for
-        strictly positive price/level series, and the conventional choice
-        for that case). Defaults to False (raw levels), since not every
-        target/covariate is guaranteed positive. Raises ``ValueError`` at
-        predict time if True but the data contains non-positive values.
+        When ``True``, the target and every covariate are converted to natural
+        logs before fitting, so the long-run relation is a constant-elasticity
+        one and forecasts are strictly positive.  Raises ``ValueError`` at fit
+        time if any of those series contains a non-positive value rather than
+        silently dropping or clipping rows.  Note this makes the flag
+        unusable with log-return covariates, which are routinely negative.
+        Default: ``False``.
     min_observations : int
-        Minimum number of overlapping observations required across the
-        target and all covariates before fitting. Raises ``ValueError`` if
-        the available history is shorter than this at a given origin. The
-        default (24) is a reasonable floor for monthly data; tighten or
-        loosen it to match your task's frequency and the degrees of freedom
-        needed for a stable fit (roughly ``2 * (1 + n_covariates)`` at a
-        minimum).
+        Minimum aligned rows required.  Below this, ``predict`` raises
+        ``ValueError`` and the harness skips the origin.  Default:
+        :data:`DEFAULT_MIN_OBSERVATIONS`.
+    cv_splits : int
+        Number of :class:`~sklearn.model_selection.TimeSeriesSplit` folds used
+        to select the ElasticNet penalty in both steps.  Default: 5.
+    l1_ratios : tuple[float, ...]
+        Candidate ElasticNet mixing parameters.  Values near 1 favour lasso-like
+        selection, near 0 favour ridge-like shrinkage.
+    n_alphas : int
+        Penalty-path length searched per ``l1_ratio``.  Default: 50.
+    adf_pvalue_threshold : float
+        Threshold above which residuals are flagged non-stationary.  Default:
+        :data:`DEFAULT_ADF_PVALUE_THRESHOLD`.
+    max_iter : int
+        Coordinate-descent iteration cap for ElasticNet.  Default: 10000.
+    covariate_diff_path : {"zero", "last"}
+        How future covariate differences are assumed to evolve.  ``"zero"``
+        (default) freezes covariates at their last observed level;  ``"last"``
+        repeats the most recent observed difference at every step, which
+        extrapolates one day's move linearly across the horizon.
+    long_run_only_covariate_series_ids : list[str] or None
+        Subset of ``covariate_series_ids`` (must be a subset — unknown ids raise)
+        to use **only** in the long-run (levels) step, excluded from the
+        short-run (differenced) step. Intended for covariates that are
+        genuinely low-frequency (monthly/weekly) but forward-filled onto a
+        daily grid upstream: their day-to-day ``Δx`` is zero on every day but
+        the rare release day, which the short-run equation can't distinguish
+        from real signal. ``None`` (default) keeps every covariate in both
+        steps, preserving existing behaviour.
+    variant_tag : str or None
+        Optional short identifier for a covariate recipe (e.g. ``"expanded"``).
+        When set, it is folded into :attr:`predictor_id` so cached backtests
+        keep recipes distinct — necessary because
+        :func:`~aieng.forecasting.evaluation.artifacts.cached_multi_backtest`
+        keys its cache files on ``predictor_id`` alone (plus spec and task),
+        so two different covariate panels sharing one id would silently reuse
+        each other's results.  ``None`` (default) preserves the bare
+        identifier used by existing callers.
+        
+    Raises
+    ------
+    ValueError
+        If ``covariate_series_ids`` is empty; if fewer than
+        ``min_observations`` aligned rows are available; or if
+        ``use_log_levels`` is set and a non-positive value is present.
     """
 
     def __init__(
         self,
         covariate_series_ids: list[str],
+        *,
         use_log_levels: bool = False,
-        min_observations: int = 24,
+        min_observations: int = DEFAULT_MIN_OBSERVATIONS,
+        cv_splits: int = 5,
+        l1_ratios: tuple[float, ...] = (0.1, 0.5, 0.7, 0.9, 0.95, 0.99, 1.0),
+        n_alphas: int = 50,
+        adf_pvalue_threshold: float = DEFAULT_ADF_PVALUE_THRESHOLD,
+        max_iter: int = 10_000,
+        covariate_diff_path: Literal["zero", "last"] = "zero",
+        long_run_only_covariate_series_ids: list[str] | None = None,
+        variant_tag: str | None = None,
     ) -> None:
         if not covariate_series_ids:
-            raise ValueError("covariate_series_ids must contain at least one series id")
+            raise ValueError(
+                "ErrorCorrectionRegressionPredictor requires at least one covariate series id; "
+                "an error-correction model with no covariates has no long-run relation."
+            )
         self._covariate_series_ids = list(covariate_series_ids)
         self._use_log_levels = use_log_levels
         self._min_observations = min_observations
+        self._cv_splits = cv_splits
+        self._l1_ratios = tuple(l1_ratios)
+        self._n_alphas = n_alphas
+        self._adf_pvalue_threshold = adf_pvalue_threshold
+        self._max_iter = max_iter
+        self._covariate_diff_path = covariate_diff_path
+
+        long_run_only = set(long_run_only_covariate_series_ids or [])
+        unknown = long_run_only - set(self._covariate_series_ids)
+        if unknown:
+            raise ValueError(
+                f"long_run_only_covariate_series_ids contains ids not present in "
+                f"covariate_series_ids: {sorted(unknown)}"
+            )
+        self._long_run_only_covariate_series_ids = long_run_only
+        self._variant_tag = variant_tag
 
     @property
     def predictor_id(self) -> str:
-        """Return a stable identifier, suffixed ``_log`` when fit in log space."""
+        """Return a stable identifier, suffixed ``_log`` under log levels and any variant tag."""
         suffix = "_log" if self._use_log_levels else ""
-        return f"ecm_regression{suffix}"
+        tag = f"_{self._variant_tag}" if self._variant_tag else ""
+        return f"ecm_regression{suffix}{tag}"
 
-    def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
-        """Produce ECM forecasts for every horizon in the task."""
-        merged = self._build_merged_frame(task, context)
+    # ── data assembly ────────────────────────────────────────────────────────
 
-        if len(merged) < self._min_observations:
-            raise ValueError(
-                f"ECM predictor needs at least {self._min_observations} overlapping "
-                f"observations, got {len(merged)} as of {context.as_of}."
-            )
+    def _aligned_frame(self, task: ForecastingTask, context: ForecastContext) -> pd.DataFrame:
+        """Inner-join target and covariates on ``timestamp``.
+
+        An inner join is deliberate: it makes no assumption about the calendar
+        grid, so a covariate carrying an off-grid stamp (a stray weekend bar,
+        say) cannot break the fit the way a ``freq="B"`` reindex would.  The
+        cost is that the fit is restricted to sessions where every series is
+        observed.
+        """
+        target = context.get_series(task.target_series_id)[["timestamp", "value"]].rename(
+            columns={"value": _TARGET_COLUMN}
+        )
+        merged = target
+        for series_id in self._covariate_series_ids:
+            cov = context.get_series(series_id)[["timestamp", "value"]].rename(columns={"value": series_id})
+            merged = pd.merge(merged, cov, on="timestamp", how="inner")
+
+        return merged.sort_values("timestamp").dropna().reset_index(drop=True)
+
+    def _to_model_arrays(self, frame: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+        """Return ``(y, X)``, log-transformed when ``use_log_levels`` is set."""
+        y = frame[_TARGET_COLUMN].to_numpy(dtype=float)
+        x = frame[self._covariate_series_ids].to_numpy(dtype=float)
 
         if self._use_log_levels:
-            non_positive_cols = [
-                col
-                for col in ["y", *self._covariate_series_ids]
-                if (merged[col] <= 0).any()
-            ]
-            if non_positive_cols:
+            if np.any(y <= 0):
                 raise ValueError(
-                    "use_log_levels=True requires strictly positive values, but "
-                    f"found non-positive observations in: {non_positive_cols}. "
-                    "Set use_log_levels=False to fit on raw levels instead."
+                    f"use_log_levels=True but target {_TARGET_COLUMN!r} contains non-positive values; "
+                    "refusing to take logs. Use use_log_levels=False for series that can be <= 0."
                 )
+            offenders = [
+                series_id for idx, series_id in enumerate(self._covariate_series_ids) if np.any(x[:, idx] <= 0)
+            ]
+            if offenders:
+                raise ValueError(
+                    f"use_log_levels=True but these covariates contain non-positive values: {offenders}. "
+                    "Log-return style covariates are routinely negative and cannot be log-levelled."
+                )
+            y = np.log(y)
+            x = np.log(x)
+        return y, x
 
-        transform, inverse_transform = self._get_transforms()
-        y = transform(merged["y"].to_numpy())
-        x = transform(merged[self._covariate_series_ids].to_numpy())
+    # ── model steps ──────────────────────────────────────────────────────────
 
-        # --- Step 1: long-run / cointegrating regression (levels) ---
-        long_run_model = LinearRegression()
-        long_run_model.fit(x, y)
-        residuals = y - long_run_model.predict(x)  # equilibrium error e_t
+    def _build_pipeline(self) -> Any:
+        """ElasticNetCV behind a StandardScaler, penalty picked on ordered folds."""
+        from sklearn.linear_model import ElasticNetCV  # noqa: PLC0415
+        from sklearn.model_selection import TimeSeriesSplit  # noqa: PLC0415
+        from sklearn.pipeline import Pipeline  # noqa: PLC0415
+        from sklearn.preprocessing import StandardScaler  # noqa: PLC0415
 
-        # --- Step 2: short-run error-correction regression (differences) ---
-        dy = np.diff(y)  # dy[i] = y[i+1] - y[i]
-        dx = np.diff(x, axis=0)  # dx[i] = x[i+1] - x[i]
-        e_t = residuals[:-1]  # equilibrium error known at time of dx[i]
-
-        # Features available at time t: [e_t, dx_t]; target: dy_{t+1}.
-        short_run_features = np.column_stack([e_t, dx])[:-1]
-        short_run_target = dy[1:]
-
-        short_run_model = LinearRegression()
-        short_run_model.fit(short_run_features, short_run_target)
-        fitted = short_run_model.predict(short_run_features)
-        residual_std = float(np.std(short_run_target - fitted, ddof=1))
-
-        # --- Iteratively forecast forward to the max requested horizon ---
-        last_y = float(y[-1])
-        last_x = x[-1].copy()
-        last_dx = dx[-1].copy()  # held flat for all future steps
-        last_e = float(residuals[-1])
-
-        max_horizon = max(task.horizons)
-        point_forecasts: dict[int, float] = {}
-        for step in range(1, max_horizon + 1):
-            features = np.concatenate([[last_e], last_dx]).reshape(1, -1)
-            pred_dy = float(short_run_model.predict(features)[0])
-
-            new_y = last_y + pred_dy
-            new_x = last_x + last_dx  # covariate levels drift by their last observed change
-            new_long_run_fit = float(long_run_model.predict(new_x.reshape(1, -1))[0])
-            new_e = new_y - new_long_run_fit
-
-            point_forecasts[step] = new_y
-            last_y, last_x, last_e = new_y, new_x, new_e
-
-        return self._build_predictions(
-            task=task,
-            context=context,
-            point_forecasts=point_forecasts,
-            residual_std=residual_std,
-            inverse_transform=inverse_transform,
+        return Pipeline(
+            [
+                ("scale", StandardScaler()),
+                (
+                    "model",
+                    ElasticNetCV(
+                        l1_ratio=list(self._l1_ratios),
+                        # An int here is the penalty-path length. The older
+                        # ``n_alphas`` spelling is deprecated in sklearn 1.7 and
+                        # removed in 1.9.
+                        alphas=self._n_alphas,
+                        cv=TimeSeriesSplit(n_splits=self._cv_splits),
+                        max_iter=self._max_iter,
+                    ),
+                ),
+            ]
         )
 
-    def _get_transforms(self):
-        """Return (forward, inverse) transforms for log-level or raw-level fitting."""
-        if self._use_log_levels:
-            return np.log, np.exp
-        return (lambda a: a), (lambda a: a)
+    def _stationarity_diagnostics(
+        self,
+        residuals: np.ndarray,
+        y: np.ndarray,
+        x_selected: np.ndarray,
+        x_all: np.ndarray,
+    ) -> dict[str, Any]:
+        """Run ADF on the residual and the proper Engle-Granger test on the pair.
 
-    def _build_merged_frame(self, task: ForecastingTask, context: ForecastContext) -> pd.DataFrame:
-        """Fetch target + covariates and inner-join them on timestamp."""
-        target_df = context.get_series(task.target_series_id)[["timestamp", "value"]].rename(
-            columns={"value": "y"}
-        )
-        merged = target_df
-        for cov_id in self._covariate_series_ids:
-            cov_df = context.get_series(cov_id)[["timestamp", "value"]].rename(columns={"value": cov_id})
-            merged = merged.merge(cov_df, on="timestamp", how="inner")
-        return merged.sort_values("timestamp").reset_index(drop=True)
+        Both are reported because they disagree in a predictable direction:
+        ADF on estimated residuals over-rejects the unit root, so it will call
+        cointegration more often than the Engle-Granger critical values do.
+        ``coint_pvalue`` is the one to trust.
 
-    def _build_predictions(
+        The Engle-Granger test normally runs on the ElasticNet-*selected*
+        covariates, since those are what the long-run relation actually uses.
+        When L1 selects nothing — which is itself strong evidence against any
+        relation — it falls back to the full input panel so a real p-value is
+        still reported rather than a bare NaN.  ``coint_basis`` records which
+        was used.
+        """
+        from statsmodels.tsa.stattools import adfuller, coint  # noqa: PLC0415
+
+        adf_stat, adf_pvalue = float("nan"), float("nan")
+        try:
+            adf_result = adfuller(residuals, regression="c", autolag="AIC")
+            adf_stat, adf_pvalue = float(adf_result[0]), float(adf_result[1])
+        except (ValueError, np.linalg.LinAlgError, IndexError):
+            pass
+
+        coint_basis = "selected" if x_selected.size else "all"
+        coint_inputs = x_selected if x_selected.size else x_all
+
+        coint_stat, coint_pvalue = float("nan"), float("nan")
+        if coint_inputs.size:
+            try:
+                coint_result = coint(y, coint_inputs, trend="c", autolag="AIC")
+                coint_stat, coint_pvalue = float(coint_result[0]), float(coint_result[1])
+            except (ValueError, np.linalg.LinAlgError, IndexError):
+                pass
+
+        adf_stationary = bool(adf_pvalue <= self._adf_pvalue_threshold) if np.isfinite(adf_pvalue) else False
+        coint_stationary = bool(coint_pvalue <= self._adf_pvalue_threshold) if np.isfinite(coint_pvalue) else False
+        return {
+            "adf_stat": adf_stat,
+            "adf_pvalue": adf_pvalue,
+            "adf_stationary": adf_stationary,
+            "coint_stat": coint_stat,
+            "coint_pvalue": coint_pvalue,
+            "coint_stationary": coint_stationary,
+            "coint_basis": coint_basis,
+            "adf_threshold": self._adf_pvalue_threshold,
+            # Believe the Engle-Granger test; ADF on estimated residuals over-rejects.
+            "cointegration_warning": not coint_stationary,
+        }
+
+    def _iterate_forward(
         self,
         *,
-        task: ForecastingTask,
-        context: ForecastContext,
-        point_forecasts: dict[int, float],
-        residual_std: float,
-        inverse_transform,
-    ) -> list[Prediction]:
-        """Assemble one Prediction per requested horizon, with Gaussian quantiles.
+        long_run: Any,
+        short_run: Any,
+        y_last: float,
+        x_last: np.ndarray,
+        dx_future: np.ndarray,
+        short_run_mask: np.ndarray,
+        max_horizon: int,
+    ) -> dict[int, float]:
+        """Step the short-run equation forward, re-deriving ``u`` each step."""
+        y_cur = float(y_last)
+        x_cur = x_last.astype(float).copy()
+        dx_future_short = dx_future[short_run_mask]
+        path: dict[int, float] = {}
 
-        Uncertainty is widened with sqrt(horizon), the standard random-walk
-        error-growth heuristic, since each additional step compounds the
-        held-flat-covariate assumption.
-        """
+        for step in range(1, max_horizon + 1):
+            equilibrium_error = y_cur - float(long_run.predict(x_cur.reshape(1, -1))[0])
+            features = np.concatenate(([equilibrium_error], dx_future_short))
+            delta_y = float(short_run.predict(features.reshape(1, -1))[0])
+            y_cur = y_cur + delta_y
+            x_cur = x_cur + dx_future
+            path[step] = y_cur
+
+        return path
+
+    # ── Predictor interface ──────────────────────────────────────────────────
+
+    def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
+        """Fit the two-step ECM at the origin and forecast every requested horizon."""
+        from scipy.stats import norm  # noqa: PLC0415
+
+        frame = self._aligned_frame(task, context)
+        if len(frame) < self._min_observations:
+            raise ValueError(
+                f"ErrorCorrectionRegressionPredictor needs at least {self._min_observations} aligned "
+                f"observations across the target and {len(self._covariate_series_ids)} covariate(s); "
+                f"only {len(frame)} available at as_of={context.as_of}."
+            )
+
+        y, x = self._to_model_arrays(frame)
+
+        short_run_mask = np.array(
+            [sid not in self._long_run_only_covariate_series_ids for sid in self._covariate_series_ids],
+            dtype=bool,
+        )
+        
+        # Step 1 — long-run relation on levels; u is the equilibrium error.
+        long_run = self._build_pipeline()
+        long_run.fit(x, y)
+        equilibrium_error = y - long_run.predict(x)
+
+        coefficients = np.asarray(long_run["model"].coef_, dtype=float)
+        selected_mask = coefficients != 0.0
+        selected = [sid for sid, keep in zip(self._covariate_series_ids, selected_mask, strict=True) if keep]
+
+        diagnostics = self._stationarity_diagnostics(equilibrium_error, y, x[:, selected_mask], x)
+
+        # Step 2 — short-run dynamics on differences, driven by the lagged error.
+        delta_y = np.diff(y)
+        delta_x_all = np.diff(x, axis=0)
+        delta_x_short = delta_x_all[:, short_run_mask]
+        lagged_error = equilibrium_error[:-1]
+        short_run_features = np.column_stack([lagged_error, delta_x_short])
+
+        short_run = self._build_pipeline()
+        short_run.fit(short_run_features, delta_y)
+        short_run_residuals = delta_y - short_run.predict(short_run_features)
+        residual_std = float(np.std(short_run_residuals, ddof=1)) if len(short_run_residuals) > 1 else 0.0
+
+        # Recover phi in original units: the pipeline fits on standardized inputs.
+        scale = np.asarray(short_run["scale"].scale_, dtype=float)
+        phi = float(np.asarray(short_run["model"].coef_, dtype=float)[0] / scale[0]) if scale[0] else 0.0
+
+        dx_future = np.zeros(x.shape[1]) if self._covariate_diff_path == "zero" else delta_x_all[-1]
+        path = self._iterate_forward(
+            long_run=long_run,
+            short_run=short_run,
+            y_last=y[-1],
+            x_last=x[-1],
+            dx_future=dx_future,
+            short_run_mask=short_run_mask,
+            max_horizon=task.horizon,
+        )
+
+        metadata: dict[str, Any] = {
+            **diagnostics,
+            "n_observations": int(len(frame)),
+            "covariates": list(self._covariate_series_ids),
+            "selected_covariates": selected,
+            "n_selected": len(selected),
+            "ecm_coefficient": phi,
+            # A zeroed phi means ElasticNet removed the error-correction term
+            # entirely, leaving a plain differenced regression; phi >= 0 means
+            # the "correction" pushes away from equilibrium rather than toward it.
+            "ecm_coefficient_zeroed": bool(phi == 0.0),
+            "ecm_sign_warning": bool(phi >= 0.0),
+            "short_run_residual_std": residual_std,
+            "use_log_levels": self._use_log_levels,
+            "covariate_diff_path": self._covariate_diff_path,
+            "long_run_only_covariates": sorted(self._long_run_only_covariate_series_ids),
+        }
+
         offset = pd.tseries.frequencies.to_offset(task.frequency)
         issued_at = datetime.now(tz=timezone.utc).replace(tzinfo=None)
+        predictions: list[Prediction] = []
 
-        predictions = []
         for h in task.horizons:
-            point_transformed = point_forecasts[h]
-            step_std = residual_std * np.sqrt(h)
+            centre = path[h]
+            sigma = residual_std * np.sqrt(h)
+            quantiles = {q: float(centre + norm.ppf(q) * sigma) for q in STANDARD_QUANTILES}
+            point = float(centre)
 
-            quantiles = {
-                q: float(inverse_transform(point_transformed + norm.ppf(q) * step_std))
-                for q in STANDARD_QUANTILES
-            }
-            payload = ContinuousForecast(
-                point_forecast=float(inverse_transform(point_transformed)),
-                quantiles=quantiles,
-            )
+            if self._use_log_levels:
+                # Quantiles survive monotone transforms exactly; the exponentiated
+                # centre is the lognormal *median*, not its mean.
+                quantiles = {q: float(np.exp(v)) for q, v in quantiles.items()}
+                point = float(np.exp(point))
+
             predictions.append(
                 Prediction(
                     predictor_id=self.predictor_id,
@@ -269,8 +523,9 @@ class ErrorCorrectionRegressionPredictor(Predictor):
                     issued_at=issued_at,
                     as_of=context.as_of,
                     forecast_date=(pd.Timestamp(context.as_of) + offset * h).to_pydatetime(),
-                    payload=payload,
-                    metadata={"covariates": self._covariate_series_ids},
+                    payload=ContinuousForecast(point_forecast=point, quantiles=quantiles),
+                    metadata=metadata,
                 )
             )
+
         return predictions

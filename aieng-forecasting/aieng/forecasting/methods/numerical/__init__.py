@@ -8,6 +8,7 @@ interface.
 from .darts_arima import DartsAutoARIMAPredictor
 from .darts_classical import DartsExponentialSmoothingPredictor, DartsKalmanForecasterPredictor
 from .darts_regression import DartsLightGBMPredictor, DartsLinearRegressionPredictor
+from .error_correction_regression import ErrorCorrectionRegressionPredictor
 
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "DartsKalmanForecasterPredictor",
     "DartsLightGBMPredictor",
     "DartsLinearRegressionPredictor",
+    "ErrorCorrectionRegressionPredictor",
 ]
