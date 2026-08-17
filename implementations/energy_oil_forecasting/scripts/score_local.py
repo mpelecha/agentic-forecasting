@@ -22,7 +22,7 @@ sys.path.insert(0, "implementations")
 from aieng.forecasting.evaluation.backtest import BacktestResult  # noqa: E402
 from energy_oil_forecasting.analysis import score_backtest_results  # noqa: E402
 
-D = "implementations/energy_oil_forecasting/data/predictions/energy_oil_backtest_10yr_quarterly"
+D = "implementations/energy_oil_forecasting/data/predictions/energy_oil_backtest_10yr_quarterly_localrun"
 
 # ── Reconstruct the price series from Naive ──────────────────────────────────
 naive_doc = yaml.safe_load(open(f"{D}/last_value_naive__wti_oil_price_forecast.yaml"))
