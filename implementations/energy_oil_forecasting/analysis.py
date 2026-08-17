@@ -66,10 +66,9 @@ def score_backtest_results(
                 continue
             median = pred.payload.point_forecast
             mae_errors.append(abs(median - actual))
-            q80 = pred.payload.quantiles.get(0.80)
-            q20 = pred.payload.quantiles.get(0.20)
-            if q80 is not None and q20 is not None:
-                coverage_hits.append(float(q20 <= actual <= q80))
+            lo80, hi80 = _qval(pred.payload.quantiles, 0.1), _qval(pred.payload.quantiles, 0.9)
+            if not (np.isnan(lo80) or np.isnan(hi80)):
+                coverage_hits.append(float(lo80 <= actual <= hi80))
 
     return {
         "mean_crps": float(np.mean(all_scores)) if all_scores else float("nan"),
@@ -249,7 +248,7 @@ def predictions_to_frame(
                 as_of = pd.Timestamp(pred.as_of)
                 fdate = pd.Timestamp(pred.forecast_date).normalize()
                 q = pred.payload.quantiles
-                lo80, hi80 = _qval(q, 0.2), _qval(q, 0.8)
+                lo80, hi80 = _qval(q, 0.1), _qval(q, 0.9)
                 point = float(pred.payload.point_forecast)
                 actual = actual_by_date.get(fdate)
                 rows.append(
@@ -260,11 +259,11 @@ def predictions_to_frame(
                         "forecast_date": fdate,
                         "horizon": _business_horizon(as_of, fdate),
                         "point": point,
-                        "q10": _qval(q, 0.1),
-                        "q20": lo80,
+                        "q10": lo80,
+                        "q20": _qval(q, 0.2),
                         "q50": _qval(q, 0.5),
-                        "q80": hi80,
-                        "q90": _qval(q, 0.9),
+                        "q80": _qval(q, 0.8),
+                        "q90": hi80,
                         "actual": actual,
                         "crps": float(score),
                         "abs_error": abs(point - actual) if actual is not None else float("nan"),
