@@ -28,11 +28,12 @@ class AuthoritativeSuiteToolArimaOnly(AuthoritativeSuiteTool):
     def __init__(
         self,
         data_service: DataService,
+        *,
         settings: CfmV52Settings,
         covariate_series_ids: list[str] | None = None,
     ) -> None:
         # Call parent __init__ but we'll override the ensemble after
-        super().__init__(data_service, settings, covariate_series_ids)
+        super().__init__(data_service, settings=settings, covariate_series_ids=covariate_series_ids)
 
         # Replace the ensemble with ARIMA-only version
         arima_only_predictors = {
