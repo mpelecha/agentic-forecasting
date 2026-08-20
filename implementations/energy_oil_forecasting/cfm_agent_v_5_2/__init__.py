@@ -2,7 +2,9 @@
 
 from energy_oil_forecasting.cfm_agent_v_5_2.agent import (
     build_cfm_agent_config,
+    build_cfm_agent_config_arima_only,
     build_cfm_agent_predictor,
+    build_cfm_agent_predictor_arima_only,
 )
 from energy_oil_forecasting.cfm_agent_v_5_2.config import (
     AGENT_NAME,
@@ -34,5 +36,7 @@ __all__ = [
     "AuthoritativeSuiteTool",
     "ResearchPipelineTool",
     "build_cfm_agent_config",
+    "build_cfm_agent_config_arima_only",
     "build_cfm_agent_predictor",
+    "build_cfm_agent_predictor_arima_only",
 ]

@@ -17,6 +17,9 @@ from energy_oil_forecasting.cfm_agent_v_5_2.tools import (
     AuthoritativeSuiteTool,
     ResearchPipelineTool,
 )
+from energy_oil_forecasting.cfm_agent_v_5_2.tools.market_data_arima_only import (
+    AuthoritativeSuiteToolArimaOnly,
+)
 from energy_oil_forecasting.data import (
     DEFAULT_WTI_COVARIATE_SERIES_IDS,
     build_wti_multivariate_service,
@@ -80,6 +83,65 @@ def build_cfm_agent_config(
 
 
 def build_cfm_agent_predictor(config: AgentConfig) -> CfmV51Predictor:
+    bundle = _CONFIG.pop(id(config), None)
+    if bundle is None or bundle[0] is not config:
+        raise ValueError("Configuration was not created here or was already consumed.")
+    _, market, research, code_execution, settings = bundle
+    return CfmV51Predictor(config, market, research, code_execution, settings)
+
+
+def build_cfm_agent_config_arima_only(
+    model: str = LITE_MODEL,
+    *,
+    data_service: DataService | None = None,
+    settings: CfmV52Settings = DEFAULT_SETTINGS,
+    search_model: str = LITE_MODEL,
+    covariate_series_ids: list[str] | None = None,
+) -> AgentConfig:
+    """Build CFM Agent v5.2 config with ONLY ARIMA in the ensemble (no Kalman, no LightGBM).
+
+    Identical to build_cfm_agent_config() except uses AuthoritativeSuiteToolArimaOnly,
+    which skips the expensive Kalman and LightGBM models. Saves hours of computation
+    while keeping the full LLM agent, policy, and research components.
+    """
+    service = data_service or build_wti_multivariate_service()
+    available = set(service.series_ids)
+    covariates = (
+        list(covariate_series_ids)
+        if covariate_series_ids is not None
+        else [value for value in DEFAULT_WTI_COVARIATE_SERIES_IDS if value in available]
+    )
+    # Use ARIMA-only variant instead of full ensemble
+    market = AuthoritativeSuiteToolArimaOnly(service, settings=settings, covariate_series_ids=covariates)
+    research = ResearchPipelineTool(settings, search_model=search_model)
+    code_execution = AuditedCodeExecutionTool(settings)
+    tools = [market.as_function_tool(), research.as_function_tool()]
+    if settings.code_execution_enabled:
+        tools.append(code_execution.as_function_tool())
+    config = AgentConfig(
+        name="cfm_agent_v_5_2_arima_only",
+        description="CFM Agent v5.2 with ONLY ARIMA ensemble (no Kalman/LightGBM).",
+        model=model,
+        instruction=_PERSONA,
+        max_output_tokens=24576,
+        function_tools=tools,
+        skills_dirs=[
+            SKILLS_ROOT / name
+            for name in [
+                "source-selection",
+                "research-planning",
+                "claim-building",
+                "action-proposal",
+                "code-analysis",
+            ]
+        ],
+    )
+    _CONFIG[id(config)] = (config, market, research, code_execution, settings)
+    return config
+
+
+def build_cfm_agent_predictor_arima_only(config: AgentConfig) -> CfmV51Predictor:
+    """Build predictor for ARIMA-only CFM Agent config (companion to build_cfm_agent_config_arima_only)."""
     bundle = _CONFIG.pop(id(config), None)
     if bundle is None or bundle[0] is not config:
         raise ValueError("Configuration was not created here or was already consumed.")
