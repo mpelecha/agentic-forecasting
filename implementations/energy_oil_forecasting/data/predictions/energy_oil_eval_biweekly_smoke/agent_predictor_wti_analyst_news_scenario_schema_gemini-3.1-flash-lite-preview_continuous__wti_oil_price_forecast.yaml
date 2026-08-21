@@ -1,0 +1,191 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:06:56.373258'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.5
+    quantiles:
+      '0.05': 56.1445995623088
+      '0.1': 63.0
+      '0.2': 64.0
+      '0.3': 64.5
+      '0.4': 65.0
+      '0.5': 65.5
+      '0.6': 66.0
+      '0.7': 66.5
+      '0.8': 67.5
+      '0.9': 69.0
+      '0.95': 72.43975018237133
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Weather-Related Supply Disruptions
+      category: macro
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Normalization
+      probability: 0.6
+      price_low: 58.0
+      price_high: 63.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: neutral
+        Geopolitical Risk: neutral
+        Weather-Related Supply Disruptions: bearish
+    - name: Escalation
+      probability: 0.3
+      price_low: 65.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: bullish
+        Geopolitical Risk: bullish
+        Weather-Related Supply Disruptions: bullish
+    - name: Supply Glut/Demand Shock
+      probability: 0.1
+      price_low: 50.0
+      price_high: 56.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: bearish
+        Geopolitical Risk: bearish
+        Weather-Related Supply Disruptions: bearish
+    rationale: The current price of $65.21 is elevated due to transitory supply-side
+      pressures (Winter Storm Fern) and a heightened geopolitical risk premium related
+      to US-Iran tensions. The primary baseline scenario assumes these transitory
+      factors normalize, allowing prices to revert toward a equilibrium range reflective
+      of broader global supply/demand balances. The scenario space accounts for both
+      potential escalation and a downside risk scenario where underlying oversupply
+      concerns dominate.
+    horizon_rationale: Short-term horizon is dominated by the unwinding or persistence
+      of current winter supply disruptions and geopolitical risk premiums; prices
+      expected to remain elevated near current levels.
+    langfuse_trace_id: 471387dd9cf4b3674a6c9f4e69f92272
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/471387dd9cf4b3674a6c9f4e69f92272
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:06:56.373258'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 62.0
+    quantiles:
+      '0.05': 50.0
+      '0.1': 58.0
+      '0.2': 59.5
+      '0.3': 60.5
+      '0.4': 61.5
+      '0.5': 62.0
+      '0.6': 63.0
+      '0.7': 64.5
+      '0.8': 66.5
+      '0.9': 69.0
+      '0.95': 75.0
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Weather-Related Supply Disruptions
+      category: macro
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Normalization
+      probability: 0.6
+      price_low: 58.0
+      price_high: 63.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: neutral
+        Geopolitical Risk: neutral
+        Weather-Related Supply Disruptions: bearish
+    - name: Escalation
+      probability: 0.3
+      price_low: 65.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: bullish
+        Geopolitical Risk: bullish
+        Weather-Related Supply Disruptions: bullish
+    - name: Supply Glut/Demand Shock
+      probability: 0.1
+      price_low: 50.0
+      price_high: 56.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: bearish
+        Geopolitical Risk: bearish
+        Weather-Related Supply Disruptions: bearish
+    rationale: The current price of $65.21 is elevated due to transitory supply-side
+      pressures (Winter Storm Fern) and a heightened geopolitical risk premium related
+      to US-Iran tensions. The primary baseline scenario assumes these transitory
+      factors normalize, allowing prices to revert toward a equilibrium range reflective
+      of broader global supply/demand balances. The scenario space accounts for both
+      potential escalation and a downside risk scenario where underlying oversupply
+      concerns dominate.
+    horizon_rationale: Longer horizon reflects a return to the underlying fundamentals
+      of a well-supplied market, assuming geopolitical tensions do not escalate into
+      a major conflict and weather conditions stabilize.
+    langfuse_trace_id: 471387dd9cf4b3674a6c9f4e69f92272
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/471387dd9cf4b3674a6c9f4e69f92272
+scores:
+- 0.8635960086836906
+- 8.660659159510592
+metric: crps
+mean_score: 4.762127584097142
+ran_at: '2026-08-19T15:06:56.626309'
+skipped_origins: 0

@@ -1,0 +1,4013 @@
+From 559a563d43780bec99bf5bb13c7cd96724214449 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 2 Aug 2026 09:30:41 +0000
+Subject: [PATCH 1/2] Add cfm_agent_v_3_4: v3.3 architecture plus v2.2 scenario
+ and calibration work
+
+Merges the two CFM lines. v3.3's numerical architecture, graduated evidence
+tiers, sanitizer, ensemble-locked control, and Python-owned arithmetic are
+preserved unchanged. Three ideas come across from the v2.2 event-scoring line.
+
+Pillar boundary: the evidence skill now bans structured market data and
+supply/demand statistics or agency publications as claims, using a general
+boundary test rather than a list of named series. This keeps the LLM pillar
+from restating what the quant and physical pillars already see.
+
+Driver categories: every claim carries a driver_category (geopolitical,
+weather, operational, policy, demand_expectations), orthogonal to claim_type.
+claim_type says what kind of fact a claim is; driver_category says what kind
+of driver produced it.
+
+Competing scenarios: 2-3 categorical scenarios with probabilities summing to
+1, a direction, a magnitude, and one required low-probability, high-impact
+tail case. Scenarios state no prices, matching the categorical-action design.
+Malformed sets are rejected; an absent set is tolerated and degrades to v3.3
+behaviour. The policy then applies a scenario-derived uncertainty floor: a
+two-sided scenario set forces the interval wider whatever the LLM proposed.
+The floor widens only and never moves the center, so it is deliberately
+independent of the evidence tier and cannot manufacture a directional view.
+
+Calibration feature row: prediction metadata now carries a fixed-width numeric
+row built from the sanitized assessment. Every key exists on every run, which
+is what makes it usable as regression input when claim text varies between
+origins. With the unadjusted_ensemble already recorded, this supplies both
+sides of the study that would replace v3.3's hand-set policy constants with
+fitted values.
+
+Validation in the repo environment: ruff clean, compileall clean, 33 tests
+passing (17 inherited from v3.3 unchanged, 16 new). Also fixed the 9 ruff
+errors v3.3 shipped with.
+
+cfm_agent_v_2_0, v_2_1, v_2_2, and v_3_3 are unmodified.
+---
+ .../cfm_agent_v_3_4/BUILD_VERIFICATION.md     |  32 ++
+ .../cfm_agent_v_3_4/CHANGELOG.md              |  43 ++
+ .../cfm_agent_v_3_4/INSTALL.md                |   3 +
+ .../cfm_agent_v_3_4/README.md                 |  98 +++++
+ .../cfm_agent_v_3_4/__init__.py               |  43 ++
+ .../cfm_agent_v_3_4/agent.py                  | 116 +++++
+ .../cfm_agent_v_3_4/config.py                 |  78 ++++
+ .../cfm_agent_v_3_4/diagnostics.py            |  68 +++
+ .../cfm_agent_v_3_4/fingerprints.py           |  16 +
+ .../cfm_agent_v_3_4/models/__init__.py        |  14 +
+ .../cfm_agent_v_3_4/models/arima.py           |  10 +
+ .../cfm_agent_v_3_4/models/ensemble.py        | 137 ++++++
+ .../cfm_agent_v_3_4/models/kalman.py          |  10 +
+ .../cfm_agent_v_3_4/models/lightgbm.py        |  22 +
+ .../cfm_agent_v_3_4/outputs.py                | 317 ++++++++++++++
+ .../cfm_agent_v_3_4/policy/__init__.py        |  10 +
+ .../cfm_agent_v_3_4/policy/base.py            |  27 ++
+ .../cfm_agent_v_3_4/policy/constrained.py     | 329 ++++++++++++++
+ .../cfm_agent_v_3_4/predictor.py              | 213 +++++++++
+ .../cfm_agent_v_3_4/prompts.py                |  43 ++
+ .../cfm_agent_v_3_4/sanitizer.py              | 165 +++++++
+ .../cfm_agent_v_3_4/schemas.py                | 277 ++++++++++++
+ .../skills/code-analysis/SKILL.md             |  12 +
+ .../skills/evidence-assessment/SKILL.md       |  86 ++++
+ .../skills/forecast-action-selection/SKILL.md |  61 +++
+ .../skills/market-context-assessment/SKILL.md |  18 +
+ .../cfm_agent_v_3_4/tests/conftest.py         |  39 ++
+ .../tests/test_agent_contract.py              |  39 ++
+ .../cfm_agent_v_3_4/tests/test_diagnostics.py |  20 +
+ .../cfm_agent_v_3_4/tests/test_outputs.py     |  41 ++
+ .../cfm_agent_v_3_4/tests/test_policy.py      | 170 +++++++
+ .../cfm_agent_v_3_4/tests/test_scenarios.py   | 283 ++++++++++++
+ .../tests/test_v34_hardening.py               | 142 ++++++
+ .../cfm_agent_v_3_4/tools/__init__.py         |  17 +
+ .../cfm_agent_v_3_4/tools/code_execution.py   |  13 +
+ .../cfm_agent_v_3_4/tools/market_data.py      | 414 ++++++++++++++++++
+ .../cfm_agent_v_3_4/tools/verified_search.py  |  27 ++
+ 37 files changed, 3453 insertions(+)
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/BUILD_VERIFICATION.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/CHANGELOG.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/INSTALL.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/README.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/__init__.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/agent.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/config.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/diagnostics.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/fingerprints.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/__init__.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/arima.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/ensemble.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/kalman.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/lightgbm.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/outputs.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/__init__.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/base.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/constrained.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/predictor.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/prompts.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/sanitizer.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/schemas.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/code-analysis/SKILL.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/evidence-assessment/SKILL.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/forecast-action-selection/SKILL.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/market-context-assessment/SKILL.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/conftest.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_agent_contract.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_diagnostics.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_outputs.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_policy.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_scenarios.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_v34_hardening.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/__init__.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/code_execution.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/market_data.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/verified_search.py
+
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/BUILD_VERIFICATION.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/BUILD_VERIFICATION.md
+new file mode 100644
+index 0000000..7600b22
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/BUILD_VERIFICATION.md
+@@ -0,0 +1,32 @@
++## Build verification
++
++Run inside the complete agentic-forecasting repository, in the `aieng`
++environment. Unlike v3.3, full Ruff and pytest execution was not deferred.
++
++- Native v3.3 package cloned as a self-contained v3.4 package: passed.
++- Legacy v3.3 package-name references in v3.4 source: none found.
++- Python compileall across the package: passed.
++- Ruff across the package: passed, no errors.
++- Full pytest suite: 33 passed.
++  - 17 inherited tests across agent contract, outputs, diagnostics, hardening,
++    and policy, all passing unchanged after the merge.
++  - 16 new tests in `tests/test_scenarios.py` covering the scenario contract,
++    calibration-feature stability, and the scenario uncertainty floor.
++- Numerical architecture comparison after version normalization: ARIMA,
++  Kalman, LightGBM, ensemble, diagnostics, fingerprints, and the authoritative
++  suite tool preserved exactly from v3.3.
++- Graduated evidence policy, sanitizer, and ensemble-locked control policy
++  preserved from v3.3; the scenario uncertainty floor is additive and widens
++  only.
++- Backward compatibility: a claim without `driver_category` parses and
++  defaults to `geopolitical`; an assessment without `scenarios` parses and
++  applies no uncertainty floor, reproducing v3.3 behaviour.
++
++### Not yet done
++
++- Live multi-date end-to-end run against real search and Langfuse.
++- Evidence-tier distribution study: confirm the sanitizer does not reject
++  nearly all real sources, and that Tier 2 and Tier 3 are reachable in
++  practice.
++- The calibration study that would replace the hand-set policy constants with
++  fitted values.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/CHANGELOG.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/CHANGELOG.md
+new file mode 100644
+index 0000000..08a2a07
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/CHANGELOG.md
+@@ -0,0 +1,43 @@
++## CFM Agent v3.4 changes from v3.3
++
++Merges three ideas from the v2.2 event-scoring line into v3.3's architecture.
++The numerical models, graduated evidence tiers, sanitizer, and Python-owned
++arithmetic are unchanged.
++
++- Added an explicit pillar boundary to the evidence skill: structured market
++  data and supply/demand statistics or agency publications are banned as
++  claims, with a general boundary test rather than a list of named series.
++- Added `driver_category` to every claim (geopolitical, weather, operational,
++  policy, demand_expectations), orthogonal to the existing `claim_type`.
++- Added a categorical `ContextScenario` contract: 2-3 competing scenarios with
++  probabilities summing to 1, a direction, a magnitude, and one required
++  low-probability, high-impact tail case. Scenarios state no prices.
++- Added scenario well-formedness validators: unique IDs, known claim
++  references, probability sum, tail-case presence and dominance, a required
++  mainline case, and rejection of two scenarios sharing direction and
++  magnitude. An absent scenario set is tolerated and degrades to v3.3
++  behaviour.
++- Added a scenario-derived uncertainty floor to the policy: when the scenario
++  set places at least `scenario_disagreement_floor_mass` on the losing price
++  direction, Python widens the interval to at least `moderately_wider`
++  regardless of the proposed action. The floor widens only and never moves the
++  center, so it is deliberately independent of the evidence tier.
++- Added `scenario_disagreement_mass` and `scenario_uncertainty_floor_applied`
++  to `PolicyDecision` and to prediction metadata.
++- Added `calibration_features()`: a fixed-width numeric row recorded in
++  prediction metadata, built from the sanitized assessment, for the future
++  score-to-price calibration study.
++- Added `tests/test_scenarios.py` with 16 tests covering the scenario
++  contract, feature-row stability, and the uncertainty floor.
++
++## CFM Agent v3.3 changes from v3.2
++
++- Replaced the single binary evidence threshold with Python-assigned limited, corroborated, and strong evidence tiers.
++- Added confidence thresholds of 0.50, 0.65, and 0.80.
++- Added tier-specific action caps and a 50% discount for possibly partly reflected evidence.
++- Permitted explicitly verified source identity metadata with imperfect URLs, with audit warnings.
++- Separated LLM-proposed, sanitized, and Python-approved assessments and actions.
++- Neutralized rejected actions and removed rejected citations from approved output.
++- Added source-level and claim-level evidence diagnostics.
++- Retained the unadjusted authoritative ensemble as a control.
++- Preserved all numerical-model and one-execution architecture from v3.2.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/INSTALL.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/INSTALL.md
+new file mode 100644
+index 0000000..3ce564d
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/INSTALL.md
+@@ -0,0 +1,3 @@
++## Installation
++
++Copy `cfm_agent_v_3_4` into `implementations/energy_oil_forecasting/` beside v3.3. Do not modify shared code or any earlier CFM package. Restart the Python kernel after installation and run the validation commands in `README.md`.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/README.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/README.md
+new file mode 100644
+index 0000000..ca1643d
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/README.md
+@@ -0,0 +1,98 @@
++## CFM Agent v3.4
++
++Self-contained successor to v3.3. V3.4 keeps v3.3's numerical architecture,
++graduated evidence policy, and sanitizer unchanged, and merges three ideas from
++the v2.2 event-scoring line: a pillar boundary, a competing-scenario contract,
++and a fixed-width calibration feature row.
++
++### What v3.4 adds
++
++**Pillar boundary.** The evidence skill now states the boundary against the
++other two forecasting pillars explicitly. Structured market data (dollar index,
++VIX, contango, cross-commodity returns, CFTC positioning, price history) and
++supply/demand statistics or agency publications (EIA, IEA, OPEC inventory,
++production, and demand forecasts) are banned as claims. The test for a
++candidate claim is whether the quant or physical pillar would eventually see it
++in its own input data; if so, this agent does not record it.
++
++**Driver categories.** Every claim carries a `driver_category` of
++`geopolitical`, `weather`, `operational`, `policy`, or `demand_expectations`.
++This is orthogonal to `claim_type`: `claim_type` says what kind of fact a claim
++is, `driver_category` says what kind of driver produced it. A hurricane that
++shuts in production is `physical_supply` and `weather`.
++
++**Competing scenarios.** The assessment states 2-3 categorical scenarios with
++probabilities summing to 1, a direction, a magnitude, and one required
++low-probability, high-impact tail case. Scenarios are categorical for the same
++reason actions are: the LLM never states a price. Python validates the set's
++well-formedness and rejects a malformed one, but tolerates an absent one — the
++agent then degrades to v3.3 behaviour rather than failing.
++
++**Scenario-derived uncertainty floor.** Scenarios are load-bearing, not
++decorative. When the assessment's own scenario set places at least
++`scenario_disagreement_floor_mass` (default 0.20) of probability on the losing
++price direction, Python widens the interval to at least `moderately_wider`,
++whatever uncertainty action the LLM proposed. The floor is independent of the
++evidence tier because it widens only and never moves the center, so it cannot
++manufacture a directional view from weak evidence. The evidence gate governs
++the center; the scenario set governs the spread.
++
++**Calibration feature row.** Each prediction's metadata now carries
++`calibration_features`: a fixed-width numeric row built from the *sanitized*
++assessment, so rejected evidence cannot inflate a feature. Every key exists on
++every run, whatever the LLM found — that is what makes it usable as regression
++input, since claim text changes between origins but the slots do not. Paired
++with the `unadjusted_ensemble` already recorded in metadata, it supplies both
++sides of the future score-to-price study: the features, and the residual of the
++actual move against the quant baseline's expectation.
++
++### Why the calibration row matters
++
++V3.3 moved the adjustment decision out of the LLM and into a deterministic,
++auditable, versioned config. That is a real improvement. But the constants in
++that config — the action width fractions, the center caps, the uncertainty
++multipliers, the persistence-profile coefficients — are still judgment calls,
++not fitted values. The calibration row is the input to the study that would
++replace them with numbers learned from data.
++
++### Graduated evidence policy (unchanged from v3.3)
++
++- Tier 0, none: no qualifying evidence, so no contextual adjustment.
++- Tier 1, limited: at least one eligible high-quality publisher, direct support for every cited material claim, confidence at least 0.50, sufficient novelty, and no material conflict. Python permits at most a small bounded center action and moderate uncertainty widening.
++- Tier 2, corroborated: at least two eligible independent publishers, direct support for every cited material claim, confidence at least 0.65, sufficient novelty, and no material conflict. Python permits at most a moderate bounded center action and substantial uncertainty widening.
++- Tier 3, strong: at least three eligible independent publishers, every cited material claim directly supported by at least two publishers, at least one primary source, confirmed material physical impact, confidence at least 0.80, likely-new evidence, and no material conflict. Python grants the strongest bounded authority available under the existing categorical action vocabulary.
++
++Evidence classified as possibly partly reflected receives a 50% center-adjustment discount. Material conflict, reflected or indeterminate novelty, unsupported cited claims, or failure to reach Tier 1 neutralizes the proposal.
++
++### Metadata and recording
++
++- Retains the original LLM assessment, sanitized assessment, and Python-approved assessment separately.
++- Retains the original LLM action and Python-approved action separately for every horizon.
++- Removes rejected citations from approved actions.
++- Neutralizes rejected actions to no_change, unchanged uncertainty, and unknown persistence.
++- Downgrades unsupported physical-status labels.
++- Records source-level and claim-level eligibility diagnostics and rejection reasons.
++- Retains the authoritative unadjusted ensemble as a control beside the final forecast.
++- Records the scenario disagreement mass and whether the uncertainty floor was applied.
++- Records the fixed-width calibration feature row.
++
++### Preserved from v3.3
++
++ARIMA, Kalman, LightGBM, equal-weight ensemble, 1,000 samples, one successful
++authoritative-suite execution, cutoff-safe research, the four graduated
++evidence tiers, the deterministic sanitizer, the ensemble-locked control
++policy, optional diagnostic E2B, and Python-owned final arithmetic are all
++unchanged.
++
++### Validation
++
++Run inside the complete agentic-forecasting repository:
++
++```bash
++uv run ruff check implementations/energy_oil_forecasting/cfm_agent_v_3_4
++uv run python -m compileall -q implementations/energy_oil_forecasting/cfm_agent_v_3_4
++uv run pytest -q implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests
++```
++
++The live multi-date end-to-end run and the calibration study are the next
++validation stages.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/__init__.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/__init__.py
+new file mode 100644
+index 0000000..f8d4c82
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/__init__.py
+@@ -0,0 +1,43 @@
++"""CFM Agent v3.4: contextual LLM actions with Python-owned forecast arithmetic."""
++
++from energy_oil_forecasting.cfm_agent_v_3_4.agent import (
++    build_cfm_agent_config,
++    build_cfm_agent_predictor,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.config import (
++    AGENT_NAME,
++    DEFAULT_SETTINGS,
++    CfmV34Settings,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.models import (
++    CfmEnsemblePredictor,
++    build_arima_predictor,
++    build_kalman_predictor,
++    build_lightgbm_predictor,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++from energy_oil_forecasting.cfm_agent_v_3_4.policy import (
++    ConstrainedActionPolicy,
++    EnsembleLockedPolicy,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.predictor import CfmV34Predictor
++from energy_oil_forecasting.cfm_agent_v_3_4.tools import AuthoritativeSuiteTool, MarketDataTool
++
++
++__all__ = [
++    "AGENT_NAME",
++    "CfmContextAssessmentOutput",
++    "CfmEnsemblePredictor",
++    "CfmV34Predictor",
++    "CfmV34Settings",
++    "ConstrainedActionPolicy",
++    "DEFAULT_SETTINGS",
++    "EnsembleLockedPolicy",
++    "AuthoritativeSuiteTool",
++    "MarketDataTool",
++    "build_arima_predictor",
++    "build_cfm_agent_config",
++    "build_cfm_agent_predictor",
++    "build_kalman_predictor",
++    "build_lightgbm_predictor",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/agent.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/agent.py
+new file mode 100644
+index 0000000..f318acf
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/agent.py
+@@ -0,0 +1,116 @@
++"""Self-contained CFM Agent v3.4 configuration."""
++
++from __future__ import annotations
++
++from pathlib import Path
++from typing import Any
++
++from aieng.forecasting.data import DataService
++from aieng.forecasting.methods.agentic import AgentConfig, build_adk_agent
++from aieng.forecasting.models import LITE_MODEL
++from energy_oil_forecasting.cfm_agent_v_3_4.config import (
++    AGENT_NAME,
++    DEFAULT_SETTINGS,
++    SKILLS_ROOT,
++    CfmV34Settings,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.predictor import CfmV34Predictor
++from energy_oil_forecasting.cfm_agent_v_3_4.tools import (
++    AuthoritativeSuiteTool,
++    build_code_execution_config,
++    build_verified_search_config,
++)
++from energy_oil_forecasting.data import (
++    DEFAULT_WTI_COVARIATE_SERIES_IDS,
++    build_wti_multivariate_service,
++)
++
++
++_CONFIG_TO_MARKET_TOOL: dict[int, AuthoritativeSuiteTool] = {}
++_CONFIG_TO_SETTINGS: dict[int, CfmV34Settings] = {}
++
++_PERSONA = """\
++### Role
++You are CFM Agent v3.4, a disciplined market-context assessment agent.
++Python owns all final forecast arithmetic. You never author a final price,
++quantile grid, dollar adjustment, or uncertainty multiplier.
++
++### Required operating procedure
++1. Load evidence-assessment, market-context-assessment, and
++   forecast-action-selection.
++2. Call run_authoritative_suite exactly once with all required arguments. Treat its component models, ensemble,
++   diagnostics, dates, and sample count as authoritative.
++3. Execute the fixed multi-query research plan. One eligible high-quality publisher may support only a small bounded action; independent corroboration is required for greater authority. Broker notes and trading websites cannot establish material facts by themselves.
++4. Separate confirmed facts from source interpretation and your own assessment.
++5. Record material claims with source IDs, support status, and contradictions.
++6. Do not claim that information is "already priced." Assess only whether it is
++   likely new relative to the latest model data, partly reflected, reflected,
++   or indeterminate.
++7. No-change is the default. A non-neutral action requires direct eligible evidence and a clear transmission mechanism. Python assigns limited, corroborated, or strong evidence authority and may cap or reject the action.
++8. Select only the authorized center, uncertainty, and persistence categories.
++9. E2B is optional and diagnostic only; it must not recreate the model suite or
++   calculate the final forecast.
++10. Call set_model_response exactly once.
++"""
++
++
++def build_cfm_agent_config(
++    model: str = LITE_MODEL,
++    *,
++    data_service: DataService | None = None,
++    settings: CfmV34Settings = DEFAULT_SETTINGS,
++    search_model: str = LITE_MODEL,
++    covariate_series_ids: list[str] | None = None,
++) -> AgentConfig:
++    service = data_service or build_wti_multivariate_service()
++    requested_covariates = (
++        list(covariate_series_ids)
++        if covariate_series_ids is not None
++        else [series_id for series_id in DEFAULT_WTI_COVARIATE_SERIES_IDS if series_id in set(service.series_ids)]
++    )
++    market_tool = AuthoritativeSuiteTool(
++        service,
++        settings=settings,
++        covariate_series_ids=requested_covariates,
++    )
++    skill_names = [
++        "evidence-assessment",
++        "market-context-assessment",
++        "forecast-action-selection",
++        "code-analysis",
++    ]
++    skill_dirs: list[Path] = [SKILLS_ROOT / name for name in skill_names]
++    config = AgentConfig(
++        name=AGENT_NAME,
++        description=(
++            "Policy-controlled WTI forecaster: stronger corroborated research, "
++            "structured contextual actions, and Python-owned final arithmetic."
++        ),
++        model=model,
++        instruction=_PERSONA,
++        max_output_tokens=24_576,
++        context_retrieval=build_verified_search_config(search_model=search_model),
++        code_execution=build_code_execution_config(),
++        function_tools=[market_tool.as_function_tool()],
++        skills_dirs=skill_dirs,
++    )
++    _CONFIG_TO_MARKET_TOOL[id(config)] = market_tool
++    _CONFIG_TO_SETTINGS[id(config)] = settings
++    return config
++
++
++def build_cfm_agent_predictor(config: AgentConfig) -> CfmV34Predictor:
++    market_tool = _CONFIG_TO_MARKET_TOOL.get(id(config))
++    settings = _CONFIG_TO_SETTINGS.get(id(config))
++    if market_tool is None or settings is None:
++        raise ValueError("The configuration was not created by build_cfm_agent_config in this process.")
++    return CfmV34Predictor(config, market_tool, settings)
++
++
++def __getattr__(name: str) -> Any:
++    if name == "root_agent":
++        return build_adk_agent(build_cfm_agent_config())
++    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
++
++
++__all__ = ["build_cfm_agent_config", "build_cfm_agent_predictor"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/config.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/config.py
+new file mode 100644
+index 0000000..2408fa2
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/config.py
+@@ -0,0 +1,78 @@
++"""Configuration for the self-contained CFM Agent v3.4 package."""
++
++from __future__ import annotations
++
++from pathlib import Path
++from typing import Literal
++
++from pydantic import BaseModel, ConfigDict, Field
++
++
++AGENT_NAME = "cfm_agent_v_3_4"
++PACKAGE_ROOT = Path(__file__).resolve().parent
++SKILLS_ROOT = PACKAGE_ROOT / "skills"
++
++
++class CfmV34Settings(BaseModel):
++    """Runtime settings for numerical models, research gates, and policy bounds."""
++
++    model_config = ConfigDict(extra="forbid", frozen=True)
++
++    # Uses existing public predictor interfaces; v3 does not change shared code.
++    model_num_samples: int = Field(default=1_000, ge=50, le=5_000)
++    lightgbm_lags: int = Field(default=21, ge=3)
++    lightgbm_covariate_lags: int = Field(default=21, ge=3)
++    kalman_dim_x: int = Field(default=2, ge=1, le=20)
++    max_data_rows_per_series: int = Field(default=520, ge=1, le=5_000)
++    max_pre_execution_attempts: int = Field(default=2, ge=1, le=3)
++    ensemble_weights: dict[str, float] = Field(
++        default_factory=lambda: {
++            "arima": 1.0 / 3.0,
++            "kalman": 1.0 / 3.0,
++            "lightgbm": 1.0 / 3.0,
++        }
++    )
++
++    # Graduated evidence gates. Python assigns the tier; the LLM cannot.
++    tier_1_min_publishers: int = Field(default=1, ge=1)
++    tier_2_min_publishers: int = Field(default=2, ge=1)
++    tier_3_min_publishers: int = Field(default=3, ge=1)
++    tier_1_min_confidence: float = Field(default=0.50, ge=0.0, le=1.0)
++    tier_2_min_confidence: float = Field(default=0.65, ge=0.0, le=1.0)
++    tier_3_min_confidence: float = Field(default=0.80, ge=0.0, le=1.0)
++    tier_1_min_claim_support: int = Field(default=1, ge=1)
++    tier_2_min_claim_support: int = Field(default=1, ge=1)
++    tier_3_min_claim_support: int = Field(default=2, ge=1)
++    require_high_quality_source: bool = True
++    allow_verified_identity_with_imperfect_url: bool = True
++    partly_reflected_adjustment_multiplier: float = Field(default=0.50, ge=0.0, le=1.0)
++
++    # Bounded forecast-action policy. Fractions scale with ensemble p10-p90 width.
++    small_action_width_fraction: float = Field(default=0.10, ge=0.0, le=1.0)
++    moderate_action_width_fraction: float = Field(default=0.20, ge=0.0, le=1.0)
++    max_center_adjustment_usd: float = Field(default=3.0, ge=0.0)
++    max_center_adjustment_price_fraction: float = Field(default=0.05, ge=0.0, le=0.50)
++    moderately_wider_multiplier: float = Field(default=1.10, ge=1.0)
++    substantially_wider_multiplier: float = Field(default=1.25, ge=1.0)
++    moderately_narrower_multiplier: float = Field(default=0.90, gt=0.0, le=1.0)
++
++    # Scenario-derived uncertainty floor. When the assessment's own scenario set
++    # places at least this much probability mass on the losing price direction,
++    # Python refuses to leave uncertainty unchanged or to narrow it, whatever the
++    # LLM proposed. This makes the scenario set load-bearing rather than
++    # decorative, without letting it touch the center.
++    scenario_disagreement_floor_mass: float = Field(default=0.20, ge=0.0, le=1.0)
++    enforce_scenario_uncertainty_floor: bool = True
++
++    policy_mode: Literal["constrained_actions", "ensemble_locked"] = "constrained_actions"
++
++
++DEFAULT_SETTINGS = CfmV34Settings()
++
++__all__ = [
++    "AGENT_NAME",
++    "CfmV34Settings",
++    "DEFAULT_SETTINGS",
++    "PACKAGE_ROOT",
++    "SKILLS_ROOT",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/diagnostics.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/diagnostics.py
+new file mode 100644
+index 0000000..24d09ab
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/diagnostics.py
+@@ -0,0 +1,68 @@
++"""Pure-Python deterministic market-state diagnostics for CFM v3."""
++
++from __future__ import annotations
++
++from datetime import datetime
++
++import numpy as np
++import pandas as pd
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import MarketDiagnostics
++
++
++def _return(values: pd.Series, periods: int) -> float | None:
++    if len(values) <= periods:
++        return None
++    prior = float(values.iloc[-periods - 1])
++    latest = float(values.iloc[-1])
++    return None if prior == 0 else latest / prior - 1.0
++
++
++def compute_market_diagnostics(
++    target: pd.DataFrame,
++    *,
++    as_of: datetime,
++    covariates: dict[str, pd.DataFrame] | None = None,
++) -> MarketDiagnostics:
++    """Compute stable diagnostics solely from cutoff-safe frames."""
++    if target.empty:
++        return MarketDiagnostics()
++    frame = target.copy().sort_values("timestamp")
++    frame["timestamp"] = pd.to_datetime(frame["timestamp"])
++    values = pd.to_numeric(frame["value"], errors="coerce").dropna()
++    if values.empty:
++        return MarketDiagnostics()
++
++    latest_timestamp = pd.Timestamp(frame.loc[values.index[-1], "timestamp"])
++    returns = values.pct_change().dropna()
++    vol = float(returns.tail(21).std(ddof=0) * np.sqrt(252)) if len(returns) >= 2 else None
++    trailing = values.tail(63)
++    drawdown = float(values.iloc[-1] / trailing.max() - 1.0) if not trailing.empty else None
++    jump_z = None
++    if len(returns) >= 10:
++        window = returns.tail(63)
++        std = float(window.std(ddof=0))
++        if std > 0:
++            jump_z = float((returns.iloc[-1] - window.mean()) / std)
++
++    cov_latest: dict[str, float] = {}
++    for series_id, covariate in (covariates or {}).items():
++        if not covariate.empty:
++            value = pd.to_numeric(covariate["value"], errors="coerce").dropna()
++            if not value.empty:
++                cov_latest[series_id] = float(value.iloc[-1])
++
++    return MarketDiagnostics(
++        latest_observation_date=str(latest_timestamp.date()),
++        latest_value=float(values.iloc[-1]),
++        calendar_gap_days=max(0, (pd.Timestamp(as_of).date() - latest_timestamp.date()).days),
++        return_1b=_return(values, 1),
++        return_5b=_return(values, 5),
++        return_21b=_return(values, 21),
++        realized_volatility_21b=vol,
++        drawdown_63b=drawdown,
++        jump_zscore_63b=jump_z,
++        covariate_latest_values=cov_latest,
++    )
++
++
++__all__ = ["compute_market_diagnostics"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/fingerprints.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/fingerprints.py
+new file mode 100644
+index 0000000..73badc7
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/fingerprints.py
+@@ -0,0 +1,16 @@
++"""Stable fingerprints for v3 numerical artifacts."""
++
++from __future__ import annotations
++
++import hashlib
++import json
++from typing import Any
++
++
++def stable_fingerprint(payload: Any, *, prefix: str) -> str:
++    """Return a stable SHA-256 ID for a JSON-serializable payload."""
++    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8")
++    return f"{prefix}:sha256:{hashlib.sha256(encoded).hexdigest()}"
++
++
++__all__ = ["stable_fingerprint"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/__init__.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/__init__.py
+new file mode 100644
+index 0000000..c8d3270
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/__init__.py
+@@ -0,0 +1,14 @@
++"""Deterministic numerical models used by ``cfm_agent_v_3_4``."""
++
++from energy_oil_forecasting.cfm_agent_v_3_4.models.arima import build_arima_predictor
++from energy_oil_forecasting.cfm_agent_v_3_4.models.ensemble import CfmEnsemblePredictor
++from energy_oil_forecasting.cfm_agent_v_3_4.models.kalman import build_kalman_predictor
++from energy_oil_forecasting.cfm_agent_v_3_4.models.lightgbm import build_lightgbm_predictor
++
++
++__all__ = [
++    "CfmEnsemblePredictor",
++    "build_arima_predictor",
++    "build_kalman_predictor",
++    "build_lightgbm_predictor",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/arima.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/arima.py
+new file mode 100644
+index 0000000..c164fb3
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/arima.py
+@@ -0,0 +1,10 @@
++"""AutoARIMA factory for CFM v3.4 using the unchanged shared predictor."""
++
++from aieng.forecasting.methods.numerical import DartsAutoARIMAPredictor
++
++
++def build_arima_predictor(*, num_samples: int = 1_000) -> DartsAutoARIMAPredictor:
++    return DartsAutoARIMAPredictor(num_samples=num_samples)
++
++
++__all__ = ["build_arima_predictor"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/ensemble.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/ensemble.py
+new file mode 100644
+index 0000000..4f5b705
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/ensemble.py
+@@ -0,0 +1,137 @@
++"""Deterministic quantile ensemble for CFM model forecasts."""
++
++from __future__ import annotations
++
++from collections.abc import Mapping, Sequence
++from datetime import datetime, timezone
++
++import pandas as pd
++from aieng.forecasting.data.context import ForecastContext
++from aieng.forecasting.evaluation.prediction import (
++    ContinuousForecast,
++    Prediction,
++)
++from aieng.forecasting.evaluation.predictor import Predictor
++from aieng.forecasting.evaluation.task import ForecastingTask
++
++
++class CfmEnsemblePredictor(Predictor):
++    """Weighted linear pool over successful continuous predictors.
++
++    Quantiles are averaged level-by-level using normalized positive weights.
++    A cumulative maximum is applied afterward to guarantee non-crossing output.
++    Model failures are tolerated when at least one component succeeds.
++    """
++
++    def __init__(
++        self,
++        predictors: Mapping[str, Predictor],
++        weights: Mapping[str, float] | None = None,
++    ) -> None:
++        if not predictors:
++            raise ValueError("predictors cannot be empty.")
++        self._predictors = dict(predictors)
++        raw_weights = dict(weights or dict.fromkeys(predictors, 1.0))
++        self._weights = {
++            name: float(raw_weights.get(name, 0.0)) for name in predictors if float(raw_weights.get(name, 0.0)) > 0
++        }
++        if not self._weights:
++            raise ValueError("at least one ensemble weight must be positive.")
++
++    def normalized_weights(self, active_models: list[str]) -> dict[str, float]:
++        """Return configured weights renormalized over successful models."""
++        active = [name for name in active_models if name in self._weights]
++        if not active:
++            return {}
++        total = sum(self._weights[name] for name in active)
++        return {name: self._weights[name] / total for name in active}
++
++    @property
++    def predictor_id(self) -> str:
++        """Return a stable identifier."""
++        return "cfm_arima_kalman_lightgbm_ensemble"
++
++    def collect(
++        self,
++        task: ForecastingTask,
++        context: ForecastContext,
++    ) -> tuple[dict[str, list[Prediction]], dict[str, str]]:
++        """Run every component and return successful predictions plus failures."""
++        successful: dict[str, list[Prediction]] = {}
++        failures: dict[str, str] = {}
++        for name, predictor in self._predictors.items():
++            try:
++                predictions = predictor.predict(task, context)
++                if len(predictions) != len(task.horizons):
++                    raise ValueError(f"expected {len(task.horizons)} predictions; got {len(predictions)}")
++                successful[name] = predictions
++            except Exception as exc:  # noqa: BLE001 - failures are model evidence
++                failures[name] = f"{type(exc).__name__}: {exc}"
++        return successful, failures
++
++    def combine(
++        self,
++        task: ForecastingTask,
++        context: ForecastContext,
++        predictions_by_model: Mapping[str, Sequence[Prediction]],
++    ) -> list[Prediction]:
++        """Combine already-computed component results without rerunning models."""
++        active = [name for name in predictions_by_model if name in self._weights]
++        if not active:
++            raise RuntimeError("no positively weighted model produced a forecast.")
++        total_weight = sum(self._weights[name] for name in active)
++        normalized = {name: self._weights[name] / total_weight for name in active}
++        outputs: list[Prediction] = []
++        issued_at = datetime.now(tz=timezone.utc).replace(tzinfo=None)
++        for index, horizon in enumerate(task.horizons):
++            payloads = {}
++            for name in active:
++                payload = predictions_by_model[name][index].payload
++                if not isinstance(payload, ContinuousForecast):
++                    raise TypeError(f"{name} did not return ContinuousForecast.")
++                payloads[name] = payload
++            common_quantiles = set.intersection(*(set(payload.quantiles) for payload in payloads.values()))
++            if 0.5 not in common_quantiles:
++                raise ValueError("component forecasts do not share the median quantile.")
++            quantiles = {
++                q: sum(normalized[name] * payloads[name].quantiles[q] for name in active)
++                for q in sorted(common_quantiles)
++            }
++            previous = float("-inf")
++            for q in sorted(quantiles):
++                quantiles[q] = max(previous, quantiles[q])
++                previous = quantiles[q]
++            forecast_date = predictions_by_model[active[0]][index].forecast_date
++            outputs.append(
++                Prediction(
++                    predictor_id=self.predictor_id,
++                    task_id=task.task_id,
++                    issued_at=issued_at,
++                    as_of=context.as_of,
++                    forecast_date=pd.Timestamp(forecast_date).to_pydatetime(),
++                    payload=ContinuousForecast(
++                        point_forecast=quantiles[0.5],
++                        quantiles=quantiles,
++                    ),
++                    metadata={
++                        "component_models": active,
++                        "normalized_weights": normalized,
++                        "horizon": horizon,
++                    },
++                )
++            )
++        return outputs
++
++    def predict(
++        self,
++        task: ForecastingTask,
++        context: ForecastContext,
++    ) -> list[Prediction]:
++        """Run components and return the weighted ensemble."""
++        successful, failures = self.collect(task, context)
++        if not successful:
++            raise RuntimeError(f"all component models failed: {failures}")
++        return self.combine(task, context, successful)
++
++
++__all__ = ["CfmEnsemblePredictor"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/kalman.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/kalman.py
+new file mode 100644
+index 0000000..11568ac
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/kalman.py
+@@ -0,0 +1,10 @@
++"""Kalman factory for CFM v3.4 using the unchanged shared predictor."""
++
++from aieng.forecasting.methods.numerical import DartsKalmanForecasterPredictor
++
++
++def build_kalman_predictor(*, num_samples: int = 1_000, dim_x: int = 2) -> DartsKalmanForecasterPredictor:
++    return DartsKalmanForecasterPredictor(num_samples=num_samples, dim_x=dim_x)
++
++
++__all__ = ["build_kalman_predictor"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/lightgbm.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/lightgbm.py
+new file mode 100644
+index 0000000..6a94ac8
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/models/lightgbm.py
+@@ -0,0 +1,22 @@
++"""LightGBM factory for CFM v3.4 using the unchanged shared predictor."""
++
++from aieng.forecasting.methods.numerical import DartsLightGBMPredictor
++
++
++def build_lightgbm_predictor(
++    *,
++    covariate_series_ids: list[str] | None = None,
++    lags: int = 21,
++    lags_past_covariates: int = 21,
++    num_samples: int = 1_000,
++) -> DartsLightGBMPredictor:
++    return DartsLightGBMPredictor(
++        lags=lags,
++        lags_past_covariates=lags_past_covariates,
++        covariate_series_ids=covariate_series_ids,
++        num_samples=num_samples,
++        lgbm_kwargs={"verbose": -1, "random_state": 42},
++    )
++
++
++__all__ = ["build_lightgbm_predictor"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/outputs.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/outputs.py
+new file mode 100644
+index 0000000..035770e
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/outputs.py
+@@ -0,0 +1,317 @@
++"""Structured contextual-assessment output for CFM Agent v3.4."""
++
++from __future__ import annotations
++
++import json
++from datetime import datetime, timezone
++from typing import ClassVar, Literal, get_args
++
++import pandas as pd
++from aieng.forecasting.data.context import ForecastContext
++from aieng.forecasting.evaluation.prediction import STANDARD_QUANTILES, ContinuousForecast, Prediction
++from aieng.forecasting.evaluation.task import ForecastingTask
++from aieng.forecasting.methods.agentic.outputs import AgentForecastOutput
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import (
++    ContextScenario,
++    DriverCategory,
++    EvidenceClaim,
++    EvidenceSource,
++    HorizonAction,
++    NoveltyAssessment,
++    PhysicalStatus,
++)
++from pydantic import Field, model_validator
++
++
++# Scenario probabilities must sum to 1 within this absolute tolerance.
++_PROBABILITY_SUM_TOLERANCE = 0.02
++
++# Encodes the categorical center action as a signed magnitude for the
++# calibration feature row. These are ordinal codes, not price effects — the
++# fitted mapping supplies the price scale.
++_CENTER_ACTION_CODE = {
++    "no_change": 0.0,
++    "small_up": 1.0,
++    "moderate_up": 2.0,
++    "small_down": -1.0,
++    "moderate_down": -2.0,
++}
++_UNCERTAINTY_ACTION_CODE = {
++    "moderately_narrower": -1.0,
++    "unchanged": 0.0,
++    "moderately_wider": 1.0,
++    "substantially_wider": 2.0,
++}
++_MAGNITUDE_CODE = {"small": 1.0, "moderate": 2.0, "large": 3.0}
++_DIRECTION_SIGN = {"up": 1.0, "down": -1.0, "neutral": 0.0}
++
++
++class CfmContextAssessmentOutput(AgentForecastOutput):
++    """LLM research assessment; final numerical arithmetic is deliberately absent."""
++
++    modality: ClassVar[Literal["continuous", "discrete", "categorical"]] = "continuous"
++    model_config = {"extra": "ignore"}
++
++    reported_search_queries: list[str] = Field(default_factory=list)
++    evidence_sources: list[EvidenceSource] = Field(default_factory=list)
++    evidence_claims: list[EvidenceClaim] = Field(default_factory=list)
++    physical_status: PhysicalStatus = "unknown"
++    incremental_novelty: NoveltyAssessment = "indeterminate"
++    material_evidence_conflict: bool = False
++    confidence: float = Field(ge=0.0, le=1.0)
++    scenarios: list[ContextScenario] = Field(
++        default_factory=list,
++        description="2-3 competing storylines with probabilities summing to 1, including one tail case.",
++    )
++    horizon_actions: list[HorizonAction]
++    research_summary: str = Field(min_length=1)
++    overall_rationale: str = Field(min_length=1)
++    e2b_used: bool = False
++    e2b_summary: str = ""
++    warnings: list[str] = Field(default_factory=list)
++
++    @model_validator(mode="after")
++    def validate_assessment(self) -> "CfmContextAssessmentOutput":
++        horizons = [action.horizon for action in self.horizon_actions]
++        if not horizons or len(horizons) != len(set(horizons)):
++            raise ValueError("horizon_actions must be nonempty and unique by horizon.")
++        source_ids = [source.source_id for source in self.evidence_sources]
++        claim_ids = [claim.claim_id for claim in self.evidence_claims]
++        if len(source_ids) != len(set(source_ids)) or len(claim_ids) != len(set(claim_ids)):
++            raise ValueError("source_id and claim_id values must be unique.")
++        known_sources = set(source_ids)
++        for claim in self.evidence_claims:
++            referenced = set(claim.supporting_source_ids) | set(claim.contradicting_source_ids)
++            if not referenced.issubset(known_sources):
++                raise ValueError(f"claim {claim.claim_id} references an unknown source_id.")
++        known_claims = set(claim_ids)
++        for action in self.horizon_actions:
++            if not set(action.cited_claim_ids).issubset(known_claims):
++                raise ValueError(f"horizon {action.horizon} references an unknown claim_id.")
++        if self.e2b_used and not self.e2b_summary.strip():
++            raise ValueError("e2b_summary is required when e2b_used is true.")
++        return self
++
++    @model_validator(mode="after")
++    def validate_scenarios(self) -> "CfmContextAssessmentOutput":
++        """Check the scenario set's well-formedness when the model supplies one.
++
++        An absent scenario set is tolerated rather than rejected: the policy
++        then applies no scenario-derived uncertainty floor, and the agent
++        degrades to the v3.3 behaviour. A *malformed* set is rejected, because
++        Python reads it to size uncertainty and must be able to trust it.
++        """
++        if not self.scenarios:
++            return self
++
++        if len(self.scenarios) < 2:
++            raise ValueError("A scenario set must contain at least two competing scenarios.")
++
++        scenario_ids = [scenario.scenario_id for scenario in self.scenarios]
++        if len(scenario_ids) != len(set(scenario_ids)):
++            raise ValueError("scenario_id values must be unique.")
++
++        known_claims = {claim.claim_id for claim in self.evidence_claims}
++        for scenario in self.scenarios:
++            if not set(scenario.cited_claim_ids).issubset(known_claims):
++                raise ValueError(f"scenario {scenario.scenario_id} references an unknown claim_id.")
++
++        total = sum(scenario.probability for scenario in self.scenarios)
++        if abs(total - 1.0) > _PROBABILITY_SUM_TOLERANCE:
++            raise ValueError(f"Scenario probabilities must sum to 1, got {total:.3f}.")
++
++        tails = [scenario for scenario in self.scenarios if scenario.is_tail_case]
++        non_tails = [scenario for scenario in self.scenarios if not scenario.is_tail_case]
++        if not tails:
++            raise ValueError("At least one scenario must set is_tail_case=true.")
++        if not non_tails:
++            raise ValueError("At least one scenario must be a non-tail mainline case.")
++        highest_non_tail = max(scenario.probability for scenario in non_tails)
++        for tail in tails:
++            if tail.probability > highest_non_tail:
++                raise ValueError(
++                    f"Tail scenario '{tail.name}' is more likely than every mainline scenario; "
++                    "a tail case must be low-probability."
++                )
++            if tail.magnitude == "small":
++                raise ValueError(
++                    f"Tail scenario '{tail.name}' has small magnitude; a tail case must be high-impact."
++                )
++
++        shapes = [(scenario.direction, scenario.magnitude) for scenario in self.scenarios]
++        if len(shapes) != len(set(shapes)):
++            raise ValueError(
++                "Two scenarios share the same direction and magnitude — that is one scenario "
++                "written twice. Differentiate them by direction or by magnitude."
++            )
++        return self
++
++    def action_for(self, horizon: int) -> HorizonAction:
++        return next(action for action in self.horizon_actions if action.horizon == horizon)
++
++    def scenario_disagreement_mass(self) -> float:
++        """Return the probability mass on the less-favoured price direction.
++
++        This is ``min(P(up), P(down))``: the share of the model's own scenario
++        set that argues against its central story. Zero when the scenarios all
++        point one way, or when no scenario set was supplied. The policy uses
++        this to floor the uncertainty multiplier, so a genuinely two-sided
++        situation cannot be reported with unchanged uncertainty.
++        """
++        up = sum(scenario.probability for scenario in self.scenarios if scenario.direction == "up")
++        down = sum(scenario.probability for scenario in self.scenarios if scenario.direction == "down")
++        return float(min(up, down))
++
++    def calibration_features(self) -> dict[str, float]:
++        """Return the fixed-width numeric row the calibration layer consumes.
++
++        Every key exists on every run, whatever the LLM found. That is the
++        point: factor and claim text changes between origins, so a learned
++        score-to-price mapping can only be fitted on stable slots. Category
++        totals count *eligible direct* claims only, so sanitizer-rejected
++        evidence cannot inflate a feature.
++
++        Pair these features with the ``unadjusted_ensemble`` recorded in
++        prediction metadata to build the regression target: the residual of
++        the actual move against the quant baseline's expectation.
++        """
++        direct_claims = [claim for claim in self.evidence_claims if claim.support_status == "direct"]
++        features: dict[str, float] = {
++            "confidence": float(self.confidence),
++            "direct_claim_count": float(len(direct_claims)),
++            "eligible_source_count": float(len(self.evidence_sources)),
++            "material_evidence_conflict": 1.0 if self.material_evidence_conflict else 0.0,
++            "physical_disruption": 1.0
++            if self.physical_status in {"partial_disruption", "confirmed_disruption"}
++            else 0.0,
++            "novelty_is_new": 1.0
++            if self.incremental_novelty == "likely_new_relative_to_model_data"
++            else 0.0,
++            "scenario_count": float(len(self.scenarios)),
++            "scenario_disagreement_mass": self.scenario_disagreement_mass(),
++            "expected_scenario_impact": float(
++                sum(
++                    scenario.probability
++                    * _DIRECTION_SIGN[scenario.direction]
++                    * _MAGNITUDE_CODE[scenario.magnitude]
++                    for scenario in self.scenarios
++                )
++            ),
++            "tail_probability": float(
++                sum(scenario.probability for scenario in self.scenarios if scenario.is_tail_case)
++            ),
++        }
++        for category in get_args(DriverCategory):
++            features[f"claims_{category}"] = float(
++                sum(1 for claim in direct_claims if claim.driver_category == category)
++            )
++        for action in self.horizon_actions:
++            features[f"center_action_h{action.horizon}"] = _CENTER_ACTION_CODE[action.center_action]
++            features[f"uncertainty_action_h{action.horizon}"] = _UNCERTAINTY_ACTION_CODE[
++                action.uncertainty_action
++            ]
++        return features
++
++    @classmethod
++    def prompt_schema_json(cls) -> str:
++        template = {
++            "reported_search_queries": [
++                "underlying event and official statements",
++                "confirmed physical oil-flow impact",
++                "production or strategic-reserve response",
++                "independent market reaction reporting",
++            ],
++            "evidence_sources": [
++                {
++                    "source_id": "source_001",
++                    "title": "<title>",
++                    "source_url": "<url>",
++                    "publisher": "<publisher>",
++                    "source_tier": "<tier_1_primary|tier_2_independent|tier_3_commentary|tier_4_other>",
++                    "publication_date": "<YYYY-MM-DD|null>",
++                    "is_primary_or_official": False,
++                    "provenance_status": "<verified_from_tool|inferred_by_agent|unresolved>",
++                    "verifier_content_status": "<accepted_factual_content|empty|unknown>",
++                    "verifier_processing_status": "<accepted_clean|accepted_after_removal|empty_after_verification|unknown>",
++                    "verified_evidence_excerpt": "<exact concise excerpt from accepted tool output, or empty>",
++                }
++            ],
++            "evidence_claims": [
++                {
++                    "claim_id": "claim_001",
++                    "statement": "<normalized fact, not interpretation>",
++                    "claim_type": "<physical_supply|shipping|production_policy|strategic_reserves|inventory|demand|market_reaction|other>",
++                    "driver_category": "<geopolitical|weather|operational|policy|demand_expectations>",
++                    "support_status": "<direct|partial|unsupported|conflicting>",
++                    "supporting_source_ids": ["source_001"],
++                    "contradicting_source_ids": [],
++                    "material_to_forecast": True,
++                }
++            ],
++            "physical_status": "<normal|elevated_risk|partial_disruption|confirmed_disruption|unknown>",
++            "incremental_novelty": "<likely_new_relative_to_model_data|possibly_partly_reflected|likely_reflected_in_model_data|indeterminate>",
++            "material_evidence_conflict": False,
++            "confidence": "<0..1>",
++            "scenarios": [
++                {
++                    "scenario_id": "scenario_001",
++                    "name": "<short storyline name>",
++                    "probability": "<0..1; the set must sum to 1>",
++                    "direction": "<up|down|neutral>",
++                    "magnitude": "<small|moderate|large; neutral must be small>",
++                    "is_tail_case": "<true for exactly the low-probability, high-impact storyline>",
++                    "cited_claim_ids": ["claim_001"],
++                    "rationale": "<one or two sentences>",
++                }
++            ],
++            "horizon_actions": [
++                {
++                    "horizon": "<requested integer>",
++                    "center_action": "<no_change|small_up|moderate_up|small_down|moderate_down>",
++                    "uncertainty_action": "<unchanged|moderately_wider|substantially_wider|moderately_narrower>",
++                    "persistence_profile": "<temporary|decaying|persistent|delayed|unknown>",
++                    "cited_claim_ids": ["claim_001"],
++                    "rationale": "<concise explanation>",
++                }
++            ],
++            "research_summary": "<facts, conflicts, and limitations>",
++            "overall_rationale": "<assessment only; do not calculate final prices>",
++            "e2b_used": False,
++            "e2b_summary": "",
++            "warnings": [],
++        }
++        return json.dumps(template, indent=2)
++
++    def to_predictions(
++        self,
++        *,
++        task: ForecastingTask,
++        context: ForecastContext,
++        predictor_id: str,
++        metadata: dict[str, object] | None = None,
++    ) -> list[Prediction]:
++        """Create temporary placeholders; the v3 wrapper replaces them from policy output."""
++        if {action.horizon for action in self.horizon_actions} != set(task.horizons):
++            raise ValueError("assessment must contain exactly the requested horizons.")
++        issued_at = datetime.now(tz=timezone.utc).replace(tzinfo=None)
++        offset = pd.tseries.frequencies.to_offset(task.frequency)
++        assessment_metadata = dict(metadata or {})
++        assessment_metadata["context_assessment"] = self.model_dump(mode="json")
++        return [
++            Prediction(
++                predictor_id=predictor_id,
++                task_id=task.task_id,
++                issued_at=issued_at,
++                as_of=context.as_of,
++                forecast_date=(pd.Timestamp(context.as_of) + offset * horizon).to_pydatetime(),
++                payload=ContinuousForecast(
++                    point_forecast=0.0,
++                    quantiles=dict.fromkeys(STANDARD_QUANTILES, 0.0),
++                ),
++                metadata=dict(assessment_metadata),
++            )
++            for horizon in task.horizons
++        ]
++
++
++__all__ = ["CfmContextAssessmentOutput"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/__init__.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/__init__.py
+new file mode 100644
+index 0000000..53d8bbc
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/__init__.py
+@@ -0,0 +1,10 @@
++"""Versioned v3 forecast policies."""
++
++from energy_oil_forecasting.cfm_agent_v_3_4.policy.base import ForecastPolicy
++from energy_oil_forecasting.cfm_agent_v_3_4.policy.constrained import (
++    ConstrainedActionPolicy,
++    EnsembleLockedPolicy,
++)
++
++
++__all__ = ["ConstrainedActionPolicy", "EnsembleLockedPolicy", "ForecastPolicy"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/base.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/base.py
+new file mode 100644
+index 0000000..6efc151
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/base.py
+@@ -0,0 +1,27 @@
++"""Policy protocol for v3 forecast transformations."""
++
++from __future__ import annotations
++
++from typing import Protocol
++
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import ModelHorizonForecast, PolicyDecision
++
++
++class ForecastPolicy(Protocol):
++    @property
++    def policy_id(self) -> str: ...
++
++    def apply(
++        self,
++        *,
++        ensemble: ModelHorizonForecast,
++        assessment: CfmContextAssessmentOutput,
++        horizon: int,
++        horizons: list[int],
++        latest_price: float | None,
++        cutoff_date: str,
++    ) -> PolicyDecision: ...
++
++
++__all__ = ["ForecastPolicy"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/constrained.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/constrained.py
+new file mode 100644
+index 0000000..1b7f2a6
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/policy/constrained.py
+@@ -0,0 +1,329 @@
++"""Graduated, bounded, auditable transformation policy for CFM Agent v3.4."""
++
++from __future__ import annotations
++
++import numpy as np
++from energy_oil_forecasting.cfm_agent_v_3_4.config import CfmV34Settings
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import (
++    HorizonAction,
++    ModelHorizonForecast,
++    PolicyDecision,
++)
++
++
++_PHYSICAL_TYPES = {"physical_supply", "shipping", "production_policy", "strategic_reserves", "inventory"}
++_HIGH_QUALITY = {"tier_1_primary", "tier_2_independent"}
++
++
++class ConstrainedActionPolicy:
++    """Convert categorical LLM actions into evidence-tiered bounded transformations."""
++
++    def __init__(self, settings: CfmV34Settings) -> None:
++        self._settings = settings
++
++    @property
++    def policy_id(self) -> str:
++        return "graduated_evidence_actions_v1"
++
++    def _evidence_tier(  # noqa: PLR0912 — one linear gate sequence; splitting it hides the ladder.
++        self,
++        assessment: CfmContextAssessmentOutput,
++        horizon: int,
++    ) -> tuple[int, str, list[str], list[str], list[str], list[str]]:
++        action = assessment.action_for(horizon)
++        if action.center_action == "no_change" and action.uncertainty_action == "unchanged":
++            return 0, "none", ["Neutral action requires no evidence gate."], [], [], []
++
++        reasons: list[str] = []
++        eligible_sources = {
++            source.source_id: source
++            for source in assessment.evidence_sources
++            if source.provenance_status == "verified_from_tool"
++            and source.verifier_content_status == "accepted_factual_content"
++            and bool(source.verified_evidence_excerpt.strip())
++            and source.source_tier != "tier_4_other"
++        }
++        publishers = sorted({source.publisher.strip().lower() for source in eligible_sources.values()})
++        high_quality = any(source.source_tier in _HIGH_QUALITY for source in eligible_sources.values())
++        tier_1_primary = any(source.source_tier == "tier_1_primary" for source in eligible_sources.values())
++
++        claim_by_id = {claim.claim_id: claim for claim in assessment.evidence_claims}
++        cited_claims = [claim_by_id[cid] for cid in action.cited_claim_ids if cid in claim_by_id]
++        claim_support_counts: dict[str, int] = {}
++        qualifying_claim_ids: list[str] = []
++        for claim in cited_claims:
++            supporting_publishers = {
++                eligible_sources[sid].publisher.strip().lower()
++                for sid in claim.supporting_source_ids
++                if sid in eligible_sources
++            }
++            claim_support_counts[claim.claim_id] = len(supporting_publishers)
++            if claim.support_status == "direct" and supporting_publishers and not claim.contradicting_source_ids:
++                qualifying_claim_ids.append(claim.claim_id)
++
++        every_claim_direct = bool(cited_claims) and len(qualifying_claim_ids) == len(cited_claims)
++        every_claim_double = every_claim_direct and all(
++            claim_support_counts[claim.claim_id] >= self._settings.tier_3_min_claim_support for claim in cited_claims
++        )
++        confirmed_material_physical = assessment.physical_status in {
++            "partial_disruption", "confirmed_disruption"
++        } and any(
++            claim.claim_type in _PHYSICAL_TYPES
++            and claim.claim_id in qualifying_claim_ids
++            and claim_support_counts[claim.claim_id] >= self._settings.tier_3_min_claim_support
++            for claim in cited_claims
++        )
++        novelty_ok = assessment.incremental_novelty in {
++            "likely_new_relative_to_model_data", "possibly_partly_reflected"
++        }
++
++        if assessment.material_evidence_conflict:
++            reasons.append("Material evidence conflict is unresolved.")
++        if not novelty_ok:
++            reasons.append("Incremental novelty is not sufficiently established.")
++        if not cited_claims:
++            reasons.append("Non-neutral action must cite at least one material claim.")
++        if not every_claim_direct:
++            reasons.append("Every cited material claim requires direct support from an eligible source.")
++        if self._settings.require_high_quality_source and not high_quality:
++            reasons.append("At least one eligible tier-1 or tier-2 source is required.")
++
++        tier = 0
++        tier_name = "none"
++        if not reasons:
++            if (
++                len(publishers) >= self._settings.tier_1_min_publishers
++                and assessment.confidence >= self._settings.tier_1_min_confidence
++            ):
++                tier, tier_name = 1, "limited"
++            if (
++                len(publishers) >= self._settings.tier_2_min_publishers
++                and assessment.confidence >= self._settings.tier_2_min_confidence
++            ):
++                tier, tier_name = 2, "corroborated"
++            if (
++                len(publishers) >= self._settings.tier_3_min_publishers
++                and assessment.confidence >= self._settings.tier_3_min_confidence
++                and every_claim_double
++                and tier_1_primary
++                and confirmed_material_physical
++                and assessment.incremental_novelty == "likely_new_relative_to_model_data"
++            ):
++                tier, tier_name = 3, "strong"
++
++        if tier == 0 and not reasons:
++            reasons.append(
++                "Evidence is valid but does not meet the minimum publisher and confidence threshold for Tier 1."
++            )
++        if tier > 0:
++            reasons.append(f"Graduated evidence Tier {tier} ({tier_name}) passed.")
++        return (
++            tier,
++            tier_name,
++            reasons,
++            sorted(eligible_sources),
++            publishers,
++            sorted(qualifying_claim_ids),
++        )
++
++    def _uncertainty(
++        self,
++        *,
++        action: HorizonAction,
++        assessment: CfmContextAssessmentOutput,
++        tier: int,
++        eligible: bool,
++    ) -> tuple[float, float, bool, str]:
++        """Return the interval multiplier, scenario disagreement mass, and floor state.
++
++        The tier caps how much the LLM's proposed uncertainty action may widen
++        the interval. On top of that, a two-sided scenario set imposes a floor:
++        it is the assessment's own admission that the situation could resolve
++        either way, so unchanged or narrowed uncertainty contradicts it. The
++        floor is deliberately independent of the evidence tier, because it
++        widens only and never shifts the center; it therefore cannot
++        manufacture a directional view out of weak evidence.
++        """
++        requested = {
++            "unchanged": 1.0,
++            "moderately_wider": self._settings.moderately_wider_multiplier,
++            "substantially_wider": self._settings.substantially_wider_multiplier,
++            "moderately_narrower": self._settings.moderately_narrower_multiplier,
++        }[action.uncertainty_action]
++        tier_cap = {
++            0: 1.0,
++            1: self._settings.moderately_wider_multiplier,
++            2: self._settings.substantially_wider_multiplier,
++            3: self._settings.substantially_wider_multiplier,
++        }[tier]
++
++        if not eligible:
++            multiplier = 1.0
++        elif requested > 1.0:
++            multiplier = min(requested, tier_cap)
++        elif requested < 1.0 and tier == 3:
++            multiplier = requested
++        else:
++            multiplier = 1.0
++
++        disagreement_mass = assessment.scenario_disagreement_mass()
++        floor = self._settings.moderately_wider_multiplier
++        if (
++            self._settings.enforce_scenario_uncertainty_floor
++            and disagreement_mass >= self._settings.scenario_disagreement_floor_mass
++            and multiplier < floor
++        ):
++            return (
++                floor,
++                disagreement_mass,
++                True,
++                f"Scenario disagreement mass {disagreement_mass:.2f} met the floor; "
++                "uncertainty was widened to at least moderately_wider.",
++            )
++        return multiplier, disagreement_mass, False, ""
++
++    @staticmethod
++    def _profile_multiplier(profile: str, horizon: int, horizons: list[int]) -> float:
++        ordered = sorted(horizons)
++        position = 0.0 if len(ordered) == 1 else ordered.index(horizon) / (len(ordered) - 1)
++        if profile == "temporary":
++            return 1.0 - 0.80 * position
++        if profile == "decaying":
++            return 1.0 - 0.60 * position
++        if profile == "persistent":
++            return 0.80 + 0.20 * position
++        if profile == "delayed":
++            return 0.40 + 0.60 * position
++        return 0.0
++
++    def apply(
++        self,
++        *,
++        ensemble: ModelHorizonForecast,
++        assessment: CfmContextAssessmentOutput,
++        horizon: int,
++        horizons: list[int],
++        latest_price: float | None,
++        cutoff_date: str,
++    ) -> PolicyDecision:
++        del cutoff_date  # Sources were deterministically cutoff-sanitized before policy evaluation.
++        action = assessment.action_for(horizon)
++        tier, tier_name, reasons, source_ids, publishers, claim_ids = self._evidence_tier(assessment, horizon)
++        neutral = action.center_action == "no_change" and action.uncertainty_action == "unchanged"
++        eligible = neutral or tier > 0
++        quantiles = dict(ensemble.quantiles)
++        median = quantiles[0.5]
++        width = max(0.0, quantiles.get(0.9, median) - quantiles.get(0.1, median))
++
++        requested_fraction = 0.0
++        if action.center_action.startswith("small"):
++            requested_fraction = self._settings.small_action_width_fraction
++        elif action.center_action.startswith("moderate"):
++            requested_fraction = self._settings.moderate_action_width_fraction
++        allowed_fraction = {
++            0: 0.0,
++            1: self._settings.small_action_width_fraction,
++            2: self._settings.moderate_action_width_fraction,
++            3: self._settings.moderate_action_width_fraction,
++        }[tier]
++        fraction = min(requested_fraction, allowed_fraction)
++        if assessment.incremental_novelty == "possibly_partly_reflected":
++            fraction *= self._settings.partly_reflected_adjustment_multiplier
++
++        direction = -1.0 if action.center_action.endswith("down") else 1.0
++        if action.center_action == "no_change":
++            direction = 0.0
++        profile = self._profile_multiplier(action.persistence_profile, horizon, horizons)
++        raw_adjustment = direction * fraction * width * profile
++        price_bound = (
++            abs(latest_price) * self._settings.max_center_adjustment_price_fraction
++            if latest_price is not None
++            else self._settings.max_center_adjustment_usd
++        )
++        bound = min(self._settings.max_center_adjustment_usd, price_bound)
++        applied_adjustment = float(np.clip(raw_adjustment, -bound, bound)) if eligible else 0.0
++
++        uncertainty_multiplier, disagreement_mass, floor_applied, floor_reason = self._uncertainty(
++            action=action,
++            assessment=assessment,
++            tier=tier,
++            eligible=eligible,
++        )
++        if floor_reason:
++            reasons.append(floor_reason)
++
++        transformed = {
++            q: float(median + applied_adjustment + uncertainty_multiplier * (value - median))
++            for q, value in quantiles.items()
++        }
++        previous = float("-inf")
++        for q in sorted(transformed):
++            transformed[q] = max(previous, transformed[q])
++            previous = transformed[q]
++        transformed[0.5] = float(median + applied_adjustment)
++
++        approved_center = action.center_action
++        approved_uncertainty = action.uncertainty_action
++        if not eligible:
++            approved_center = "no_change"
++            approved_uncertainty = "unchanged"
++        elif tier == 1 and approved_center in {"moderate_up", "moderate_down"}:
++            approved_center = "small_up" if approved_center.endswith("up") else "small_down"
++        if tier == 1 and approved_uncertainty == "substantially_wider":
++            approved_uncertainty = "moderately_wider"
++        if tier < 3 and approved_uncertainty == "moderately_narrower":
++            approved_uncertainty = "unchanged"
++        if floor_applied:
++            approved_uncertainty = "moderately_wider"
++
++        return PolicyDecision(
++            policy_id=self.policy_id,
++            horizon=horizon,
++            eligible=eligible,
++            evidence_tier=tier_name,
++            evidence_tier_level=tier,
++            eligible_source_ids=source_ids,
++            eligible_publishers=publishers,
++            qualifying_claim_ids=claim_ids,
++            eligibility_reasons=reasons,
++            center_action=approved_center,
++            uncertainty_action=approved_uncertainty,
++            raw_center_adjustment=float(raw_adjustment),
++            applied_center_adjustment=applied_adjustment,
++            uncertainty_multiplier=float(uncertainty_multiplier),
++            scenario_disagreement_mass=float(disagreement_mass),
++            scenario_uncertainty_floor_applied=floor_applied,
++            final_point_forecast=transformed[0.5],
++            final_quantiles=transformed,
++        )
++
++
++class EnsembleLockedPolicy(ConstrainedActionPolicy):
++    """Control policy that always applies the authoritative ensemble unchanged."""
++
++    @property
++    def policy_id(self) -> str:
++        return "ensemble_locked_v1"
++
++    def apply(self, **kwargs) -> PolicyDecision:  # type: ignore[no-untyped-def]
++        ensemble: ModelHorizonForecast = kwargs["ensemble"]
++        horizon: int = kwargs["horizon"]
++        return PolicyDecision(
++            policy_id=self.policy_id,
++            horizon=horizon,
++            eligible=False,
++            evidence_tier="none",
++            evidence_tier_level=0,
++            eligibility_reasons=["Ensemble-locked control policy."],
++            center_action="no_change",
++            uncertainty_action="unchanged",
++            raw_center_adjustment=0.0,
++            applied_center_adjustment=0.0,
++            uncertainty_multiplier=1.0,
++            final_point_forecast=ensemble.point_forecast,
++            final_quantiles=dict(ensemble.quantiles),
++        )
++
++
++__all__ = ["ConstrainedActionPolicy", "EnsembleLockedPolicy"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/predictor.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/predictor.py
+new file mode 100644
+index 0000000..b849d71
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/predictor.py
+@@ -0,0 +1,213 @@
++"""Policy-controlled predictor for CFM Agent v3.4."""
++
++from __future__ import annotations
++
++from typing import Any
++
++from aieng.forecasting.data.context import ForecastContext
++from aieng.forecasting.evaluation.prediction import ContinuousForecast, Prediction
++from aieng.forecasting.evaluation.predictor import Predictor
++from aieng.forecasting.evaluation.task import ForecastingTask
++from aieng.forecasting.methods.agentic import AgentConfig, AgentPredictor
++from energy_oil_forecasting.cfm_agent_v_3_4.config import CfmV34Settings
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++from energy_oil_forecasting.cfm_agent_v_3_4.policy import ConstrainedActionPolicy, EnsembleLockedPolicy
++from energy_oil_forecasting.cfm_agent_v_3_4.prompts import CfmV34PromptBuilder
++from energy_oil_forecasting.cfm_agent_v_3_4.sanitizer import sanitize_assessment
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import ModelForecastResult, PolicyDecision
++from energy_oil_forecasting.cfm_agent_v_3_4.tools import AuthoritativeSuiteTool
++
++
++class CfmV34Predictor(Predictor):
++    """Run the assessment agent, then let Python approve actions and construct every final number."""
++
++    def __init__(
++        self,
++        config: AgentConfig,
++        market_data_tool: AuthoritativeSuiteTool,
++        settings: CfmV34Settings,
++    ) -> None:
++        self._market_data_tool = market_data_tool
++        self._settings = settings
++        self._policy = (
++            EnsembleLockedPolicy(settings)
++            if settings.policy_mode == "ensemble_locked"
++            else ConstrainedActionPolicy(settings)
++        )
++        self._inner = AgentPredictor(
++            agent_config=config,
++            prompt_builder=CfmV34PromptBuilder(),
++            output_schema=CfmContextAssessmentOutput,
++        )
++
++    @property
++    def predictor_id(self) -> str:
++        return self._inner.predictor_id
++
++    @property
++    def _runner(self) -> Any:
++        return self._inner._runner
++
++    def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
++        placeholders = self._inner.predict(task, context)
++        result = self._market_data_tool.last_result
++        if result is None or result.model_suite is None or result.model_suite.ensemble is None:
++            raise RuntimeError("CFM v3.4 requires one successful authoritative numerical-suite result.")
++        suite = result.model_suite
++        if suite.horizons != sorted(task.horizons):
++            raise RuntimeError("Numerical-suite horizons do not match the requested task.")
++
++        assessment_raw = placeholders[0].metadata.get("context_assessment") if placeholders else None
++        original_assessment = CfmContextAssessmentOutput.model_validate(assessment_raw)
++        sanitized_assessment, sanitization_audit = sanitize_assessment(
++            original_assessment,
++            cutoff_date=suite.cutoff_date,
++            settings=self._settings,
++        )
++        by_horizon = {action.horizon: action for action in sanitized_assessment.horizon_actions}
++        if set(by_horizon) != set(task.horizons):
++            raise RuntimeError("Context assessment does not cover the requested horizons.")
++
++        ensemble_by_horizon = {item.horizon: item for item in suite.ensemble.forecasts}
++        decisions = {
++            horizon: self._policy.apply(
++                ensemble=ensemble_by_horizon[horizon],
++                assessment=sanitized_assessment,
++                horizon=horizon,
++                horizons=task.horizons,
++                latest_price=suite.diagnostics.latest_value,
++                cutoff_date=suite.cutoff_date,
++            )
++            for horizon in task.horizons
++        }
++        approved_assessment = self._approved_assessment(sanitized_assessment, decisions)
++        prediction_by_date = {str(prediction.forecast_date.date()): prediction for prediction in placeholders}
++
++        for ensemble_forecast in suite.ensemble.forecasts:
++            prediction = prediction_by_date[ensemble_forecast.forecast_date]
++            decision = decisions[ensemble_forecast.horizon]
++            prediction.payload = ContinuousForecast(
++                point_forecast=decision.final_point_forecast,
++                quantiles=decision.final_quantiles,
++            )
++            prediction.metadata.update(
++                {
++                    "model_suite_id": suite.model_suite_id,
++                    "llm_context_assessment": original_assessment.model_dump(mode="json"),
++                    "llm_proposed_context_assessment": original_assessment.model_dump(mode="json"),
++                    "sanitized_context_assessment": sanitized_assessment.model_dump(mode="json"),
++                    "policy_approved_context_assessment": approved_assessment.model_dump(mode="json"),
++                    "context_assessment": approved_assessment.model_dump(mode="json"),
++                    "llm_proposed_action": original_assessment.action_for(
++                        ensemble_forecast.horizon
++                    ).model_dump(mode="json"),
++                    "policy_approved_action": approved_assessment.action_for(
++                        ensemble_forecast.horizon
++                    ).model_dump(mode="json"),
++                    "assessment_sanitization_audit": sanitization_audit,
++                    "workflow_audit": {
++                        **self._market_data_tool.audit,
++                        "reported_search_queries": list(original_assessment.reported_search_queries),
++                        "reported_search_call_count": len(original_assessment.reported_search_queries),
++                        "validated_structured_response_count": 1,
++                        "graduated_evidence_policy_id": self._policy.policy_id,
++                    },
++                    "model_num_samples": suite.model_num_samples,
++                    "authoritative_component_models": {
++                        name: self._component_at_horizon(model, ensemble_forecast.horizon)
++                        for name, model in suite.models.items()
++                    },
++                    "authoritative_ensemble": self._component_at_horizon(
++                        suite.ensemble, ensemble_forecast.horizon
++                    ),
++                    "unadjusted_ensemble": self._component_at_horizon(
++                        suite.ensemble, ensemble_forecast.horizon
++                    ),
++                    "configured_ensemble_weights": suite.configured_ensemble_weights,
++                    "active_ensemble_weights": suite.active_ensemble_weights,
++                    "successful_models": suite.successful_models,
++                    "failed_models": suite.failed_models,
++                    "model_disagreement_std": suite.model_disagreement_std[ensemble_forecast.horizon],
++                    "training_data": {
++                        name: model.training_data.model_dump(mode="json")
++                        for name, model in suite.models.items()
++                    },
++                    "market_diagnostics": suite.diagnostics.model_dump(mode="json"),
++                    "policy_decision": decision.model_dump(mode="json"),
++                    # Fixed-width numeric row for the future score-to-price
++                    # calibration study. Built from the sanitized assessment, so
++                    # sanitizer-rejected evidence cannot inflate a feature. Pair
++                    # it with unadjusted_ensemble above to form the regression
++                    # target: actual move minus the quant baseline's expectation.
++                    "calibration_features": sanitized_assessment.calibration_features(),
++                    "llm_authored_final_numbers": False,
++                    "market_data_tool_status": result.status,
++                    "market_data_tool_warnings": result.warnings,
++                }
++            )
++        return placeholders
++
++    @staticmethod
++    def _approved_assessment(
++        sanitized: CfmContextAssessmentOutput,
++        decisions: dict[int, PolicyDecision],
++    ) -> CfmContextAssessmentOutput:
++        raw = sanitized.model_dump(mode="json")
++        approved_actions = []
++        for action in sanitized.horizon_actions:
++            decision = decisions[action.horizon]
++            approved = action.model_dump(mode="json")
++            approved["center_action"] = decision.center_action
++            approved["uncertainty_action"] = decision.uncertainty_action
++            approved["cited_claim_ids"] = [
++                claim_id for claim_id in action.cited_claim_ids
++                if claim_id in decision.qualifying_claim_ids
++            ]
++            if not decision.eligible:
++                approved["persistence_profile"] = "unknown"
++                approved["cited_claim_ids"] = []
++                approved["rationale"] = (
++                    "The LLM proposal was rejected by Python's graduated evidence policy; "
++                    + " ".join(decision.eligibility_reasons)
++                )
++            elif decision.evidence_tier_level > 0:
++                approved["rationale"] = (
++                    f"Python approved evidence Tier {decision.evidence_tier_level} "
++                    f"({decision.evidence_tier}) and bounded the proposed categorical action."
++                )
++            approved_actions.append(approved)
++        raw["horizon_actions"] = approved_actions
++        raw["research_summary"] = (
++            "Python-approved assessment derived from the sanitized evidence record; "
++            "unsupported citations and rejected actions were removed."
++        )
++        raw["overall_rationale"] = (
++            "Final contextual actions are assigned and bounded by Python under the graduated evidence policy."
++        )
++        return CfmContextAssessmentOutput.model_validate(raw)
++
++    @staticmethod
++    def _component_at_horizon(result: ModelForecastResult, horizon: int) -> dict[str, Any]:
++        if result.status == "error":
++            return {
++                "status": "error",
++                "predictor_id": result.predictor_id,
++                "num_samples": result.num_samples,
++                "point_forecast": None,
++                "quantiles": {},
++                "forecast_date": None,
++                "error": result.error,
++            }
++        forecast = next(item for item in result.forecasts if item.horizon == horizon)
++        return {
++            "status": "ok",
++            "predictor_id": result.predictor_id,
++            "num_samples": result.num_samples,
++            "point_forecast": forecast.point_forecast,
++            "quantiles": {str(q): value for q, value in forecast.quantiles.items()},
++            "forecast_date": forecast.forecast_date,
++            "error": None,
++        }
++
++
++__all__ = ["CfmV34Predictor"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/prompts.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/prompts.py
+new file mode 100644
+index 0000000..8fe2991
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/prompts.py
+@@ -0,0 +1,43 @@
++"""Identifier-only assessment prompt for CFM Agent v3.4."""
++
++from __future__ import annotations
++
++import json
++
++import pandas as pd
++from aieng.forecasting.data.context import ForecastContext
++from aieng.forecasting.evaluation.task import ForecastingTask
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++
++
++class CfmV34PromptBuilder:
++    def __init__(self) -> None:
++        self._schema = CfmContextAssessmentOutput.prompt_schema_json()
++
++    def __call__(self, *, task: ForecastingTask, context: ForecastContext) -> str:
++        payload = {
++            "agent_name": "cfm_agent_v_3_4",
++            "task_id": task.task_id,
++            "target_series_id": task.target_series_id,
++            "description": task.description,
++            "as_of": str(pd.Timestamp(context.as_of).date()),
++            "horizons": list(task.horizons),
++            "frequency": task.frequency,
++            "available_series_ids": context.series_ids,
++            "raw_history_in_prompt": False,
++            "instructions": (
++                "Load all required skills. Call run_authoritative_suite exactly once with the exact cutoff, target, required horizons, frequency, and relevant series IDs. Treat its model suite and diagnostics as authoritative. "
++                "Execute four distinct search_web calls, one for each part of the fixed research plan: underlying event "
++                "and official statements; confirmed physical oil-flow impact; production or "
++                "strategic-reserve response; and independent market-reaction reporting. Use only "
++                "cutoff-approved evidence. Do not report a planned query as executed. An empty verifier result supplies no facts. Never infer source title, publisher, date, tier, or provenance from an opaque redirect URL. Report verifier_processing_status only when the accepted tool output establishes it; otherwise use unknown. One eligible high-quality publisher may support only a small bounded action; two independent publishers may support a moderate bounded action; three or more strongly corroborated publishers may support the strongest bounded action. Separate facts from interpretation, preserve conflicts, and "
++                "select only authorized categorical actions. Do not calculate any final price, "
++                "quantile, dollar adjustment, or uncertainty multiplier. Call set_model_response "
++                "exactly once with json_response matching output_schema."
++            ),
++            "output_schema": self._schema,
++        }
++        return json.dumps(payload, indent=2)
++
++
++__all__ = ["CfmV34PromptBuilder"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/sanitizer.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/sanitizer.py
+new file mode 100644
+index 0000000..29cabb0
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/sanitizer.py
+@@ -0,0 +1,165 @@
++"""Deterministic evidence and narrative sanitization for CFM Agent v3.4."""
++
++from __future__ import annotations
++
++from contextlib import suppress
++from datetime import datetime
++from urllib.parse import urlparse
++
++from energy_oil_forecasting.cfm_agent_v_3_4.config import CfmV34Settings
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++
++
++_PLACEHOLDERS = {
++    "various", "unknown", "multiple sources", "news reports", "several outlets",
++    "google search", "search results", "vertex ai search", "independent market reporting",
++    "maritime analytics reporting", "energy market news",
++}
++_REJECTED_HOSTS = {"vertexaisearch.cloud.google.com"}
++_PHYSICAL_CLAIM_TYPES = {"physical_supply", "shipping", "production_policy", "strategic_reserves", "inventory"}
++
++
++def _url_quality(url: str) -> str:
++    parsed = urlparse(url)
++    host = parsed.netloc.lower()
++    if not host:
++        return "invalid"
++    if host in _REJECTED_HOSTS:
++        return "opaque_redirect"
++    if not parsed.path.strip("/"):
++        return "publisher_homepage"
++    return "resolved_specific"
++
++
++def sanitize_assessment(  # noqa: PLR0912, PLR0915 — one linear rejection pass; splitting it hides the order.
++    assessment: CfmContextAssessmentOutput,
++    *,
++    cutoff_date: str,
++    settings: CfmV34Settings,
++) -> tuple[CfmContextAssessmentOutput, dict[str, object]]:
++    """Return a conservative assessment plus claim- and source-level audit metadata."""
++    raw = assessment.model_dump(mode="json")
++    cutoff = datetime.strptime(cutoff_date, "%Y-%m-%d").date()
++    eligible: set[str] = set()
++    eligible_publishers: set[str] = set()
++    source_audit: list[dict[str, object]] = []
++    changes: list[str] = []
++    warnings: list[str] = []
++
++    for source in raw["evidence_sources"]:
++        publisher = source["publisher"].strip()
++        publisher_key = publisher.lower()
++        quality = _url_quality(source["source_url"])
++        reasons: list[str] = []
++        publication_date = None
++        with suppress(TypeError, ValueError):
++            if source.get("publication_date"):
++                publication_date = datetime.strptime(source["publication_date"], "%Y-%m-%d").date()
++        if publisher_key in _PLACEHOLDERS:
++            reasons.append("publisher is missing or a placeholder")
++        if source.get("provenance_status") != "verified_from_tool":
++            reasons.append("source identity is not verified_from_tool")
++        if source.get("verifier_content_status") != "accepted_factual_content":
++            reasons.append("verifier returned no accepted factual content")
++        if not source.get("verified_evidence_excerpt", "").strip():
++            reasons.append("verified evidence excerpt is empty")
++        if publication_date is None:
++            reasons.append("publication date is missing or invalid")
++        elif publication_date >= cutoff:
++            reasons.append("publication date is not strictly before cutoff")
++        if not source.get("title", "").strip() or source["title"].lstrip().startswith("<"):
++            reasons.append("document title is missing or unresolved")
++        if quality == "invalid":
++            reasons.append("source URL is invalid")
++        elif quality in {"opaque_redirect", "publisher_homepage"}:
++            complete_identity = bool(
++                publisher and source.get("title") and publication_date and source.get("verified_evidence_excerpt", "").strip()
++            )
++            if not settings.allow_verified_identity_with_imperfect_url or not complete_identity:
++                reasons.append("source URL is not a resolved auditable document")
++            else:
++                warnings.append(
++                    f"Source {source['source_id']} accepted from verified identity metadata with URL quality {quality}."
++                )
++
++        source_ok = not reasons
++        if source_ok:
++            eligible.add(source["source_id"])
++            eligible_publishers.add(publisher_key)
++        else:
++            if source["source_tier"] != "tier_4_other" or source.get("is_primary_or_official"):
++                changes.append(f"Downgraded source {source['source_id']} classification.")
++            source["source_tier"] = "tier_4_other"
++            source["is_primary_or_official"] = False
++        source_audit.append({
++            "source_id": source["source_id"],
++            "publisher": publisher,
++            "eligible": source_ok,
++            "url_quality": quality,
++            "reasons": reasons,
++        })
++
++    claim_audit: list[dict[str, object]] = []
++    qualifying_claim_ids: set[str] = set()
++    for claim in raw["evidence_claims"]:
++        eligible_support = [sid for sid in claim["supporting_source_ids"] if sid in eligible]
++        eligible_contradictions = [sid for sid in claim["contradicting_source_ids"] if sid in eligible]
++        claim["supporting_source_ids"] = eligible_support
++        claim["contradicting_source_ids"] = eligible_contradictions
++        direct_eligible_publishers = {
++            source["publisher"].strip().lower()
++            for source in raw["evidence_sources"]
++            if source["source_id"] in eligible_support
++        }
++        if claim["support_status"] == "direct" and not direct_eligible_publishers:
++            claim["support_status"] = "unsupported"
++            changes.append(f"Downgraded claim {claim['claim_id']} to unsupported.")
++        if claim["support_status"] == "direct" and direct_eligible_publishers:
++            qualifying_claim_ids.add(claim["claim_id"])
++        claim_audit.append({
++            "claim_id": claim["claim_id"],
++            "support_status": claim["support_status"],
++            "eligible_supporting_source_ids": eligible_support,
++            "eligible_supporting_publishers": sorted(direct_eligible_publishers),
++            "eligible_support_count": len(direct_eligible_publishers),
++            "eligible_contradicting_source_ids": eligible_contradictions,
++        })
++
++    qualifying_physical_claims = [
++        claim for claim in raw["evidence_claims"]
++        if claim["claim_type"] in _PHYSICAL_CLAIM_TYPES and claim["support_status"] == "direct"
++    ]
++    if raw["physical_status"] in {"partial_disruption", "confirmed_disruption"} and not qualifying_physical_claims:
++        raw["physical_status"] = "unknown"
++        changes.append("Downgraded physical_status to unknown.")
++    if raw["physical_status"] == "elevated_risk" and not qualifying_claim_ids:
++        raw["physical_status"] = "unknown"
++        changes.append("Downgraded elevated_risk physical_status to unknown.")
++
++    if not qualifying_claim_ids:
++        raw["confidence"] = 0.0
++        raw["research_summary"] = "No eligible directly supported material claim survives sanitization."
++        raw["overall_rationale"] = (
++            "The original LLM assessment is retained separately; the sanitized assessment does not establish a contextual deviation."
++        )
++        warnings.append("Assessment confidence reduced to zero because no eligible direct claim survived.")
++    raw["warnings"] = list(dict.fromkeys(list(raw.get("warnings", [])) + warnings))
++
++    sanitized = CfmContextAssessmentOutput.model_validate(raw)
++    audit = {
++        "sanitizer_id": "evidence_sanitizer_v2",
++        "eligible_source_ids": sorted(eligible),
++        "eligible_publishers": sorted(eligible_publishers),
++        "eligible_publisher_count": len(eligible_publishers),
++        "qualifying_claim_ids": sorted(qualifying_claim_ids),
++        "qualifying_physical_claim_ids": sorted(claim["claim_id"] for claim in qualifying_physical_claims),
++        "source_audit": source_audit,
++        "claim_audit": claim_audit,
++        "change_count": len(changes),
++        "changes": changes,
++        "warnings": warnings,
++    }
++    return sanitized, audit
++
++
++__all__ = ["sanitize_assessment"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/schemas.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/schemas.py
+new file mode 100644
+index 0000000..f5fc2c3
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/schemas.py
+@@ -0,0 +1,277 @@
++"""Typed contracts for CFM Agent v3.4 numerical, research, and policy layers."""
++
++from __future__ import annotations
++
++from typing import Literal
++
++from pydantic import BaseModel, ConfigDict, Field, model_validator
++
++
++ToolStatus = Literal["ok", "partial", "error"]
++ProvenanceStatus = Literal["verified_from_tool", "inferred_by_agent", "unresolved"]
++VerifierContentStatus = Literal["accepted_factual_content", "empty", "unknown"]
++VerifierProcessingStatus = Literal["accepted_clean", "accepted_after_removal", "empty_after_verification", "unknown"]
++SourceTier = Literal["tier_1_primary", "tier_2_independent", "tier_3_commentary", "tier_4_other"]
++CenterAction = Literal["no_change", "small_up", "moderate_up", "small_down", "moderate_down"]
++UncertaintyAction = Literal["unchanged", "moderately_wider", "substantially_wider", "moderately_narrower"]
++PersistenceProfile = Literal["temporary", "decaying", "persistent", "delayed", "unknown"]
++NoveltyAssessment = Literal[
++    "likely_new_relative_to_model_data",
++    "possibly_partly_reflected",
++    "likely_reflected_in_model_data",
++    "indeterminate",
++]
++PhysicalStatus = Literal["normal", "elevated_risk", "partial_disruption", "confirmed_disruption", "unknown"]
++EvidenceTier = Literal["none", "limited", "corroborated", "strong"]
++
++# Which news-visible channel a driver belongs to. Orthogonal to ``claim_type``:
++# claim_type says what kind of fact a claim is (a shipping fact, an inventory
++# fact); DriverCategory says what kind of driver produced it (a weather event, a
++# geopolitical event). The calibration layer aggregates by this axis, because it
++# is a fixed enum and therefore stable across origins, unlike free-text claims.
++DriverCategory = Literal[
++    "geopolitical",
++    "weather",
++    "operational",
++    "policy",
++    "demand_expectations",
++]
++ScenarioDirection = Literal["up", "down", "neutral"]
++ScenarioMagnitude = Literal["small", "moderate", "large"]
++
++
++class SeriesObservation(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    date: str
++    value: float
++
++
++class SeriesSnapshot(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    series_id: str
++    description: str
++    source: str
++    units: str
++    frequency: str
++    n_observations_at_cutoff: int = Field(ge=0)
++    returned_observations: int = Field(ge=0)
++    first_available_date: str | None = None
++    last_available_date: str | None = None
++    last_value: float | None = None
++    observations: list[SeriesObservation] = Field(default_factory=list)
++
++
++class ModelTrainingData(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    target_observations: int = Field(ge=0)
++    first_target_date: str | None = None
++    last_target_date: str | None = None
++    aligned_observations: int | None = Field(default=None, ge=0)
++    effective_training_examples_estimate: int | None = Field(default=None, ge=0)
++    target_lags: int | None = Field(default=None, ge=1)
++    covariate_lags: int | None = Field(default=None, ge=1)
++    covariates: list[str] = Field(default_factory=list)
++    covariate_observations: dict[str, int] = Field(default_factory=dict)
++    notes: str = ""
++
++
++class ModelHorizonForecast(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    horizon: int = Field(gt=0)
++    forecast_date: str
++    point_forecast: float
++    quantiles: dict[float, float]
++
++    @model_validator(mode="after")
++    def validate_quantiles(self) -> "ModelHorizonForecast":
++        ordered = [self.quantiles[q] for q in sorted(self.quantiles)]
++        if ordered != sorted(ordered):
++            raise ValueError("quantiles must be non-decreasing.")
++        if 0.5 not in self.quantiles or self.point_forecast != self.quantiles[0.5]:
++            raise ValueError("point_forecast must equal the 0.5 quantile.")
++        return self
++
++
++class ModelForecastResult(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    model_name: str
++    predictor_id: str
++    status: Literal["ok", "error"]
++    forecasts: list[ModelHorizonForecast] = Field(default_factory=list)
++    training_data: ModelTrainingData
++    num_samples: int = Field(ge=1)
++    error: str | None = None
++
++
++class MarketDiagnostics(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    latest_observation_date: str | None = None
++    latest_value: float | None = None
++    calendar_gap_days: int | None = Field(default=None, ge=0)
++    return_1b: float | None = None
++    return_5b: float | None = None
++    return_21b: float | None = None
++    realized_volatility_21b: float | None = Field(default=None, ge=0.0)
++    drawdown_63b: float | None = None
++    jump_zscore_63b: float | None = None
++    covariate_latest_values: dict[str, float] = Field(default_factory=dict)
++
++
++class ModelSuiteResult(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    model_suite_id: str
++    target_series_id: str
++    cutoff_date: str
++    horizons: list[int]
++    model_num_samples: int = Field(ge=1)
++    models: dict[str, ModelForecastResult]
++    ensemble: ModelForecastResult | None = None
++    configured_ensemble_weights: dict[str, float]
++    active_ensemble_weights: dict[str, float] = Field(default_factory=dict)
++    successful_models: list[str] = Field(default_factory=list)
++    failed_models: list[str] = Field(default_factory=list)
++    model_disagreement_std: dict[int, float] = Field(default_factory=dict)
++    diagnostics: MarketDiagnostics
++
++
++class MarketDataToolResult(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    status: ToolStatus
++    operation: str
++    cutoff_date: str
++    available_series: list[str] = Field(default_factory=list)
++    series: list[SeriesSnapshot] = Field(default_factory=list)
++    model_suite: ModelSuiteResult | None = None
++    warnings: list[str] = Field(default_factory=list)
++    error: str | None = None
++
++
++class EvidenceSource(BaseModel):
++    """One source used by the assessment."""
++
++    model_config = ConfigDict(extra="ignore")
++    source_id: str = Field(min_length=1)
++    title: str = Field(min_length=1)
++    source_url: str = Field(min_length=1)
++    publisher: str = Field(min_length=1)
++    source_tier: SourceTier
++    publication_date: str | None = None
++    is_primary_or_official: bool = False
++    provenance_status: ProvenanceStatus = "unresolved"
++    verifier_content_status: VerifierContentStatus = "unknown"
++    verifier_processing_status: VerifierProcessingStatus = "unknown"
++    verified_evidence_excerpt: str = ""
++
++
++class EvidenceClaim(BaseModel):
++    """One normalized material claim and its supporting source IDs."""
++
++    model_config = ConfigDict(extra="ignore")
++    claim_id: str = Field(min_length=1)
++    statement: str = Field(min_length=1)
++    claim_type: Literal[
++        "physical_supply",
++        "shipping",
++        "production_policy",
++        "strategic_reserves",
++        "inventory",
++        "demand",
++        "market_reaction",
++        "other",
++    ]
++    driver_category: DriverCategory = "geopolitical"
++    support_status: Literal["direct", "partial", "unsupported", "conflicting"]
++    supporting_source_ids: list[str] = Field(default_factory=list)
++    contradicting_source_ids: list[str] = Field(default_factory=list)
++    material_to_forecast: bool = True
++
++
++class HorizonAction(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    horizon: int = Field(gt=0)
++    center_action: CenterAction = "no_change"
++    uncertainty_action: UncertaintyAction = "unchanged"
++    persistence_profile: PersistenceProfile = "unknown"
++    cited_claim_ids: list[str] = Field(default_factory=list)
++    rationale: str = Field(min_length=1)
++
++
++class ContextScenario(BaseModel):
++    """One named, competing storyline for how the assessed context resolves.
++
++    Scenarios are categorical for the same reason actions are: the LLM states
++    structure and direction, never a price. They serve two purposes. They force
++    the assessment to consider a tail case and a genuine alternative before
++    committing to an action, and they give Python a deterministic signal for
++    how much uncertainty the situation actually carries.
++    """
++
++    model_config = ConfigDict(extra="ignore")
++    scenario_id: str = Field(min_length=1)
++    name: str = Field(min_length=1)
++    probability: float = Field(gt=0.0, le=1.0)
++    direction: ScenarioDirection
++    magnitude: ScenarioMagnitude
++    is_tail_case: bool = False
++    cited_claim_ids: list[str] = Field(default_factory=list)
++    rationale: str = Field(min_length=1)
++
++    @model_validator(mode="after")
++    def validate_scenario(self) -> "ContextScenario":
++        """Require a neutral direction to carry a small magnitude."""
++        if self.direction == "neutral" and self.magnitude != "small":
++            raise ValueError("A neutral scenario must have small magnitude.")
++        return self
++
++
++class PolicyDecision(BaseModel):
++    model_config = ConfigDict(extra="forbid")
++    policy_id: str
++    horizon: int
++    eligible: bool
++    evidence_tier: EvidenceTier = "none"
++    evidence_tier_level: int = Field(default=0, ge=0, le=3)
++    eligible_source_ids: list[str] = Field(default_factory=list)
++    eligible_publishers: list[str] = Field(default_factory=list)
++    qualifying_claim_ids: list[str] = Field(default_factory=list)
++    eligibility_reasons: list[str] = Field(default_factory=list)
++    center_action: CenterAction
++    uncertainty_action: UncertaintyAction
++    raw_center_adjustment: float
++    applied_center_adjustment: float
++    uncertainty_multiplier: float = Field(gt=0.0)
++    scenario_disagreement_mass: float = Field(default=0.0, ge=0.0, le=1.0)
++    scenario_uncertainty_floor_applied: bool = False
++    final_point_forecast: float
++    final_quantiles: dict[float, float]
++
++
++__all__ = [
++    "CenterAction",
++    "ContextScenario",
++    "DriverCategory",
++    "EvidenceClaim",
++    "EvidenceTier",
++    "EvidenceSource",
++    "HorizonAction",
++    "MarketDataToolResult",
++    "MarketDiagnostics",
++    "ModelForecastResult",
++    "ModelHorizonForecast",
++    "ModelSuiteResult",
++    "ModelTrainingData",
++    "NoveltyAssessment",
++    "PersistenceProfile",
++    "PhysicalStatus",
++    "PolicyDecision",
++    "ProvenanceStatus",
++    "ScenarioDirection",
++    "ScenarioMagnitude",
++    "SeriesObservation",
++    "SeriesSnapshot",
++    "SourceTier",
++    "ToolStatus",
++    "VerifierContentStatus",
++    "VerifierProcessingStatus",
++    "UncertaintyAction",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/code-analysis/SKILL.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/code-analysis/SKILL.md
+new file mode 100644
+index 0000000..9de3154
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/code-analysis/SKILL.md
+@@ -0,0 +1,12 @@
++---
++name: code-analysis
++description: Use E2B only for bounded diagnostics and disclose its contribution.
++---
++# Code Analysis
++
++- run_code is optional.
++- Do not recreate ARIMA, Kalman, LightGBM, the ensemble, cutoff filtering, policy arithmetic, or final quantiles.
++- Use only data supplied by the task or run_authoritative_suite.
++- Use E2B only for a specific incremental diagnostic.
++- Set e2b_used accurately and summarize the contribution.
++- Never inspect or expose credentials or environment secrets.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/evidence-assessment/SKILL.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/evidence-assessment/SKILL.md
+new file mode 100644
+index 0000000..71ed87b
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/evidence-assessment/SKILL.md
+@@ -0,0 +1,86 @@
++---
++name: evidence-assessment
++description: Build a corroborated, claim-level evidence record from cutoff-approved web research.
++---
++# Evidence Assessment
++
++## Search procedure
++Run distinct searches covering:
++1. the underlying event and official statements;
++2. confirmed physical oil-flow or shipping effects;
++3. production, inventory, or strategic-reserve responses;
++4. reputable independent reporting on market reaction.
++
++## Source standards
++- Prefer official/primary sources and reputable independent reporting.
++- One eligible high-quality publisher may support only a small bounded action. Independent corroboration progressively unlocks moderate and strong bounded authority.
++- Treat broker, bank, trading-site, and analyst material as commentary unless it directly links to primary evidence.
++- Do not count repeated articles from the same publisher as independent corroboration.
++- For each source, record publisher, URL, title, date, source tier, and whether it is primary/official.
++
++## Pillar boundary: events, not statistics
++
++This agent is one of three pillars. A quant pillar already sees price and
++financial market data. A physical pillar already sees supply/demand
++fundamentals. This agent covers only what is visible through news and text,
++and must not restate what the other two already carry.
++
++Two banned classes, not just the named examples:
++
++- Structured market data: dollar index, VIX, oil curve contango,
++  cross-commodity returns, CFTC positioning, and the price history itself.
++- Supply/demand statistics and agency publications: EIA, IEA, or OPEC
++  inventory levels, production and supply figures, demand forecasts and
++  their revisions, and any number taken from a weekly or monthly report.
++
++The boundary test for every candidate claim: it must be an event or a
++situation, not a statistic or a forecast. Ask, "would the quant pillar or the
++physical pillar eventually see this in its input data?" If yes, do not record
++it as a material claim.
++
++Prefer primary reporting about a specific event over market-wrap or outlook
++articles. A market overview may point you to an event; it is not itself
++evidence for one.
++
++## Driver categories
++
++Tag every claim with the news-visible channel that produced it:
++
++- `geopolitical`: conflict, sanctions, shipping-lane risk, OPEC+ policy
++  decisions, diplomatic developments.
++- `weather`: hurricanes, freezes, floods, and other natural events that
++  disrupt production, refining, or transport.
++- `operational`: strikes, accidents, outages, cyberattacks on energy
++  infrastructure.
++- `policy`: domestic government action such as strategic-reserve releases or
++  refills, drilling rules, tariffs, and price caps.
++- `demand_expectations`: sudden headline shocks to expected demand, such as a
++  stimulus announcement, a lockdown, or a fast-moving recession scare. Agency
++  demand forecasts and their revisions are not in this category; they are
++  fundamentals data.
++
++This tag is orthogonal to `claim_type`. `claim_type` says what kind of fact a
++claim is; `driver_category` says what kind of driver produced it. A hurricane
++that shuts in production is `claim_type: physical_supply` and
++`driver_category: weather`.
++
++## Claim standards
++- Separate confirmed facts from source interpretation and agent assessment.
++- Normalize each material fact into one claim.
++- Mark support as direct, partial, unsupported, or conflicting.
++- Link every claim to supporting and contradicting source IDs.
++- Never promote threatened, feared, or possible disruption into confirmed physical disruption.
++- Preserve unresolved conflicts; do not choose the most dramatic account.
++- If evidence is weak or conflicting, keep the action neutral. A directly verified single high-quality source may support only a small action when novelty and transmission are clear.
++
++
++### Provenance hardening
++- Execute all four searches; report the exact executed query strings, not plan labels.
++- If verifier-approved factual text is empty, the search contributes no evidence.
++- Never reconstruct removed claims from memory or from URLs alone.
++- Never use placeholder publishers such as Various, Unknown, Multiple sources, News reports, or Google Search.
++- Do not infer title, publisher, publication date, source tier, or official status from an opaque redirect URL.
++- Set provenance_status to verified_from_tool only when the accepted tool output explicitly establishes the source identity fields; otherwise use inferred_by_agent or unresolved.
++- Set verifier_content_status to accepted_factual_content only when accepted factual text is present.
++- Copy a concise exact accepted excerpt into verified_evidence_excerpt.
++- Prefer resolved direct publisher URLs. When accepted tool output explicitly establishes publisher, title, date, factual excerpt, source type, and cutoff compliance, an imperfect URL may be retained with an audit warning rather than automatically discarded.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/forecast-action-selection/SKILL.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/forecast-action-selection/SKILL.md
+new file mode 100644
+index 0000000..a56d05c
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/forecast-action-selection/SKILL.md
+@@ -0,0 +1,61 @@
++---
++name: forecast-action-selection
++description: Select only authorized categorical forecast actions; Python owns all final arithmetic.
++---
++# Forecast Action Selection
++
++## Default
++no_change and unchanged uncertainty are the default.
++
++## Authorized center actions
++- no_change
++- small_up
++- moderate_up
++- small_down
++- moderate_down
++
++## Authorized uncertainty actions
++- unchanged
++- moderately_wider
++- substantially_wider
++- moderately_narrower
++
++## Authorized persistence profiles
++- temporary
++- decaying
++- persistent
++- delayed
++- unknown
++
++## Competing scenarios
++
++Before selecting any action, state 2-3 competing scenarios for how the
++assessed context resolves. Scenarios discipline the action: they force you to
++name the alternative before committing to a direction.
++
++- Give each scenario a `probability`. Probabilities must sum to 1.
++- Give each a `direction` (up, down, neutral) and a `magnitude` (small,
++  moderate, large). A neutral scenario must be small. These are categorical,
++  like actions: never state a price or a percentage.
++- Exactly the tail role: at least one scenario sets `is_tail_case: true`. A
++  tail case must be genuinely low-probability, never the most likely
++  scenario, and must be moderate or large in magnitude.
++- Keep at least one non-tail mainline scenario.
++- No two scenarios may share the same direction *and* magnitude. An intensity
++  ladder is valid, but the rungs must differ: if two storylines resolve the
++  same way with the same force, they are one scenario written twice.
++- Cite the claim IDs each scenario rests on.
++
++Python reads the scenario set to size uncertainty. When your scenarios place
++real probability on both an up and a down outcome, Python widens the interval
++whatever uncertainty action you propose. So an honest two-sided scenario set
++and an `unchanged` uncertainty action contradict each other; choose the
++uncertainty action your own scenarios imply.
++
++## Rules
++- Select one action record for every requested horizon.
++- Cite only normalized material claim IDs.
++- A non-neutral action requires direct eligible evidence, no unresolved material conflict, a clear WTI transmission mechanism, and sufficient incremental novelty. Python assigns a graduated evidence tier and may cap or reject the proposal.
++- Do not output a final price, quantile, dollar adjustment, percentage adjustment, interval multiplier, or Python-policy parameter.
++- Python may reject the selected action if evidence gates fail.
++- Keep horizon actions coherent with the chosen persistence profile.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/market-context-assessment/SKILL.md b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/market-context-assessment/SKILL.md
+new file mode 100644
+index 0000000..b5d29ea
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/skills/market-context-assessment/SKILL.md
+@@ -0,0 +1,18 @@
++---
++name: market-context-assessment
++description: Interpret eligible evidence alongside authoritative numerical diagnostics without inventing prices.
++---
++# Market Context Assessment
++
++- Treat run_authoritative_suite model results and diagnostics as authoritative and immutable for the run.
++- Do not recalculate ARIMA, Kalman, LightGBM, the ensemble, or final quantiles.
++- Do not claim that an event is "already priced." Use only these narrower classifications:
++  - likely_new_relative_to_model_data
++  - possibly_partly_reflected
++  - likely_reflected_in_model_data
++  - indeterminate
++- Use Python-reported latest-observation timing when discussing novelty.
++- Distinguish normal conditions, elevated risk, partial disruption, confirmed disruption, and unknown status.
++- Assess the transmission channel to WTI, expected direction, persistence, and uncertainty separately.
++- Dramatic language is not evidence of magnitude.
++- If timing, support, transmission, or novelty is indeterminate, prefer no_change. Evidence that is possibly partly reflected may justify a discounted adjustment; Python applies the discount.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/conftest.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/conftest.py
+new file mode 100644
+index 0000000..d410a80
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/conftest.py
+@@ -0,0 +1,39 @@
++"""Shared v3 fixtures."""
++
++from __future__ import annotations
++
++import numpy as np
++import pandas as pd
++import pytest
++from aieng.forecasting.data import DataService, SeriesMetadata, StaticFrameAdapter
++from energy_oil_forecasting.data import WTI_SERIES_ID
++
++
++@pytest.fixture
++def synthetic_service() -> DataService:
++    dates = pd.bdate_range("2020-01-01", periods=500)
++    x = np.arange(len(dates), dtype=float)
++    service = DataService()
++    for series_id, values, description in [
++        (WTI_SERIES_ID, 55.0 + 0.02 * x + np.sin(x / 20.0), "Synthetic WTI"),
++        ("vix_level_l1b", 20.0 + 2.0 * np.cos(x / 15.0), "Synthetic VIX"),
++    ]:
++        frame = pd.DataFrame(
++            {
++                "timestamp": dates,
++                "value": values,
++                "released_at": dates + pd.offsets.BDay(1),
++            }
++        )
++        service.register(
++            series_id,
++            StaticFrameAdapter(frame),
++            SeriesMetadata(
++                series_id=series_id,
++                description=description,
++                source="test",
++                units="index" if "vix" in series_id else "USD/bbl",
++                frequency="B",
++            ),
++        )
++    return service
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_agent_contract.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_agent_contract.py
+new file mode 100644
+index 0000000..dc61c2f
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_agent_contract.py
+@@ -0,0 +1,39 @@
++"""Construction and prompt-boundary tests."""
++
++import json
++from datetime import datetime
++
++from aieng.forecasting.evaluation.task import ForecastingTask
++from energy_oil_forecasting.cfm_agent_v_3_4 import (
++    AGENT_NAME,
++    DEFAULT_SETTINGS,
++    build_cfm_agent_config,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.prompts import CfmV34PromptBuilder
++
++
++def test_default_sample_count_and_agent_composition(synthetic_service) -> None:
++    assert DEFAULT_SETTINGS.model_num_samples == 1_000
++    config = build_cfm_agent_config(data_service=synthetic_service)
++    assert config.name == AGENT_NAME == "cfm_agent_v_3_4"
++    assert [tool.name for tool in config.function_tools] == ["run_authoritative_suite"]
++    assert [path.name for path in config.skills_dirs] == [
++        "evidence-assessment",
++        "market-context-assessment",
++        "forecast-action-selection",
++        "code-analysis",
++    ]
++
++
++def test_prompt_forbids_llm_authored_final_numbers(synthetic_service) -> None:
++    task = ForecastingTask(
++        task_id="wti_v3",
++        target_series_id="wti_crude_oil_price",
++        horizons=[5, 10, 21],
++        frequency="B",
++        description="WTI v3 test",
++    )
++    payload = json.loads(CfmV34PromptBuilder()(task=task, context=synthetic_service.context(datetime(2021, 6, 1))))
++    assert payload["raw_history_in_prompt"] is False
++    assert "Do not calculate any final price" in payload["instructions"]
++    assert "date,value" not in json.dumps(payload)
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_diagnostics.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_diagnostics.py
+new file mode 100644
+index 0000000..7c287a4
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_diagnostics.py
+@@ -0,0 +1,20 @@
++"""Market diagnostics and fingerprint tests."""
++
++from datetime import datetime
++
++import pandas as pd
++from energy_oil_forecasting.cfm_agent_v_3_4.diagnostics import compute_market_diagnostics
++from energy_oil_forecasting.cfm_agent_v_3_4.fingerprints import stable_fingerprint
++
++
++def test_diagnostics_are_deterministic() -> None:
++    dates = pd.bdate_range("2025-01-01", periods=70)
++    frame = pd.DataFrame({"timestamp": dates, "value": range(70)})
++    a = compute_market_diagnostics(frame, as_of=datetime(2025, 4, 15))
++    b = compute_market_diagnostics(frame, as_of=datetime(2025, 4, 15))
++    assert a == b
++    assert a.return_5b is not None
++
++
++def test_fingerprint_is_order_insensitive_for_mapping_keys() -> None:
++    assert stable_fingerprint({"a": 1, "b": 2}, prefix="x") == stable_fingerprint({"b": 2, "a": 1}, prefix="x")
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_outputs.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_outputs.py
+new file mode 100644
+index 0000000..6e6e151
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_outputs.py
+@@ -0,0 +1,41 @@
++"""Assessment schema tests."""
++
++import pytest
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++from pydantic import ValidationError
++
++
++def neutral() -> dict[str, object]:
++    return {
++        "reported_search_queries": [],
++        "evidence_sources": [],
++        "evidence_claims": [],
++        "physical_status": "unknown",
++        "incremental_novelty": "indeterminate",
++        "material_evidence_conflict": False,
++        "confidence": 0.2,
++        "horizon_actions": [
++            {
++                "horizon": 5,
++                "center_action": "no_change",
++                "uncertainty_action": "unchanged",
++                "persistence_profile": "unknown",
++                "cited_claim_ids": [],
++                "rationale": "Insufficient evidence.",
++            }
++        ],
++        "research_summary": "No eligible evidence.",
++        "overall_rationale": "Neutral assessment.",
++    }
++
++
++def test_neutral_assessment_can_abstain_without_sources() -> None:
++    parsed = CfmContextAssessmentOutput.model_validate(neutral())
++    assert parsed.action_for(5).center_action == "no_change"
++
++
++def test_unknown_claim_reference_is_rejected() -> None:
++    raw = neutral()
++    raw["horizon_actions"][0]["cited_claim_ids"] = ["missing"]  # type: ignore[index]
++    with pytest.raises(ValidationError, match="unknown claim_id"):
++        CfmContextAssessmentOutput.model_validate(raw)
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_policy.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_policy.py
+new file mode 100644
+index 0000000..be59075
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_policy.py
+@@ -0,0 +1,170 @@
++"""Graduated evidence and bounded action-policy tests."""
++
++import pytest
++from energy_oil_forecasting.cfm_agent_v_3_4.config import CfmV34Settings
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++from energy_oil_forecasting.cfm_agent_v_3_4.policy import ConstrainedActionPolicy, EnsembleLockedPolicy
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import ModelHorizonForecast
++
++
++def ensemble() -> ModelHorizonForecast:
++    return ModelHorizonForecast(
++        horizon=5,
++        forecast_date="2026-03-09",
++        point_forecast=67.0,
++        quantiles={0.05: 60.0, 0.1: 62.0, 0.5: 67.0, 0.9: 72.0, 0.95: 74.0},
++    )
++
++
++def assessment(
++    *,
++    publishers: int,
++    confidence: float,
++    action: str = "moderate_up",
++    support_count: int | None = None,
++    primary: bool = True,
++    novelty: str = "likely_new_relative_to_model_data",
++) -> CfmContextAssessmentOutput:
++    sources = [
++        {
++            "source_id": f"s{i}",
++            "title": f"Source {i}",
++            "source_url": f"https://publisher{i}.example/story",
++            "publisher": f"Publisher {i}",
++            "source_tier": "tier_1_primary" if i == 0 and primary else "tier_2_independent",
++            "publication_date": "2026-03-01",
++            "is_primary_or_official": i == 0 and primary,
++            "provenance_status": "verified_from_tool",
++            "verifier_content_status": "accepted_factual_content",
++            "verifier_processing_status": "accepted_clean",
++            "verified_evidence_excerpt": "Accepted factual evidence.",
++        }
++        for i in range(publishers)
++    ]
++    support_count = publishers if support_count is None else support_count
++    return CfmContextAssessmentOutput.model_validate(
++        {
++            "reported_search_queries": ["q1", "q2", "q3", "q4"],
++            "evidence_sources": sources,
++            "evidence_claims": [
++                {
++                    "claim_id": "c1",
++                    "statement": "A directly supported physical event occurred.",
++                    "claim_type": "physical_supply",
++                    "support_status": "direct",
++                    "supporting_source_ids": [source["source_id"] for source in sources[:support_count]],
++                    "contradicting_source_ids": [],
++                }
++            ],
++            "physical_status": "partial_disruption",
++            "incremental_novelty": novelty,
++            "material_evidence_conflict": False,
++            "confidence": confidence,
++            "horizon_actions": [
++                {
++                    "horizon": 5,
++                    "center_action": action,
++                    "uncertainty_action": "substantially_wider",
++                    "persistence_profile": "decaying",
++                    "cited_claim_ids": ["c1"],
++                    "rationale": "Direct evidence supports a bounded action.",
++                }
++            ],
++            "research_summary": "Evidence record.",
++            "overall_rationale": "Assessment only.",
++        }
++    )
++
++
++def apply(value: CfmContextAssessmentOutput):
++    return ConstrainedActionPolicy(CfmV34Settings()).apply(
++        ensemble=ensemble(),
++        assessment=value,
++        horizon=5,
++        horizons=[5],
++        latest_price=67.0,
++        cutoff_date="2026-03-02",
++    )
++
++
++def test_one_publisher_at_point_50_gets_limited_tier_and_small_cap() -> None:
++    decision = apply(assessment(publishers=1, confidence=0.50))
++    assert decision.evidence_tier == "limited"
++    assert decision.evidence_tier_level == 1
++    assert decision.center_action == "small_up"
++    assert decision.applied_center_adjustment == pytest.approx(1.0)
++    assert decision.uncertainty_action == "moderately_wider"
++    assert decision.uncertainty_multiplier == pytest.approx(1.10)
++
++
++def test_two_publishers_at_point_65_get_correlated_tier() -> None:
++    decision = apply(assessment(publishers=2, confidence=0.65, support_count=1))
++    assert decision.evidence_tier == "corroborated"
++    assert decision.evidence_tier_level == 2
++    assert decision.center_action == "moderate_up"
++    assert decision.applied_center_adjustment == pytest.approx(2.0)
++    assert decision.uncertainty_multiplier == pytest.approx(1.25)
++
++
++def test_three_publishers_at_point_80_with_double_support_get_strong_tier() -> None:
++    decision = apply(assessment(publishers=3, confidence=0.80, support_count=2))
++    assert decision.evidence_tier == "strong"
++    assert decision.evidence_tier_level == 3
++    assert decision.center_action == "moderate_up"
++    assert decision.applied_center_adjustment == pytest.approx(2.0)
++
++
++def test_three_publishers_without_double_claim_support_remain_correlated() -> None:
++    decision = apply(assessment(publishers=3, confidence=0.90, support_count=1))
++    assert decision.evidence_tier == "corroborated"
++
++
++def test_below_tier_one_confidence_is_rejected_and_neutralized() -> None:
++    decision = apply(assessment(publishers=1, confidence=0.49))
++    assert decision.eligible is False
++    assert decision.evidence_tier == "none"
++    assert decision.center_action == "no_change"
++    assert decision.uncertainty_action == "unchanged"
++    assert decision.applied_center_adjustment == 0.0
++
++
++def test_partly_reflected_evidence_halves_center_adjustment() -> None:
++    decision = apply(
++        assessment(
++            publishers=1,
++            confidence=0.60,
++            action="small_up",
++            novelty="possibly_partly_reflected",
++        )
++    )
++    assert decision.evidence_tier == "limited"
++    assert decision.applied_center_adjustment == pytest.approx(0.5)
++
++
++def test_material_conflict_blocks_non_neutral_action() -> None:
++    raw = assessment(publishers=3, confidence=0.90).model_dump(mode="json")
++    raw["material_evidence_conflict"] = True
++    decision = apply(CfmContextAssessmentOutput.model_validate(raw))
++    assert decision.eligible is False
++    assert decision.final_point_forecast == ensemble().point_forecast
++
++
++def test_reflected_or_indeterminate_novelty_blocks_center_action() -> None:
++    for novelty in ("likely_reflected_in_model_data", "indeterminate"):
++        decision = apply(assessment(publishers=3, confidence=0.90, novelty=novelty))
++        assert decision.eligible is False
++        assert decision.applied_center_adjustment == 0.0
++
++
++def test_ensemble_lock_ignores_all_agent_actions() -> None:
++    decision = EnsembleLockedPolicy(CfmV34Settings()).apply(
++        ensemble=ensemble(),
++        assessment=assessment(publishers=3, confidence=0.90),
++        horizon=5,
++        horizons=[5],
++        latest_price=67.0,
++        cutoff_date="2026-03-02",
++    )
++    assert decision.policy_id == "ensemble_locked_v1"
++    assert decision.final_quantiles == ensemble().quantiles
++    assert decision.evidence_tier == "none"
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_scenarios.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_scenarios.py
+new file mode 100644
+index 0000000..2147a5b
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_scenarios.py
+@@ -0,0 +1,283 @@
++"""Scenario contract, calibration-feature, and uncertainty-floor tests."""
++
++import copy
++
++import pytest
++from energy_oil_forecasting.cfm_agent_v_3_4.config import CfmV34Settings
++from energy_oil_forecasting.cfm_agent_v_3_4.outputs import CfmContextAssessmentOutput
++from energy_oil_forecasting.cfm_agent_v_3_4.policy import ConstrainedActionPolicy
++from energy_oil_forecasting.cfm_agent_v_3_4.sanitizer import sanitize_assessment
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import ModelHorizonForecast
++from pydantic import ValidationError
++
++
++def ensemble() -> ModelHorizonForecast:
++    return ModelHorizonForecast(
++        horizon=5,
++        forecast_date="2026-03-09",
++        point_forecast=67.0,
++        quantiles={0.05: 60.0, 0.1: 62.0, 0.5: 67.0, 0.9: 72.0, 0.95: 74.0},
++    )
++
++
++def base_assessment() -> dict:
++    """Two eligible publishers, one direct weather claim, a two-sided scenario set."""
++    return {
++        "reported_search_queries": ["q1", "q2", "q3", "q4"],
++        "evidence_sources": [
++            {
++                "source_id": f"s{i}",
++                "title": f"Source {i}",
++                "source_url": f"https://publisher{i}.example/story",
++                "publisher": f"Publisher {i}",
++                "source_tier": "tier_1_primary" if i == 0 else "tier_2_independent",
++                "publication_date": "2026-03-01",
++                "is_primary_or_official": i == 0,
++                "provenance_status": "verified_from_tool",
++                "verifier_content_status": "accepted_factual_content",
++                "verifier_processing_status": "accepted_clean",
++                "verified_evidence_excerpt": "Accepted factual evidence.",
++            }
++            for i in range(2)
++        ],
++        "evidence_claims": [
++            {
++                "claim_id": "c1",
++                "statement": "A storm shut in offshore production.",
++                "claim_type": "physical_supply",
++                "driver_category": "weather",
++                "support_status": "direct",
++                "supporting_source_ids": ["s0", "s1"],
++                "contradicting_source_ids": [],
++            },
++            {
++                "claim_id": "c2",
++                "statement": "A stimulus announcement lifted demand expectations.",
++                "claim_type": "demand",
++                "driver_category": "demand_expectations",
++                "support_status": "direct",
++                "supporting_source_ids": ["s1"],
++                "contradicting_source_ids": [],
++            },
++        ],
++        "physical_status": "partial_disruption",
++        "incremental_novelty": "likely_new_relative_to_model_data",
++        "material_evidence_conflict": False,
++        "confidence": 0.70,
++        "scenarios": [
++            {
++                "scenario_id": "sc1",
++                "name": "Disruption persists",
++                "probability": 0.55,
++                "direction": "up",
++                "magnitude": "moderate",
++                "is_tail_case": False,
++                "cited_claim_ids": ["c1"],
++                "rationale": "Shut-ins continue and the supply loss is felt.",
++            },
++            {
++                "scenario_id": "sc2",
++                "name": "Rapid restart",
++                "probability": 0.30,
++                "direction": "down",
++                "magnitude": "small",
++                "is_tail_case": False,
++                "cited_claim_ids": ["c1"],
++                "rationale": "Facilities restart quickly and the premium unwinds.",
++            },
++            {
++                "scenario_id": "sc3",
++                "name": "Compound infrastructure damage",
++                "probability": 0.15,
++                "direction": "up",
++                "magnitude": "large",
++                "is_tail_case": True,
++                "cited_claim_ids": ["c1", "c2"],
++                "rationale": "Damage proves structural and outages extend for months.",
++            },
++        ],
++        "horizon_actions": [
++            {
++                "horizon": 5,
++                "center_action": "small_up",
++                "uncertainty_action": "unchanged",
++                "persistence_profile": "temporary",
++                "cited_claim_ids": ["c1"],
++                "rationale": "Bounded upward pressure from a confirmed shut-in.",
++            }
++        ],
++        "research_summary": "Storm-driven shut-ins with a credible fast-restart path.",
++        "overall_rationale": "Two-sided situation with an upward central case.",
++    }
++
++
++def test_valid_scenario_set_parses_and_reports_disagreement() -> None:
++    output = CfmContextAssessmentOutput.model_validate(base_assessment())
++    # min(P(up)=0.70, P(down)=0.30) = 0.30
++    assert output.scenario_disagreement_mass() == pytest.approx(0.30)
++
++
++def test_absent_scenario_set_is_tolerated() -> None:
++    raw = base_assessment()
++    raw["scenarios"] = []
++    output = CfmContextAssessmentOutput.model_validate(raw)
++    assert output.scenario_disagreement_mass() == 0.0
++
++
++def test_probabilities_must_sum_to_one() -> None:
++    raw = base_assessment()
++    raw["scenarios"][0]["probability"] = 0.90
++    with pytest.raises(ValidationError, match="sum to 1"):
++        CfmContextAssessmentOutput.model_validate(raw)
++
++
++def test_missing_tail_case_is_rejected() -> None:
++    raw = base_assessment()
++    raw["scenarios"][2]["is_tail_case"] = False
++    with pytest.raises(ValidationError, match="is_tail_case=true"):
++        CfmContextAssessmentOutput.model_validate(raw)
++
++
++def test_tail_case_may_not_be_the_most_likely_scenario() -> None:
++    raw = base_assessment()
++    raw["scenarios"][0]["probability"] = 0.15
++    raw["scenarios"][2]["probability"] = 0.55
++    with pytest.raises(ValidationError, match="low-probability"):
++        CfmContextAssessmentOutput.model_validate(raw)
++
++
++def test_tail_case_must_be_high_impact() -> None:
++    raw = base_assessment()
++    raw["scenarios"][2]["magnitude"] = "small"
++    with pytest.raises(ValidationError, match="high-impact"):
++        CfmContextAssessmentOutput.model_validate(raw)
++
++
++def test_duplicate_direction_and_magnitude_is_rejected() -> None:
++    raw = base_assessment()
++    raw["scenarios"][2]["magnitude"] = "moderate"  # now identical to sc1: up/moderate
++    with pytest.raises(ValidationError, match="written twice"):
++        CfmContextAssessmentOutput.model_validate(raw)
++
++
++def test_scenario_may_not_cite_unknown_claim() -> None:
++    raw = base_assessment()
++    raw["scenarios"][0]["cited_claim_ids"] = ["c_missing"]
++    with pytest.raises(ValidationError, match="unknown claim_id"):
++        CfmContextAssessmentOutput.model_validate(raw)
++
++
++def test_neutral_scenario_must_be_small() -> None:
++    raw = base_assessment()
++    raw["scenarios"][1]["direction"] = "neutral"
++    raw["scenarios"][1]["magnitude"] = "moderate"
++    with pytest.raises(ValidationError, match="neutral scenario must have small magnitude"):
++        CfmContextAssessmentOutput.model_validate(raw)
++
++
++def test_calibration_features_are_fixed_width_and_numeric() -> None:
++    output = CfmContextAssessmentOutput.model_validate(base_assessment())
++    features = output.calibration_features()
++
++    assert all(isinstance(value, float) for value in features.values())
++    # Every driver category has a slot, whether or not it was used this run.
++    for category in ("geopolitical", "weather", "operational", "policy", "demand_expectations"):
++        assert f"claims_{category}" in features
++    assert features["claims_weather"] == 1.0
++    assert features["claims_demand_expectations"] == 1.0
++    assert features["claims_geopolitical"] == 0.0
++    assert features["tail_probability"] == pytest.approx(0.15)
++    assert features["scenario_disagreement_mass"] == pytest.approx(0.30)
++    # 0.55*(+2) + 0.30*(-1) + 0.15*(+3) = 1.25
++    assert features["expected_scenario_impact"] == pytest.approx(1.25)
++    assert features["center_action_h5"] == 1.0
++    assert features["uncertainty_action_h5"] == 0.0
++
++
++def test_calibration_feature_keys_are_identical_across_different_content() -> None:
++    """The whole point: different findings, same columns."""
++    first = CfmContextAssessmentOutput.model_validate(base_assessment())
++
++    raw = base_assessment()
++    raw["scenarios"] = []
++    raw["evidence_claims"][0]["driver_category"] = "geopolitical"
++    raw["evidence_claims"][1]["driver_category"] = "policy"
++    second = CfmContextAssessmentOutput.model_validate(raw)
++
++    assert set(first.calibration_features()) == set(second.calibration_features())
++
++
++def test_scenario_disagreement_floors_uncertainty_widening() -> None:
++    """A two-sided scenario set overrides an 'unchanged' uncertainty proposal."""
++    settings = CfmV34Settings()
++    output = CfmContextAssessmentOutput.model_validate(base_assessment())
++    decision = ConstrainedActionPolicy(settings).apply(
++        ensemble=ensemble(),
++        assessment=output,
++        horizon=5,
++        horizons=[5],
++        latest_price=67.0,
++        cutoff_date="2026-03-02",
++    )
++
++    assert decision.scenario_disagreement_mass == pytest.approx(0.30)
++    assert decision.scenario_uncertainty_floor_applied is True
++    assert decision.uncertainty_action == "moderately_wider"
++    assert decision.uncertainty_multiplier == pytest.approx(settings.moderately_wider_multiplier)
++    # Widening only — the floor must never move the center.
++    assert decision.final_point_forecast == pytest.approx(
++        ensemble().point_forecast + decision.applied_center_adjustment
++    )
++
++
++def test_one_sided_scenario_set_applies_no_floor() -> None:
++    raw = base_assessment()
++    raw["scenarios"][1]["direction"] = "neutral"  # removes all downside mass
++    raw["scenarios"][1]["magnitude"] = "small"
++    output = CfmContextAssessmentOutput.model_validate(raw)
++    decision = ConstrainedActionPolicy(CfmV34Settings()).apply(
++        ensemble=ensemble(),
++        assessment=output,
++        horizon=5,
++        horizons=[5],
++        latest_price=67.0,
++        cutoff_date="2026-03-02",
++    )
++
++    assert decision.scenario_disagreement_mass == 0.0
++    assert decision.scenario_uncertainty_floor_applied is False
++    assert decision.uncertainty_action == "unchanged"
++
++
++def test_floor_can_be_disabled_by_settings() -> None:
++    settings = CfmV34Settings(enforce_scenario_uncertainty_floor=False)
++    output = CfmContextAssessmentOutput.model_validate(base_assessment())
++    decision = ConstrainedActionPolicy(settings).apply(
++        ensemble=ensemble(),
++        assessment=output,
++        horizon=5,
++        horizons=[5],
++        latest_price=67.0,
++        cutoff_date="2026-03-02",
++    )
++
++    assert decision.scenario_uncertainty_floor_applied is False
++    assert decision.uncertainty_multiplier == pytest.approx(1.0)
++
++
++def test_scenarios_survive_sanitization_round_trip() -> None:
++    """The sanitizer dumps and revalidates; scenarios must not be lost."""
++    output = CfmContextAssessmentOutput.model_validate(base_assessment())
++    sanitized, _audit = sanitize_assessment(
++        output, cutoff_date="2026-03-02", settings=CfmV34Settings()
++    )
++    assert len(sanitized.scenarios) == 3
++    assert sanitized.scenario_disagreement_mass() == pytest.approx(0.30)
++
++
++def test_driver_category_defaults_do_not_break_legacy_claims() -> None:
++    """A claim without driver_category still parses, defaulting to geopolitical."""
++    raw = copy.deepcopy(base_assessment())
++    del raw["evidence_claims"][0]["driver_category"]
++    output = CfmContextAssessmentOutput.model_validate(raw)
++    assert output.evidence_claims[0].driver_category == "geopolitical"
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_v34_hardening.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_v34_hardening.py
+new file mode 100644
+index 0000000..5b2156e
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tests/test_v34_hardening.py
+@@ -0,0 +1,142 @@
++"""V3.2 dedicated-tool, audit, and sanitization tests."""
++
++import inspect
++
++from energy_oil_forecasting.cfm_agent_v_3_4 import (
++    CfmContextAssessmentOutput,
++    CfmV34Settings,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.sanitizer import (
++    sanitize_assessment,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.tools import (
++    AuthoritativeSuiteTool,
++)
++
++
++def _assessment() -> CfmContextAssessmentOutput:
++    """Return an intentionally unsupported LLM assessment."""
++    return CfmContextAssessmentOutput.model_validate(
++        {
++            "reported_search_queries": [
++                "q1",
++                "q2",
++                "q3",
++                "q4",
++            ],
++            "evidence_sources": [
++                {
++                    "source_id": "s1",
++                    "title": "Claimed source",
++                    "source_url": ("https://vertexaisearch.cloud.google.com/grounding-api-redirect/x"),
++                    "publisher": "Energy Market News",
++                    "source_tier": "tier_1_primary",
++                    "publication_date": "2026-03-01",
++                    "is_primary_or_official": True,
++                    "provenance_status": "inferred_by_agent",
++                    "verifier_content_status": ("accepted_factual_content"),
++                    "verifier_processing_status": "unknown",
++                    "verified_evidence_excerpt": "text",
++                }
++            ],
++            "evidence_claims": [
++                {
++                    "claim_id": "c1",
++                    "statement": "Disruption occurred.",
++                    "claim_type": "shipping",
++                    "support_status": "direct",
++                    "supporting_source_ids": ["s1"],
++                    "contradicting_source_ids": [],
++                }
++            ],
++            "physical_status": "confirmed_disruption",
++            "incremental_novelty": ("likely_new_relative_to_model_data"),
++            "material_evidence_conflict": False,
++            "confidence": 0.9,
++            "horizon_actions": [
++                {
++                    "horizon": 5,
++                    "center_action": "small_up",
++                    "uncertainty_action": ("moderately_wider"),
++                    "persistence_profile": "persistent",
++                    "cited_claim_ids": ["c1"],
++                    "rationale": "Claimed evidence.",
++                }
++            ],
++            "research_summary": "Claimed disruption.",
++            "overall_rationale": "Claimed action.",
++        }
++    )
++
++
++def test_sanitizer_downgrades_inferred_source_and_claim() -> None:
++    """Unsupported source metadata and conclusions must be downgraded."""
++    original = _assessment()
++
++    sanitized, audit = sanitize_assessment(
++        original,
++        cutoff_date="2026-03-02",
++        settings=CfmV34Settings(),
++    )
++
++    source = sanitized.evidence_sources[0]
++    claim = sanitized.evidence_claims[0]
++
++    assert source.source_tier == "tier_4_other"
++    assert source.is_primary_or_official is False
++    assert claim.support_status == "unsupported"
++    assert claim.supporting_source_ids == []
++    assert sanitized.physical_status == "unknown"
++    assert sanitized.confidence == 0.0
++
++    assert audit["sanitizer_id"] == "evidence_sanitizer_v2"
++    assert audit["eligible_source_ids"] == []
++    assert audit["change_count"] >= 3
++
++    # The original LLM assessment remains available unchanged.
++    assert original.evidence_sources[0].source_tier == "tier_1_primary"
++    assert original.evidence_sources[0].is_primary_or_official is True
++    assert original.evidence_claims[0].support_status == "direct"
++    assert original.physical_status == "confirmed_disruption"
++    assert original.confidence == 0.9
++
++
++def test_dedicated_tool_schema_requires_horizons(
++    synthetic_service,
++) -> None:
++    """The dedicated tool must structurally require horizons."""
++    tool = AuthoritativeSuiteTool(
++        synthetic_service,
++        settings=CfmV34Settings(
++            model_num_samples=50,
++        ),
++    )
++
++    signature = inspect.signature(tool.run_authoritative_suite)
++
++    parameters = signature.parameters
++
++    required_parameters = [
++        name
++        for name, parameter in parameters.items()
++        if (name != "self" and parameter.default is inspect.Parameter.empty)
++    ]
++
++    assert required_parameters == [
++        "cutoff_date",
++        "series_ids",
++        "target_series_id",
++        "horizons",
++    ]
++
++    assert parameters["horizons"].default is inspect.Parameter.empty
++
++    assert "operation" not in parameters
++
++    assert tool.audit == {
++        "tool_name": "run_authoritative_suite",
++        "attempt_count": 0,
++        "validation_failure_count": 0,
++        "successful_execution_count": 0,
++        "attempt_errors": [],
++    }
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/__init__.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/__init__.py
+new file mode 100644
+index 0000000..d259389
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/__init__.py
+@@ -0,0 +1,17 @@
++"""Three tool capabilities for ``cfm_agent_v_3_4``."""
++
++from energy_oil_forecasting.cfm_agent_v_3_4.tools.code_execution import (
++    build_code_execution_config,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.tools.market_data import AuthoritativeSuiteTool, MarketDataTool
++from energy_oil_forecasting.cfm_agent_v_3_4.tools.verified_search import (
++    build_verified_search_config,
++)
++
++
++__all__ = [
++    "AuthoritativeSuiteTool",
++    "MarketDataTool",
++    "build_code_execution_config",
++    "build_verified_search_config",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/code_execution.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/code_execution.py
+new file mode 100644
+index 0000000..3ef5c5e
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/code_execution.py
+@@ -0,0 +1,13 @@
++"""E2B code-execution configuration for the CFM agent."""
++
++from __future__ import annotations
++
++from aieng.forecasting.methods.agentic.agent_factory import CodeExecutionConfig
++
++
++def build_code_execution_config() -> CodeExecutionConfig:
++    """Enable the repository's isolated E2B ``run_code`` capability."""
++    return CodeExecutionConfig(enabled=True)
++
++
++__all__ = ["build_code_execution_config"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/market_data.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/market_data.py
+new file mode 100644
+index 0000000..d46b810
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/market_data.py
+@@ -0,0 +1,414 @@
++"""Cutoff-safe market data, model forecasts, and model training audit."""
++
++from __future__ import annotations
++
++import threading
++from datetime import datetime
++
++import numpy as np
++import pandas as pd
++from aieng.forecasting.data import DataService, ForecastContext
++from aieng.forecasting.evaluation.prediction import ContinuousForecast, Prediction
++from aieng.forecasting.evaluation.task import ForecastingTask
++from energy_oil_forecasting.cfm_agent_v_3_4.config import (
++    DEFAULT_SETTINGS,
++    CfmV34Settings,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.diagnostics import compute_market_diagnostics
++from energy_oil_forecasting.cfm_agent_v_3_4.fingerprints import stable_fingerprint
++from energy_oil_forecasting.cfm_agent_v_3_4.models import (
++    CfmEnsemblePredictor,
++    build_arima_predictor,
++    build_kalman_predictor,
++    build_lightgbm_predictor,
++)
++from energy_oil_forecasting.cfm_agent_v_3_4.schemas import (
++    MarketDataToolResult,
++    ModelForecastResult,
++    ModelHorizonForecast,
++    ModelSuiteResult,
++    ModelTrainingData,
++    SeriesObservation,
++    SeriesSnapshot,
++)
++
++
++try:
++    from google.adk.tools.function_tool import FunctionTool
++except ModuleNotFoundError as exc:
++    raise ImportError("The market-data tool requires the agentic extra.") from exc
++
++
++_ALLOWED_OPERATIONS = {
++    "list_series",
++    "get_series",
++    "run_models",
++    "get_series_and_run_models",
++}
++
++
++class AuthoritativeSuiteTool:
++    """Run exactly one successful authoritative suite with auditable attempts."""
++
++    def __init__(
++        self,
++        data_service: DataService,
++        *,
++        settings: CfmV34Settings = DEFAULT_SETTINGS,
++        covariate_series_ids: list[str] | None = None,
++    ) -> None:
++        self._data_service = data_service
++        self._settings = settings
++        self._lock = threading.Lock()
++        self._last_result: MarketDataToolResult | None = None
++        self._attempt_count = 0
++        self._validation_failure_count = 0
++        self._successful_execution_count = 0
++        self._attempt_errors: list[str] = []
++        available = set(data_service.series_ids)
++        self._covariate_series_ids = [series_id for series_id in (covariate_series_ids or []) if series_id in available]
++        predictors = {
++            "arima": build_arima_predictor(num_samples=settings.model_num_samples),
++            "kalman": build_kalman_predictor(
++                num_samples=settings.model_num_samples,
++                dim_x=settings.kalman_dim_x,
++            ),
++            "lightgbm": build_lightgbm_predictor(
++                covariate_series_ids=self._covariate_series_ids or None,
++                lags=settings.lightgbm_lags,
++                lags_past_covariates=settings.lightgbm_covariate_lags,
++                num_samples=settings.model_num_samples,
++            ),
++        }
++        self._ensemble = CfmEnsemblePredictor(
++            predictors,
++            weights=settings.ensemble_weights,
++        )
++
++    @property
++    def last_result(self) -> MarketDataToolResult | None:
++        """Return a defensive copy of the most recent tool result."""
++        with self._lock:
++            return self._last_result.model_copy(deep=True) if self._last_result else None
++
++    @property
++    def audit(self) -> dict[str, object]:
++        """Return workflow-level execution counters."""
++        with self._lock:
++            return {
++                "tool_name": "run_authoritative_suite",
++                "attempt_count": self._attempt_count,
++                "validation_failure_count": self._validation_failure_count,
++                "successful_execution_count": self._successful_execution_count,
++                "attempt_errors": list(self._attempt_errors),
++            }
++
++    def as_function_tool(self) -> FunctionTool:
++        """Return the narrow agent-facing tool with required horizons."""
++        return FunctionTool(func=self.run_authoritative_suite)
++
++    def run_authoritative_suite(  # noqa: PLR0911, PLR0917
++        self,
++        cutoff_date: str,
++        series_ids: list[str],
++        target_series_id: str,
++        horizons: list[int],
++        frequency: str = "B",
++        lookback: int = 260,
++    ) -> str:
++        """Run the cutoff-safe ARIMA, Kalman, LightGBM, ensemble suite.
++
++        All core arguments, including horizons, are structurally required.
++        One pre-execution validation retry is allowed by default. After one
++        successful model-suite execution, subsequent calls return an error
++        without rerunning models or replacing the authoritative result.
++        """
++        with self._lock:
++            self._attempt_count += 1
++            attempt = self._attempt_count
++            already_succeeded = self._successful_execution_count > 0
++        if already_succeeded:
++            return MarketDataToolResult(
++                status="error",
++                operation="run_authoritative_suite",
++                cutoff_date=cutoff_date,
++                error="authoritative numerical suite already executed successfully for this workflow.",
++            ).model_dump_json(indent=2)
++        if attempt > self._settings.max_pre_execution_attempts:
++            return self._record_validation_error(cutoff_date, "pre-execution attempt limit exceeded.")
++        try:
++            as_of = datetime.strptime(cutoff_date, "%Y-%m-%d")
++            clean_lookback = max(1, min(int(lookback), self._settings.max_data_rows_per_series))
++            clean_horizons = sorted({int(h) for h in horizons})
++        except (TypeError, ValueError):
++            return self._record_validation_error(
++                cutoff_date, "cutoff_date must be YYYY-MM-DD; lookback and horizons must be integers."
++            )
++        if not clean_horizons or any(h < 1 for h in clean_horizons):
++            return self._record_validation_error(cutoff_date, "positive horizons are required.")
++        available = set(self._data_service.series_ids)
++        if target_series_id not in available:
++            return self._record_validation_error(cutoff_date, f"target series {target_series_id!r} is not registered.")
++        context = self._data_service.context(as_of=as_of)
++        snapshots: list[SeriesSnapshot] = []
++        warnings: list[str] = []
++        for series_id in dict.fromkeys(series_ids):
++            try:
++                snapshots.append(self._snapshot(context, series_id, clean_lookback))
++            except KeyError:
++                warnings.append(f"Series {series_id!r} is not registered and was omitted.")
++        try:
++            suite = self._run_model_suite(
++                context=context,
++                target_series_id=target_series_id,
++                horizons=clean_horizons,
++                frequency=frequency,
++                cutoff_date=cutoff_date,
++            )
++        except KeyError as exc:
++            return self._record_validation_error(cutoff_date, str(exc))
++        if suite.failed_models:
++            warnings.append("One or more models failed; ensemble weights were renormalized over successful models.")
++        result = MarketDataToolResult(
++            status="partial" if warnings or suite.failed_models else "ok",
++            operation="run_authoritative_suite",
++            cutoff_date=cutoff_date,
++            available_series=self._data_service.series_ids,
++            series=snapshots,
++            model_suite=suite,
++            warnings=warnings,
++        )
++        with self._lock:
++            self._successful_execution_count += 1
++            self._last_result = result.model_copy(deep=True)
++        return result.model_dump_json(indent=2)
++
++    def _record_validation_error(self, cutoff_date: str, message: str) -> str:
++        with self._lock:
++            self._validation_failure_count += 1
++            self._attempt_errors.append(message)
++        return MarketDataToolResult(
++            status="error",
++            operation="run_authoritative_suite",
++            cutoff_date=cutoff_date,
++            error=message,
++        ).model_dump_json(indent=2)
++
++    @staticmethod
++    def _snapshot(context: ForecastContext, series_id: str, lookback: int) -> SeriesSnapshot:
++        metadata = context.get_metadata(series_id)
++        history = context.get_series(series_id).copy()
++        history["timestamp"] = pd.to_datetime(history["timestamp"])
++        selected = history.tail(lookback)
++        return SeriesSnapshot(
++            series_id=series_id,
++            description=metadata.description,
++            source=metadata.source,
++            units=metadata.units,
++            frequency=metadata.frequency,
++            n_observations_at_cutoff=len(history),
++            returned_observations=len(selected),
++            first_available_date=(
++                str(pd.Timestamp(history["timestamp"].iloc[0]).date()) if not history.empty else None
++            ),
++            last_available_date=(
++                str(pd.Timestamp(history["timestamp"].iloc[-1]).date()) if not history.empty else None
++            ),
++            last_value=float(history["value"].iloc[-1]) if not history.empty else None,
++            observations=[
++                SeriesObservation(
++                    date=str(pd.Timestamp(row.timestamp).date()),
++                    value=float(row.value),
++                )
++                for row in selected.itertuples(index=False)
++            ],
++        )
++
++    def _training_audit(
++        self,
++        context: ForecastContext,
++        target_series_id: str,
++        max_horizon: int,
++    ) -> dict[str, ModelTrainingData]:
++        target = context.get_series(target_series_id).copy()
++        target["timestamp"] = pd.to_datetime(target["timestamp"])
++        target_count = len(target)
++        first_date = str(target["timestamp"].iloc[0].date()) if target_count else None
++        last_date = str(target["timestamp"].iloc[-1].date()) if target_count else None
++        base = {
++            "target_observations": target_count,
++            "first_target_date": first_date,
++            "last_target_date": last_date,
++        }
++        covariate_counts: dict[str, int] = {}
++        frame_starts = [target["timestamp"].min()]
++        frame_ends = [target["timestamp"].max()]
++        for series_id in self._covariate_series_ids:
++            frame = context.get_series(series_id).copy()
++            frame["timestamp"] = pd.to_datetime(frame["timestamp"])
++            covariate_counts[series_id] = len(frame)
++            if not frame.empty:
++                frame_starts.append(frame["timestamp"].min())
++                frame_ends.append(frame["timestamp"].max())
++        if frame_starts and frame_ends:
++            aligned_start = max(frame_starts)
++            aligned_end = min(frame_ends)
++            aligned_count = len(pd.bdate_range(aligned_start, aligned_end)) if aligned_start <= aligned_end else 0
++        else:
++            aligned_count = 0
++        lag_requirement = max(
++            self._settings.lightgbm_lags,
++            self._settings.lightgbm_covariate_lags,
++        )
++        effective_estimate = max(0, aligned_count - lag_requirement - max_horizon + 1)
++        simple = ModelTrainingData(
++            **base,
++            notes="All cutoff-safe target observations are supplied to the Darts model.",
++        )
++        lightgbm = ModelTrainingData(
++            **base,
++            aligned_observations=aligned_count,
++            effective_training_examples_estimate=effective_estimate,
++            target_lags=self._settings.lightgbm_lags,
++            covariate_lags=self._settings.lightgbm_covariate_lags,
++            covariates=list(self._covariate_series_ids),
++            covariate_observations=covariate_counts,
++            notes=(
++                "Aligned observations use the common business-day span after Darts-style "
++                "calendar regularization. Effective examples are an auditable estimate: "
++                "aligned_observations - max(lags) - max_horizon + 1."
++            ),
++        )
++        return {"arima": simple, "kalman": simple.model_copy(deep=True), "lightgbm": lightgbm}
++
++    def _run_model_suite(
++        self,
++        *,
++        context: ForecastContext,
++        target_series_id: str,
++        horizons: list[int],
++        frequency: str,
++        cutoff_date: str,
++    ) -> ModelSuiteResult:
++        task = ForecastingTask(
++            task_id=f"cfm_v3_4_{target_series_id}_{cutoff_date}",
++            target_series_id=target_series_id,
++            horizons=horizons,
++            frequency=frequency,
++            description=f"CFM v3.4 authoritative numerical suite for {target_series_id}.",
++        )
++        audits = self._training_audit(context, target_series_id, max(horizons))
++        successful, failures = self._ensemble.collect(task, context)
++        model_results: dict[str, ModelForecastResult] = {}
++        for name in ("arima", "kalman", "lightgbm"):
++            if name in successful:
++                model_results[name] = self._format_model_result(
++                    name,
++                    successful[name],
++                    horizons,
++                    audits[name],
++                    self._settings.model_num_samples,
++                )
++            else:
++                model_results[name] = ModelForecastResult(
++                    model_name=name,
++                    predictor_id=name,
++                    status="error",
++                    training_data=audits[name],
++                    num_samples=self._settings.model_num_samples,
++                    error=failures.get(name, "model did not return a result."),
++                )
++        ensemble_result = None
++        active_weights = self._ensemble.normalized_weights(list(successful))
++        if successful:
++            ensemble_predictions = self._ensemble.combine(task, context, successful)
++            ensemble_training = ModelTrainingData(
++                target_observations=audits["arima"].target_observations,
++                first_target_date=audits["arima"].first_target_date,
++                last_target_date=audits["arima"].last_target_date,
++                aligned_observations=audits["lightgbm"].aligned_observations,
++                effective_training_examples_estimate=(audits["lightgbm"].effective_training_examples_estimate),
++                covariates=list(self._covariate_series_ids),
++                notes="Ensemble consumes forecast distributions, not raw observations.",
++            )
++            ensemble_result = self._format_model_result(
++                "ensemble",
++                ensemble_predictions,
++                horizons,
++                ensemble_training,
++                self._settings.model_num_samples,
++            )
++        disagreement = {}
++        for index, horizon in enumerate(horizons):
++            values = [
++                predictions[index].payload.point_forecast
++                for predictions in successful.values()
++                if isinstance(predictions[index].payload, ContinuousForecast)
++            ]
++            disagreement[horizon] = float(np.std(values, ddof=0)) if values else 0.0
++        target_frame = context.get_series(target_series_id)
++        covariate_frames = {series_id: context.get_series(series_id) for series_id in self._covariate_series_ids}
++        diagnostics = compute_market_diagnostics(
++            target_frame,
++            as_of=context.as_of,
++            covariates=covariate_frames,
++        )
++        suite_identity = {
++            "target_series_id": target_series_id,
++            "cutoff_date": cutoff_date,
++            "horizons": horizons,
++            "model_num_samples": self._settings.model_num_samples,
++            "models": {name: result.model_dump(mode="json") for name, result in model_results.items()},
++            "ensemble": ensemble_result.model_dump(mode="json") if ensemble_result else None,
++            "active_weights": active_weights,
++        }
++        return ModelSuiteResult(
++            model_suite_id=stable_fingerprint(suite_identity, prefix="model_suite"),
++            target_series_id=target_series_id,
++            cutoff_date=cutoff_date,
++            horizons=horizons,
++            model_num_samples=self._settings.model_num_samples,
++            models=model_results,
++            ensemble=ensemble_result,
++            configured_ensemble_weights=dict(self._settings.ensemble_weights),
++            active_ensemble_weights=active_weights,
++            successful_models=list(successful),
++            failed_models=list(failures),
++            model_disagreement_std=disagreement,
++            diagnostics=diagnostics,
++        )
++
++    @staticmethod
++    def _format_model_result(
++        model_name: str,
++        predictions: list[Prediction],
++        horizons: list[int],
++        training_data: ModelTrainingData,
++        num_samples: int,
++    ) -> ModelForecastResult:
++        forecasts = []
++        for horizon, prediction in zip(horizons, predictions, strict=True):
++            payload = prediction.payload
++            if not isinstance(payload, ContinuousForecast):
++                raise TypeError("model suite requires ContinuousForecast payloads.")
++            forecasts.append(
++                ModelHorizonForecast(
++                    horizon=horizon,
++                    forecast_date=str(pd.Timestamp(prediction.forecast_date).date()),
++                    point_forecast=payload.point_forecast,
++                    quantiles=payload.quantiles,
++                )
++            )
++        return ModelForecastResult(
++            model_name=model_name,
++            predictor_id=predictions[0].predictor_id,
++            status="ok",
++            forecasts=forecasts,
++            training_data=training_data,
++            num_samples=num_samples,
++        )
++
++
++MarketDataTool = AuthoritativeSuiteTool
++
++__all__ = ["AuthoritativeSuiteTool", "MarketDataTool"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/verified_search.py b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/verified_search.py
+new file mode 100644
+index 0000000..0b4dfe0
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_3_4/tools/verified_search.py
+@@ -0,0 +1,27 @@
++"""Cutoff-aware search configuration with v3 corroboration instructions."""
++
++from aieng.forecasting.methods.agentic.agent_factory import ContextRetrievalConfig
++from aieng.forecasting.models import LITE_MODEL
++
++
++_SEARCH_INSTRUCTION = """\
++You are a cutoff-aware research specialist. Search only for information publicly
++knowable on or before the supplied cutoff. For material oil-market claims,
++prioritize official/primary sources and reputable independent reporting.
++Separate confirmed facts from interpretation. Preserve conflicting accounts.
++Broker, trading-site, and analyst commentary may provide context but cannot by
++itself establish geopolitical facts, physical disruption, production changes,
++or strategic-reserve action. Never fill gaps from model memory.
++"""
++
++
++def build_verified_search_config(*, search_model: str = LITE_MODEL) -> ContextRetrievalConfig:
++    return ContextRetrievalConfig(
++        enabled=True,
++        instruction=_SEARCH_INSTRUCTION,
++        search_model=search_model,
++        enforce_cutoff=True,
++    )
++
++
++__all__ = ["build_verified_search_config"]
+-- 
+2.43.0
+
+
+From e8f8402137738bdb14f2c5dbd90d73878dc2b178 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 2 Aug 2026 09:30:41 +0000
+Subject: [PATCH 2/2] Close fundamentals leak and duplicate scenarios in v2.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Rebuilds the four fixes applied and live-tested during the session.
+
+Skill scope: the exclusion list becomes two banned classes (structured
+market data; supply/demand statistics and agency publications) plus a
+general boundary test — a factor must be an event or a situation, never
+a statistic another pillar will see in its own input data.
+
+Search strategy: step 1 targets events rather than "market drivers" or
+"market outlook" queries, which return supply/demand-framed market-wrap
+articles. New step 4 allows overview articles to point at an event but
+never to serve as its evidence.
+
+Search instruction: replaces the short generic version with the richer
+one adapted from the analyst agent — let results decide what matters,
+name both sides of a disagreement, seek a historical precedent, and
+verify recency from substance rather than claimed publish dates. Scope
+line covers the five event categories, and the events-not-statistics
+rule is repeated at the retrieval layer where wrap articles enter.
+
+Duplicate scenarios: a new validator rejects two scenarios identical in
+both stances and impact_score. Shared stances alone stay legal, so an
+intensity ladder (de-escalation / sustained / escalation) still passes
+while a tail case that merely restates the mainline does not.
+
+Verified in the repo environment: ruff clean, 20 tests passing.
+---
+ .../cfm_agent_v_2_2/outputs.py                | 21 ++++++++++
+ .../skills/event-context-analysis/SKILL.md    | 40 ++++++++++++++----
+ .../cfm_agent_v_2_2/tests/test_outputs.py     | 15 +++++++
+ .../cfm_agent_v_2_2/tools/verified_search.py  | 42 ++++++++++++++++---
+ 4 files changed, 104 insertions(+), 14 deletions(-)
+
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py
+index 3375d8f..61d8a20 100644
+--- a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py
+@@ -159,6 +159,27 @@ class WtiEventScoreOutput(BaseModel):
+             "scenarios must genuinely disagree, not just differ in tone."
+         )
+ 
++    @model_validator(mode="after")
++    def _scenarios_are_not_duplicates(self) -> "WtiEventScoreOutput":
++        """Reject scenarios identical in both stances and conditional impact.
++
++        Same stances alone are allowed — an intensity ladder (de-escalation /
++        sustained / escalation) legitimately shares stances and differs only
++        in impact_score. Identical on both axes means the scenario is a
++        reworded copy, not a different storyline.
++        """
++        seen: dict[tuple, str] = {}
++        for scenario in self.scenarios:
++            key = (tuple(sorted(scenario.stances.items())), scenario.impact_score)
++            if key in seen:
++                raise ValueError(
++                    f"Scenarios '{seen[key]}' and '{scenario.name}' have identical stances and "
++                    "identical impact_score — differentiate the storylines by stance or by "
++                    "conditional impact."
++                )
++            seen[key] = scenario.name
++        return self
++
+     def calibration_features(self) -> dict[str, float]:
+         """Return the flat numeric features the calibration layer consumes.
+ 
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md
+index 2c5942a..73fc545 100644
+--- a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md
+@@ -22,22 +22,40 @@ categories:
+   infrastructure.
+ - `policy`: domestic government action — SPR releases and refills,
+   drilling rules, tariffs, price caps.
+-- `demand_expectations`: headline shocks to expected demand — stimulus or
+-  lockdown news, recession fear waves — before any indicator prints.
+-
+-Do not restate a driver already covered by structured data: dollar index,
+-VIX, oil curve contango, cross-commodity returns, EIA inventory, CFTC
+-positioning. Never derive a factor from the price history itself. If a
+-candidate factor is just structured data restated in words, drop it.
++- `demand_expectations`: sudden headline shocks to expected demand — a
++  stimulus announcement, a lockdown, a fast-moving recession scare.
++  Agency demand forecasts and their revisions (IEA, EIA, OPEC) are NOT
++  in this category — they are fundamentals data, not news events.
++
++Do not restate a driver another pillar already covers. Two banned
++classes, not just the named examples:
++
++- Structured market data: dollar index, VIX, oil curve contango,
++  cross-commodity returns, CFTC positioning, and the price history
++  itself.
++- Supply/demand statistics and agency publications: EIA, IEA, or OPEC
++  inventory levels, production and supply figures, demand forecasts and
++  their revisions, and any number taken from a weekly or monthly report.
++
++The boundary test for every candidate factor: it must be an event or a
++situation, not a statistic or a forecast. Ask: "Would the quant pillar
++or the physical fundamentals pillar eventually see this in its input
++data?" If yes, drop the factor.
+ 
+ ## Search strategy
+ 
+-1. Start broad: search current market drivers as of the cutoff date.
++1. Search for current *events* that could move oil — conflict, storms,
++   strikes, sanctions, policy action — as of the cutoff date. Do not
++   search for "market drivers" or "market outlook": those queries return
++   market-wrap articles dominated by supply/demand framing.
+ 2. Run 1-2 follow-up searches on whatever the first search actually
+    surfaced as relevant — do not default to a fixed topic list.
+ 3. Actively search for sources that disagree with each other, and for a
+    past episode that resembles the current situation. Report both sides
+    when sources conflict; do not report only the majority view.
++4. Use a market-overview article only to discover that an event exists.
++   Never cite one as factor evidence — verify each event from primary
++   reporting about that specific event.
+ 
+ ## Scoring rubric
+ 
+@@ -83,5 +101,11 @@ scores to prices.
+ 4. Exactly the tail role: at least one scenario sets `is_tail_case: true`.
+    A tail case must be genuinely low-probability (never the most likely
+    scenario) and genuinely high-impact (|impact_score| of 2 or 3).
++5. An intensity ladder (de-escalation / sustained / escalation) is a
++   valid scenario set: those scenarios may share stances, but must then
++   differ in impact_score — the mainline is not the most extreme case,
++   so do not give it the same score as the tail. Two scenarios that are
++   identical in both stances and impact_score are one scenario written
++   twice, and will be rejected.
+ 
+ **No scripts in this skill. Do not call `run_skill_script`.**
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py
+index f2c0668..9811ced 100644
+--- a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py
+@@ -231,3 +231,18 @@ def test_scenario_probability_must_be_positive() -> None:
+                 "rationale": "Zero-probability scenarios are not allowed.",
+             }
+         )
++
++
++def test_duplicate_scenarios_are_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["scenarios"][0]["stances"] = dict(raw["scenarios"][1]["stances"])
++    raw["scenarios"][0]["impact_score"] = raw["scenarios"][1]["impact_score"]
++    with pytest.raises(ValidationError, match="identical stances"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_intensity_ladder_with_shared_stances_is_allowed() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["scenarios"][2]["stances"] = dict(raw["scenarios"][1]["stances"])
++    raw["scenarios"][2]["impact_score"] = -3  # same stances, different impact — valid ladder
++    assert WtiEventScoreOutput.model_validate(raw)
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py
+index b19a795..0b267bf 100644
+--- a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py
+@@ -11,12 +11,42 @@ from aieng.forecasting.models import LITE_MODEL
+ 
+ 
+ _SEARCH_INSTRUCTION = """\
+-You are a cutoff-aware market research specialist. Search for evidence relevant
+-to the user's forecasting question. Separate facts from interpretation and cite
+-the retrieved sources. When a cutoff date is supplied, include only information
+-that was publicly knowable on or before that date. Never fill gaps from model
+-memory. If verified evidence is insufficient or conflicting, say so explicitly.
+-Prioritize primary sources and reputable independent reporting.\
++You are an oil market intelligence specialist with access to web search.
++
++Search for information relevant to the query you were given and return a \
++concise, grounded markdown summary (3-5 paragraphs). Report the events \
++that are actually driving price action according to the sources you \
++retrieve — do not impose a fixed checklist of topics; let the search \
++results themselves determine which events are significant right now. \
++Report events and situations, not statistics: \
++supply/demand figures, inventory data, and agency forecasts or their \
++revisions (EIA, IEA, OPEC) belong to other market and financial data pipelines and must not \
++be the substance of your summary. Prefer primary reporting about a \
++specific event over market-wrap or outlook articles.
++
++Where credible sources actively disagree on a geopolitical, weather, \
++operational, policy, or demand-expectation driver — name both sides \
++rather than reporting only the majority view.
++
++If the current situation resembles a past market episode, search for that \
++precedent explicitly and report: what happened, how WTI/Brent moved in the \
++following weeks, and how similar the current setup actually is versus \
++superficially similar. Only include an analogue if you can ground it in a \
++retrieved source — do not construct one from memory. If no clear precedent \
++surfaces in search results, say so rather than forcing a comparison.
++
++Ground your summary in the search results you actually retrieve. \
++When a cutoff date is specified, do not report or speculate about events \
++that occurred after that date!
++
++Before finalizing your summary, reason step by step: (1) for each candidate \
++fact, judge its actual recency from the substance of the result itself, \
++never from a source's claimed publish date or byline timestamp — those are \
++frequently stale or updated after original publication; (2) discard \
++anything you cannot confidently place before the cutoff date; (3) only then \
++write your summary. Do not supplement the search results with your own \
++background/training knowledge — if the results are insufficient, say so \
++explicitly rather than filling gaps from memory.\
+ """
+ 
+ 
+-- 
+2.43.0
+

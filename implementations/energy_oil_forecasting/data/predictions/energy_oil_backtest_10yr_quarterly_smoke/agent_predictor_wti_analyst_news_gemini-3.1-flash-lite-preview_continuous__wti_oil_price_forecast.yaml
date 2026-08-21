@@ -1,0 +1,161 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2021-07-23T00:00:00'
+  end: '2021-07-24T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:47:42.449727'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-07-30T00:00:00'
+  payload:
+    point_forecast: 71.5
+    quantiles:
+      '0.05': 67.5
+      '0.1': 68.5
+      '0.2': 69.5
+      '0.3': 70.5
+      '0.4': 71.0
+      '0.5': 71.5
+      '0.6': 72.2
+      '0.7': 73.0
+      '0.8': 74.0
+      '0.9': 75.0
+      '0.95': 76.0
+  metadata:
+    rationale: 'The forecast reflects a market in transition: strong fundamental tightness
+      (OECD stock draws, OPEC+ caution) pitted against rising fears of Delta-variant
+      induced demand destruction. The short-term reflects stabilization after a correction,
+      while the longer-term horizon (63 days) incorporates a slightly more cautious
+      outlook as seasonal demand trends shift and the pandemic situation evolves.'
+    horizon_rationale: As of July 23, 2021, WTI is rebounding from a mid-week sell-off
+      driven by Delta variant demand fears. The market sentiment is volatile but supported
+      by tight supply fundamentals from OPEC+'s planned modest output increases (400kb/d
+      monthly). In the 5-day horizon, prices are likely to consolidate near $71-$72
+      as the market digests recent inventory data.
+    langfuse_trace_id: f4304850fe49d7b608ecacb12cc76c31
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f4304850fe49d7b608ecacb12cc76c31
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:47:42.449727'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-08-06T00:00:00'
+  payload:
+    point_forecast: 72.0
+    quantiles:
+      '0.05': 66.0
+      '0.1': 67.5
+      '0.2': 69.0
+      '0.3': 70.5
+      '0.4': 71.2
+      '0.5': 72.0
+      '0.6': 73.0
+      '0.7': 74.0
+      '0.8': 75.5
+      '0.9': 76.5
+      '0.95': 77.5
+  metadata:
+    rationale: 'The forecast reflects a market in transition: strong fundamental tightness
+      (OECD stock draws, OPEC+ caution) pitted against rising fears of Delta-variant
+      induced demand destruction. The short-term reflects stabilization after a correction,
+      while the longer-term horizon (63 days) incorporates a slightly more cautious
+      outlook as seasonal demand trends shift and the pandemic situation evolves.'
+    horizon_rationale: By the 10-day horizon, the focus shifts to whether the Delta
+      variant causes significant mobility restrictions. If data remains steady, the
+      structural deficit in global supply should exert upward pressure, returning
+      prices toward the recent range highs of $75.
+    langfuse_trace_id: f4304850fe49d7b608ecacb12cc76c31
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f4304850fe49d7b608ecacb12cc76c31
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:47:42.449727'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-08-23T00:00:00'
+  payload:
+    point_forecast: 72.5
+    quantiles:
+      '0.05': 64.0
+      '0.1': 66.0
+      '0.2': 68.0
+      '0.3': 70.0
+      '0.4': 71.5
+      '0.5': 72.5
+      '0.6': 73.5
+      '0.7': 75.0
+      '0.8': 76.5
+      '0.9': 78.5
+      '0.95': 80.0
+  metadata:
+    rationale: 'The forecast reflects a market in transition: strong fundamental tightness
+      (OECD stock draws, OPEC+ caution) pitted against rising fears of Delta-variant
+      induced demand destruction. The short-term reflects stabilization after a correction,
+      while the longer-term horizon (63 days) incorporates a slightly more cautious
+      outlook as seasonal demand trends shift and the pandemic situation evolves.'
+    horizon_rationale: Over the one-month horizon, the impact of the OPEC+ August
+      output increase will begin to be priced in. The supply-demand balance remains
+      tight due to OECD stock draws, suggesting a range-bound to slightly bullish
+      bias unless the pandemic narrative worsens significantly.
+    langfuse_trace_id: f4304850fe49d7b608ecacb12cc76c31
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f4304850fe49d7b608ecacb12cc76c31
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:47:42.449727'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-10-20T00:00:00'
+  payload:
+    point_forecast: 70.0
+    quantiles:
+      '0.05': 58.0
+      '0.1': 61.0
+      '0.2': 64.0
+      '0.3': 66.5
+      '0.4': 68.5
+      '0.5': 70.0
+      '0.6': 72.0
+      '0.7': 74.5
+      '0.8': 77.0
+      '0.9': 80.0
+      '0.95': 82.0
+  metadata:
+    rationale: 'The forecast reflects a market in transition: strong fundamental tightness
+      (OECD stock draws, OPEC+ caution) pitted against rising fears of Delta-variant
+      induced demand destruction. The short-term reflects stabilization after a correction,
+      while the longer-term horizon (63 days) incorporates a slightly more cautious
+      outlook as seasonal demand trends shift and the pandemic situation evolves.'
+    horizon_rationale: Looking 3 months ahead, the uncertainty surrounding global
+      demand due to the Delta variant remains the primary downside risk. Simultaneously,
+      continued supply discipline from OPEC+ serves as a floor. A base-case expectation
+      is a slight moderation from mid-year highs as the seasonal peak in summer driving
+      demand passes.
+    langfuse_trace_id: f4304850fe49d7b608ecacb12cc76c31
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f4304850fe49d7b608ecacb12cc76c31
+scores:
+- 1.3648746458952092
+- 2.326777636315211
+- 4.207769094419873
+- 9.345209358152282
+metric: crps
+mean_score: 4.311157683695644
+ran_at: '2026-07-25T16:47:42.780340'
+skipped_origins: 0

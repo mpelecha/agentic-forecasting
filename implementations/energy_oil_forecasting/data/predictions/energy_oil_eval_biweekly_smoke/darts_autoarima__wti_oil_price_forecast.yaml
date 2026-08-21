@@ -1,0 +1,71 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: darts_autoarima
+predictions:
+- predictor_id: darts_autoarima
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:06:30.119027'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 64.96119876301498
+    quantiles:
+      '0.05': 57.13872670103523
+      '0.1': 59.28109643344541
+      '0.2': 60.92829246761669
+      '0.3': 62.637839924458504
+      '0.4': 63.804422613410836
+      '0.5': 64.96119876301498
+      '0.6': 66.10824003937635
+      '0.7': 67.30236500187686
+      '0.8': 68.7353653756212
+      '0.9': 70.52538018365291
+      '0.95': 72.01114552818899
+  metadata: {}
+- predictor_id: darts_autoarima
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:06:30.119027'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 65.4243473081227
+    quantiles:
+      '0.05': 51.39652969205542
+      '0.1': 54.2206365397386
+      '0.2': 57.03785142839855
+      '0.3': 60.02508376219237
+      '0.4': 62.69579456819504
+      '0.5': 65.4243473081227
+      '0.6': 67.80634443555046
+      '0.7': 69.84936889754657
+      '0.8': 73.18828630275378
+      '0.9': 76.52023152720568
+      '0.95': 81.35819599783925
+  metadata: {}
+scores:
+- 1.22016402208855
+- 5.580674132456949
+metric: crps
+mean_score: 3.4004190772727494
+ran_at: '2026-08-19T15:06:30.150361'
+skipped_origins: 0

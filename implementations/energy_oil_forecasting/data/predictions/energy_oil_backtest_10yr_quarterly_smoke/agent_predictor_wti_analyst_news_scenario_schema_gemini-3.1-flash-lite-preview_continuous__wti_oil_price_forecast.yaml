@@ -1,0 +1,327 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2021-07-23T00:00:00'
+  end: '2021-07-24T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:48:08.449248'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-07-30T00:00:00'
+  payload:
+    point_forecast: 71.5
+    quantiles:
+      '0.05': 64.33766489617643
+      '0.1': 69.0
+      '0.2': 70.0
+      '0.3': 70.7
+      '0.4': 71.2
+      '0.5': 71.5
+      '0.6': 71.9
+      '0.7': 72.5
+      '0.8': 73.2
+      '0.9': 74.5
+      '0.95': 75.64085904245475
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Delta Variant Impact
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Economic Resilience
+      probability: 0.5
+      price_low: 70.0
+      price_high: 76.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bullish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: neutral
+    - name: Demand Softening
+      probability: 0.4
+      price_low: 63.0
+      price_high: 69.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: bearish
+    - name: Supply-Demand Mismatch (Tail Risk)
+      probability: 0.1
+      price_low: 55.0
+      price_high: 62.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: bullish
+        Delta Variant Impact: bearish
+    rationale: The market is currently wrestling with the tension between a robust,
+      albeit slowing, global economic recovery and the tangible threat to oil consumption
+      posed by the Delta variant. The recent OPEC+ decision to gradually increase
+      supply provides a stabilizing framework for the next few months, but increases
+      downside sensitivity if demand underperforms. My forecast reflects a cautious
+      baseline (Economic Resilience) with a significant weight on downside risks (Demand
+      Softening) driven by health-related uncertainty.
+    horizon_rationale: Short-term stabilization following the mid-July volatility.
+      The market is consolidating near $71-72 as it balances OPEC+ supply increases
+      against ongoing Delta variant concerns.
+    langfuse_trace_id: a0dcc77c4ee8fdc4e3daf1350376a445
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a0dcc77c4ee8fdc4e3daf1350376a445
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:48:08.449248'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-08-06T00:00:00'
+  payload:
+    point_forecast: 71.0
+    quantiles:
+      '0.05': 61.617495099107224
+      '0.1': 67.5
+      '0.2': 69.0
+      '0.3': 70.0
+      '0.4': 70.5
+      '0.5': 71.0
+      '0.6': 71.8
+      '0.7': 72.5
+      '0.8': 73.5
+      '0.9': 75.0
+      '0.95': 76.5
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Delta Variant Impact
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Economic Resilience
+      probability: 0.5
+      price_low: 70.0
+      price_high: 76.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bullish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: neutral
+    - name: Demand Softening
+      probability: 0.4
+      price_low: 63.0
+      price_high: 69.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: bearish
+    - name: Supply-Demand Mismatch (Tail Risk)
+      probability: 0.1
+      price_low: 55.0
+      price_high: 62.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: bullish
+        Delta Variant Impact: bearish
+    rationale: The market is currently wrestling with the tension between a robust,
+      albeit slowing, global economic recovery and the tangible threat to oil consumption
+      posed by the Delta variant. The recent OPEC+ decision to gradually increase
+      supply provides a stabilizing framework for the next few months, but increases
+      downside sensitivity if demand underperforms. My forecast reflects a cautious
+      baseline (Economic Resilience) with a significant weight on downside risks (Demand
+      Softening) driven by health-related uncertainty.
+    horizon_rationale: Moderate downside risk remains as the market digests the August
+      production increase. Investors are hyper-vigilant for any negative demand news
+      linked to Delta.
+    langfuse_trace_id: a0dcc77c4ee8fdc4e3daf1350376a445
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a0dcc77c4ee8fdc4e3daf1350376a445
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:48:08.449248'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-08-23T00:00:00'
+  payload:
+    point_forecast: 70.0
+    quantiles:
+      '0.05': 58.38119784648299
+      '0.1': 65.0
+      '0.2': 67.0
+      '0.3': 68.5
+      '0.4': 69.5
+      '0.5': 70.0
+      '0.6': 71.0
+      '0.7': 72.5
+      '0.8': 74.0
+      '0.9': 76.0
+      '0.95': 78.0
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Delta Variant Impact
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Economic Resilience
+      probability: 0.5
+      price_low: 70.0
+      price_high: 76.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bullish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: neutral
+    - name: Demand Softening
+      probability: 0.4
+      price_low: 63.0
+      price_high: 69.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: bearish
+    - name: Supply-Demand Mismatch (Tail Risk)
+      probability: 0.1
+      price_low: 55.0
+      price_high: 62.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: bullish
+        Delta Variant Impact: bearish
+    rationale: The market is currently wrestling with the tension between a robust,
+      albeit slowing, global economic recovery and the tangible threat to oil consumption
+      posed by the Delta variant. The recent OPEC+ decision to gradually increase
+      supply provides a stabilizing framework for the next few months, but increases
+      downside sensitivity if demand underperforms. My forecast reflects a cautious
+      baseline (Economic Resilience) with a significant weight on downside risks (Demand
+      Softening) driven by health-related uncertainty.
+    horizon_rationale: As we move into August, if supply additions hit the market
+      while demand concerns linger, we expect a gradual drift downward in the consensus,
+      though volatility remains high.
+    langfuse_trace_id: a0dcc77c4ee8fdc4e3daf1350376a445
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a0dcc77c4ee8fdc4e3daf1350376a445
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:48:08.449248'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-10-20T00:00:00'
+  payload:
+    point_forecast: 68.0
+    quantiles:
+      '0.05': 55.0
+      '0.1': 61.0
+      '0.2': 64.0
+      '0.3': 66.0
+      '0.4': 67.0
+      '0.5': 68.0
+      '0.6': 69.5
+      '0.7': 71.5
+      '0.8': 74.0
+      '0.9': 77.0
+      '0.95': 80.0
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Delta Variant Impact
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Economic Resilience
+      probability: 0.5
+      price_low: 70.0
+      price_high: 76.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bullish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: neutral
+    - name: Demand Softening
+      probability: 0.4
+      price_low: 63.0
+      price_high: 69.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        Delta Variant Impact: bearish
+    - name: Supply-Demand Mismatch (Tail Risk)
+      probability: 0.1
+      price_low: 55.0
+      price_high: 62.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: bullish
+        Delta Variant Impact: bearish
+    rationale: The market is currently wrestling with the tension between a robust,
+      albeit slowing, global economic recovery and the tangible threat to oil consumption
+      posed by the Delta variant. The recent OPEC+ decision to gradually increase
+      supply provides a stabilizing framework for the next few months, but increases
+      downside sensitivity if demand underperforms. My forecast reflects a cautious
+      baseline (Economic Resilience) with a significant weight on downside risks (Demand
+      Softening) driven by health-related uncertainty.
+    horizon_rationale: Looking 3 months ahead, the impact of the OPEC+ monthly supply
+      additions will be cumulative. Barring a major demand surprise, the risk is skewed
+      slightly to the downside.
+    langfuse_trace_id: a0dcc77c4ee8fdc4e3daf1350376a445
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a0dcc77c4ee8fdc4e3daf1350376a445
+scores:
+- 1.51366081951179
+- 1.8307652801242422
+- 2.9325524723189025
+- 11.57248208542501
+metric: crps
+mean_score: 4.462365164344986
+ran_at: '2026-07-25T16:48:08.761813'
+skipped_origins: 0

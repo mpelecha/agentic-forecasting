@@ -190,6 +190,7 @@ def build_wti_news_scenario_schema_enhanced_config(
         model=model,
         instruction=_WTI_ANALYST_INSTRUCTION_SCENARIO_SCHEMA_ENHANCED,
         max_output_tokens=max_output_tokens,
+        temperature=0.0,  # 2026.08.20 — pin determinism for reproducible scenarios
         context_retrieval=ContextRetrievalConfig(
             enabled=True,
             instruction=_WTI_FACTORS_V2_CONTEXT_RETRIEVAL_INSTRUCTION,

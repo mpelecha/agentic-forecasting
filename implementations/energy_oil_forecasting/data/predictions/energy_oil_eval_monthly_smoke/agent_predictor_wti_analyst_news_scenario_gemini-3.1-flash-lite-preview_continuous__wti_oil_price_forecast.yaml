@@ -1,0 +1,91 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:06:06.791250'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.0
+    quantiles:
+      '0.05': 62.5
+      '0.1': 63.2
+      '0.2': 63.8
+      '0.3': 64.2
+      '0.4': 64.6
+      '0.5': 65.0
+      '0.6': 65.4
+      '0.7': 66.0
+      '0.8': 66.8
+      '0.9': 68.0
+      '0.95': 69.5
+  metadata:
+    rationale: The outlook balances the structural bearishness of projected global
+      inventory builds with the high-impact/low-probability upside risks associated
+      with Middle East geopolitical escalation. The forecast is constrained by OPEC+'s
+      current commitment to supply discipline, which effectively provides a floor
+      under current price levels.
+    horizon_rationale: Short-term momentum is supported by the elevated $65.21 close
+      and persisting geopolitical anxiety. Little near-term change is expected from
+      supply fundamentals.
+    langfuse_trace_id: 61ce5f5f63431b71052fa4e5b18d3f48
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/61ce5f5f63431b71052fa4e5b18d3f48
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:06:06.791250'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 63.5
+    quantiles:
+      '0.05': 57.0
+      '0.1': 59.0
+      '0.2': 60.5
+      '0.3': 61.5
+      '0.4': 62.5
+      '0.5': 63.5
+      '0.6': 64.5
+      '0.7': 66.0
+      '0.8': 68.0
+      '0.9': 70.5
+      '0.95': 73.0
+  metadata:
+    rationale: The outlook balances the structural bearishness of projected global
+      inventory builds with the high-impact/low-probability upside risks associated
+      with Middle East geopolitical escalation. The forecast is constrained by OPEC+'s
+      current commitment to supply discipline, which effectively provides a floor
+      under current price levels.
+    horizon_rationale: By 21 days, the interplay between the 'Status Quo' surplus
+      and the 'Geopolitical' risk premium is more pronounced, leading to a wider probability
+      distribution reflecting those divergent scenarios.
+    langfuse_trace_id: 61ce5f5f63431b71052fa4e5b18d3f48
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/61ce5f5f63431b71052fa4e5b18d3f48
+scores:
+- 0.5662808252760194
+- 7.741815740411934
+metric: crps
+mean_score: 4.154048282843977
+ran_at: '2026-07-22T15:06:07.095322'
+skipped_origins: 0

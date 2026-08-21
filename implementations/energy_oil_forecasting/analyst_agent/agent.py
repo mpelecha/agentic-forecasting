@@ -1280,6 +1280,7 @@ def build_wti_news_scenario_schema_config(
     verifier_model: str = ADVANCED_MODEL,
     verifier_max_attempts: int = 3,
     verifier_confidence_threshold: int = 8,
+    temperature: float | None = None,  # ← ADD THIS
 ) -> AgentConfig:
     """Like :func:`build_wti_news_factors_v2_config`, but the core/transitory
     scenario decomposition is a real, schema-validated output (see
@@ -1291,6 +1292,7 @@ def build_wti_news_scenario_schema_config(
         model=model,
         instruction=_WTI_ANALYST_INSTRUCTION_SCENARIO_SCHEMA,
         max_output_tokens=max_output_tokens,
+        temperature=temperature,  # ← ADD THIS
         context_retrieval=ContextRetrievalConfig(
             enabled=True,
             instruction=_WTI_FACTORS_V2_CONTEXT_RETRIEVAL_INSTRUCTION,

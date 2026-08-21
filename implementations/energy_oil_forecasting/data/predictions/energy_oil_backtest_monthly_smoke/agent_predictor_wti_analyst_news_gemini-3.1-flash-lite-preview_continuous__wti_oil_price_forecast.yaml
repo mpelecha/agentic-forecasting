@@ -1,0 +1,140 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-06-02T00:00:00'
+  end: '2025-06-09T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:22:41.609203'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 57.5
+      '0.1': 58.2
+      '0.2': 59.1
+      '0.3': 59.8
+      '0.4': 60.2
+      '0.5': 60.5
+      '0.6': 60.9
+      '0.7': 61.5
+      '0.8': 62.3
+      '0.9': 63.5
+      '0.95': 64.5
+  metadata:
+    rationale: 'Overall Outlook: The WTI market is currently bearish, dominated by
+      the OPEC+ supply increase strategy, which aims to reclaim market share, and
+      tepid global demand projections. Three scenarios guide the quantiles: 1) ''OPEC+
+      Supply Pressure'' (Prob: 0.6): Continued supply increases and cooling demand
+      push prices lower, toward $56-58. 2) ''Geopolitical Escalation'' (Prob: 0.25):
+      Regional tensions in the Middle East cause sudden supply chain disruptions,
+      spiking prices toward $68+. 3) ''Balanced Stasis'' (Prob: 0.15): Market volatility
+      remains subdued as higher supply is offset by better-than-expected economic
+      data, keeping prices around $60-62. The final forecast interval reflects a bearish
+      tilt but acknowledges significant geopolitical tail-risk upside.'
+    horizon_rationale: Over a 5-day horizon, prices are likely to be range-bound,
+      oscillating around $60-61/bbl. The market is digesting the recent OPEC+ decision
+      to continue the output hike, providing a bearish ceiling, while geopolitical
+      tensions in the Middle East provide a support floor.
+    langfuse_trace_id: c443f21906147e1cd58b1d4aec150eb7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c443f21906147e1cd58b1d4aec150eb7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:22:41.609203'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 59.8
+    quantiles:
+      '0.05': 56.0
+      '0.1': 57.0
+      '0.2': 58.0
+      '0.3': 59.0
+      '0.4': 59.5
+      '0.5': 59.8
+      '0.6': 60.5
+      '0.7': 61.2
+      '0.8': 62.5
+      '0.9': 64.0
+      '0.95': 65.5
+  metadata:
+    rationale: 'Overall Outlook: The WTI market is currently bearish, dominated by
+      the OPEC+ supply increase strategy, which aims to reclaim market share, and
+      tepid global demand projections. Three scenarios guide the quantiles: 1) ''OPEC+
+      Supply Pressure'' (Prob: 0.6): Continued supply increases and cooling demand
+      push prices lower, toward $56-58. 2) ''Geopolitical Escalation'' (Prob: 0.25):
+      Regional tensions in the Middle East cause sudden supply chain disruptions,
+      spiking prices toward $68+. 3) ''Balanced Stasis'' (Prob: 0.15): Market volatility
+      remains subdued as higher supply is offset by better-than-expected economic
+      data, keeping prices around $60-62. The final forecast interval reflects a bearish
+      tilt but acknowledges significant geopolitical tail-risk upside.'
+    horizon_rationale: By 10 days, the impact of increased OPEC+ production becomes
+      clearer. Bearish momentum likely dominates, with a drift toward testing the
+      $57-58 support levels seen in early May.
+    langfuse_trace_id: c443f21906147e1cd58b1d4aec150eb7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c443f21906147e1cd58b1d4aec150eb7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:22:41.609203'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 58.5
+    quantiles:
+      '0.05': 54.0
+      '0.1': 55.5
+      '0.2': 56.5
+      '0.3': 57.5
+      '0.4': 58.0
+      '0.5': 58.5
+      '0.6': 59.5
+      '0.7': 61.0
+      '0.8': 63.0
+      '0.9': 65.5
+      '0.95': 68.0
+  metadata:
+    rationale: 'Overall Outlook: The WTI market is currently bearish, dominated by
+      the OPEC+ supply increase strategy, which aims to reclaim market share, and
+      tepid global demand projections. Three scenarios guide the quantiles: 1) ''OPEC+
+      Supply Pressure'' (Prob: 0.6): Continued supply increases and cooling demand
+      push prices lower, toward $56-58. 2) ''Geopolitical Escalation'' (Prob: 0.25):
+      Regional tensions in the Middle East cause sudden supply chain disruptions,
+      spiking prices toward $68+. 3) ''Balanced Stasis'' (Prob: 0.15): Market volatility
+      remains subdued as higher supply is offset by better-than-expected economic
+      data, keeping prices around $60-62. The final forecast interval reflects a bearish
+      tilt but acknowledges significant geopolitical tail-risk upside.'
+    horizon_rationale: At 21 days, market focus shifts to broader demand indicators
+      and whether the increased OPEC+ output creates an actual surplus in U.S. inventories.
+      Continued supply unwinding creates a downward bias, but the wide tail reflects
+      uncertainty regarding potential geopolitical flare-ups.
+    langfuse_trace_id: c443f21906147e1cd58b1d4aec150eb7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c443f21906147e1cd58b1d4aec150eb7
+scores:
+- 3.4073562874281715
+- 9.936938791826737
+- 3.9144608678896575
+metric: crps
+mean_score: 5.75291864904819
+ran_at: '2026-07-22T14:22:41.935462'
+skipped_origins: 0

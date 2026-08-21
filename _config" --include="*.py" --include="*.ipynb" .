@@ -1,0 +1,36 @@
+[1mdiff --git a/agent_original.py b/agent.py[m
+[1mindex 2697062..2470835 100644[m
+[1m--- a/agent_original.py[m
+[1m+++ b/agent.py[m
+[36m@@ -156,7 +156,21 @@[m [mmarkdown summary (3-5 paragraphs) covering relevant aspects of:[m
+ - Geopolitical risks in the Persian Gulf, Middle East, key shipping lanes[m
+ - US Strategic Petroleum Reserve and energy policy signals[m
+ - Notable tanker/shipping incidents or supply disruption signals[m
+[31m-- Published analyst forecasts or unusual price-target revisions[m
+[32m+[m[32m- Published analyst and forecast views — including major banks, \[m
+[32m+[m[32mgovernment/international energy agencies, and large physical oil trading \[m
+[32m+[m[32mhouses — noting any unusual price-target revisions or shifts in outlook[m
+[32m+[m[32m- Where credible sources actively disagree (e.g. surplus vs. tight-market \[m
+[32m+[m[32mcalls, bullish vs. bearish institutional forecasts) — name both sides \[m
+[32m+[m[32mrather than reporting only the majority view[m
+[32m+[m
+[32m+[m[32mIf the current situation resembles a past market episode (e.g. a prior \[m
+[32m+[m[32mOPEC+ supply cut, a prior Strait of Hormuz scare, a prior demand-shock \[m
+[32m+[m[32mperiod), search for that precedent explicitly and report: what happened, \[m
+[32m+[m[32mhow WTI/Brent moved in the following weeks, and how similar the current \[m
+[32m+[m[32msetup actually is versus superficially similar. Only include an analogue \[m
+[32m+[m[32mif you can ground it in a retrieved source — do not construct one from \[m
+[32m+[m[32mmemory. If no clear precedent surfaces in search results, say so rather \[m
+[32m+[m[32mthan forcing a comparison.[m
+ [m
+ Ground your summary in the search results you actually retrieve. \[m
+ When a cutoff date is specified, do not report or speculate about events \[m
+[36m@@ -455,7 +469,7 @@[m [mdef build_wti_news_config([m
+     AgentConfig[m
+     """[m
+     return AgentConfig([m
+[31m-        name="wti_analyst_news",[m
+[32m+[m[32m        name="wti_analyst_news_contrarian", # ← changed from "wti_analyst_news"[m
+         model=model,[m
+         instruction=_WTI_ANALYST_INSTRUCTION,[m
+         context_retrieval=ContextRetrievalConfig([m

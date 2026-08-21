@@ -1,0 +1,182 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:11:19.188436'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 64.8
+    quantiles:
+      '0.05': 59.5
+      '0.1': 61.0
+      '0.2': 62.5
+      '0.3': 63.5
+      '0.4': 64.2
+      '0.5': 64.8
+      '0.6': 65.5
+      '0.7': 66.3
+      '0.8': 67.5
+      '0.9': 69.0
+      '0.95': 71.0
+  metadata:
+    rationale: WTI crude oil prices experienced a strong rally in late January 2026,
+      closing at $65.21 on January 30, driven by geopolitical tensions in the Middle
+      East involving the US and Iran and potential threats to transit through the
+      Strait of Hormuz. While the near-term momentum is supported by declining US
+      commercial inventories, low levels in the US Strategic Petroleum Reserve, and
+      OPEC+'s pause on unwinding cuts through Q1 2026, the medium-term outlook is
+      dominated by fundamental oversupply risks from non-OPEC producers. Accordingly,
+      the forecasts model a widening distribution over time with a slightly declining
+      median to reflect eventual de-escalation and the structural supply surplus.
+    horizon_rationale: Over a short-term 5-day horizon, WTI crude oil is expected
+      to consolidate near its recent high of $65.21. The market has broken out of
+      its prior $57-$61 range, propelled by escalating US-Iran tensions and potential
+      threats to transit through the Strait of Hormuz. While short-term upward momentum
+      remains strong due to larger-than-expected commercial inventory draws, a slight
+      downward consolidation toward $64.80 is projected as the median outcome due
+      to technical resistance and profit-taking, though the high-end tail remains
+      skewed toward $71.00 in the event of an active geopolitical escalation.
+    langfuse_trace_id: dd908114ac9d6d97a13291a06b5f160c
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/dd908114ac9d6d97a13291a06b5f160c
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:11:19.188436'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 63.0
+    quantiles:
+      '0.05': 54.0
+      '0.1': 56.5
+      '0.2': 59.0
+      '0.3': 60.8
+      '0.4': 62.0
+      '0.5': 63.0
+      '0.6': 64.2
+      '0.7': 65.8
+      '0.8': 67.8
+      '0.9': 70.5
+      '0.95': 73.5
+  metadata:
+    rationale: WTI crude oil prices experienced a strong rally in late January 2026,
+      closing at $65.21 on January 30, driven by geopolitical tensions in the Middle
+      East involving the US and Iran and potential threats to transit through the
+      Strait of Hormuz. While the near-term momentum is supported by declining US
+      commercial inventories, low levels in the US Strategic Petroleum Reserve, and
+      OPEC+'s pause on unwinding cuts through Q1 2026, the medium-term outlook is
+      dominated by fundamental oversupply risks from non-OPEC producers. Accordingly,
+      the forecasts model a widening distribution over time with a slightly declining
+      median to reflect eventual de-escalation and the structural supply surplus.
+    horizon_rationale: Over a 21-day horizon, the gravitational pull of fundamental
+      supply-demand dynamics is anticipated to re-assert itself, leading to a median
+      forecast of $63.00. As the market approaches the end of Q1, focus will pivot
+      to whether OPEC+ starts unwinding voluntary production cuts in Q2, which could
+      introduce substantial supply back into a relatively soft demand environment.
+      The probability distribution is significantly wider at this horizon; a complete
+      de-escalation of Persian Gulf tensions could drag WTI back to $54.00 (near 52-week
+      lows), whereas any active kinetic disruption to shipping lanes could trigger
+      a sharp spike toward $73.50.
+    langfuse_trace_id: dd908114ac9d6d97a13291a06b5f160c
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/dd908114ac9d6d97a13291a06b5f160c
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:12:16.939974'
+  as_of: '2026-02-09T00:00:00'
+  forecast_date: '2026-02-23T00:00:00'
+  payload:
+    point_forecast: 64.5
+    quantiles:
+      '0.05': 57.5
+      '0.1': 59.5
+      '0.2': 61.5
+      '0.3': 62.6
+      '0.4': 63.5
+      '0.5': 64.5
+      '0.6': 65.5
+      '0.7': 66.6
+      '0.8': 68.0
+      '0.9': 70.0
+      '0.95': 71.5
+  metadata:
+    rationale: 'WTI crude oil pricing in early February 2026 is driven by two main
+      factors: (1) OPEC+''s decision on Feb 1, 2026, to extend the pause on production
+      increments through March 2026, which provides structural support, and (2) an
+      embedded geopolitical risk premium arising from military positioning near the
+      Strait of Hormuz. These forecasts utilize daily volatility projections calibrated
+      against the recent 6-month historical data and typical WTI trading distributions
+      to model calibrated, non-decreasing quantiles.'
+    horizon_rationale: For the 10-day horizon, the price distribution widens in response
+      to cumulative uncertainty, with the median drifting slightly higher to $64.50.
+      Downside risks are limited by OPEC+ discipline and low global inventory levels,
+      while upside risks remain elevated due to potential disruptions in key maritime
+      shipping lanes like the Strait of Hormuz. Price behavior is expected to remain
+      largely range-bound with a bullish bias.
+    langfuse_trace_id: b7ded109b5fb6fbd5c954fec5bdc0f27
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b7ded109b5fb6fbd5c954fec5bdc0f27
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:12:16.939974'
+  as_of: '2026-02-09T00:00:00'
+  forecast_date: '2026-03-10T00:00:00'
+  payload:
+    point_forecast: 65.0
+    quantiles:
+      '0.05': 55.0
+      '0.1': 57.5
+      '0.2': 60.5
+      '0.3': 62.2
+      '0.4': 63.6
+      '0.5': 65.0
+      '0.6': 66.4
+      '0.7': 68.0
+      '0.8': 70.0
+      '0.9': 72.5
+      '0.95': 74.5
+  metadata:
+    rationale: 'WTI crude oil pricing in early February 2026 is driven by two main
+      factors: (1) OPEC+''s decision on Feb 1, 2026, to extend the pause on production
+      increments through March 2026, which provides structural support, and (2) an
+      embedded geopolitical risk premium arising from military positioning near the
+      Strait of Hormuz. These forecasts utilize daily volatility projections calibrated
+      against the recent 6-month historical data and typical WTI trading distributions
+      to model calibrated, non-decreasing quantiles.'
+    horizon_rationale: Over the 21-day horizon (extending to early March 2026), the
+      forecast distribution incorporates broader seasonal demand expectations and
+      the continuation of the voluntary OPEC+ cuts. The 52-week low of $55.27 acts
+      as a strong technical support anchor (representing the 0.05 quantile), whereas
+      the 52-week high of $75.14 serves as a major ceiling (representing the 0.95
+      quantile) in the absence of actual physical supply blockages in the Middle East.
+    langfuse_trace_id: b7ded109b5fb6fbd5c954fec5bdc0f27
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b7ded109b5fb6fbd5c954fec5bdc0f27
+scores:
+- 0.7986776304639066
+- 8.012063674296233
+- 1.336610904409865
+- 15.119418435845496
+metric: crps
+mean_score: 6.3166926612538745
+ran_at: '2026-08-16T18:12:17.237844'
+skipped_origins: 0

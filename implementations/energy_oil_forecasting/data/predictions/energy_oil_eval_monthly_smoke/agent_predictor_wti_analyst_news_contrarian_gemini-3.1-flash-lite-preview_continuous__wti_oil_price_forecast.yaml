@@ -1,0 +1,104 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:24:49.439831'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.0
+    quantiles:
+      '0.05': 62.5
+      '0.1': 63.2
+      '0.2': 63.8
+      '0.3': 64.3
+      '0.4': 64.7
+      '0.5': 65.0
+      '0.6': 65.3
+      '0.7': 65.8
+      '0.8': 66.5
+      '0.9': 67.5
+      '0.95': 68.5
+  metadata:
+    rationale: 'The forecast is constructed around three primary scenarios: 1. ''Surplus
+      Reassertion'' (60% probability, price target $60): Global inventories remain
+      high, OPEC+ policy holds, and geopolitical threats remain contained, allowing
+      fundamentals to drive prices lower. 2. ''Geopolitical Escalation'' (30% probability,
+      price target $72): A kinetic event in the Persian Gulf or sharp escalation with
+      Iran disrupts shipping, forcing a quick risk-premium spike. 3. ''Tail Risk:
+      Full-Scale Regional Conflict'' (10% probability, price target $85+): A major,
+      sustained disruption that challenges global supply security. The interval widths
+      are calibrated to capture these scenarios, with the 80% range (0.1/0.9) reflecting
+      a spread of ~$12 at 21 days.'
+    horizon_rationale: Short-term volatility is driven by the 'geopolitical risk premium'
+      versus the 'structural supply surplus'. With the market currently balanced but
+      sensitive, 5-day price action is likely to hold around recent closes ($65.20)
+      as markets weigh ongoing Middle East tensions against stable OPEC+ policy.
+    langfuse_trace_id: 26178364ccdac955c8420391d2c69c00
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/26178364ccdac955c8420391d2c69c00
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:24:49.439831'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 63.5
+    quantiles:
+      '0.05': 57.0
+      '0.1': 58.5
+      '0.2': 60.0
+      '0.3': 61.5
+      '0.4': 62.5
+      '0.5': 63.5
+      '0.6': 64.5
+      '0.7': 66.0
+      '0.8': 68.0
+      '0.9': 70.5
+      '0.95': 72.5
+  metadata:
+    rationale: 'The forecast is constructed around three primary scenarios: 1. ''Surplus
+      Reassertion'' (60% probability, price target $60): Global inventories remain
+      high, OPEC+ policy holds, and geopolitical threats remain contained, allowing
+      fundamentals to drive prices lower. 2. ''Geopolitical Escalation'' (30% probability,
+      price target $72): A kinetic event in the Persian Gulf or sharp escalation with
+      Iran disrupts shipping, forcing a quick risk-premium spike. 3. ''Tail Risk:
+      Full-Scale Regional Conflict'' (10% probability, price target $85+): A major,
+      sustained disruption that challenges global supply security. The interval widths
+      are calibrated to capture these scenarios, with the 80% range (0.1/0.9) reflecting
+      a spread of ~$12 at 21 days.'
+    horizon_rationale: At the 21-day horizon, the interplay between scenarios becomes
+      clearer. With the 'Geopolitical Escalation' vs. 'Surplus Reassertion' scenarios,
+      the distribution reflects a widening uncertainty. The bearish trend (surplus)
+      dominates the lower end of the distribution, while the risk of supply disruption
+      in the Persian Gulf provides the upside tail.
+    langfuse_trace_id: 26178364ccdac955c8420391d2c69c00
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/26178364ccdac955c8420391d2c69c00
+scores:
+- 0.5191733872594911
+- 7.861650451155735
+metric: crps
+mean_score: 4.190411919207613
+ran_at: '2026-07-22T14:24:49.763345'
+skipped_origins: 0

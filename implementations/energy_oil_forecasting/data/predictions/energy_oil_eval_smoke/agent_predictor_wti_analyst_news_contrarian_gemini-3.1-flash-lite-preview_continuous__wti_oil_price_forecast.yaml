@@ -1,0 +1,166 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-21T08:08:34.624140'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 64.8
+    quantiles:
+      '0.05': 61.5
+      '0.1': 62.2
+      '0.2': 63.0
+      '0.3': 63.8
+      '0.4': 64.3
+      '0.5': 64.8
+      '0.6': 65.4
+      '0.7': 66.2
+      '0.8': 67.5
+      '0.9': 68.8
+      '0.95': 70.0
+  metadata:
+    rationale: 'The forecast reflects a short-term ''contrarian'' view: while recent
+      prices have risen to the $65 level due to geopolitical anxiety and market momentum,
+      fundamentals suggest this level is unsustainable in the absence of a genuine
+      supply disruption. OPEC+ is actively managing the surplus, and demand is currently
+      characterized by seasonal lulls. Therefore, we project a short-term peak followed
+      by a gradual drift lower as the market acknowledges the supply-heavy reality.'
+    horizon_rationale: Over the 5-day horizon, momentum from the late-January price
+      surge is expected to persist but encounter resistance near the recent highs
+      of $65-$66. WTI is currently digesting recent gains; the market remains hyper-sensitive
+      to geopolitical headlines from the Middle East while fundamentals remain anchored
+      by OPEC+ supply restraint.
+    langfuse_trace_id: a989cb1a8a6b43ba579d3cf027c10e6a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a989cb1a8a6b43ba579d3cf027c10e6a
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-21T08:08:34.624140'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 62.5
+    quantiles:
+      '0.05': 57.0
+      '0.1': 58.2
+      '0.2': 59.5
+      '0.3': 60.8
+      '0.4': 61.6
+      '0.5': 62.5
+      '0.6': 63.4
+      '0.7': 64.8
+      '0.8': 66.5
+      '0.9': 68.5
+      '0.95': 70.5
+  metadata:
+    rationale: 'The forecast reflects a short-term ''contrarian'' view: while recent
+      prices have risen to the $65 level due to geopolitical anxiety and market momentum,
+      fundamentals suggest this level is unsustainable in the absence of a genuine
+      supply disruption. OPEC+ is actively managing the surplus, and demand is currently
+      characterized by seasonal lulls. Therefore, we project a short-term peak followed
+      by a gradual drift lower as the market acknowledges the supply-heavy reality.'
+    horizon_rationale: Over the 21-day horizon, the primary driver is anticipated
+      to be the persistent global supply surplus and seasonal demand softness, which
+      OPEC+ is currently attempting to balance. The forecast reflects a cooling of
+      short-term volatility, with prices drifting lower as the lack of sustained demand
+      growth becomes more apparent.
+    langfuse_trace_id: a989cb1a8a6b43ba579d3cf027c10e6a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a989cb1a8a6b43ba579d3cf027c10e6a
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-21T08:08:47.300294'
+  as_of: '2026-02-09T00:00:00'
+  forecast_date: '2026-02-23T00:00:00'
+  payload:
+    point_forecast: 64.2
+    quantiles:
+      '0.05': 60.5
+      '0.1': 61.2
+      '0.2': 62.0
+      '0.3': 63.0
+      '0.4': 63.8
+      '0.5': 64.2
+      '0.6': 64.8
+      '0.7': 65.6
+      '0.8': 66.5
+      '0.9': 68.0
+      '0.95': 69.5
+  metadata:
+    rationale: The forecast is grounded in the current conflict between soft supply-demand
+      fundamentals (global surplus, seasonal demand softness) and a elevated geopolitical
+      risk premium (US-Iran tensions, Strait of Hormuz concerns). OPEC+ policy continues
+      to act as a anchor, providing a structural floor. The forecast incorporates
+      the high volatility typical of periods dominated by geopolitical uncertainty,
+      resulting in wider spreads at longer horizons.
+    horizon_rationale: Looking 10 days out, uncertainty remains elevated. If the diplomatic
+      situation with Iran does not show clear signs of de-escalation, the risk premium
+      will likely build, keeping prices supported. However, if reports emerge of increased
+      global inventory levels or successful diplomatic backchannel progress, a bearish
+      re-correction toward fundamental values is possible.
+    langfuse_trace_id: 74bb246338cf08fbe50bb01ec255ff0d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/74bb246338cf08fbe50bb01ec255ff0d
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-21T08:08:47.300294'
+  as_of: '2026-02-09T00:00:00'
+  forecast_date: '2026-03-10T00:00:00'
+  payload:
+    point_forecast: 63.5
+    quantiles:
+      '0.05': 58.0
+      '0.1': 59.5
+      '0.2': 60.5
+      '0.3': 61.5
+      '0.4': 62.5
+      '0.5': 63.5
+      '0.6': 64.5
+      '0.7': 66.0
+      '0.8': 68.0
+      '0.9': 70.0
+      '0.95': 72.0
+  metadata:
+    rationale: The forecast is grounded in the current conflict between soft supply-demand
+      fundamentals (global surplus, seasonal demand softness) and a elevated geopolitical
+      risk premium (US-Iran tensions, Strait of Hormuz concerns). OPEC+ policy continues
+      to act as a anchor, providing a structural floor. The forecast incorporates
+      the high volatility typical of periods dominated by geopolitical uncertainty,
+      resulting in wider spreads at longer horizons.
+    horizon_rationale: By the 21-day horizon, the market expectation is for the initial
+      shock of the geopolitical fear to potentially stabilize or begin to discount.
+      While the OPEC+ production pause provides a structural floor, the persistent
+      surplus and soft OECD demand outlooks will continue to weigh on prices. The
+      point forecast reflects a return to near current levels as the market balances
+      these opposing fundamental and geopolitical forces.
+    langfuse_trace_id: 74bb246338cf08fbe50bb01ec255ff0d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/74bb246338cf08fbe50bb01ec255ff0d
+scores:
+- 0.6804958122820897
+- 9.226939707354083
+- 1.2491724439888956
+- 16.863220088738057
+metric: crps
+mean_score: 7.004957013090781
+ran_at: '2026-07-21T08:08:47.533956'
+skipped_origins: 0

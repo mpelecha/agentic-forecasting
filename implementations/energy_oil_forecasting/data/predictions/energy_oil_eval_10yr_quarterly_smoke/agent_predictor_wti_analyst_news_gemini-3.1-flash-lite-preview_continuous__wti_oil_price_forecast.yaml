@@ -1,0 +1,295 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-06-23T00:00:00'
+  end: '2026-07-23T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:57:44.496974'
+  as_of: '2026-06-23T00:00:00'
+  forecast_date: '2026-06-30T00:00:00'
+  payload:
+    point_forecast: 73.5
+    quantiles:
+      '0.05': 69.5
+      '0.1': 70.8
+      '0.2': 71.9
+      '0.3': 72.6
+      '0.4': 73.1
+      '0.5': 73.5
+      '0.6': 74.0
+      '0.7': 74.8
+      '0.8': 75.6
+      '0.9': 76.5
+      '0.95': 77.5
+  metadata:
+    rationale: The forecast is driven by the major geopolitical shift in the Persian
+      Gulf following a ceasefire and the opening of the Strait of Hormuz. We assume
+      a gradual easing of the risk premium that had elevated prices earlier in 2026.
+      OPEC+ continues its quota unwinding, adding to supply, while historically low
+      US SPR levels provide a structural floor for long-term price expectations.
+    horizon_rationale: Prices are experiencing downward pressure following a ceasefire
+      announcement regarding the Strait of Hormuz. In the very short term (5 days),
+      we expect the market to price in the improved supply outlook, with some floor
+      support near $70/bbl due to persistent structural supply constraints.
+    langfuse_trace_id: 3dab244a1e4e3b5bb3d02feac96ff3da
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/3dab244a1e4e3b5bb3d02feac96ff3da
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:57:44.496974'
+  as_of: '2026-06-23T00:00:00'
+  forecast_date: '2026-07-07T00:00:00'
+  payload:
+    point_forecast: 72.0
+    quantiles:
+      '0.05': 67.0
+      '0.1': 68.5
+      '0.2': 70.0
+      '0.3': 70.9
+      '0.4': 71.5
+      '0.5': 72.0
+      '0.6': 72.8
+      '0.7': 73.5
+      '0.8': 74.5
+      '0.9': 75.8
+      '0.95': 77.0
+  metadata:
+    rationale: The forecast is driven by the major geopolitical shift in the Persian
+      Gulf following a ceasefire and the opening of the Strait of Hormuz. We assume
+      a gradual easing of the risk premium that had elevated prices earlier in 2026.
+      OPEC+ continues its quota unwinding, adding to supply, while historically low
+      US SPR levels provide a structural floor for long-term price expectations.
+    horizon_rationale: Over the next 10 business days, the market will likely consolidate
+      around the prospect of stabilized transit. While the diplomatic agreement is
+      positive, the reality of physical flow resumption (de-mining/transit logistics)
+      will be slow, keeping some risk premium in the price.
+    langfuse_trace_id: 3dab244a1e4e3b5bb3d02feac96ff3da
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/3dab244a1e4e3b5bb3d02feac96ff3da
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:57:44.496974'
+  as_of: '2026-06-23T00:00:00'
+  forecast_date: '2026-07-22T00:00:00'
+  payload:
+    point_forecast: 70.0
+    quantiles:
+      '0.05': 63.0
+      '0.1': 65.0
+      '0.2': 67.5
+      '0.3': 68.8
+      '0.4': 69.4
+      '0.5': 70.0
+      '0.6': 71.0
+      '0.7': 72.5
+      '0.8': 74.0
+      '0.9': 76.0
+      '0.95': 78.0
+  metadata:
+    rationale: The forecast is driven by the major geopolitical shift in the Persian
+      Gulf following a ceasefire and the opening of the Strait of Hormuz. We assume
+      a gradual easing of the risk premium that had elevated prices earlier in 2026.
+      OPEC+ continues its quota unwinding, adding to supply, while historically low
+      US SPR levels provide a structural floor for long-term price expectations.
+    horizon_rationale: Looking 21 business days ahead, as the ceasefire holds, the
+      geopolitical risk premium continues to fade. Increased OPEC+ production flows,
+      albeit gradual, begin to weigh on the market against a backdrop of tight US
+      SPR buffers.
+    langfuse_trace_id: 3dab244a1e4e3b5bb3d02feac96ff3da
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/3dab244a1e4e3b5bb3d02feac96ff3da
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:57:56.614904'
+  as_of: '2026-06-30T00:00:00'
+  forecast_date: '2026-07-07T00:00:00'
+  payload:
+    point_forecast: 69.5
+    quantiles:
+      '0.05': 66.5
+      '0.1': 67.2
+      '0.2': 68.1
+      '0.3': 68.8
+      '0.4': 69.2
+      '0.5': 69.5
+      '0.6': 69.9
+      '0.7': 70.4
+      '0.8': 71.0
+      '0.9': 71.8
+      '0.95': 72.5
+  metadata:
+    rationale: 'My analysis incorporates the primary drivers of late June 2026: a
+      tentative ceasefire cooling geopolitical tensions and reducing the risk premium,
+      consistent OPEC+ production quota increases that remain constrained by infrastructure,
+      and significant SPR drawdown concerns. The forecast reflects a cautious, slightly
+      bearish trend as these supply-side reassessments meet sustained weak demand
+      signals.'
+    horizon_rationale: Market is currently pricing in a 60-day ceasefire between the
+      U.S. and Iran, easing immediate supply risk. WTI is consolidating around $70.
+      The 5-day horizon reflects continued caution as participants wait for ceasefire
+      stability.
+    langfuse_trace_id: d02212cb0bdecc256f81fdd9b45a09e7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d02212cb0bdecc256f81fdd9b45a09e7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:57:56.614904'
+  as_of: '2026-06-30T00:00:00'
+  forecast_date: '2026-07-14T00:00:00'
+  payload:
+    point_forecast: 69.0
+    quantiles:
+      '0.05': 65.0
+      '0.1': 66.0
+      '0.2': 67.2
+      '0.3': 68.0
+      '0.4': 68.6
+      '0.5': 69.0
+      '0.6': 69.5
+      '0.7': 70.2
+      '0.8': 71.0
+      '0.9': 72.0
+      '0.95': 73.0
+  metadata:
+    rationale: 'My analysis incorporates the primary drivers of late June 2026: a
+      tentative ceasefire cooling geopolitical tensions and reducing the risk premium,
+      consistent OPEC+ production quota increases that remain constrained by infrastructure,
+      and significant SPR drawdown concerns. The forecast reflects a cautious, slightly
+      bearish trend as these supply-side reassessments meet sustained weak demand
+      signals.'
+    horizon_rationale: Over 10 days, the focus shifts to whether the production quota
+      increases scheduled for July 2026 can be partially realized or if the regional
+      infrastructure constraints continue to limit output. Downward bias persists
+      given soft demand signals.
+    langfuse_trace_id: d02212cb0bdecc256f81fdd9b45a09e7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d02212cb0bdecc256f81fdd9b45a09e7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:58:09.994157'
+  as_of: '2026-07-07T00:00:00'
+  forecast_date: '2026-07-14T00:00:00'
+  payload:
+    point_forecast: 68.25
+    quantiles:
+      '0.05': 63.5
+      '0.1': 65.0
+      '0.2': 66.25
+      '0.3': 67.25
+      '0.4': 67.75
+      '0.5': 68.25
+      '0.6': 69.0
+      '0.7': 70.0
+      '0.8': 71.5
+      '0.9': 73.5
+      '0.95': 75.0
+  metadata:
+    rationale: 'The forecast assumes that the mid-June US-Iran MOU holds but remains
+      fragile, keeping a geopolitical risk premium present. We also incorporate the
+      impact of the ongoing OPEC+ monthly production increases. The primary risks
+      to this outlook are: 1) A breakdown in the ceasefire causing a surge in prices;
+      2) Further weakness in global demand growth; and 3) The inability of the US
+      to rebuild SPR stocks efficiently.'
+    horizon_rationale: Short-term horizon reflects the market digesting the recent
+      downward correction. The price is currently at $68.55, and with the June MOU
+      providing a fragile calm, some near-term stability or slight consolidation is
+      expected before the next major driver. Risk is slightly skewed to the upside
+      due to persistent regional fragility.
+    langfuse_trace_id: 60b29a0d3b6d18ebedb0eec261afa023
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/60b29a0d3b6d18ebedb0eec261afa023
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:58:09.994157'
+  as_of: '2026-07-07T00:00:00'
+  forecast_date: '2026-07-21T00:00:00'
+  payload:
+    point_forecast: 69.5
+    quantiles:
+      '0.05': 63.0
+      '0.1': 64.5
+      '0.2': 66.0
+      '0.3': 67.5
+      '0.4': 68.5
+      '0.5': 69.5
+      '0.6': 70.5
+      '0.7': 72.0
+      '0.8': 74.0
+      '0.9': 76.5
+      '0.95': 78.5
+  metadata:
+    rationale: 'The forecast assumes that the mid-June US-Iran MOU holds but remains
+      fragile, keeping a geopolitical risk premium present. We also incorporate the
+      impact of the ongoing OPEC+ monthly production increases. The primary risks
+      to this outlook are: 1) A breakdown in the ceasefire causing a surge in prices;
+      2) Further weakness in global demand growth; and 3) The inability of the US
+      to rebuild SPR stocks efficiently.'
+    horizon_rationale: Over 10 days, the market will react to incoming inventory data
+      and any further tests of the Strait of Hormuz peace. Given depleted global stocks
+      and the failure of recent SPR replenishment efforts, the downside is limited,
+      but upside remains capped by demand concerns and OPEC+ gradual supply increases.
+    langfuse_trace_id: 60b29a0d3b6d18ebedb0eec261afa023
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/60b29a0d3b6d18ebedb0eec261afa023
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T16:58:22.687830'
+  as_of: '2026-07-14T00:00:00'
+  forecast_date: '2026-07-21T00:00:00'
+  payload:
+    point_forecast: 80.5
+    quantiles:
+      '0.05': 76.5
+      '0.1': 77.5
+      '0.2': 78.5
+      '0.3': 79.5
+      '0.4': 80.0
+      '0.5': 80.5
+      '0.6': 81.0
+      '0.7': 82.0
+      '0.8': 83.5
+      '0.9': 85.0
+      '0.95': 87.0
+  metadata:
+    rationale: The forecast is driven primarily by the acute geopolitical risk premium
+      caused by the collapse of the U.S.-Iran ceasefire in July 2026. The critical
+      constraint on physical supply from the Strait of Hormuz, combined with the U.S.
+      having significantly depleted its SPR buffer, creates a highly bullish short-term
+      environment. The OPEC+ production increases are seen as largely symbolic given
+      the physical disruption of export routes. Upside risks include military escalation
+      and full disruption of Hormuz transit, while downside risks involve unforeseen
+      de-escalation or a sharp, macro-driven drop in global oil demand.
+    horizon_rationale: Following the collapse of the U.S.-Iran ceasefire on July 8,
+      the market is aggressively pricing in a geopolitical risk premium. WTI is showing
+      strong momentum toward the $80/bbl level. Short-term upside remains skewed by
+      potential further escalations in the Persian Gulf and the risk of physical supply
+      constraints, despite OPEC+ nominal production increases.
+    langfuse_trace_id: 707e35bc3d8e3fd8139d436028dde750
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/707e35bc3d8e3fd8139d436028dde750
+scores:
+- 2.809090909090907
+- 1.1148749233277375
+- 13.919258029401796
+- 0.6190093741929225
+- 8.96065749491542
+- 8.637516999047651
+- 12.211656554671361
+- 2.595622165143983
+metric: crps
+mean_score: 6.358460806223972
+ran_at: '2026-07-25T16:58:37.754981'
+skipped_origins: 1

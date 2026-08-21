@@ -1,0 +1,232 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-06-02T00:00:00'
+  end: '2025-06-09T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:02:27.228430'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 56.8
+      '0.1': 57.6
+      '0.2': 58.5
+      '0.3': 59.2
+      '0.4': 59.9
+      '0.5': 60.5
+      '0.6': 61.1
+      '0.7': 61.8
+      '0.8': 62.6
+      '0.9': 63.6
+      '0.95': 64.5
+  metadata:
+    rationale: Global crude oil markets as of June 2, 2025, are balancing a transition
+      toward higher supply (OPEC+ unwinding voluntary cuts by ~411k bpd monthly) and
+      a sluggish demand outlook (IEA 2025 demand growth at 1.3 mb/d with weak US/China
+      Q2 data). While geopolitical risks in critical shipping lanes persist, they
+      are largely priced in, leading to a downward-drifting median price across the
+      forecast horizons with significant support around the recent 4-year low of ~$57.13.
+    horizon_rationale: Over a 5-day horizon, WTI is expected to drift slightly lower
+      from the May 30 close of $60.79 to a median of $60.50 as the market digests
+      the May 31 OPEC+ announcement reaffirming the July output increase of 411,000
+      bpd. The downside is strongly supported near the 52-week low of $57.13, while
+      upside is limited by the incoming supply.
+    langfuse_trace_id: 5e667e9f71a9bc5d47973de1231aef66
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5e667e9f71a9bc5d47973de1231aef66
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:02:27.228430'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 60.1
+    quantiles:
+      '0.05': 55.0
+      '0.1': 56.2
+      '0.2': 57.5
+      '0.3': 58.4
+      '0.4': 59.3
+      '0.5': 60.1
+      '0.6': 60.9
+      '0.7': 61.8
+      '0.8': 63.0
+      '0.9': 64.5
+      '0.95': 65.8
+  metadata:
+    rationale: Global crude oil markets as of June 2, 2025, are balancing a transition
+      toward higher supply (OPEC+ unwinding voluntary cuts by ~411k bpd monthly) and
+      a sluggish demand outlook (IEA 2025 demand growth at 1.3 mb/d with weak US/China
+      Q2 data). While geopolitical risks in critical shipping lanes persist, they
+      are largely priced in, leading to a downward-drifting median price across the
+      forecast horizons with significant support around the recent 4-year low of ~$57.13.
+    horizon_rationale: For the 10-day horizon, the median is projected at $60.10,
+      reflecting persistent oversupply concerns ahead of the July cut unwinds. Increased
+      volatility expands the distribution, with a 5% tail reaching $55.00 in the event
+      of macro-driven sell-offs, and a 95% tail at $65.80 on potential short-lived
+      geopolitical spikes.
+    langfuse_trace_id: 5e667e9f71a9bc5d47973de1231aef66
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5e667e9f71a9bc5d47973de1231aef66
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:02:27.228430'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 59.5
+    quantiles:
+      '0.05': 52.5
+      '0.1': 54.0
+      '0.2': 56.0
+      '0.3': 57.2
+      '0.4': 58.4
+      '0.5': 59.5
+      '0.6': 60.6
+      '0.7': 61.8
+      '0.8': 63.4
+      '0.9': 65.5
+      '0.95': 67.2
+  metadata:
+    rationale: Global crude oil markets as of June 2, 2025, are balancing a transition
+      toward higher supply (OPEC+ unwinding voluntary cuts by ~411k bpd monthly) and
+      a sluggish demand outlook (IEA 2025 demand growth at 1.3 mb/d with weak US/China
+      Q2 data). While geopolitical risks in critical shipping lanes persist, they
+      are largely priced in, leading to a downward-drifting median price across the
+      forecast horizons with significant support around the recent 4-year low of ~$57.13.
+    horizon_rationale: At the 21-day horizon (approaching early July), the physical
+      entry of the 411,000 bpd OPEC+ supply increase and weak summer demand indicators
+      are expected to push the median WTI price down to $59.50. This creates a wider
+      distribution where a breakdown below the 52-week low is possible, balanced by
+      right-skewed tail risks for unforeseen geopolitical disruptions.
+    langfuse_trace_id: 5e667e9f71a9bc5d47973de1231aef66
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5e667e9f71a9bc5d47973de1231aef66
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:03:35.449999'
+  as_of: '2025-06-09T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 65.0
+    quantiles:
+      '0.05': 60.2
+      '0.1': 61.3
+      '0.2': 62.6
+      '0.3': 63.6
+      '0.4': 64.3
+      '0.5': 65.0
+      '0.6': 65.7
+      '0.7': 66.5
+      '0.8': 67.5
+      '0.9': 68.8
+      '0.95': 69.9
+  metadata:
+    rationale: These calibrated forecasts incorporate WTI crude oil price dynamics
+      as of June 9, 2025. They balance short-term seasonal demand and geopolitical
+      factors against comfortable global stock levels and the flexible unwinding of
+      OPEC+ voluntary production cuts.
+    horizon_rationale: WTI crude oil closed at $64.58 on June 6, 2025, recovering
+      from its 52-week low of $57.13 in early May. Over a 5-day horizon, the median
+      is projected at $65.00. The prompt outlook balances strong seasonal driving
+      demand against comfortable inventory levels (global stocks built through April).
+      Geopolitical risk in the Middle East provides mild support, while scheduled
+      OPEC+ production adjustments cap the upside.
+    langfuse_trace_id: 760de869f44687e8ae06bb94240e14d6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/760de869f44687e8ae06bb94240e14d6
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:03:35.449999'
+  as_of: '2025-06-09T00:00:00'
+  forecast_date: '2025-06-23T00:00:00'
+  payload:
+    point_forecast: 65.5
+    quantiles:
+      '0.05': 59.2
+      '0.1': 60.5
+      '0.2': 62.3
+      '0.3': 63.5
+      '0.4': 64.6
+      '0.5': 65.5
+      '0.6': 66.6
+      '0.7': 67.8
+      '0.8': 69.2
+      '0.9': 71.0
+      '0.95': 72.5
+  metadata:
+    rationale: These calibrated forecasts incorporate WTI crude oil price dynamics
+      as of June 9, 2025. They balance short-term seasonal demand and geopolitical
+      factors against comfortable global stock levels and the flexible unwinding of
+      OPEC+ voluntary production cuts.
+    horizon_rationale: At a 10-day horizon, the median forecast is set at $65.50.
+      Rising summer driving activity in June is expected to support prices, but global
+      supply remains comfortable as OPEC+ gradually unwinds voluntary cuts. The price
+      distribution shows moderate positive skewness, with the 0.05 quantile anchored
+      at $59.20 near recent technical support levels and the 0.95 quantile reaching
+      $72.50 due to potential geopolitical escalation.
+    langfuse_trace_id: 760de869f44687e8ae06bb94240e14d6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/760de869f44687e8ae06bb94240e14d6
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.5-flash_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:03:35.449999'
+  as_of: '2025-06-09T00:00:00'
+  forecast_date: '2025-07-08T00:00:00'
+  payload:
+    point_forecast: 66.2
+    quantiles:
+      '0.05': 57.8
+      '0.1': 59.5
+      '0.2': 61.8
+      '0.3': 63.5
+      '0.4': 64.9
+      '0.5': 66.2
+      '0.6': 67.7
+      '0.7': 69.4
+      '0.8': 71.5
+      '0.9': 74.2
+      '0.95': 76.5
+  metadata:
+    rationale: These calibrated forecasts incorporate WTI crude oil price dynamics
+      as of June 9, 2025. They balance short-term seasonal demand and geopolitical
+      factors against comfortable global stock levels and the flexible unwinding of
+      OPEC+ voluntary production cuts.
+    horizon_rationale: Over a 21-day horizon, the median forecast is projected at
+      $66.20. Market balances are expected to remain adequate with OPEC+ continuing
+      its planned 411,000 bpd production increase for July. Summer demand peaks and
+      potential shipping lane/geopolitical disruptions in the Middle East represent
+      upside risks, lifting the 0.95 quantile to $76.50. Downside risks from soft
+      macro demand in China are mitigated by strong physical support around $57-58,
+      putting the 0.05 quantile at $57.80.
+    langfuse_trace_id: 760de869f44687e8ae06bb94240e14d6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/760de869f44687e8ae06bb94240e14d6
+scores:
+- 3.3933067006513116
+- 9.68983135381021
+- 3.60123772739379
+- 5.0741288744713655
+- 1.8028935329973221
+- 1.7776038051636747
+metric: crps
+mean_score: 4.22316699908128
+ran_at: '2026-08-16T18:03:35.753826'
+skipped_origins: 0

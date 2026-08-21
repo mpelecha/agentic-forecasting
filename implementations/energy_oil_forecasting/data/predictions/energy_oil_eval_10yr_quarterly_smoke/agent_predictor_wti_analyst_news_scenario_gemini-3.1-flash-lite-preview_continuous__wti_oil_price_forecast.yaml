@@ -1,0 +1,350 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-06-23T00:00:00'
+  end: '2026-07-23T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:38:57.134847'
+  as_of: '2026-06-23T00:00:00'
+  forecast_date: '2026-06-30T00:00:00'
+  payload:
+    point_forecast: 74.5
+    quantiles:
+      '0.05': 71.0
+      '0.1': 72.0
+      '0.2': 73.0
+      '0.3': 73.8
+      '0.4': 74.2
+      '0.5': 74.5
+      '0.6': 75.0
+      '0.7': 75.8
+      '0.8': 77.0
+      '0.9': 78.5
+      '0.95': 80.0
+  metadata:
+    rationale: "My analysis is based on the following three scenarios for the coming\
+      \ months: \n\n1. **Strait Stabilization (60% probability, target ~$68):** The\
+      \ ceasefire holds, tanker traffic through the Strait of Hormuz normalizes, and\
+      \ the market shifts from a supply-constrained environment back to a demand-driven\
+      \ one. This is the base case.\n\n2. **Truce Fracture/Renewed Conflict (25% probability,\
+      \ target ~$85):** The truce is fragile; minor skirmishes or political rhetoric\
+      \ cause a partial return of the risk premium, preventing a full decline in prices.\n\
+      \n3. **Full Regional Escalation (15% probability, tail risk target >$100):**\
+      \ A low-probability but high-impact scenario where the MOU collapses and major\
+      \ military conflict ensues, completely blocking the strait again. \n\nMy forecast\
+      \ intervals are explicitly widened at longer horizons to encompass the considerable\
+      \ spread between these scenarios. Key assumptions include: OPEC+ output increases\
+      \ remain largely symbolic until logistics improve, and the U.S. continues to\
+      \ manage its depleted SPR carefully."
+    horizon_rationale: Short-term horizon reflects the immediate market consolidation
+      following the announcement of the U.S.-Iran MOU. Prices are stabilizing as traders
+      wait for confirmation of safe passage through the Strait of Hormuz.
+    langfuse_trace_id: 6c2f3c21722514f0ac2a7ecd9d38da06
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/6c2f3c21722514f0ac2a7ecd9d38da06
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:38:57.134847'
+  as_of: '2026-06-23T00:00:00'
+  forecast_date: '2026-07-07T00:00:00'
+  payload:
+    point_forecast: 73.5
+    quantiles:
+      '0.05': 68.0
+      '0.1': 69.5
+      '0.2': 71.0
+      '0.3': 72.0
+      '0.4': 72.8
+      '0.5': 73.5
+      '0.6': 74.2
+      '0.7': 75.5
+      '0.8': 77.0
+      '0.9': 80.0
+      '0.95': 83.0
+  metadata:
+    rationale: "My analysis is based on the following three scenarios for the coming\
+      \ months: \n\n1. **Strait Stabilization (60% probability, target ~$68):** The\
+      \ ceasefire holds, tanker traffic through the Strait of Hormuz normalizes, and\
+      \ the market shifts from a supply-constrained environment back to a demand-driven\
+      \ one. This is the base case.\n\n2. **Truce Fracture/Renewed Conflict (25% probability,\
+      \ target ~$85):** The truce is fragile; minor skirmishes or political rhetoric\
+      \ cause a partial return of the risk premium, preventing a full decline in prices.\n\
+      \n3. **Full Regional Escalation (15% probability, tail risk target >$100):**\
+      \ A low-probability but high-impact scenario where the MOU collapses and major\
+      \ military conflict ensues, completely blocking the strait again. \n\nMy forecast\
+      \ intervals are explicitly widened at longer horizons to encompass the considerable\
+      \ spread between these scenarios. Key assumptions include: OPEC+ output increases\
+      \ remain largely symbolic until logistics improve, and the U.S. continues to\
+      \ manage its depleted SPR carefully."
+    horizon_rationale: Over 10 days, the focus shifts to whether the 60-day ceasefire
+      holds. Any minor maritime incident would likely trigger a sharp, albeit short-lived,
+      price spike, necessitating a wider range than the 5-day horizon.
+    langfuse_trace_id: 6c2f3c21722514f0ac2a7ecd9d38da06
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/6c2f3c21722514f0ac2a7ecd9d38da06
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:38:57.134847'
+  as_of: '2026-06-23T00:00:00'
+  forecast_date: '2026-07-22T00:00:00'
+  payload:
+    point_forecast: 72.0
+    quantiles:
+      '0.05': 65.0
+      '0.1': 67.0
+      '0.2': 69.0
+      '0.3': 70.5
+      '0.4': 71.2
+      '0.5': 72.0
+      '0.6': 73.5
+      '0.7': 76.0
+      '0.8': 79.0
+      '0.9': 84.0
+      '0.95': 88.0
+  metadata:
+    rationale: "My analysis is based on the following three scenarios for the coming\
+      \ months: \n\n1. **Strait Stabilization (60% probability, target ~$68):** The\
+      \ ceasefire holds, tanker traffic through the Strait of Hormuz normalizes, and\
+      \ the market shifts from a supply-constrained environment back to a demand-driven\
+      \ one. This is the base case.\n\n2. **Truce Fracture/Renewed Conflict (25% probability,\
+      \ target ~$85):** The truce is fragile; minor skirmishes or political rhetoric\
+      \ cause a partial return of the risk premium, preventing a full decline in prices.\n\
+      \n3. **Full Regional Escalation (15% probability, tail risk target >$100):**\
+      \ A low-probability but high-impact scenario where the MOU collapses and major\
+      \ military conflict ensues, completely blocking the strait again. \n\nMy forecast\
+      \ intervals are explicitly widened at longer horizons to encompass the considerable\
+      \ spread between these scenarios. Key assumptions include: OPEC+ output increases\
+      \ remain largely symbolic until logistics improve, and the U.S. continues to\
+      \ manage its depleted SPR carefully."
+    horizon_rationale: By 21 days (roughly one month), the market will have tested
+      the durability of the strait's reopening. A successful period of transit would
+      likely lead to a gradual softening of prices as the 'geopolitical risk premium'
+      evaporates.
+    langfuse_trace_id: 6c2f3c21722514f0ac2a7ecd9d38da06
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/6c2f3c21722514f0ac2a7ecd9d38da06
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:39:09.713068'
+  as_of: '2026-06-30T00:00:00'
+  forecast_date: '2026-07-07T00:00:00'
+  payload:
+    point_forecast: 69.5
+    quantiles:
+      '0.05': 66.0
+      '0.1': 67.0
+      '0.2': 68.0
+      '0.3': 68.8
+      '0.4': 69.2
+      '0.5': 69.5
+      '0.6': 70.0
+      '0.7': 70.8
+      '0.8': 71.5
+      '0.9': 72.5
+      '0.95': 73.5
+  metadata:
+    rationale: 'Overall Outlook: Bearish. Scenario analysis suggests a market transitioning
+      from ''geopolitical risk pricing'' to ''fundamentals pricing''. Scenarios: 1.
+      ''Ceasefire Holds & Fundamentals Weaken'' (65%): Strait of Hormuz remains open,
+      OPEC+ continues to add supply, demand stays soft. Target: $60. 2. ''Renewed
+      Escalation'' (20%): Ceasefire collapses, Strait of Hormuz re-blocks. Bullish
+      tail. Target: $85+. 3. ''Stagnation/Partial Supply Cuts'' (15%): OPEC+ pauses
+      production hikes due to price weakness, limiting the downside. Target: $68.
+      My interval incorporates the risk of re-escalation (upper quantiles) and the
+      potential for a demand-led correction (lower quantiles). Assumptions: OPEC+
+      continues gradual supply additions, geopolitical tension remains latent but
+      largely constrained by the ceasefire.'
+    horizon_rationale: Short-term stabilization as the market digests the June ceasefire
+      and the potential for a return of normal shipping flows in the Strait of Hormuz.
+      OPEC+ quota increases provide a bearish anchor.
+    langfuse_trace_id: 464cba55845ba88ecb33fd62ce190972
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/464cba55845ba88ecb33fd62ce190972
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:39:09.713068'
+  as_of: '2026-06-30T00:00:00'
+  forecast_date: '2026-07-14T00:00:00'
+  payload:
+    point_forecast: 68.0
+    quantiles:
+      '0.05': 63.5
+      '0.1': 65.0
+      '0.2': 66.0
+      '0.3': 67.0
+      '0.4': 67.5
+      '0.5': 68.0
+      '0.6': 68.8
+      '0.7': 69.5
+      '0.8': 70.5
+      '0.9': 72.0
+      '0.95': 73.0
+  metadata:
+    rationale: 'Overall Outlook: Bearish. Scenario analysis suggests a market transitioning
+      from ''geopolitical risk pricing'' to ''fundamentals pricing''. Scenarios: 1.
+      ''Ceasefire Holds & Fundamentals Weaken'' (65%): Strait of Hormuz remains open,
+      OPEC+ continues to add supply, demand stays soft. Target: $60. 2. ''Renewed
+      Escalation'' (20%): Ceasefire collapses, Strait of Hormuz re-blocks. Bullish
+      tail. Target: $85+. 3. ''Stagnation/Partial Supply Cuts'' (15%): OPEC+ pauses
+      production hikes due to price weakness, limiting the downside. Target: $68.
+      My interval incorporates the risk of re-escalation (upper quantiles) and the
+      potential for a demand-led correction (lower quantiles). Assumptions: OPEC+
+      continues gradual supply additions, geopolitical tension remains latent but
+      largely constrained by the ceasefire.'
+    horizon_rationale: The ceasefire's durability faces tests. As shipments resume,
+      physical supply begins to loosen, weighing on prices. Demand outlook remains
+      tepid.
+    langfuse_trace_id: 464cba55845ba88ecb33fd62ce190972
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/464cba55845ba88ecb33fd62ce190972
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:39:23.023186'
+  as_of: '2026-07-07T00:00:00'
+  forecast_date: '2026-07-14T00:00:00'
+  payload:
+    point_forecast: 69.5
+    quantiles:
+      '0.05': 65.0
+      '0.1': 66.5
+      '0.2': 67.5
+      '0.3': 68.2
+      '0.4': 68.8
+      '0.5': 69.5
+      '0.6': 70.5
+      '0.7': 71.5
+      '0.8': 73.0
+      '0.9': 75.0
+      '0.95': 77.0
+  metadata:
+    rationale: "Market Analysis: The WTI crude oil market is currently governed by\
+      \ extreme geopolitical risk centering on the Strait of Hormuz and the Iran-US\
+      \ conflict. \n\nScenarios:\n1. 'Fragile Status Quo' (Prob 0.5): The current\
+      \ ceasefire holds intermittently, with periodic flare-ups keeping shipping premiums\
+      \ high. (OPEC: Neutral, Geopolitics: Neutral/Bullish, SPR: Bearish, Demand:\
+      \ Bearish). Price ~ $75.\n2. 'Regional Escalation' (Prob 0.3): The U.S.-Iran\
+      \ ceasefire collapses, the Strait of Hormuz is effectively blockaded, and major\
+      \ supply shocks occur. (OPEC: Neutral, Geopolitics: Bullish, SPR: Bearish-drawdown,\
+      \ Demand: Neutral). Price ~ $100+.\n3. 'Diplomatic Breakthrough/De-escalation'\
+      \ (Prob 0.2 - Tail Case): Sustained diplomatic progress, rapid reopening of\
+      \ the Strait, and an easing of geopolitical risk premium. (OPEC: Neutral, Geopolitics:\
+      \ Bearish, SPR: Bullish-rebuild, Demand: Neutral). Price ~ $55.\n\nIntervals\
+      \ are widened to reflect the high probability of tail outcomes driven by binary\
+      \ geopolitical events."
+    horizon_rationale: Short-term volatility driven by the fragility of the U.S.-Iran
+      ceasefire. The price is currently reacting to the tension in the Strait of Hormuz,
+      with a slight bullish bias from potential re-escalation.
+    langfuse_trace_id: f32788ea2ea30c6120fcfe7c9b6e9eb8
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f32788ea2ea30c6120fcfe7c9b6e9eb8
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:39:23.023186'
+  as_of: '2026-07-07T00:00:00'
+  forecast_date: '2026-07-21T00:00:00'
+  payload:
+    point_forecast: 71.0
+    quantiles:
+      '0.05': 64.0
+      '0.1': 66.0
+      '0.2': 68.0
+      '0.3': 69.5
+      '0.4': 70.2
+      '0.5': 71.0
+      '0.6': 72.5
+      '0.7': 74.0
+      '0.8': 76.5
+      '0.9': 79.5
+      '0.95': 82.0
+  metadata:
+    rationale: "Market Analysis: The WTI crude oil market is currently governed by\
+      \ extreme geopolitical risk centering on the Strait of Hormuz and the Iran-US\
+      \ conflict. \n\nScenarios:\n1. 'Fragile Status Quo' (Prob 0.5): The current\
+      \ ceasefire holds intermittently, with periodic flare-ups keeping shipping premiums\
+      \ high. (OPEC: Neutral, Geopolitics: Neutral/Bullish, SPR: Bearish, Demand:\
+      \ Bearish). Price ~ $75.\n2. 'Regional Escalation' (Prob 0.3): The U.S.-Iran\
+      \ ceasefire collapses, the Strait of Hormuz is effectively blockaded, and major\
+      \ supply shocks occur. (OPEC: Neutral, Geopolitics: Bullish, SPR: Bearish-drawdown,\
+      \ Demand: Neutral). Price ~ $100+.\n3. 'Diplomatic Breakthrough/De-escalation'\
+      \ (Prob 0.2 - Tail Case): Sustained diplomatic progress, rapid reopening of\
+      \ the Strait, and an easing of geopolitical risk premium. (OPEC: Neutral, Geopolitics:\
+      \ Bearish, SPR: Bullish-rebuild, Demand: Neutral). Price ~ $55.\n\nIntervals\
+      \ are widened to reflect the high probability of tail outcomes driven by binary\
+      \ geopolitical events."
+    horizon_rationale: Over 10 days, market participants will assess the sustainability
+      of the ceasefire MOU. Continued shipping uncertainty poses upside risk.
+    langfuse_trace_id: f32788ea2ea30c6120fcfe7c9b6e9eb8
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f32788ea2ea30c6120fcfe7c9b6e9eb8
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:39:35.361490'
+  as_of: '2026-07-14T00:00:00'
+  forecast_date: '2026-07-21T00:00:00'
+  payload:
+    point_forecast: 80.0
+    quantiles:
+      '0.05': 75.0
+      '0.1': 77.0
+      '0.2': 78.5
+      '0.3': 79.2
+      '0.4': 79.6
+      '0.5': 80.0
+      '0.6': 80.5
+      '0.7': 81.5
+      '0.8': 83.0
+      '0.9': 85.0
+      '0.95': 87.0
+  metadata:
+    rationale: 'My analysis is driven by three main scenarios:
+
+
+      1. ''Escalation/Blockade Persists'' (Prob: 0.5): The U.S. naval blockade continues,
+      forcing a sustained increase in the geopolitical risk premium. Price target:
+      $85-$95/bbl at the 63-day horizon.
+
+      2. ''Diplomatic De-escalation'' (Prob: 0.3): A return to the negotiating table
+      by September/October stabilizes shipping, leading to a pull-back from current
+      highs. Price target: $70-$75/bbl.
+
+      3. ''Tail Case: Full Regional War'' (Prob: 0.2): Sustained military conflict,
+      severe destruction of transit infrastructure. Price target: $100+/bbl.
+
+
+      The final quantile spread reflects this significant divergence, with wider intervals
+      at longer horizons to account for the uncertainty regarding how the U.S.-Iran
+      standoff resolves. Key drivers are the state of the Strait of Hormuz, SPR inventory
+      status, and OPEC+ ability to influence output when shipping lanes are disrupted.'
+    horizon_rationale: As of July 14, 2026, the market is reacting to the collapse
+      of the U.S.-Iran MOU and the reinstatement of the U.S. naval blockade. Short-term
+      price action is dominated by immediate supply shock fears. The 5-day horizon
+      remains highly sensitive to geopolitical news headlines.
+    langfuse_trace_id: 0f7c9a7ef5b263cc383435d3751a1b5e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/0f7c9a7ef5b263cc383435d3751a1b5e
+scores:
+- 4.030578512396692
+- 2.031568694311724
+- 9.193141994003426
+- 0.6836370294744315
+- 9.510244271774924
+- 7.149087246981535
+- 9.812483000952351
+- 2.8989279502679506
+metric: crps
+mean_score: 5.66370858752038
+ran_at: '2026-07-24T21:39:49.633364'
+skipped_origins: 1

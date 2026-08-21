@@ -1,0 +1,2093 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_cfm_agent_v_5_2_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_cfm_agent_v_5_2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:10:20.602999'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.24129811575354
+    quantiles:
+      '0.05': 59.5966109742308
+      '0.1': 60.949995497407194
+      '0.2': 62.1252951083251
+      '0.3': 62.76434058256028
+      '0.4': 63.79526453573412
+      '0.5': 65.24129811575354
+      '0.6': 65.8778845171377
+      '0.7': 66.60339681469382
+      '0.8': 67.61128257419247
+      '0.9': 69.17998611863104
+      '0.95': 70.18697422942154
+  metadata:
+    context_assessment:
+      research_packet_id: research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    model_suite_id: model_suite:sha256:c9e678abdae70d84205c6815c04b4079e2a4ef4f1c074c4121594091f92f4f34
+    numerical_suite_audit:
+      model_suite:
+        model_suite_id: model_suite:sha256:c9e678abdae70d84205c6815c04b4079e2a4ef4f1c074c4121594091f92f4f34
+        target_series_id: wti_crude_oil_price
+        cutoff_date: '2026-02-02'
+        horizons:
+        - 5
+        - 10
+        - 21
+        frequency: B
+        model_num_samples: 1000
+        rng_seed: 473580824
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:1c3a45186163c17f7a3cd693a53f1c388219bbc5f31c660cd1fef1793cf35473
+        models:
+          arima:
+            model_name: arima
+            predictor_id: darts_autoarima
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2026-02-09'
+              point_forecast: 65.1053287704708
+              quantiles:
+                '0.05': 58.40134723856121
+                '0.1': 59.91192469950811
+                '0.2': 61.563898896823694
+                '0.3': 62.8207206253759
+                '0.4': 63.95330218448227
+                '0.5': 65.1053287704708
+                '0.6': 65.99223051629762
+                '0.7': 67.39411937958273
+                '0.8': 68.91139765975521
+                '0.9': 70.7947698704736
+                '0.95': 72.51385031474538
+            - horizon: 10
+              forecast_date: '2026-02-16'
+              point_forecast: 65.13243328683338
+              quantiles:
+                '0.05': 55.82838235126762
+                '0.1': 57.623238933154035
+                '0.2': 60.23813668608153
+                '0.3': 62.008036714666666
+                '0.4': 63.649873186114256
+                '0.5': 65.13243328683338
+                '0.6': 66.6376701580515
+                '0.7': 68.11023305200807
+                '0.8': 70.21602985233301
+                '0.9': 72.55478389991774
+                '0.95': 74.85133042271485
+            - horizon: 21
+              forecast_date: '2026-03-03'
+              point_forecast: 65.04288529867985
+              quantiles:
+                '0.05': 51.73530285625687
+                '0.1': 54.44959547650962
+                '0.2': 57.22705279661903
+                '0.3': 60.30021077846694
+                '0.4': 62.54588777042239
+                '0.5': 65.04288529867985
+                '0.6': 67.50666092882057
+                '0.7': 69.5522560391036
+                '0.8': 72.3045619653195
+                '0.9': 75.61647318824748
+                '0.95': 78.62111235999383
+            training_data:
+              target_observations: 5551
+              first_target_date: '2004-01-05'
+              last_target_date: '2026-01-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          kalman:
+            model_name: kalman
+            predictor_id: darts_kalman
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2026-02-09'
+              point_forecast: 65.05851187152624
+              quantiles:
+                '0.05': 62.12815173639683
+                '0.1': 62.701684465953555
+                '0.2': 63.566019439385
+                '0.3': 64.14728083226197
+                '0.4': 64.61020479825136
+                '0.5': 65.05851187152624
+                '0.6': 65.51421171834983
+                '0.7': 66.03748530141094
+                '0.8': 66.68219099965691
+                '0.9': 67.53735759922485
+                '0.95': 68.01559449447203
+            - horizon: 10
+              forecast_date: '2026-02-16'
+              point_forecast: 65.05789631376854
+              quantiles:
+                '0.05': 61.86843022061365
+                '0.1': 62.657900758512014
+                '0.2': 63.430243762240764
+                '0.3': 64.05899144051037
+                '0.4': 64.55938997105928
+                '0.5': 65.05789631376854
+                '0.6': 65.4908982496051
+                '0.7': 66.07848335605186
+                '0.8': 66.6379007113839
+                '0.9': 67.47347955163322
+                '0.95': 68.00259934092091
+            - horizon: 21
+              forecast_date: '2026-03-03'
+              point_forecast: 64.88365967377452
+              quantiles:
+                '0.05': 61.96912723946363
+                '0.1': 62.402545921683505
+                '0.2': 63.25193802607935
+                '0.3': 63.854022018629145
+                '0.4': 64.38936574929573
+                '0.5': 64.88365967377452
+                '0.6': 65.38695315296694
+                '0.7': 65.86411466498159
+                '0.8': 66.47283323477221
+                '0.9': 67.1492903568826
+                '0.95': 67.77522441839665
+            training_data:
+              target_observations: 5551
+              first_target_date: '2004-01-05'
+              last_target_date: '2026-01-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          lightgbm:
+            model_name: lightgbm
+            predictor_id: darts_lightgbm_cov
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2026-02-09'
+              point_forecast: 65.56005370526358
+              quantiles:
+                '0.05': 58.26033394773437
+                '0.1': 60.23637732675992
+                '0.2': 61.24596698876661
+                '0.3': 61.32502029004299
+                '0.4': 62.82228662446873
+                '0.5': 65.56005370526358
+                '0.6': 66.12721131676567
+                '0.7': 66.37858576308781
+                '0.8': 67.24025906316533
+                '0.9': 69.20783088619466
+                '0.95': 70.03147787904724
+            - horizon: 10
+              forecast_date: '2026-02-16'
+              point_forecast: 63.49017492477627
+              quantiles:
+                '0.05': 58.63297039012491
+                '0.1': 59.13623617296009
+                '0.2': 61.85917359297037
+                '0.3': 62.12494965635573
+                '0.4': 62.93522486625947
+                '0.5': 63.49017492477627
+                '0.6': 64.22181870275362
+                '0.7': 65.44266091496213
+                '0.8': 67.10542094007899
+                '0.9': 68.4483006073305
+                '0.95': 69.06050024068827
+            - horizon: 21
+              forecast_date: '2026-03-03'
+              point_forecast: 63.06424803462279
+              quantiles:
+                '0.05': 57.26872610052241
+                '0.1': 59.27824193213091
+                '0.2': 59.69029399666934
+                '0.3': 60.015845294097225
+                '0.4': 62.663761127086296
+                '0.5': 63.06424803462279
+                '0.6': 63.38330420081576
+                '0.7': 63.79621730761206
+                '0.8': 64.21808645444312
+                '0.9': 66.32714879533773
+                '0.95': 66.87350295960863
+            training_data:
+              target_observations: 5551
+              first_target_date: '2004-01-05'
+              last_target_date: '2026-01-30'
+              aligned_observations: 4736
+              effective_training_examples_estimate: 4695
+              target_lags: 21
+              covariate_lags: 21
+              covariates:
+              - brent_log_ret_1b_l1b
+              - natgas_log_ret_1b_l1b
+              - gasoline_log_ret_1b_l1b
+              - gold_log_ret_1b_l1b
+              - dollar_index_log_ret_1b_l1b
+              - oil_curve_contango_l1b
+              - vix_level_l1b
+              covariate_observations:
+                brent_log_ret_1b_l1b: 4604
+                natgas_log_ret_1b_l1b: 5551
+                gasoline_log_ret_1b_l1b: 5553
+                gold_log_ret_1b_l1b: 5546
+                dollar_index_log_ret_1b_l1b: 5567
+                oil_curve_contango_l1b: 4737
+                vix_level_l1b: 5555
+              notes: 'Aligned observations use the common business-day span after
+                Darts-style calendar regularization. Effective examples are an auditable
+                estimate: aligned_observations - max(lags) - max_horizon + 1.'
+            num_samples: 1000
+            error: null
+        ensemble:
+          model_name: ensemble
+          predictor_id: cfm_arima_kalman_lightgbm_ensemble
+          status: ok
+          forecasts:
+          - horizon: 5
+            forecast_date: '2026-02-09'
+            point_forecast: 65.24129811575354
+            quantiles:
+              '0.05': 59.5966109742308
+              '0.1': 60.949995497407194
+              '0.2': 62.1252951083251
+              '0.3': 62.76434058256028
+              '0.4': 63.79526453573412
+              '0.5': 65.24129811575354
+              '0.6': 65.8778845171377
+              '0.7': 66.60339681469382
+              '0.8': 67.61128257419247
+              '0.9': 69.17998611863104
+              '0.95': 70.18697422942154
+          - horizon: 10
+            forecast_date: '2026-02-16'
+            point_forecast: 64.56016817512605
+            quantiles:
+              '0.05': 58.77659432066872
+              '0.1': 59.805791954875374
+              '0.2': 61.84251801376422
+              '0.3': 62.73065927051091
+              '0.4': 63.71482934114433
+              '0.5': 64.56016817512605
+              '0.6': 65.4501290368034
+              '0.7': 66.54379244100735
+              '0.8': 67.9864505012653
+              '0.9': 69.49218801962715
+              '0.95': 70.63814333477467
+          - horizon: 21
+            forecast_date: '2026-03-03'
+            point_forecast: 64.33026433569239
+            quantiles:
+              '0.05': 56.991052065414294
+              '0.1': 58.71012777677468
+              '0.2': 60.05642827312257
+              '0.3': 61.39002603039776
+              '0.4': 63.1996715489348
+              '0.5': 64.33026433569239
+              '0.6': 65.42563942753442
+              '0.7': 66.40419600389907
+              '0.8': 67.6651605515116
+              '0.9': 69.6976374468226
+              '0.95': 71.08994657933303
+          training_data:
+            target_observations: 5551
+            first_target_date: '2004-01-05'
+            last_target_date: '2026-01-30'
+            aligned_observations: 4736
+            effective_training_examples_estimate: 4695
+            target_lags: null
+            covariate_lags: null
+            covariates:
+            - brent_log_ret_1b_l1b
+            - natgas_log_ret_1b_l1b
+            - gasoline_log_ret_1b_l1b
+            - gold_log_ret_1b_l1b
+            - dollar_index_log_ret_1b_l1b
+            - oil_curve_contango_l1b
+            - vix_level_l1b
+            covariate_observations: {}
+            notes: Ensemble consumes forecast distributions, not raw observations.
+          num_samples: 1000
+          error: null
+        configured_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        active_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        successful_models:
+        - arima
+        - kalman
+        - lightgbm
+        failed_models: []
+        model_disagreement_std:
+          '5': 0.22620315336678753
+          '10': 0.7572111581032074
+          '21': 0.8975656543626117
+        diagnostics:
+          latest_observation_date: '2026-01-30'
+          latest_value: 65.20999908447266
+          calendar_gap_days: 3
+          return_1b: -0.0032100136097579224
+          return_5b: 0.06779104978445427
+          return_21b: 0.12528038353670157
+          realized_volatility_21b: 0.3280112506853289
+          drawdown_63b: -0.0032100136097579224
+          jump_zscore_63b: -0.26597360787765767
+          covariate_latest_values:
+            brent_log_ret_1b_l1b: -0.00028283794885322443
+            natgas_log_ret_1b_l1b: 0.10551366869862883
+            gasoline_log_ret_1b_l1b: 0.0014572646819566888
+            gold_log_ret_1b_l1b: -0.1206569177115754
+            dollar_index_log_ret_1b_l1b: 0.00734725814399296
+            oil_curve_contango_l1b: -0.7586250226528817
+            vix_level_l1b: 17.440000534057617
+      execution:
+        tool_name: run_authoritative_suite
+        attempt_count: 1
+        validation_failure_count: 0
+        successful_execution_count: 1
+        attempt_errors: []
+        rng_seed: 473580824
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:1c3a45186163c17f7a3cd693a53f1c388219bbc5f31c660cd1fef1793cf35473
+    research_execution_audit:
+      tool_name: run_research_pipeline
+      expected_cutoff: '2026-02-02'
+      attempt_count: 1
+      successful_execution_count: 1
+      rejected_duplicate_count: 0
+      in_progress: false
+      attempt_errors: []
+    code_execution_audit:
+      code_execution_available: true
+      code_execution_used: false
+      code_execution_call_count: 0
+      code_execution_purposes: []
+    llm_context_assessment:
+      research_packet_id: research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    structured_output_control_audit:
+      control_id: structured_assessment_retry_v52
+      maximum_correction_retries: 1
+      initial_response: "{\n  \"research_packet_id\": \"research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec\"\
+        ,\n  \"evidence_claims\": [\n    {\n      \"claim_id\": \"claim_001\",\n \
+        \     \"statement\": \"U.S. crude oil production is projected to plateau near\
+        \ 13.6 million barrels per day throughout 2026.\",\n      \"claim_type\":\
+        \ \"physical_supply\",\n      \"supporting_summary_ids\": [\n        \"verified_summary:sha256:128d5cdaf781bcd532ba2a12fb39c5a421dc42239dded91549274a93d8754eab\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_011\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_002\",\n      \"statement\": \"Winter Storm Fern caused a temporary\
+        \ shutdown of approximately 15% of U.S. crude production and disrupted Gulf\
+        \ Coast exports in January 2026.\",\n      \"claim_type\": \"physical_supply\"\
+        ,\n      \"supporting_summary_ids\": [\n        \"verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_013\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_003\",\n      \"statement\": \"Heightened geopolitical tensions\
+        \ in the Middle East and concerns over the security of maritime oil transit\
+        \ via the Strait of Hormuz have increased the geopolitical risk premium in\
+        \ global oil markets.\",\n      \"claim_type\": \"physical_supply\",\n   \
+        \   \"supporting_summary_ids\": [\n        \"verified_summary:sha256:dda08900438534ef44f1cd8aa2aab72f8745c0535d682aff4e63403d4e1c47e9\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_006\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_004\",\n      \"statement\": \"WTI crude oil prices rose approximately\
+        \ 4.1% in January 2026, supported by supply disruptions, inventory draws,\
+        \ and geopolitical risk.\",\n      \"claim_type\": \"market_reaction\",\n\
+        \      \"supporting_summary_ids\": [\n        \"verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_013\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    }\n  ],\n  \"physical_status\"\
+        : \"tightening\",\n  \"incremental_novelty\": \"low\",\n  \"material_evidence_conflict\"\
+        : false,\n  \"confidence\": \"0.7\",\n  \"horizon_actions\": [\n    {\n  \
+        \    \"horizon\": 5,\n      \"center_action\": \"small_up\",\n      \"uncertainty_action\"\
+        : \"moderately_narrower\",\n      \"persistence_profile\": \"temporary\",\n\
+        \      \"cited_claim_ids\": [\n        \"claim_002\",\n        \"claim_004\"\
+        \n      ],\n      \"narrowing_uncertainty_resolved\": \"resolution of the\
+        \ immediate supply shock from Winter Storm Fern\",\n      \"rationale\": \"\
+        Market pricing likely already reflects the recovery from the weather-related\
+        \ shut-ins, leading to a temporary price correction following the January\
+        \ rally.\"\n    },\n    {\n      \"horizon\": 10,\n      \"center_action\"\
+        : \"no_change\",\n      \"uncertainty_action\": \"small_wider\",\n      \"\
+        persistence_profile\": \"decaying\",\n      \"cited_claim_ids\": [\n     \
+        \   \"claim_001\",\n        \"claim_003\"\n      ],\n      \"narrowing_uncertainty_resolved\"\
+        : \"\",\n      \"rationale\": \"Production leveling off near record highs\
+        \ and geopolitical risk premiums are likely to offset each other, resulting\
+        \ in a stabilization of prices.\"\n    },\n    {\n      \"horizon\": 21,\n\
+        \      \"center_action\": \"small_down\",\n      \"uncertainty_action\": \"\
+        moderately_wider\",\n      \"persistence_profile\": \"decaying\",\n      \"\
+        cited_claim_ids\": [\n        \"claim_001\",\n        \"claim_003\"\n    \
+        \  ],\n      \"narrowing_uncertainty_resolved\": \"\",\n      \"rationale\"\
+        : \"Over the longer horizon, the anticipated plateau in production and potential\
+        \ easing of weather impacts, balanced against persistent geopolitical uncertainty,\
+        \ may lead to a mild softening as seasonal demand weakens.\"\n    }\n  ],\n\
+        \  \"research_summary\": \"Energy markets in early February 2026 are heavily\
+        \ influenced by the interplay between U.S. production plateauing, geopolitical\
+        \ volatility in the Middle East, and recent weather-driven disruptions. EIA\
+        \ projections indicate stable U.S. production, while January saw a price rally\
+        \ driven by Winter Storm Fern and rising risk premiums.\",\n  \"overall_rationale\"\
+        : \"The outlook balances the structural support provided by geopolitical risks\
+        \ against the reality of a production plateau and the expected dissipation\
+        \ of temporary weather-related supply constraints.\",\n  \"warnings\": []\n\
+        }"
+      initial_validation_failed: true
+      initial_validation_errors:
+      - type: literal_error
+        loc:
+        - physical_status
+        msg: Input should be 'normal', 'elevated_risk', 'partial_disruption', 'confirmed_disruption'
+          or 'unknown'
+        input: tightening
+        ctx:
+          expected: '''normal'', ''elevated_risk'', ''partial_disruption'', ''confirmed_disruption''
+            or ''unknown'''
+      - type: literal_error
+        loc:
+        - incremental_novelty
+        msg: Input should be 'likely_new_relative_to_model_data', 'possibly_partly_reflected',
+          'likely_reflected_in_model_data' or 'indeterminate'
+        input: low
+        ctx:
+          expected: '''likely_new_relative_to_model_data'', ''possibly_partly_reflected'',
+            ''likely_reflected_in_model_data'' or ''indeterminate'''
+      correction_retry_attempted: true
+      retry_response: null
+      retry_validation_errors:
+      - type: AttributeError
+        msg: '''CfmV52Settings'' object has no attribute ''structured_output_retry_timeout_seconds'''
+      retry_succeeded: false
+      neutral_fallback_applied: true
+      final_disposition: neutral_fallback_after_retry_failure
+    active_research_packet:
+      packet_id: research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec
+      cutoff_date: '2026-02-02'
+      queries:
+      - area: underlying_event
+        query: major energy sector developments January February 2026
+      - area: physical_flows
+        query: current physical WTI crude oil supply chain status February 2026
+      - area: supply_response
+        query: US oil production levels and outlook February 2026
+      - area: market_reaction
+        query: WTI Crude Oil price market reaction February 2026
+      verified_summaries:
+      - verified_summary_id: verified_summary:sha256:53213a4264c73b56454b80fd33993d4a003f583a471e80081dda6db62bdf95f0
+        query_area: underlying_event
+        query: major energy sector developments January February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: "Major developments in the energy sector during January 2026\
+          \ were characterized by a focus on energy security, the integration of renewable\
+          \ technologies, and the ongoing influence of data center power demand.\n\
+          \n### **Market Trends and Energy Security**\n*   **Shift in Energy Security:**\
+          \ The definition of \"energy security\" continued to evolve, moving beyond\
+          \ traditional oil supply concerns to encompass a broader focus on electricity\
+          \ reliability and infrastructure.\n*   **European Energy Transition:** Europe\
+          \ continued its efforts to sever ties with Russian fossil fuels, with long-term\
+          \ contracts for Russian liquefied natural gas (LNG) being phased out by\
+          \ January 2026. European energy companies increasingly adopted a diversified\
+          \ strategy, balancing LNG, nuclear, and renewables to ensure supply security.\n\
+          *   **Market Dynamics:** January 2026 saw energy markets influenced by winter\
+          \ weather patterns, which drove fluctuations in gas and power demand. Geopolitical\
+          \ tensions and shifts in global LNG flows also remained key factors impacting\
+          \ market sentiment.\n\n### **Infrastructure and Technology**\n*   **Data\
+          \ Center Impact:** The rapid growth of data centers and AI infrastructure\
+          \ remained a dominant force, significantly driving up electricity demand\
+          \ and necessitating grid modernization.\n*   **Grid Investment:** The sector\
+          \ saw a surge in grid infrastructure investments, with notable capital commitments\
+          \ directed toward home-scale battery technology and renewable energy projects.\n\
+          *   **Renewable Deployment:** Renewable energy deployment continued to accelerate,\
+          \ though reports noted that the pace remained insufficient to meet the COP28\
+          \ commitment of tripling renewable capacity by 2030.\n\n### **Industry Events**\n\
+          *   **World Future Energy Summit:** Held from January 13\u201315, 2026,\
+          \ in Abu Dhabi, this summit served as a major platform for convening global\
+          \ clean energy leaders, investors, and policymakers to discuss decarbonization\
+          \ and resilient energy economies.\n*   **Handelsblatt Energy Summit:** Taking\
+          \ place in Berlin from January 27\u201329, 2026, this event brought together\
+          \ European CEOs and regulators to set the strategic tone for the year regarding\
+          \ energy supply and transition."
+        associated_source_ids:
+        - source_001
+        - source_002
+        - source_003
+        - source_004
+        - source_005
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:dda08900438534ef44f1cd8aa2aab72f8745c0535d682aff4e63403d4e1c47e9
+        query_area: physical_flows
+        query: current physical WTI crude oil supply chain status February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: 'As of early February 2026, the physical WTI crude oil supply
+          chain was operating within a global market environment significantly impacted
+          by geopolitical tensions in the Middle East.
+
+
+          ### Supply Chain Status (Early 2026)
+
+
+          *   **Geopolitical Impact:** The primary driver of supply chain instability
+          was the heightened risk of conflict in the Middle East. While the Strait
+          of Hormuz remained a critical chokepoint, the market was already experiencing
+          the effects of increased risk premiums and concerns over the security of
+          maritime oil transit.
+
+          *   **Inventory Dynamics:** Entering 2026, the market was navigating a transition
+          from the "oversupply" conditions projected in late 2025. U.S. commercial
+          crude oil inventories were being closely monitored as refineries prepared
+          for seasonal maintenance in the first quarter of 2026.
+
+          *   **Market Sentiment:** Analysts and market participants were focused
+          on the balance between non-OPEC+ supply growth and the potential for OPEC+
+          to adjust production levels. Despite earlier forecasts of a supply surplus
+          for 2026, the physical supply chain remained sensitive to any disruptions
+          in production or logistics.
+
+          *   **Refining and Logistics:** Global refinery throughputs were projected
+          to be influenced by seasonal maintenance schedules in the U.S., Europe,
+          and Asia during the first quarter of 2026. The industry was also managing
+          the ongoing effects of previous years'' market volatility, which had led
+          to shifts in trade flows and infrastructure utilization.
+
+
+          In summary, the WTI supply chain in early February 2026 was characterized
+          by a cautious outlook, with market participants balancing expectations of
+          a potential supply surplus against the persistent risks of geopolitical
+          disruptions and their subsequent impact on global trade flows.'
+        associated_source_ids:
+        - source_006
+        - source_007
+        - source_008
+        - source_009
+        - source_010
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:128d5cdaf781bcd532ba2a12fb39c5a421dc42239dded91549274a93d8754eab
+        query_area: supply_response
+        query: US oil production levels and outlook February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: 'As of the U.S. Energy Information Administration''s (EIA)
+          **January 2026 Short-Term Energy Outlook (STEO)**, published on January
+          22, 2026, the outlook for U.S. crude oil production was as follows:
+
+
+          *   **Production Forecast:** The EIA projected that U.S. crude oil production
+          would remain near the 2025 record of 13.6 million barrels per day (b/d)
+          throughout 2026.
+
+          *   **Trend:** The agency anticipated that production would plateau rather
+          than continue the rapid growth seen in previous years. It forecasted a slight
+          decrease of 2% to 13.3 million b/d in 2027, which would mark the first annual
+          decline since 2021.
+
+          *   **Drivers:** The forecast was heavily influenced by domestic crude oil
+          prices. The EIA expected West Texas Intermediate (WTI) prices to fall from
+          a 2025 average of $65/b to $52/b in 2026 and $50/b in 2027. This price environment
+          was expected to reduce operators'' incentives to drill, with the slowdown
+          in drilling activity projected to outpace gains in drilling productivity.
+
+          *   **Regional Outlook:** Production in the Permian region was expected
+          to remain essentially flat at 6.6 million b/d in 2026, while production
+          in the Federal Gulf of America was forecast to rise slightly to 2.0 million
+          b/d as new fields offset declines.'
+        associated_source_ids:
+        - source_011
+        - source_012
+        verifier_confidence: 10
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1
+        query_area: market_reaction
+        query: WTI Crude Oil price market reaction February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: "In January 2026, WTI crude oil prices experienced upward\
+          \ pressure, climbing approximately 4.1% by the end of the month. This market\
+          \ reaction was driven by several key factors:\n\n*   **Supply Disruptions:**\
+          \ Winter Storm Fern caused significant disruptions, shutting in roughly\
+          \ 15% of U.S. crude production and temporarily halting exports along the\
+          \ Gulf Coast.\n*   **Geopolitical Tensions:** Escalating tensions between\
+          \ the U.S. and Iran, characterized by a heightened military presence and\
+          \ threats regarding the Strait of Hormuz, increased the geopolitical risk\
+          \ premium.\n*   **Inventory Declines:** A reported decline in U.S. commercial\
+          \ crude oil inventories further supported the view of a tightening market.\n\
+          \nBy the end of January 2026, these combined factors\u2014tightening supply,\
+          \ geopolitical concerns, and inventory draws\u2014had pushed WTI prices\
+          \ to a high for the month."
+        associated_source_ids:
+        - source_013
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      sources:
+      - source_id: source_001
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEuJK4TMJ2RgE8wLbT7ia7WAMTuAKA68eRfiBxlpnJY-9wLrGQRkQ9Ea4XyYwOzlZSJeuhOkmnDLSWNg9GcIQ5Fxe12loKrbcW623DXMtGl0AczvaY9LXQHSwm9k2lI4qKAFd_7L-amTSVoEQeO3Q50A6URUhUwU4DLwke8Uttcfvx9IiN_mSsoJckmZp5S0VB82pskd2EDJFXNbdSkFQ==
+        provider_title: forbes.com
+        resolved_url: https://www.forbes.com/sites/rrapier/2026/01/01/energy-outlook-2026-the-year-of-the-glut-and-the-crunch/
+        resolved_domain: forbes.com
+        publisher: forbes.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_002
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGv6GEUMtdv-asY8qSRYw6yebtpUZtd23Oqu44DTHJq27cbqOJ9F2L__igiY13KE8jQgMkrNL-09XUAqxxorHJRNdtIdo5UWWvPgcFdUl3DdAoV37hEc5xoNNfCMZqLTUH3I_O5UFQWdCvaODXirtqgmW1YNhmbVjGsYMMdzjFAvo__CG6hYlq0MtMLVdRYeEUDiIk=
+        provider_title: energy-infrastructure-partners.com
+        resolved_url: https://energy-infrastructure-partners.com/five-trends-shaping-energy-infrastructure-in-2026/
+        resolved_domain: energy-infrastructure-partners.com
+        publisher: energy-infrastructure-partners.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_003
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEqocYU9TcTTbUNA4fB2nDlAQRpElGRs0CL0psOra_swsNWFMjqSaHMZfJV0OJuJOMR59uPWv5X50z6bKq296t4If4v1oTIdMEt2DJc6YZEC9CKV1clKwSIntd4lWRayyDsDsp2kd1Z1dMrYf9mA9dBFfxV1wHMpxS2RJv72X2DZtQ=
+        provider_title: reutersevents.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 403: Forbidden'
+      - source_id: source_004
+        rank: 4
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHvdxCL5EBc2k1hPHeCe_6EeH_aB9S8l-ymDJwzeDcnUyORJ28kb-LuphHDdvkYTLB3TEOBmHo_O4y1blrm4vI26zrxaOmSjOlpdoxChbgey-N0AKR9cN_8bAeusbFIsHdn
+        provider_title: youtube.com
+        resolved_url: https://www.youtube.com/watch?v=mWL5Qt7J2LM
+        resolved_domain: youtube.com
+        publisher: youtube.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_005
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFkcmdjldJYhapfamQIpAS-M5cVH3ogdo1Q38VUUMZ7disqw0tSrnsTeSeLK3-4SHRWSRK9zRw5O8MqmtvNnoZUP9dm0thhPi9sjLNc5XhtLkmY0Xa5QCE6_21zZUEPLhgrTP8C
+        provider_title: bcse.org
+        resolved_url: https://bcse.org/market-trends/top-six-trends/
+        resolved_domain: bcse.org
+        publisher: bcse.org
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_006
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHYdqF8hOCFEtxvJ5cz8s9RJmQ3T0ueAZb30BRfwscJCl_1jiuB5JDQ4XKiW6yzNy_sA1SQH0byWJzDvPiS5-mlVzOOoMRMRHX8pHWw3sbuRQxZgjDjs_hkKdydZOJVvDMEi_08WSJPse8fog==
+        provider_title: eia.gov
+        resolved_url: https://www.eia.gov/todayinenergy/detail.php?id=67424
+        resolved_domain: eia.gov
+        publisher: U.S. Energy Information Administration
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_007
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFUoLi4Gxt4kAqOilxjpBF0re5dyrfYM1y5fCZkAjdg_dfuXJo4KSb5gCKTy8ekH36ieG4YyHrMrcqmkJqiEoK4MbX7Gdn19C6n09NbJC-EKS_dqKgyZ4af48ahmS3J590W1g33RG1IMiLd_XSsczfTJhSFUJo-xhqESDhjxSA=
+        provider_title: jpmorgan.com
+        resolved_url: https://www.jpmorgan.com/insights/global-research/commodities/oil-prices
+        resolved_domain: jpmorgan.com
+        publisher: jpmorgan.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_008
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF2WoD6QK0SwjX5VX2xx5ZoyJUuB4DWegQ1Mf85IbWdwkeYXYBfj1pnTFD7uSqTjnxYbp_9rx_6BM429fps_amqN0t7QXyVM9BM1m8r13nR2_jSVwFwVKacqliS7qFGUbAQPZjIj0-rsKSEWbMU7qvbobOjjoNil_IIDFiFNEk=
+        provider_title: cryptorank.io
+        resolved_url: https://cryptorank.io/news/feed/ce890-wti-price-forecast-supply-concerns
+        resolved_domain: cryptorank.io
+        publisher: cryptorank.io
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_009
+        rank: 4
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG0kzWskJR6SJb34nAbl9AOLhwPC3yF1N_09kxoRdSVntkL0chnsY1SjWpLyuL_x4fZqLxAqq314SunzZFdR_3x-LhMSJZ4jo8Hm8xuDePgSYtv7Em4yX19jpv5s7BddH_a3nEa6TaoHvQTXxelPhHb4N18Vm_TwxiO-ddZTsLHqw==
+        provider_title: ing.com
+        resolved_url: https://think.ing.com/articles/bearish-oil-outlook-but-clear-upside-risks/
+        resolved_domain: think.ing.com
+        publisher: think.ing.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_010
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFgb6zPCaDG7CcdbCmXkYTKzY2IqVCvZdFdmJKxUP7ABhTEksF2gPUty-D23uEzeYxHSfWCLRRdAQVqb7d0f1N_GGqUOnZfN7Q3AiceL-na-kLRj9rxULE99oUNG99UEshtJxcd5llM8g2zzuQleozNXfXTjB17rf4FsgHn5mskLs9owtlfEyCOG8T_T26IghTnnfJ9iCAH3Oq7AYaRowYpQsY4eg==
+        provider_title: ogj.com
+        resolved_url: https://www.ogj.com/general-interest/economics-markets/news/55397558/iea-revises-down-2026-oil-demand-forecast
+        resolved_domain: ogj.com
+        publisher: ogj.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_011
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG6-2iZ6kGfTbTGmRL19WSPSV6lCKB6Vq5mdVYTUbj26dIVicPicLfYrOQnOcq7wtP8RCZKLgIkIP9J3xIfruoBmB1O9Yc5VYftSOC75iz3OVXBX_OjJy-NtbX4x2d239eFPwf2hxgplbjBHQ==
+        provider_title: eia.gov
+        resolved_url: https://www.eia.gov/todayinenergy/detail.php?id=67045
+        resolved_domain: eia.gov
+        publisher: U.S. Energy Information Administration
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_012
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGjhmmkb95To08IG6oPvBTjwHKTGjcnwZ_PTamWtfuOdQRigfVJha2Rv2e5aRiVvXzegLXJH-wdwku3Rdcxq7mdycGtq8j9Lm4uEKCrIx3lFAmVJSng1rUjrR7jlEuRF_7RZATb1X6A4UYtHtftQhpgZsx3CwE9yXqBR0XIWNM=
+        provider_title: eaglenaturalresources.com
+        resolved_url: https://eaglenaturalresources.com/eia-production-forecast-us-oil-supply/
+        resolved_domain: eaglenaturalresources.com
+        publisher: eaglenaturalresources.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_013
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH377fp9Shljn-gj1S0XkccbWdxOLya-6l7m7O7GBC8O6hfVcoKWpxFqs8T2kfAmnCpDvosVCvLo6PjJoUpuXOlpsjDDomkXQEPBGN-gSVQVIBzmIvnf1VZOoczNV_n-nwMrtoumatXS7jqJhog73JK_8NAHzNIebWOGOf1_aftd8bmekJ4zU1S4KsOW4UbhFQ0uwkMIYkmIncJoeYoV9yzeNeEH3__TJ0=
+        provider_title: chemanalyst.com
+        resolved_url: https://www.chemanalyst.com/NewsAndDeals/NewsDetails/crude-oil-wti-prices-jump-4-1-at-the-end-of-january-2026-40981
+        resolved_domain: chemanalyst.com
+        publisher: chemanalyst.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      warnings: []
+      active_evidence_type: main_verifier_cleaned_summaries
+      destination_page_content_included: false
+    cutoff_verification_audit:
+      verifier_id: main_code_cutoff_verifier
+      queries:
+      - verified_summary_id: verified_summary:sha256:53213a4264c73b56454b80fd33993d4a003f583a471e80081dda6db62bdf95f0
+        query_area: underlying_event
+        query: major energy sector developments January February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims: []
+          source_count: 10
+        removed_flagged_claims: []
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:dda08900438534ef44f1cd8aa2aab72f8745c0535d682aff4e63403d4e1c47e9
+        query_area: physical_flows
+        query: current physical WTI crude oil supply chain status February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - geopolitical tensions in the Middle East, which had escalated sharply
+            in late February 2026
+          source_count: 7
+        removed_flagged_claims:
+        - geopolitical tensions in the Middle East, which had escalated sharply in
+          late February 2026
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:128d5cdaf781bcd532ba2a12fb39c5a421dc42239dded91549274a93d8754eab
+        query_area: supply_response
+        query: US oil production levels and outlook February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 10
+          flagged_claims: []
+          source_count: 2
+        removed_flagged_claims: []
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1
+        query_area: market_reaction
+        query: WTI Crude Oil price market reaction February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims: []
+          source_count: 1
+        removed_flagged_claims: []
+        audit_only: true
+      audit_only: true
+    source_validation_audit:
+      audit_enabled: false
+      executed: false
+      validator_id: source_validator_v52_audit_only
+      records: []
+      audit_only: true
+    claim_support_audit:
+      verifier_id: claim_support_verifier_v52_audit_only
+      audit_only: true
+      executed: false
+      completed: false
+      reason: audit switch is off
+      findings: []
+    claim_support_findings: []
+    policy_decision:
+      policy_id: graduated_evidence_policy_v52
+      horizon: 5
+      eligible: true
+      evidence_tier: none
+      evidence_tier_level: 0
+      resolved_source_ids: []
+      resolved_publishers: []
+      qualifying_claim_ids: []
+      eligibility_reasons:
+      - Neutral proposal requires no evidence.
+      center_action: no_change
+      uncertainty_action: unchanged
+    forecast_transformation:
+      engine_id: python_forecast_engine_v52
+      horizon: 5
+      original_point_forecast: 65.24129811575354
+      original_quantiles:
+        '0.05': 59.5966109742308
+        '0.1': 60.949995497407194
+        '0.2': 62.1252951083251
+        '0.3': 62.76434058256028
+        '0.4': 63.79526453573412
+        '0.5': 65.24129811575354
+        '0.6': 65.8778845171377
+        '0.7': 66.60339681469382
+        '0.8': 67.61128257419247
+        '0.9': 69.17998611863104
+        '0.95': 70.18697422942154
+      p10_p90_width: 8.229990621223841
+      center_action: no_change
+      action_fraction: 0.0
+      raw_center_adjustment: 0.0
+      novelty_multiplier: 1.0
+      novelty_adjusted_amount: 0.0
+      emergency_cap: 65.20999908447266
+      applied_center_adjustment: 0.0
+      uncertainty_action: unchanged
+      uncertainty_multiplier: 1.0
+      pre_floor_quantiles:
+        '0.05': 59.5966109742308
+        '0.1': 60.949995497407194
+        '0.2': 62.1252951083251
+        '0.3': 62.76434058256028
+        '0.4': 63.79526453573412
+        '0.5': 65.24129811575354
+        '0.6': 65.8778845171377
+        '0.7': 66.60339681469382
+        '0.8': 67.61128257419247
+        '0.9': 69.17998611863104
+        '0.95': 70.18697422942154
+      final_point_forecast: 65.24129811575354
+      final_quantiles:
+        '0.05': 59.5966109742308
+        '0.1': 60.949995497407194
+        '0.2': 62.1252951083251
+        '0.3': 62.76434058256028
+        '0.4': 63.79526453573412
+        '0.5': 65.24129811575354
+        '0.6': 65.8778845171377
+        '0.7': 66.60339681469382
+        '0.8': 67.61128257419247
+        '0.9': 69.17998611863104
+        '0.95': 70.18697422942154
+      floor_applied: false
+      warnings: []
+    unadjusted_ensemble:
+      point_forecast: 65.24129811575354
+      quantiles:
+        '0.05': 59.5966109742308
+        '0.1': 60.949995497407194
+        '0.2': 62.1252951083251
+        '0.3': 62.76434058256028
+        '0.4': 63.79526453573412
+        '0.5': 65.24129811575354
+        '0.6': 65.8778845171377
+        '0.7': 66.60339681469382
+        '0.8': 67.61128257419247
+        '0.9': 69.17998611863104
+        '0.95': 70.18697422942154
+    market_diagnostics:
+      latest_observation_date: '2026-01-30'
+      latest_value: 65.20999908447266
+      calendar_gap_days: 3
+      return_1b: -0.0032100136097579224
+      return_5b: 0.06779104978445427
+      return_21b: 0.12528038353670157
+      realized_volatility_21b: 0.3280112506853289
+      drawdown_63b: -0.0032100136097579224
+      jump_zscore_63b: -0.26597360787765767
+      covariate_latest_values:
+        brent_log_ret_1b_l1b: -0.00028283794885322443
+        natgas_log_ret_1b_l1b: 0.10551366869862883
+        gasoline_log_ret_1b_l1b: 0.0014572646819566888
+        gold_log_ret_1b_l1b: -0.1206569177115754
+        dollar_index_log_ret_1b_l1b: 0.00734725814399296
+        oil_curve_contango_l1b: -0.7586250226528817
+        vix_level_l1b: 17.440000534057617
+    task_binding:
+      cutoff: '2026-02-02'
+      target_series_id: wti_crude_oil_price
+      horizons:
+      - 5
+      - 10
+      - 21
+      frequency: B
+      validated: true
+    audit_switch: false
+    audit_only_controls:
+      source_validator_executed: false
+      claim_support_verifier_executed: false
+      claim_support_verifier_completed: false
+    active_evidence_declaration: The LLM used the authoritative numerical-suite output
+      and main-verifier-cleaned summaries with mechanically resolved source identities.
+      Destination-page and audit-only content were not exposed. Optional diagnostic
+      code use is separately declared in code_execution_audit.
+    audit_findings_changed_forecast: false
+    llm_authored_final_numbers: false
+- predictor_id: agent_predictor_cfm_agent_v_5_2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:10:20.602999'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 64.33026433569239
+    quantiles:
+      '0.05': 56.991052065414294
+      '0.1': 58.71012777677468
+      '0.2': 60.05642827312257
+      '0.3': 61.39002603039776
+      '0.4': 63.1996715489348
+      '0.5': 64.33026433569239
+      '0.6': 65.42563942753442
+      '0.7': 66.40419600389907
+      '0.8': 67.6651605515116
+      '0.9': 69.6976374468226
+      '0.95': 71.08994657933303
+  metadata:
+    context_assessment:
+      research_packet_id: research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    model_suite_id: model_suite:sha256:c9e678abdae70d84205c6815c04b4079e2a4ef4f1c074c4121594091f92f4f34
+    numerical_suite_audit:
+      model_suite:
+        model_suite_id: model_suite:sha256:c9e678abdae70d84205c6815c04b4079e2a4ef4f1c074c4121594091f92f4f34
+        target_series_id: wti_crude_oil_price
+        cutoff_date: '2026-02-02'
+        horizons:
+        - 5
+        - 10
+        - 21
+        frequency: B
+        model_num_samples: 1000
+        rng_seed: 473580824
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:1c3a45186163c17f7a3cd693a53f1c388219bbc5f31c660cd1fef1793cf35473
+        models:
+          arima:
+            model_name: arima
+            predictor_id: darts_autoarima
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2026-02-09'
+              point_forecast: 65.1053287704708
+              quantiles:
+                '0.05': 58.40134723856121
+                '0.1': 59.91192469950811
+                '0.2': 61.563898896823694
+                '0.3': 62.8207206253759
+                '0.4': 63.95330218448227
+                '0.5': 65.1053287704708
+                '0.6': 65.99223051629762
+                '0.7': 67.39411937958273
+                '0.8': 68.91139765975521
+                '0.9': 70.7947698704736
+                '0.95': 72.51385031474538
+            - horizon: 10
+              forecast_date: '2026-02-16'
+              point_forecast: 65.13243328683338
+              quantiles:
+                '0.05': 55.82838235126762
+                '0.1': 57.623238933154035
+                '0.2': 60.23813668608153
+                '0.3': 62.008036714666666
+                '0.4': 63.649873186114256
+                '0.5': 65.13243328683338
+                '0.6': 66.6376701580515
+                '0.7': 68.11023305200807
+                '0.8': 70.21602985233301
+                '0.9': 72.55478389991774
+                '0.95': 74.85133042271485
+            - horizon: 21
+              forecast_date: '2026-03-03'
+              point_forecast: 65.04288529867985
+              quantiles:
+                '0.05': 51.73530285625687
+                '0.1': 54.44959547650962
+                '0.2': 57.22705279661903
+                '0.3': 60.30021077846694
+                '0.4': 62.54588777042239
+                '0.5': 65.04288529867985
+                '0.6': 67.50666092882057
+                '0.7': 69.5522560391036
+                '0.8': 72.3045619653195
+                '0.9': 75.61647318824748
+                '0.95': 78.62111235999383
+            training_data:
+              target_observations: 5551
+              first_target_date: '2004-01-05'
+              last_target_date: '2026-01-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          kalman:
+            model_name: kalman
+            predictor_id: darts_kalman
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2026-02-09'
+              point_forecast: 65.05851187152624
+              quantiles:
+                '0.05': 62.12815173639683
+                '0.1': 62.701684465953555
+                '0.2': 63.566019439385
+                '0.3': 64.14728083226197
+                '0.4': 64.61020479825136
+                '0.5': 65.05851187152624
+                '0.6': 65.51421171834983
+                '0.7': 66.03748530141094
+                '0.8': 66.68219099965691
+                '0.9': 67.53735759922485
+                '0.95': 68.01559449447203
+            - horizon: 10
+              forecast_date: '2026-02-16'
+              point_forecast: 65.05789631376854
+              quantiles:
+                '0.05': 61.86843022061365
+                '0.1': 62.657900758512014
+                '0.2': 63.430243762240764
+                '0.3': 64.05899144051037
+                '0.4': 64.55938997105928
+                '0.5': 65.05789631376854
+                '0.6': 65.4908982496051
+                '0.7': 66.07848335605186
+                '0.8': 66.6379007113839
+                '0.9': 67.47347955163322
+                '0.95': 68.00259934092091
+            - horizon: 21
+              forecast_date: '2026-03-03'
+              point_forecast: 64.88365967377452
+              quantiles:
+                '0.05': 61.96912723946363
+                '0.1': 62.402545921683505
+                '0.2': 63.25193802607935
+                '0.3': 63.854022018629145
+                '0.4': 64.38936574929573
+                '0.5': 64.88365967377452
+                '0.6': 65.38695315296694
+                '0.7': 65.86411466498159
+                '0.8': 66.47283323477221
+                '0.9': 67.1492903568826
+                '0.95': 67.77522441839665
+            training_data:
+              target_observations: 5551
+              first_target_date: '2004-01-05'
+              last_target_date: '2026-01-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          lightgbm:
+            model_name: lightgbm
+            predictor_id: darts_lightgbm_cov
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2026-02-09'
+              point_forecast: 65.56005370526358
+              quantiles:
+                '0.05': 58.26033394773437
+                '0.1': 60.23637732675992
+                '0.2': 61.24596698876661
+                '0.3': 61.32502029004299
+                '0.4': 62.82228662446873
+                '0.5': 65.56005370526358
+                '0.6': 66.12721131676567
+                '0.7': 66.37858576308781
+                '0.8': 67.24025906316533
+                '0.9': 69.20783088619466
+                '0.95': 70.03147787904724
+            - horizon: 10
+              forecast_date: '2026-02-16'
+              point_forecast: 63.49017492477627
+              quantiles:
+                '0.05': 58.63297039012491
+                '0.1': 59.13623617296009
+                '0.2': 61.85917359297037
+                '0.3': 62.12494965635573
+                '0.4': 62.93522486625947
+                '0.5': 63.49017492477627
+                '0.6': 64.22181870275362
+                '0.7': 65.44266091496213
+                '0.8': 67.10542094007899
+                '0.9': 68.4483006073305
+                '0.95': 69.06050024068827
+            - horizon: 21
+              forecast_date: '2026-03-03'
+              point_forecast: 63.06424803462279
+              quantiles:
+                '0.05': 57.26872610052241
+                '0.1': 59.27824193213091
+                '0.2': 59.69029399666934
+                '0.3': 60.015845294097225
+                '0.4': 62.663761127086296
+                '0.5': 63.06424803462279
+                '0.6': 63.38330420081576
+                '0.7': 63.79621730761206
+                '0.8': 64.21808645444312
+                '0.9': 66.32714879533773
+                '0.95': 66.87350295960863
+            training_data:
+              target_observations: 5551
+              first_target_date: '2004-01-05'
+              last_target_date: '2026-01-30'
+              aligned_observations: 4736
+              effective_training_examples_estimate: 4695
+              target_lags: 21
+              covariate_lags: 21
+              covariates:
+              - brent_log_ret_1b_l1b
+              - natgas_log_ret_1b_l1b
+              - gasoline_log_ret_1b_l1b
+              - gold_log_ret_1b_l1b
+              - dollar_index_log_ret_1b_l1b
+              - oil_curve_contango_l1b
+              - vix_level_l1b
+              covariate_observations:
+                brent_log_ret_1b_l1b: 4604
+                natgas_log_ret_1b_l1b: 5551
+                gasoline_log_ret_1b_l1b: 5553
+                gold_log_ret_1b_l1b: 5546
+                dollar_index_log_ret_1b_l1b: 5567
+                oil_curve_contango_l1b: 4737
+                vix_level_l1b: 5555
+              notes: 'Aligned observations use the common business-day span after
+                Darts-style calendar regularization. Effective examples are an auditable
+                estimate: aligned_observations - max(lags) - max_horizon + 1.'
+            num_samples: 1000
+            error: null
+        ensemble:
+          model_name: ensemble
+          predictor_id: cfm_arima_kalman_lightgbm_ensemble
+          status: ok
+          forecasts:
+          - horizon: 5
+            forecast_date: '2026-02-09'
+            point_forecast: 65.24129811575354
+            quantiles:
+              '0.05': 59.5966109742308
+              '0.1': 60.949995497407194
+              '0.2': 62.1252951083251
+              '0.3': 62.76434058256028
+              '0.4': 63.79526453573412
+              '0.5': 65.24129811575354
+              '0.6': 65.8778845171377
+              '0.7': 66.60339681469382
+              '0.8': 67.61128257419247
+              '0.9': 69.17998611863104
+              '0.95': 70.18697422942154
+          - horizon: 10
+            forecast_date: '2026-02-16'
+            point_forecast: 64.56016817512605
+            quantiles:
+              '0.05': 58.77659432066872
+              '0.1': 59.805791954875374
+              '0.2': 61.84251801376422
+              '0.3': 62.73065927051091
+              '0.4': 63.71482934114433
+              '0.5': 64.56016817512605
+              '0.6': 65.4501290368034
+              '0.7': 66.54379244100735
+              '0.8': 67.9864505012653
+              '0.9': 69.49218801962715
+              '0.95': 70.63814333477467
+          - horizon: 21
+            forecast_date: '2026-03-03'
+            point_forecast: 64.33026433569239
+            quantiles:
+              '0.05': 56.991052065414294
+              '0.1': 58.71012777677468
+              '0.2': 60.05642827312257
+              '0.3': 61.39002603039776
+              '0.4': 63.1996715489348
+              '0.5': 64.33026433569239
+              '0.6': 65.42563942753442
+              '0.7': 66.40419600389907
+              '0.8': 67.6651605515116
+              '0.9': 69.6976374468226
+              '0.95': 71.08994657933303
+          training_data:
+            target_observations: 5551
+            first_target_date: '2004-01-05'
+            last_target_date: '2026-01-30'
+            aligned_observations: 4736
+            effective_training_examples_estimate: 4695
+            target_lags: null
+            covariate_lags: null
+            covariates:
+            - brent_log_ret_1b_l1b
+            - natgas_log_ret_1b_l1b
+            - gasoline_log_ret_1b_l1b
+            - gold_log_ret_1b_l1b
+            - dollar_index_log_ret_1b_l1b
+            - oil_curve_contango_l1b
+            - vix_level_l1b
+            covariate_observations: {}
+            notes: Ensemble consumes forecast distributions, not raw observations.
+          num_samples: 1000
+          error: null
+        configured_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        active_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        successful_models:
+        - arima
+        - kalman
+        - lightgbm
+        failed_models: []
+        model_disagreement_std:
+          '5': 0.22620315336678753
+          '10': 0.7572111581032074
+          '21': 0.8975656543626117
+        diagnostics:
+          latest_observation_date: '2026-01-30'
+          latest_value: 65.20999908447266
+          calendar_gap_days: 3
+          return_1b: -0.0032100136097579224
+          return_5b: 0.06779104978445427
+          return_21b: 0.12528038353670157
+          realized_volatility_21b: 0.3280112506853289
+          drawdown_63b: -0.0032100136097579224
+          jump_zscore_63b: -0.26597360787765767
+          covariate_latest_values:
+            brent_log_ret_1b_l1b: -0.00028283794885322443
+            natgas_log_ret_1b_l1b: 0.10551366869862883
+            gasoline_log_ret_1b_l1b: 0.0014572646819566888
+            gold_log_ret_1b_l1b: -0.1206569177115754
+            dollar_index_log_ret_1b_l1b: 0.00734725814399296
+            oil_curve_contango_l1b: -0.7586250226528817
+            vix_level_l1b: 17.440000534057617
+      execution:
+        tool_name: run_authoritative_suite
+        attempt_count: 1
+        validation_failure_count: 0
+        successful_execution_count: 1
+        attempt_errors: []
+        rng_seed: 473580824
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:1c3a45186163c17f7a3cd693a53f1c388219bbc5f31c660cd1fef1793cf35473
+    research_execution_audit:
+      tool_name: run_research_pipeline
+      expected_cutoff: '2026-02-02'
+      attempt_count: 1
+      successful_execution_count: 1
+      rejected_duplicate_count: 0
+      in_progress: false
+      attempt_errors: []
+    code_execution_audit:
+      code_execution_available: true
+      code_execution_used: false
+      code_execution_call_count: 0
+      code_execution_purposes: []
+    llm_context_assessment:
+      research_packet_id: research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    structured_output_control_audit:
+      control_id: structured_assessment_retry_v52
+      maximum_correction_retries: 1
+      initial_response: "{\n  \"research_packet_id\": \"research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec\"\
+        ,\n  \"evidence_claims\": [\n    {\n      \"claim_id\": \"claim_001\",\n \
+        \     \"statement\": \"U.S. crude oil production is projected to plateau near\
+        \ 13.6 million barrels per day throughout 2026.\",\n      \"claim_type\":\
+        \ \"physical_supply\",\n      \"supporting_summary_ids\": [\n        \"verified_summary:sha256:128d5cdaf781bcd532ba2a12fb39c5a421dc42239dded91549274a93d8754eab\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_011\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_002\",\n      \"statement\": \"Winter Storm Fern caused a temporary\
+        \ shutdown of approximately 15% of U.S. crude production and disrupted Gulf\
+        \ Coast exports in January 2026.\",\n      \"claim_type\": \"physical_supply\"\
+        ,\n      \"supporting_summary_ids\": [\n        \"verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_013\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_003\",\n      \"statement\": \"Heightened geopolitical tensions\
+        \ in the Middle East and concerns over the security of maritime oil transit\
+        \ via the Strait of Hormuz have increased the geopolitical risk premium in\
+        \ global oil markets.\",\n      \"claim_type\": \"physical_supply\",\n   \
+        \   \"supporting_summary_ids\": [\n        \"verified_summary:sha256:dda08900438534ef44f1cd8aa2aab72f8745c0535d682aff4e63403d4e1c47e9\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_006\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_004\",\n      \"statement\": \"WTI crude oil prices rose approximately\
+        \ 4.1% in January 2026, supported by supply disruptions, inventory draws,\
+        \ and geopolitical risk.\",\n      \"claim_type\": \"market_reaction\",\n\
+        \      \"supporting_summary_ids\": [\n        \"verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_013\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    }\n  ],\n  \"physical_status\"\
+        : \"tightening\",\n  \"incremental_novelty\": \"low\",\n  \"material_evidence_conflict\"\
+        : false,\n  \"confidence\": \"0.7\",\n  \"horizon_actions\": [\n    {\n  \
+        \    \"horizon\": 5,\n      \"center_action\": \"small_up\",\n      \"uncertainty_action\"\
+        : \"moderately_narrower\",\n      \"persistence_profile\": \"temporary\",\n\
+        \      \"cited_claim_ids\": [\n        \"claim_002\",\n        \"claim_004\"\
+        \n      ],\n      \"narrowing_uncertainty_resolved\": \"resolution of the\
+        \ immediate supply shock from Winter Storm Fern\",\n      \"rationale\": \"\
+        Market pricing likely already reflects the recovery from the weather-related\
+        \ shut-ins, leading to a temporary price correction following the January\
+        \ rally.\"\n    },\n    {\n      \"horizon\": 10,\n      \"center_action\"\
+        : \"no_change\",\n      \"uncertainty_action\": \"small_wider\",\n      \"\
+        persistence_profile\": \"decaying\",\n      \"cited_claim_ids\": [\n     \
+        \   \"claim_001\",\n        \"claim_003\"\n      ],\n      \"narrowing_uncertainty_resolved\"\
+        : \"\",\n      \"rationale\": \"Production leveling off near record highs\
+        \ and geopolitical risk premiums are likely to offset each other, resulting\
+        \ in a stabilization of prices.\"\n    },\n    {\n      \"horizon\": 21,\n\
+        \      \"center_action\": \"small_down\",\n      \"uncertainty_action\": \"\
+        moderately_wider\",\n      \"persistence_profile\": \"decaying\",\n      \"\
+        cited_claim_ids\": [\n        \"claim_001\",\n        \"claim_003\"\n    \
+        \  ],\n      \"narrowing_uncertainty_resolved\": \"\",\n      \"rationale\"\
+        : \"Over the longer horizon, the anticipated plateau in production and potential\
+        \ easing of weather impacts, balanced against persistent geopolitical uncertainty,\
+        \ may lead to a mild softening as seasonal demand weakens.\"\n    }\n  ],\n\
+        \  \"research_summary\": \"Energy markets in early February 2026 are heavily\
+        \ influenced by the interplay between U.S. production plateauing, geopolitical\
+        \ volatility in the Middle East, and recent weather-driven disruptions. EIA\
+        \ projections indicate stable U.S. production, while January saw a price rally\
+        \ driven by Winter Storm Fern and rising risk premiums.\",\n  \"overall_rationale\"\
+        : \"The outlook balances the structural support provided by geopolitical risks\
+        \ against the reality of a production plateau and the expected dissipation\
+        \ of temporary weather-related supply constraints.\",\n  \"warnings\": []\n\
+        }"
+      initial_validation_failed: true
+      initial_validation_errors:
+      - type: literal_error
+        loc:
+        - physical_status
+        msg: Input should be 'normal', 'elevated_risk', 'partial_disruption', 'confirmed_disruption'
+          or 'unknown'
+        input: tightening
+        ctx:
+          expected: '''normal'', ''elevated_risk'', ''partial_disruption'', ''confirmed_disruption''
+            or ''unknown'''
+      - type: literal_error
+        loc:
+        - incremental_novelty
+        msg: Input should be 'likely_new_relative_to_model_data', 'possibly_partly_reflected',
+          'likely_reflected_in_model_data' or 'indeterminate'
+        input: low
+        ctx:
+          expected: '''likely_new_relative_to_model_data'', ''possibly_partly_reflected'',
+            ''likely_reflected_in_model_data'' or ''indeterminate'''
+      correction_retry_attempted: true
+      retry_response: null
+      retry_validation_errors:
+      - type: AttributeError
+        msg: '''CfmV52Settings'' object has no attribute ''structured_output_retry_timeout_seconds'''
+      retry_succeeded: false
+      neutral_fallback_applied: true
+      final_disposition: neutral_fallback_after_retry_failure
+    active_research_packet:
+      packet_id: research_packet:sha256:77b376c719d837dcc6f61af6b6310c2345fb3d5d6c0ca5f413475ea42d0f1bec
+      cutoff_date: '2026-02-02'
+      queries:
+      - area: underlying_event
+        query: major energy sector developments January February 2026
+      - area: physical_flows
+        query: current physical WTI crude oil supply chain status February 2026
+      - area: supply_response
+        query: US oil production levels and outlook February 2026
+      - area: market_reaction
+        query: WTI Crude Oil price market reaction February 2026
+      verified_summaries:
+      - verified_summary_id: verified_summary:sha256:53213a4264c73b56454b80fd33993d4a003f583a471e80081dda6db62bdf95f0
+        query_area: underlying_event
+        query: major energy sector developments January February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: "Major developments in the energy sector during January 2026\
+          \ were characterized by a focus on energy security, the integration of renewable\
+          \ technologies, and the ongoing influence of data center power demand.\n\
+          \n### **Market Trends and Energy Security**\n*   **Shift in Energy Security:**\
+          \ The definition of \"energy security\" continued to evolve, moving beyond\
+          \ traditional oil supply concerns to encompass a broader focus on electricity\
+          \ reliability and infrastructure.\n*   **European Energy Transition:** Europe\
+          \ continued its efforts to sever ties with Russian fossil fuels, with long-term\
+          \ contracts for Russian liquefied natural gas (LNG) being phased out by\
+          \ January 2026. European energy companies increasingly adopted a diversified\
+          \ strategy, balancing LNG, nuclear, and renewables to ensure supply security.\n\
+          *   **Market Dynamics:** January 2026 saw energy markets influenced by winter\
+          \ weather patterns, which drove fluctuations in gas and power demand. Geopolitical\
+          \ tensions and shifts in global LNG flows also remained key factors impacting\
+          \ market sentiment.\n\n### **Infrastructure and Technology**\n*   **Data\
+          \ Center Impact:** The rapid growth of data centers and AI infrastructure\
+          \ remained a dominant force, significantly driving up electricity demand\
+          \ and necessitating grid modernization.\n*   **Grid Investment:** The sector\
+          \ saw a surge in grid infrastructure investments, with notable capital commitments\
+          \ directed toward home-scale battery technology and renewable energy projects.\n\
+          *   **Renewable Deployment:** Renewable energy deployment continued to accelerate,\
+          \ though reports noted that the pace remained insufficient to meet the COP28\
+          \ commitment of tripling renewable capacity by 2030.\n\n### **Industry Events**\n\
+          *   **World Future Energy Summit:** Held from January 13\u201315, 2026,\
+          \ in Abu Dhabi, this summit served as a major platform for convening global\
+          \ clean energy leaders, investors, and policymakers to discuss decarbonization\
+          \ and resilient energy economies.\n*   **Handelsblatt Energy Summit:** Taking\
+          \ place in Berlin from January 27\u201329, 2026, this event brought together\
+          \ European CEOs and regulators to set the strategic tone for the year regarding\
+          \ energy supply and transition."
+        associated_source_ids:
+        - source_001
+        - source_002
+        - source_003
+        - source_004
+        - source_005
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:dda08900438534ef44f1cd8aa2aab72f8745c0535d682aff4e63403d4e1c47e9
+        query_area: physical_flows
+        query: current physical WTI crude oil supply chain status February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: 'As of early February 2026, the physical WTI crude oil supply
+          chain was operating within a global market environment significantly impacted
+          by geopolitical tensions in the Middle East.
+
+
+          ### Supply Chain Status (Early 2026)
+
+
+          *   **Geopolitical Impact:** The primary driver of supply chain instability
+          was the heightened risk of conflict in the Middle East. While the Strait
+          of Hormuz remained a critical chokepoint, the market was already experiencing
+          the effects of increased risk premiums and concerns over the security of
+          maritime oil transit.
+
+          *   **Inventory Dynamics:** Entering 2026, the market was navigating a transition
+          from the "oversupply" conditions projected in late 2025. U.S. commercial
+          crude oil inventories were being closely monitored as refineries prepared
+          for seasonal maintenance in the first quarter of 2026.
+
+          *   **Market Sentiment:** Analysts and market participants were focused
+          on the balance between non-OPEC+ supply growth and the potential for OPEC+
+          to adjust production levels. Despite earlier forecasts of a supply surplus
+          for 2026, the physical supply chain remained sensitive to any disruptions
+          in production or logistics.
+
+          *   **Refining and Logistics:** Global refinery throughputs were projected
+          to be influenced by seasonal maintenance schedules in the U.S., Europe,
+          and Asia during the first quarter of 2026. The industry was also managing
+          the ongoing effects of previous years'' market volatility, which had led
+          to shifts in trade flows and infrastructure utilization.
+
+
+          In summary, the WTI supply chain in early February 2026 was characterized
+          by a cautious outlook, with market participants balancing expectations of
+          a potential supply surplus against the persistent risks of geopolitical
+          disruptions and their subsequent impact on global trade flows.'
+        associated_source_ids:
+        - source_006
+        - source_007
+        - source_008
+        - source_009
+        - source_010
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:128d5cdaf781bcd532ba2a12fb39c5a421dc42239dded91549274a93d8754eab
+        query_area: supply_response
+        query: US oil production levels and outlook February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: 'As of the U.S. Energy Information Administration''s (EIA)
+          **January 2026 Short-Term Energy Outlook (STEO)**, published on January
+          22, 2026, the outlook for U.S. crude oil production was as follows:
+
+
+          *   **Production Forecast:** The EIA projected that U.S. crude oil production
+          would remain near the 2025 record of 13.6 million barrels per day (b/d)
+          throughout 2026.
+
+          *   **Trend:** The agency anticipated that production would plateau rather
+          than continue the rapid growth seen in previous years. It forecasted a slight
+          decrease of 2% to 13.3 million b/d in 2027, which would mark the first annual
+          decline since 2021.
+
+          *   **Drivers:** The forecast was heavily influenced by domestic crude oil
+          prices. The EIA expected West Texas Intermediate (WTI) prices to fall from
+          a 2025 average of $65/b to $52/b in 2026 and $50/b in 2027. This price environment
+          was expected to reduce operators'' incentives to drill, with the slowdown
+          in drilling activity projected to outpace gains in drilling productivity.
+
+          *   **Regional Outlook:** Production in the Permian region was expected
+          to remain essentially flat at 6.6 million b/d in 2026, while production
+          in the Federal Gulf of America was forecast to rise slightly to 2.0 million
+          b/d as new fields offset declines.'
+        associated_source_ids:
+        - source_011
+        - source_012
+        verifier_confidence: 10
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1
+        query_area: market_reaction
+        query: WTI Crude Oil price market reaction February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        cleaned_summary: "In January 2026, WTI crude oil prices experienced upward\
+          \ pressure, climbing approximately 4.1% by the end of the month. This market\
+          \ reaction was driven by several key factors:\n\n*   **Supply Disruptions:**\
+          \ Winter Storm Fern caused significant disruptions, shutting in roughly\
+          \ 15% of U.S. crude production and temporarily halting exports along the\
+          \ Gulf Coast.\n*   **Geopolitical Tensions:** Escalating tensions between\
+          \ the U.S. and Iran, characterized by a heightened military presence and\
+          \ threats regarding the Strait of Hormuz, increased the geopolitical risk\
+          \ premium.\n*   **Inventory Declines:** A reported decline in U.S. commercial\
+          \ crude oil inventories further supported the view of a tightening market.\n\
+          \nBy the end of January 2026, these combined factors\u2014tightening supply,\
+          \ geopolitical concerns, and inventory draws\u2014had pushed WTI prices\
+          \ to a high for the month."
+        associated_source_ids:
+        - source_013
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      sources:
+      - source_id: source_001
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEuJK4TMJ2RgE8wLbT7ia7WAMTuAKA68eRfiBxlpnJY-9wLrGQRkQ9Ea4XyYwOzlZSJeuhOkmnDLSWNg9GcIQ5Fxe12loKrbcW623DXMtGl0AczvaY9LXQHSwm9k2lI4qKAFd_7L-amTSVoEQeO3Q50A6URUhUwU4DLwke8Uttcfvx9IiN_mSsoJckmZp5S0VB82pskd2EDJFXNbdSkFQ==
+        provider_title: forbes.com
+        resolved_url: https://www.forbes.com/sites/rrapier/2026/01/01/energy-outlook-2026-the-year-of-the-glut-and-the-crunch/
+        resolved_domain: forbes.com
+        publisher: forbes.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_002
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGv6GEUMtdv-asY8qSRYw6yebtpUZtd23Oqu44DTHJq27cbqOJ9F2L__igiY13KE8jQgMkrNL-09XUAqxxorHJRNdtIdo5UWWvPgcFdUl3DdAoV37hEc5xoNNfCMZqLTUH3I_O5UFQWdCvaODXirtqgmW1YNhmbVjGsYMMdzjFAvo__CG6hYlq0MtMLVdRYeEUDiIk=
+        provider_title: energy-infrastructure-partners.com
+        resolved_url: https://energy-infrastructure-partners.com/five-trends-shaping-energy-infrastructure-in-2026/
+        resolved_domain: energy-infrastructure-partners.com
+        publisher: energy-infrastructure-partners.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_003
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEqocYU9TcTTbUNA4fB2nDlAQRpElGRs0CL0psOra_swsNWFMjqSaHMZfJV0OJuJOMR59uPWv5X50z6bKq296t4If4v1oTIdMEt2DJc6YZEC9CKV1clKwSIntd4lWRayyDsDsp2kd1Z1dMrYf9mA9dBFfxV1wHMpxS2RJv72X2DZtQ=
+        provider_title: reutersevents.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 403: Forbidden'
+      - source_id: source_004
+        rank: 4
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHvdxCL5EBc2k1hPHeCe_6EeH_aB9S8l-ymDJwzeDcnUyORJ28kb-LuphHDdvkYTLB3TEOBmHo_O4y1blrm4vI26zrxaOmSjOlpdoxChbgey-N0AKR9cN_8bAeusbFIsHdn
+        provider_title: youtube.com
+        resolved_url: https://www.youtube.com/watch?v=mWL5Qt7J2LM
+        resolved_domain: youtube.com
+        publisher: youtube.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_005
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFkcmdjldJYhapfamQIpAS-M5cVH3ogdo1Q38VUUMZ7disqw0tSrnsTeSeLK3-4SHRWSRK9zRw5O8MqmtvNnoZUP9dm0thhPi9sjLNc5XhtLkmY0Xa5QCE6_21zZUEPLhgrTP8C
+        provider_title: bcse.org
+        resolved_url: https://bcse.org/market-trends/top-six-trends/
+        resolved_domain: bcse.org
+        publisher: bcse.org
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_006
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHYdqF8hOCFEtxvJ5cz8s9RJmQ3T0ueAZb30BRfwscJCl_1jiuB5JDQ4XKiW6yzNy_sA1SQH0byWJzDvPiS5-mlVzOOoMRMRHX8pHWw3sbuRQxZgjDjs_hkKdydZOJVvDMEi_08WSJPse8fog==
+        provider_title: eia.gov
+        resolved_url: https://www.eia.gov/todayinenergy/detail.php?id=67424
+        resolved_domain: eia.gov
+        publisher: U.S. Energy Information Administration
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_007
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFUoLi4Gxt4kAqOilxjpBF0re5dyrfYM1y5fCZkAjdg_dfuXJo4KSb5gCKTy8ekH36ieG4YyHrMrcqmkJqiEoK4MbX7Gdn19C6n09NbJC-EKS_dqKgyZ4af48ahmS3J590W1g33RG1IMiLd_XSsczfTJhSFUJo-xhqESDhjxSA=
+        provider_title: jpmorgan.com
+        resolved_url: https://www.jpmorgan.com/insights/global-research/commodities/oil-prices
+        resolved_domain: jpmorgan.com
+        publisher: jpmorgan.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_008
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF2WoD6QK0SwjX5VX2xx5ZoyJUuB4DWegQ1Mf85IbWdwkeYXYBfj1pnTFD7uSqTjnxYbp_9rx_6BM429fps_amqN0t7QXyVM9BM1m8r13nR2_jSVwFwVKacqliS7qFGUbAQPZjIj0-rsKSEWbMU7qvbobOjjoNil_IIDFiFNEk=
+        provider_title: cryptorank.io
+        resolved_url: https://cryptorank.io/news/feed/ce890-wti-price-forecast-supply-concerns
+        resolved_domain: cryptorank.io
+        publisher: cryptorank.io
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_009
+        rank: 4
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG0kzWskJR6SJb34nAbl9AOLhwPC3yF1N_09kxoRdSVntkL0chnsY1SjWpLyuL_x4fZqLxAqq314SunzZFdR_3x-LhMSJZ4jo8Hm8xuDePgSYtv7Em4yX19jpv5s7BddH_a3nEa6TaoHvQTXxelPhHb4N18Vm_TwxiO-ddZTsLHqw==
+        provider_title: ing.com
+        resolved_url: https://think.ing.com/articles/bearish-oil-outlook-but-clear-upside-risks/
+        resolved_domain: think.ing.com
+        publisher: think.ing.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_010
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFgb6zPCaDG7CcdbCmXkYTKzY2IqVCvZdFdmJKxUP7ABhTEksF2gPUty-D23uEzeYxHSfWCLRRdAQVqb7d0f1N_GGqUOnZfN7Q3AiceL-na-kLRj9rxULE99oUNG99UEshtJxcd5llM8g2zzuQleozNXfXTjB17rf4FsgHn5mskLs9owtlfEyCOG8T_T26IghTnnfJ9iCAH3Oq7AYaRowYpQsY4eg==
+        provider_title: ogj.com
+        resolved_url: https://www.ogj.com/general-interest/economics-markets/news/55397558/iea-revises-down-2026-oil-demand-forecast
+        resolved_domain: ogj.com
+        publisher: ogj.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_011
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG6-2iZ6kGfTbTGmRL19WSPSV6lCKB6Vq5mdVYTUbj26dIVicPicLfYrOQnOcq7wtP8RCZKLgIkIP9J3xIfruoBmB1O9Yc5VYftSOC75iz3OVXBX_OjJy-NtbX4x2d239eFPwf2hxgplbjBHQ==
+        provider_title: eia.gov
+        resolved_url: https://www.eia.gov/todayinenergy/detail.php?id=67045
+        resolved_domain: eia.gov
+        publisher: U.S. Energy Information Administration
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_012
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGjhmmkb95To08IG6oPvBTjwHKTGjcnwZ_PTamWtfuOdQRigfVJha2Rv2e5aRiVvXzegLXJH-wdwku3Rdcxq7mdycGtq8j9Lm4uEKCrIx3lFAmVJSng1rUjrR7jlEuRF_7RZATb1X6A4UYtHtftQhpgZsx3CwE9yXqBR0XIWNM=
+        provider_title: eaglenaturalresources.com
+        resolved_url: https://eaglenaturalresources.com/eia-production-forecast-us-oil-supply/
+        resolved_domain: eaglenaturalresources.com
+        publisher: eaglenaturalresources.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_013
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH377fp9Shljn-gj1S0XkccbWdxOLya-6l7m7O7GBC8O6hfVcoKWpxFqs8T2kfAmnCpDvosVCvLo6PjJoUpuXOlpsjDDomkXQEPBGN-gSVQVIBzmIvnf1VZOoczNV_n-nwMrtoumatXS7jqJhog73JK_8NAHzNIebWOGOf1_aftd8bmekJ4zU1S4KsOW4UbhFQ0uwkMIYkmIncJoeYoV9yzeNeEH3__TJ0=
+        provider_title: chemanalyst.com
+        resolved_url: https://www.chemanalyst.com/NewsAndDeals/NewsDetails/crude-oil-wti-prices-jump-4-1-at-the-end-of-january-2026-40981
+        resolved_domain: chemanalyst.com
+        publisher: chemanalyst.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      warnings: []
+      active_evidence_type: main_verifier_cleaned_summaries
+      destination_page_content_included: false
+    cutoff_verification_audit:
+      verifier_id: main_code_cutoff_verifier
+      queries:
+      - verified_summary_id: verified_summary:sha256:53213a4264c73b56454b80fd33993d4a003f583a471e80081dda6db62bdf95f0
+        query_area: underlying_event
+        query: major energy sector developments January February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims: []
+          source_count: 10
+        removed_flagged_claims: []
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:dda08900438534ef44f1cd8aa2aab72f8745c0535d682aff4e63403d4e1c47e9
+        query_area: physical_flows
+        query: current physical WTI crude oil supply chain status February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - geopolitical tensions in the Middle East, which had escalated sharply
+            in late February 2026
+          source_count: 7
+        removed_flagged_claims:
+        - geopolitical tensions in the Middle East, which had escalated sharply in
+          late February 2026
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:128d5cdaf781bcd532ba2a12fb39c5a421dc42239dded91549274a93d8754eab
+        query_area: supply_response
+        query: US oil production levels and outlook February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 10
+          flagged_claims: []
+          source_count: 2
+        removed_flagged_claims: []
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:9f4edfe397c93b11a4d473e8ea73260395593f83da2f54a09f0e601767b36ed1
+        query_area: market_reaction
+        query: WTI Crude Oil price market reaction February 2026
+        cutoff_date: '2026-02-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims: []
+          source_count: 1
+        removed_flagged_claims: []
+        audit_only: true
+      audit_only: true
+    source_validation_audit:
+      audit_enabled: false
+      executed: false
+      validator_id: source_validator_v52_audit_only
+      records: []
+      audit_only: true
+    claim_support_audit:
+      verifier_id: claim_support_verifier_v52_audit_only
+      audit_only: true
+      executed: false
+      completed: false
+      reason: audit switch is off
+      findings: []
+    claim_support_findings: []
+    policy_decision:
+      policy_id: graduated_evidence_policy_v52
+      horizon: 21
+      eligible: true
+      evidence_tier: none
+      evidence_tier_level: 0
+      resolved_source_ids: []
+      resolved_publishers: []
+      qualifying_claim_ids: []
+      eligibility_reasons:
+      - Neutral proposal requires no evidence.
+      center_action: no_change
+      uncertainty_action: unchanged
+    forecast_transformation:
+      engine_id: python_forecast_engine_v52
+      horizon: 21
+      original_point_forecast: 64.33026433569239
+      original_quantiles:
+        '0.05': 56.991052065414294
+        '0.1': 58.71012777677468
+        '0.2': 60.05642827312257
+        '0.3': 61.39002603039776
+        '0.4': 63.1996715489348
+        '0.5': 64.33026433569239
+        '0.6': 65.42563942753442
+        '0.7': 66.40419600389907
+        '0.8': 67.6651605515116
+        '0.9': 69.6976374468226
+        '0.95': 71.08994657933303
+      p10_p90_width: 10.98750967004792
+      center_action: no_change
+      action_fraction: 0.0
+      raw_center_adjustment: 0.0
+      novelty_multiplier: 1.0
+      novelty_adjusted_amount: 0.0
+      emergency_cap: 65.20999908447266
+      applied_center_adjustment: 0.0
+      uncertainty_action: unchanged
+      uncertainty_multiplier: 1.0
+      pre_floor_quantiles:
+        '0.05': 56.991052065414294
+        '0.1': 58.71012777677468
+        '0.2': 60.05642827312257
+        '0.3': 61.39002603039776
+        '0.4': 63.1996715489348
+        '0.5': 64.33026433569239
+        '0.6': 65.42563942753442
+        '0.7': 66.40419600389907
+        '0.8': 67.6651605515116
+        '0.9': 69.6976374468226
+        '0.95': 71.08994657933303
+      final_point_forecast: 64.33026433569239
+      final_quantiles:
+        '0.05': 56.991052065414294
+        '0.1': 58.71012777677468
+        '0.2': 60.05642827312257
+        '0.3': 61.39002603039776
+        '0.4': 63.1996715489348
+        '0.5': 64.33026433569239
+        '0.6': 65.42563942753442
+        '0.7': 66.40419600389907
+        '0.8': 67.6651605515116
+        '0.9': 69.6976374468226
+        '0.95': 71.08994657933303
+      floor_applied: false
+      warnings: []
+    unadjusted_ensemble:
+      point_forecast: 64.33026433569239
+      quantiles:
+        '0.05': 56.991052065414294
+        '0.1': 58.71012777677468
+        '0.2': 60.05642827312257
+        '0.3': 61.39002603039776
+        '0.4': 63.1996715489348
+        '0.5': 64.33026433569239
+        '0.6': 65.42563942753442
+        '0.7': 66.40419600389907
+        '0.8': 67.6651605515116
+        '0.9': 69.6976374468226
+        '0.95': 71.08994657933303
+    market_diagnostics:
+      latest_observation_date: '2026-01-30'
+      latest_value: 65.20999908447266
+      calendar_gap_days: 3
+      return_1b: -0.0032100136097579224
+      return_5b: 0.06779104978445427
+      return_21b: 0.12528038353670157
+      realized_volatility_21b: 0.3280112506853289
+      drawdown_63b: -0.0032100136097579224
+      jump_zscore_63b: -0.26597360787765767
+      covariate_latest_values:
+        brent_log_ret_1b_l1b: -0.00028283794885322443
+        natgas_log_ret_1b_l1b: 0.10551366869862883
+        gasoline_log_ret_1b_l1b: 0.0014572646819566888
+        gold_log_ret_1b_l1b: -0.1206569177115754
+        dollar_index_log_ret_1b_l1b: 0.00734725814399296
+        oil_curve_contango_l1b: -0.7586250226528817
+        vix_level_l1b: 17.440000534057617
+    task_binding:
+      cutoff: '2026-02-02'
+      target_series_id: wti_crude_oil_price
+      horizons:
+      - 5
+      - 10
+      - 21
+      frequency: B
+      validated: true
+    audit_switch: false
+    audit_only_controls:
+      source_validator_executed: false
+      claim_support_verifier_executed: false
+      claim_support_verifier_completed: false
+    active_evidence_declaration: The LLM used the authoritative numerical-suite output
+      and main-verifier-cleaned summaries with mechanically resolved source identities.
+      Destination-page and audit-only content were not exposed. Optional diagnostic
+      code use is separately declared in code_execution_audit.
+    audit_findings_changed_forecast: false
+    llm_authored_final_numbers: false
+scores:
+- 0.9753844501255194
+- 8.001223325082025
+metric: crps
+mean_score: 4.488303887603772
+ran_at: '2026-08-19T15:10:20.632574'
+skipped_origins: 0

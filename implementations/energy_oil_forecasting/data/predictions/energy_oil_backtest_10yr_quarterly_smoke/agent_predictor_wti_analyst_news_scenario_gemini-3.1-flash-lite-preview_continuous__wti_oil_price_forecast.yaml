@@ -1,0 +1,177 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2021-07-23T00:00:00'
+  end: '2021-07-24T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:37:33.931173'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-07-30T00:00:00'
+  payload:
+    point_forecast: 71.5
+    quantiles:
+      '0.05': 67.5
+      '0.1': 68.5
+      '0.2': 69.5
+      '0.3': 70.5
+      '0.4': 71.0
+      '0.5': 71.5
+      '0.6': 72.0
+      '0.7': 72.5
+      '0.8': 73.5
+      '0.9': 74.5
+      '0.95': 75.5
+  metadata:
+    rationale: 'The market is balancing the disciplined OPEC+ supply policy (bullish)
+      against potential demand headwinds from the COVID-19 Delta variant (bearish).
+      I have developed three scenarios: 1) ''Recovery Continues'' (60% probability):
+      Strong mobility data overrides Delta concerns, prices test $80-$85. 2) ''Delta
+      Demand Stall'' (30% probability): Rising cases lead to renewed mobility restrictions,
+      dampening consumption; prices retreat to $60-$65. 3) ''OPEC+ Policy Failure''
+      (10% probability, tail risk): A supply spike or major demand collapse causes
+      a significant price correction to below $55. The interval width accounts for
+      the high uncertainty surrounding the trajectory of the Delta variant in late
+      Q3.'
+    horizon_rationale: 'In the immediate 5-day horizon, the market is digesting the
+      recovery from the mid-July sell-off. The price is likely to consolidate around
+      $71-72 as the tug-of-war between strong fundamentals and Delta-variant fear
+      continues. Assumptions: OPEC+ output increase confirmed for August, no major
+      supply shocks.'
+    langfuse_trace_id: 8d1c1d26fedea6572e3d77e4806ecee2
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d1c1d26fedea6572e3d77e4806ecee2
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:37:33.931173'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-08-06T00:00:00'
+  payload:
+    point_forecast: 72.0
+    quantiles:
+      '0.05': 66.0
+      '0.1': 67.5
+      '0.2': 69.0
+      '0.3': 70.5
+      '0.4': 71.5
+      '0.5': 72.0
+      '0.6': 72.5
+      '0.7': 73.5
+      '0.8': 75.0
+      '0.9': 76.5
+      '0.95': 77.5
+  metadata:
+    rationale: 'The market is balancing the disciplined OPEC+ supply policy (bullish)
+      against potential demand headwinds from the COVID-19 Delta variant (bearish).
+      I have developed three scenarios: 1) ''Recovery Continues'' (60% probability):
+      Strong mobility data overrides Delta concerns, prices test $80-$85. 2) ''Delta
+      Demand Stall'' (30% probability): Rising cases lead to renewed mobility restrictions,
+      dampening consumption; prices retreat to $60-$65. 3) ''OPEC+ Policy Failure''
+      (10% probability, tail risk): A supply spike or major demand collapse causes
+      a significant price correction to below $55. The interval width accounts for
+      the high uncertainty surrounding the trajectory of the Delta variant in late
+      Q3.'
+    horizon_rationale: By 10 days, market participants will have more clarity on the
+      U.S. mobility data trends regarding the Delta variant. The base case is a gradual
+      recovery toward previous highs if mobility holds.
+    langfuse_trace_id: 8d1c1d26fedea6572e3d77e4806ecee2
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d1c1d26fedea6572e3d77e4806ecee2
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:37:33.931173'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-08-23T00:00:00'
+  payload:
+    point_forecast: 73.0
+    quantiles:
+      '0.05': 64.0
+      '0.1': 66.0
+      '0.2': 68.5
+      '0.3': 70.5
+      '0.4': 72.0
+      '0.5': 73.0
+      '0.6': 74.5
+      '0.7': 76.0
+      '0.8': 78.0
+      '0.9': 80.0
+      '0.95': 81.5
+  metadata:
+    rationale: 'The market is balancing the disciplined OPEC+ supply policy (bullish)
+      against potential demand headwinds from the COVID-19 Delta variant (bearish).
+      I have developed three scenarios: 1) ''Recovery Continues'' (60% probability):
+      Strong mobility data overrides Delta concerns, prices test $80-$85. 2) ''Delta
+      Demand Stall'' (30% probability): Rising cases lead to renewed mobility restrictions,
+      dampening consumption; prices retreat to $60-$65. 3) ''OPEC+ Policy Failure''
+      (10% probability, tail risk): A supply spike or major demand collapse causes
+      a significant price correction to below $55. The interval width accounts for
+      the high uncertainty surrounding the trajectory of the Delta variant in late
+      Q3.'
+    horizon_rationale: At a 21-day horizon, the impact of the August production start
+      will be the focal point. Scenarios diverge significantly based on whether the
+      Delta variant demand hit materializes.
+    langfuse_trace_id: 8d1c1d26fedea6572e3d77e4806ecee2
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d1c1d26fedea6572e3d77e4806ecee2
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-24T21:37:33.931173'
+  as_of: '2021-07-23T00:00:00'
+  forecast_date: '2021-10-20T00:00:00'
+  payload:
+    point_forecast: 75.0
+    quantiles:
+      '0.05': 60.0
+      '0.1': 63.0
+      '0.2': 67.0
+      '0.3': 70.0
+      '0.4': 73.0
+      '0.5': 75.0
+      '0.6': 77.0
+      '0.7': 79.0
+      '0.8': 82.0
+      '0.9': 85.0
+      '0.95': 87.0
+  metadata:
+    rationale: 'The market is balancing the disciplined OPEC+ supply policy (bullish)
+      against potential demand headwinds from the COVID-19 Delta variant (bearish).
+      I have developed three scenarios: 1) ''Recovery Continues'' (60% probability):
+      Strong mobility data overrides Delta concerns, prices test $80-$85. 2) ''Delta
+      Demand Stall'' (30% probability): Rising cases lead to renewed mobility restrictions,
+      dampening consumption; prices retreat to $60-$65. 3) ''OPEC+ Policy Failure''
+      (10% probability, tail risk): A supply spike or major demand collapse causes
+      a significant price correction to below $55. The interval width accounts for
+      the high uncertainty surrounding the trajectory of the Delta variant in late
+      Q3.'
+    horizon_rationale: By 63 days, we are into early Q4. The 'Delta Demand Shock'
+      (bearish) vs. 'Structural Tightness' (bullish) debate will be resolved. The
+      uncertainty is reflected in the wide 80% interval ($63-$85).
+    langfuse_trace_id: 8d1c1d26fedea6572e3d77e4806ecee2
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d1c1d26fedea6572e3d77e4806ecee2
+scores:
+- 1.4929732645838716
+- 2.2722321817697564
+- 4.6829757059901205
+- 5.487522408981955
+metric: crps
+mean_score: 3.4839258903314256
+ran_at: '2026-07-24T21:37:34.252014'
+skipped_origins: 0

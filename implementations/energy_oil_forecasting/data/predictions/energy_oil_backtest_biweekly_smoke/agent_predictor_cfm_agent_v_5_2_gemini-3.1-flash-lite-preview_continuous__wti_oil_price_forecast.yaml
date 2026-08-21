@@ -1,0 +1,3237 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-06-02T00:00:00'
+  end: '2025-06-09T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_cfm_agent_v_5_2_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_cfm_agent_v_5_2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:04:03.169964'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.55688585599732
+    quantiles:
+      '0.05': 55.84928708100362
+      '0.1': 56.830733633527416
+      '0.2': 58.094279352450386
+      '0.3': 59.276721347279576
+      '0.4': 60.00110350448173
+      '0.5': 60.55688585599732
+      '0.6': 61.31001968658367
+      '0.7': 62.287921839754226
+      '0.8': 63.2454415198994
+      '0.9': 64.42903607657982
+      '0.95': 65.41722196665346
+  metadata:
+    context_assessment:
+      research_packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    model_suite_id: model_suite:sha256:e1cfc4b23727aa7e3177c42738c442b6c98c84f5f5381902365f0e3c76307a82
+    numerical_suite_audit:
+      model_suite:
+        model_suite_id: model_suite:sha256:e1cfc4b23727aa7e3177c42738c442b6c98c84f5f5381902365f0e3c76307a82
+        target_series_id: wti_crude_oil_price
+        cutoff_date: '2025-06-02'
+        horizons:
+        - 5
+        - 10
+        - 21
+        frequency: B
+        model_num_samples: 1000
+        rng_seed: 2052286392
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:7a5367b8120a7522dec3f1cbfadc744eae8519458ddadf2c09758049bf9ae4bc
+        models:
+          arima:
+            model_name: arima
+            predictor_id: darts_autoarima
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.579814228693834
+              quantiles:
+                '0.05': 52.968360528542256
+                '0.1': 54.686887502162755
+                '0.2': 56.72570877754043
+                '0.3': 58.44321325604885
+                '0.4': 59.489406528505725
+                '0.5': 60.579814228693834
+                '0.6': 61.58460840824639
+                '0.7': 62.834852422354416
+                '0.8': 64.04052481400969
+                '0.9': 66.34501925184
+                '0.95': 68.04164909912988
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 60.98718806405927
+              quantiles:
+                '0.05': 51.2892346162915
+                '0.1': 53.0624400348172
+                '0.2': 55.185848385971575
+                '0.3': 57.55638729260419
+                '0.4': 59.3914916684483
+                '0.5': 60.98718806405927
+                '0.6': 62.41035619553421
+                '0.7': 64.26824249035853
+                '0.8': 66.29895148084545
+                '0.9': 68.46232726448982
+                '0.95': 70.6069992825297
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 60.79691606525057
+              quantiles:
+                '0.05': 47.443445676414484
+                '0.1': 49.83672224947937
+                '0.2': 53.36769365538477
+                '0.3': 56.03239100806535
+                '0.4': 58.12007217543334
+                '0.5': 60.79691606525057
+                '0.6': 63.2329590993992
+                '0.7': 65.70637623977944
+                '0.8': 68.69574806798767
+                '0.9': 71.76071971046643
+                '0.95': 75.56575910200468
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          kalman:
+            model_name: kalman
+            predictor_id: darts_kalman
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.75503528650333
+              quantiles:
+                '0.05': 57.79070126655423
+                '0.1': 58.48080216918084
+                '0.2': 59.370208760193044
+                '0.3': 59.832688828112836
+                '0.4': 60.304870895170396
+                '0.5': 60.75503528650333
+                '0.6': 61.23308721888569
+                '0.7': 61.80600721689132
+                '0.8': 62.397150890675604
+                '0.9': 63.11071643877319
+                '0.95': 63.69740306603726
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 60.89602993158681
+              quantiles:
+                '0.05': 57.89606288077733
+                '0.1': 58.54269643574965
+                '0.2': 59.32802882937166
+                '0.3': 59.91293167598438
+                '0.4': 60.393428747937136
+                '0.5': 60.89602993158681
+                '0.6': 61.35831007330365
+                '0.7': 61.80307627118107
+                '0.8': 62.40841502778749
+                '0.9': 63.12007043352928
+                '0.95': 63.75802386670325
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 60.69488235394074
+              quantiles:
+                '0.05': 57.70006964278622
+                '0.1': 58.35069398197453
+                '0.2': 59.14538456252146
+                '0.3': 59.69875976781996
+                '0.4': 60.218231430869615
+                '0.5': 60.69488235394074
+                '0.6': 61.10604996199314
+                '0.7': 61.47305739148813
+                '0.8': 62.02439992845279
+                '0.9': 62.88384868924173
+                '0.95': 63.709954400090226
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          lightgbm:
+            model_name: lightgbm
+            predictor_id: darts_lightgbm_cov
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.33580805279483
+              quantiles:
+                '0.05': 56.78879944791438
+                '0.1': 57.324511229238674
+                '0.2': 58.18692051961767
+                '0.3': 59.55426195767704
+                '0.4': 60.209033089769086
+                '0.5': 60.33580805279483
+                '0.6': 61.11236343261895
+                '0.7': 62.22290588001697
+                '0.8': 63.298648855012935
+                '0.9': 63.83137253912627
+                '0.95': 64.51261373479323
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 61.88409836534139
+              quantiles:
+                '0.05': 53.25977391334131
+                '0.1': 53.94740435700263
+                '0.2': 56.086786707105155
+                '0.3': 60.35113225259552
+                '0.4': 61.48028311096769
+                '0.5': 61.88409836534139
+                '0.6': 62.44263267461396
+                '0.7': 62.857006953723705
+                '0.8': 63.27530822602079
+                '0.9': 63.70107316766339
+                '0.95': 64.79568182215215
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 59.57357992417391
+              quantiles:
+                '0.05': 52.53915311545198
+                '0.1': 53.49914801280354
+                '0.2': 55.42368426060833
+                '0.3': 57.59976113212878
+                '0.4': 57.80954834802441
+                '0.5': 59.57357992417391
+                '0.6': 60.04636964241483
+                '0.7': 60.26738324168595
+                '0.8': 61.32749238433085
+                '0.9': 65.11191071526973
+                '0.95': 65.25632794573228
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: 4561
+              effective_training_examples_estimate: 4520
+              target_lags: 21
+              covariate_lags: 21
+              covariates:
+              - brent_log_ret_1b_l1b
+              - natgas_log_ret_1b_l1b
+              - gasoline_log_ret_1b_l1b
+              - gold_log_ret_1b_l1b
+              - dollar_index_log_ret_1b_l1b
+              - oil_curve_contango_l1b
+              - vix_level_l1b
+              covariate_observations:
+                brent_log_ret_1b_l1b: 4435
+                natgas_log_ret_1b_l1b: 5382
+                gasoline_log_ret_1b_l1b: 5384
+                gold_log_ret_1b_l1b: 5377
+                dollar_index_log_ret_1b_l1b: 5399
+                oil_curve_contango_l1b: 4562
+                vix_level_l1b: 5387
+              notes: 'Aligned observations use the common business-day span after
+                Darts-style calendar regularization. Effective examples are an auditable
+                estimate: aligned_observations - max(lags) - max_horizon + 1.'
+            num_samples: 1000
+            error: null
+        ensemble:
+          model_name: ensemble
+          predictor_id: cfm_arima_kalman_lightgbm_ensemble
+          status: ok
+          forecasts:
+          - horizon: 5
+            forecast_date: '2025-06-09'
+            point_forecast: 60.55688585599732
+            quantiles:
+              '0.05': 55.84928708100362
+              '0.1': 56.830733633527416
+              '0.2': 58.094279352450386
+              '0.3': 59.276721347279576
+              '0.4': 60.00110350448173
+              '0.5': 60.55688585599732
+              '0.6': 61.31001968658367
+              '0.7': 62.287921839754226
+              '0.8': 63.2454415198994
+              '0.9': 64.42903607657982
+              '0.95': 65.41722196665346
+          - horizon: 10
+            forecast_date: '2025-06-16'
+            point_forecast: 61.255772120329155
+            quantiles:
+              '0.05': 54.14835713680338
+              '0.1': 55.18418027585649
+              '0.2': 56.86688797414946
+              '0.3': 59.273483740394695
+              '0.4': 60.42173450911771
+              '0.5': 61.255772120329155
+              '0.6': 62.0704329811506
+              '0.7': 62.97610857175444
+              '0.8': 63.99422491155124
+              '0.9': 65.09449028856082
+              '0.95': 66.38690165712836
+          - horizon: 21
+            forecast_date: '2025-07-01'
+            point_forecast: 60.355126114455075
+            quantiles:
+              '0.05': 52.56088947821756
+              '0.1': 53.89552141475248
+              '0.2': 55.97892082617152
+              '0.3': 57.77697063600469
+              '0.4': 58.715950651442455
+              '0.5': 60.355126114455075
+              '0.6': 61.46179290126906
+              '0.7': 62.482272290984504
+              '0.8': 64.01588012692376
+              '0.9': 66.58549303832596
+              '0.95': 68.17734714927573
+          training_data:
+            target_observations: 5382
+            first_target_date: '2004-01-05'
+            last_target_date: '2025-05-30'
+            aligned_observations: 4561
+            effective_training_examples_estimate: 4520
+            target_lags: null
+            covariate_lags: null
+            covariates:
+            - brent_log_ret_1b_l1b
+            - natgas_log_ret_1b_l1b
+            - gasoline_log_ret_1b_l1b
+            - gold_log_ret_1b_l1b
+            - dollar_index_log_ret_1b_l1b
+            - oil_curve_contango_l1b
+            - vix_level_l1b
+            covariate_observations: {}
+            notes: Ensemble consumes forecast distributions, not raw observations.
+          num_samples: 1000
+          error: null
+        configured_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        active_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        successful_models:
+        - arima
+        - kalman
+        - lightgbm
+        failed_models: []
+        model_disagreement_std:
+          '5': 0.17191500046360514
+          '10': 0.4458496412524035
+          '21': 0.5542042675272738
+        diagnostics:
+          latest_observation_date: '2025-05-30'
+          latest_value: 60.790000915527344
+          calendar_gap_days: 3
+          return_1b: -0.0024613999764007133
+          return_5b: -0.00669934382844628
+          return_21b: 0.04432231354806704
+          realized_volatility_21b: 0.27801220743800376
+          drawdown_63b: -0.1522799931440777
+          jump_zscore_63b: -0.02380822138700579
+          covariate_latest_values:
+            brent_log_ret_1b_l1b: -0.0039047295850964114
+            natgas_log_ret_1b_l1b: -0.021524735913139748
+            gasoline_log_ret_1b_l1b: -0.010249563485997907
+            gold_log_ret_1b_l1b: -0.008537804000789136
+            dollar_index_log_ret_1b_l1b: 0.0005035300605269822
+            oil_curve_contango_l1b: -0.7064896971407592
+            vix_level_l1b: 18.56999969482422
+      execution:
+        tool_name: run_authoritative_suite
+        attempt_count: 1
+        validation_failure_count: 0
+        successful_execution_count: 1
+        attempt_errors: []
+        rng_seed: 2052286392
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:7a5367b8120a7522dec3f1cbfadc744eae8519458ddadf2c09758049bf9ae4bc
+    research_execution_audit:
+      tool_name: run_research_pipeline
+      expected_cutoff: '2025-06-02'
+      attempt_count: 1
+      successful_execution_count: 1
+      rejected_duplicate_count: 0
+      in_progress: false
+      attempt_errors: []
+    code_execution_audit:
+      code_execution_available: true
+      code_execution_used: false
+      code_execution_call_count: 0
+      code_execution_purposes: []
+    llm_context_assessment:
+      research_packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    structured_output_control_audit:
+      control_id: structured_assessment_retry_v52
+      maximum_correction_retries: 1
+      initial_response: "{\n  \"research_packet_id\": \"research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740\"\
+        ,\n  \"evidence_claims\": [\n    {\n      \"claim_id\": \"claim_001\",\n \
+        \     \"statement\": \"Eight OPEC+ countries, including Saudi Arabia and Russia,\
+        \ implemented a production adjustment of 411,000 barrels per day for June\
+        \ 2025 as part of a scheduled gradual phase-out of voluntary production cuts.\"\
+        ,\n      \"claim_type\": \"physical_supply\",\n      \"supporting_summary_ids\"\
+        : [\n        \"verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_010\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_002\",\n      \"statement\": \"As of early June 2025, market participants\
+        \ were driven by optimism over U.S.-China trade talks and concerns regarding\
+        \ geopolitical tensions in the Middle East, leading to a weekly increase in\
+        \ WTI prices.\",\n      \"claim_type\": \"market_reaction\",\n      \"supporting_summary_ids\"\
+        : [\n        \"verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_013\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    }\n  ],\n  \"physical_status\"\
+        : \"stable\",\n  \"incremental_novelty\": \"low\",\n  \"material_evidence_conflict\"\
+        : false,\n  \"confidence\": 0.85,\n  \"horizon_actions\": [\n    {\n     \
+        \ \"horizon\": 5,\n      \"center_action\": \"small_up\",\n      \"uncertainty_action\"\
+        : \"unchanged\",\n      \"persistence_profile\": \"temporary\",\n      \"\
+        cited_claim_ids\": [\n        \"claim_001\",\n        \"claim_002\"\n    \
+        \  ],\n      \"narrowing_uncertainty_resolved\": \"The market is reacting\
+        \ to supply adjustment schedules and positive trade sentiment.\",\n      \"\
+        rationale\": \"Prices are showing upward momentum driven by recent geopolitical\
+        \ news and trade optimism, supported by OPEC+ supply adjustments.\"\n    },\n\
+        \    {\n      \"horizon\": 10,\n      \"center_action\": \"no_change\",\n\
+        \      \"uncertainty_action\": \"small_wider\",\n      \"persistence_profile\"\
+        : \"decaying\",\n      \"cited_claim_ids\": [\n        \"claim_001\"\n   \
+        \   ],\n      \"narrowing_uncertainty_resolved\": \"Uncertainty remains regarding\
+        \ the long-term impact of the phased production increases.\",\n      \"rationale\"\
+        : \"Market sentiment may balance out the current upward pressure as the reality\
+        \ of OPEC+ production increases settles in.\"\n    },\n    {\n      \"horizon\"\
+        : 21,\n      \"center_action\": \"small_down\",\n      \"uncertainty_action\"\
+        : \"moderately_wider\",\n      \"persistence_profile\": \"temporary\",\n \
+        \     \"cited_claim_ids\": [\n        \"claim_001\"\n      ],\n      \"narrowing_uncertainty_resolved\"\
+        : \"Longer term, the market remains sensitive to global demand growth headwinds.\"\
+        ,\n      \"rationale\": \"Underlying concerns about weak demand growth in\
+        \ the second quarter may exert downward pressure on prices over the longer\
+        \ 21-day horizon.\"\n    }\n  ],\n  \"research_summary\": \"In early June\
+        \ 2025, WTI crude oil prices saw a recovery in momentum, driven by geopolitical\
+        \ concerns in the Middle East and positive sentiment from U.S.-China trade\
+        \ discussions. OPEC+ continues to implement its scheduled phased return of\
+        \ production volumes, which participants justify as maintaining healthy market\
+        \ fundamentals amid currently low inventories. Despite this, demand growth\
+        \ remains constrained by reports of weaker delivery performance in the United\
+        \ States and China.\",\n  \"overall_rationale\": \"The recent price surge\
+        \ is a reaction to immediate short-term supply anxiety and trade optimism.\
+        \ However, the systematic implementation of planned production increases by\
+        \ OPEC+ and persistent signals of cooling demand suggest that current upward\
+        \ pressures are likely temporary and may fade over the coming weeks.\",\n\
+        \  \"warnings\": []\n}"
+      initial_validation_failed: true
+      initial_validation_errors:
+      - type: literal_error
+        loc:
+        - physical_status
+        msg: Input should be 'normal', 'elevated_risk', 'partial_disruption', 'confirmed_disruption'
+          or 'unknown'
+        input: stable
+        ctx:
+          expected: '''normal'', ''elevated_risk'', ''partial_disruption'', ''confirmed_disruption''
+            or ''unknown'''
+      - type: literal_error
+        loc:
+        - incremental_novelty
+        msg: Input should be 'likely_new_relative_to_model_data', 'possibly_partly_reflected',
+          'likely_reflected_in_model_data' or 'indeterminate'
+        input: low
+        ctx:
+          expected: '''likely_new_relative_to_model_data'', ''possibly_partly_reflected'',
+            ''likely_reflected_in_model_data'' or ''indeterminate'''
+      correction_retry_attempted: true
+      retry_response: null
+      retry_validation_errors:
+      - type: AttributeError
+        msg: '''CfmV52Settings'' object has no attribute ''structured_output_retry_timeout_seconds'''
+      retry_succeeded: false
+      neutral_fallback_applied: true
+      final_disposition: neutral_fallback_after_retry_failure
+    active_research_packet:
+      packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      cutoff_date: '2025-06-02'
+      queries:
+      - area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+      - area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+      - area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+      - area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+      verified_summaries:
+      - verified_summary_id: verified_summary:sha256:25808ad5df7f4e3b0ab2ead8802f822d1d45f9d808ba1742dbad998e8ea4bb38
+        query_area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: "During late May and early June 2025, West Texas Intermediate\
+          \ (WTI) crude oil prices experienced a period of range-bound trading.\n\n\
+          ### WTI Price Trends\n*   **Late May 2025:** WTI spot prices remained in\
+          \ a relatively narrow range. For the week of May 26\u201330, 2025, daily\
+          \ spot prices were recorded at $61.61, $62.54, $61.66, and $61.46 per barrel.\
+          \ The monthly average for May 2025 was approximately $62.20 per barrel.\n\
+          *   **Early June 2025:** Prices showed signs of a slight recovery as the\
+          \ month began.\n\n### Major Energy Market Context\nMarket observers characterized\
+          \ May 2025 as a \"hinge point\" that potentially rewired global energy market\
+          \ dynamics. Key factors influencing the market during this period included:\n\
+          \n*   **Supply Strategy Adjustments:** Several major producing nations reportedly\
+          \ recalibrated their output strategies. Notably, OPEC+ had previously decided\
+          \ to increase output, with plans to unwind a portion of voluntary production\
+          \ cuts through June 2025.\n*   **Geopolitical and Policy Shifts:** The energy\
+          \ sector saw a confluence of geopolitical actions and policy announcements.\
+          \ This included efforts by consuming nations to secure alternative supply\
+          \ routes and storage capacities, alongside evolving regulatory frameworks\
+          \ in major economies regarding fossil fuel investments and renewable energy.\n\
+          *   **Demand Signals:** Global oil demand growth faced headwinds, with reports\
+          \ of weak second-quarter deliveries in the United States and China. Additionally,\
+          \ the rapid rise of AI and the associated surge in data center power demand\
+          \ began to emerge as a significant driver of electricity and natural gas\
+          \ consumption."
+        associated_source_ids:
+        - source_001
+        - source_002
+        - source_003
+        - source_004
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:d7b7ce4138326c92f2bb94d39acd2b63a94ff653f28d4575901493c95c40eead
+        query_area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: 'As of early June 2025, the global crude oil market was characterized
+          by a transition in supply dynamics and heightened sensitivity to geopolitical
+          risks.
+
+
+          ### Global Supply and Production Trends
+
+
+          ### Market Sentiment and Geopolitical Factors'
+        associated_source_ids:
+        - source_005
+        - source_006
+        - source_007
+        - source_008
+        - source_009
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620
+        query_area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: 'In early June 2025, OPEC+ continued its strategy of a gradual
+          and flexible return of voluntary production adjustments.
+
+
+          ### OPEC+ Production Policy
+
+          *   **Production Adjustment:** Following a virtual meeting on May 31, 2025,
+          eight OPEC+ countries (Saudi Arabia, Russia, Iraq, UAE, Kuwait, Kazakhstan,
+          Algeria, and Oman) reaffirmed their commitment to market stability. They
+          implemented a production adjustment of **411,000 barrels per day (bpd)**
+          for June 2025, relative to the previous month''s required levels.
+
+          *   **Strategy:** This move was part of a broader plan, agreed upon on December
+          5, 2024, to gradually phase out 2.2 million bpd of voluntary production
+          adjustments over an 18-month period that began on April 1, 2025. The group
+          maintained that these increases could be paused or reversed depending on
+          evolving market conditions.
+
+          *   **Commitment:** The participating countries reiterated their commitment
+          to full conformity with the Declaration of Cooperation and their intention
+          to compensate for any overproduced volumes since January 2024.
+
+
+          ### Oil Inventory and Market Context
+
+          *   **Market Fundamentals:** In their late May/early June assessments, the
+          participating OPEC+ countries cited "healthy market fundamentals," specifically
+          noting **low oil inventories** as a justification for their production adjustments.
+
+          *   **Market Trends:** Despite this, global oil demand growth for 2025 remained
+          projected at approximately 1.3 million bpd, with significant contributions
+          from non-OECD countries.'
+        associated_source_ids:
+        - source_010
+        - source_011
+        - source_012
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149
+        query_area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: "As of June 2, 2025, the WTI crude oil market was characterized\
+          \ by a significant upward trend, with prices experiencing a notable surge\
+          \ during the first week of June 2025.\n\n### Market Context and Reaction\n\
+          *   **Price Performance:** This marked a reversal in momentum, representing\
+          \ the first weekly increase for the benchmark in three weeks.\n*   **Drivers\
+          \ of the Rally:**\n    *   **Trade Optimism:** The surge was largely fueled\
+          \ by optimism surrounding U.S.-China trade talks, which improved market\
+          \ risk appetite and bolstered expectations for stronger global fuel demand.\n\
+          \    *   **Geopolitical Tensions:** Concerns regarding potential Israeli\
+          \ strikes on Iranian nuclear sites created fears of supply disruptions in\
+          \ the Middle East, adding upward pressure to prices.\n    *   **OPEC+ Policy:**\
+          \ Market participants were closely monitoring OPEC+ supply policies during\
+          \ this period. Leading up to June 2025, the group had been implementing\
+          \ a gradual return of voluntary production adjustments, with a scheduled\
+          \ production adjustment of 411,000 barrels per day for June 2025."
+        associated_source_ids:
+        - source_013
+        - source_014
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      sources:
+      - source_id: source_001
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFioBxceuCejXpoCKEJlsnhgtmTzgMO-Bx3agCATaElQAHl5LScpsOhjZDxjhZGOVBgVonSpPSeXcutJ5onOm17RQ9LYVQLwl2i60rGOY7zltFaJktSybwtaDk1EosSpnRTVBQQS8mpCp6OoNKhJRNttm9heXqk80dr7_QEXLCeARfkjTUGa_1o1pOcZfm5H67qKaNwatW1fsY57PI7MvrGbg3ZudMO60Ao4b4RHY_I
+        provider_title: windows.net
+        resolved_url: https://iea.blob.core.windows.net/assets/49666e25-2275-47cc-9343-cebb3477619c/-17JUNE2025_OilMarketReport_Corrigendum.pdf
+        resolved_domain: iea.blob.core.windows.net
+        publisher: iea.blob.core.windows.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_002
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEZuWbytRZkC5V8NTDjd9l2pPyLVsBfdw2G4BWcdNzKFxzjD2GovYBLAtsVdheKwxcc6duxCZmTCorBB56HTrAy-zogr4tTQMC4UzFwjvkDqW7pn10d0kOGmq5FJ3HiQUZ0
+        provider_title: eia.gov
+        resolved_url: https://www.eia.gov/dnav/pet/hist/rwtcd.htm
+        resolved_domain: eia.gov
+        publisher: U.S. Energy Information Administration
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_003
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEo24z57UegOT3WNCBNEKBriv3YS-fKkAo5M0pf-5JaGsQIsgyjZNN-0Iot5ZN5vrMSzdrnM-i7zOpeQlKFvIlbu1CbAER2IBQC_09Xnpv93jkqlrU2WPzX4OYk0G2qC9LbBzbem7Sll93d9GH6EhEFjw==
+        provider_title: ycharts.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 405: Not Allowed'
+      - source_id: source_004
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH7HQdrp7_M3oNtf-TRMvh7qPk8t5DVSXULeC6gvNCQcl9Re2XNZdcJDwvHXLw5bmi1RDDmXHs6FFN23mio2BgrutYzXr856LI-EhXDtqmRaI6fNOp_7ACk0znKRJzHP9LLQoTX5XDathbTjlmc18rKidj1QYI1-IlkNd1w5klgrf1daQq7jWbblijgr0qSodnQrJOeut0g-tpoBEM259FR
+        provider_title: vanhessen.com
+        resolved_url: https://www.vanhessen.com/en/info/404/
+        resolved_domain: vanhessen.com
+        publisher: vanhessen.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_005
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHbiQB4k8j38dxHvr9LfaWoFjHJczlOx833P8scxnX8v1x6hvGFzhmBwQ5pIir2XWq8K_rxBRmhoyOVIUH6jLCRB1gzcEeuknHwmBNmUYFvV9me0qoQHoexxnlhWWbCNj8mULAijNEMPKyy0cO3
+        provider_title: iea.org
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 403: Forbidden'
+      - source_id: source_006
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE7QseHayu87hlNTOHgTXQD7Wu7LKueyvTSlbneYrFvZbYUd2f5VnUITApHTEmvh0xQlDkNL2EN9gV5tfP67foZAs59MniAITY1TpYTplOpVkS2GJZTJ8ViYdYBpUSjq6AMKYBeRZrZuzsEGskPqIDErhHNYJgvZ9W90b5QAKkf00t9KDAkZy9nkMlCrn0noZYanTYvH4E1tz7j91dBQLXq12kg-_BOMT27oGOGs5pT
+        provider_title: windows.net
+        resolved_url: https://iea.blob.core.windows.net/assets/49666e25-2275-47cc-9343-cebb3477619c/-17JUNE2025_OilMarketReport_Corrigendum.pdf
+        resolved_domain: iea.blob.core.windows.net
+        publisher: iea.blob.core.windows.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_007
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH6YG1GlpezLlZ3skC2sJoJLPBg2fPtA7q3CWqwZTxkFIH6e_0P7CrpQ7G2VKyrQ6Lbc9UUCYoUZG7NM66iSduzTJac1A13bWtF-cpMxCM19QgeAIAnx8LlzprM7G8SBZnWnNPc9lL9NcHrbM-IyMc6IA==
+        provider_title: commodia.com
+        resolved_url: https://newsletter.commodia.com/p/forecast-update-june-2025
+        resolved_domain: newsletter.commodia.com
+        publisher: newsletter.commodia.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_008
+        rank: 4
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF15HsbDT2h5kFFyhA4VQL8j6Ety7U6lOBK69uKfu8P4sCio2lVqX6W0z7SZY5ME88g_td_f2LoElmqD0o6_o_xW3ACNN-CoI4HOTRA9I0atlhV8rFkYYLg3P5ax9kAoFxgymcJWqo1LuC3iXHbC-Oh92_i-OqregbptOzXqLglD4dA9lkKmwTIsSSMoRnSt5dD5CFpRfgoh39R8FPa5JpfRmH0bJI=
+        provider_title: kamcoinvest.com
+        resolved_url: https://www.kamcoinvest.com/sites/default/files/research/pdf/Oil%20Market%20Monthly%20Report%20-%20Jun-2025.pdf
+        resolved_domain: kamcoinvest.com
+        publisher: kamcoinvest.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_009
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF1th_D8931JAtlpr85ZA_RjetsNkZcVs63F70hl8oMZGm1ICFAUmR4Q8MsWqPRjaBG5N7QhpUoqXEgqzaqQayjVBEkXTKnztLKAR-YR_nbloPt_i0jFKvmZa51mZv3dmFSh12ziIS_nhz4LFDn6tx9pQap0DhBwDBMR2Ny9RmvyGvUnNFKAm4H0QZYPz2Ib9eWqkFuqnXZhunm-bcKBjs=
+        provider_title: domesticoperating.com
+        resolved_url: https://www.domesticoperating.com/blog/2025/06/12/wti-crude-oil-price-surges-3-as-global-supply-tightens/
+        resolved_domain: domesticoperating.com
+        publisher: domesticoperating.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_010
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFLNeFYzKou-G5CTGSELtaQtCc2Uxp_0kJ1zbWCjLT4y1zG1EoPZeORDK42Id0MLnkS7HBIqBOa57ITtehKMKPtBQmQE0orNGkMbZFUVdJ9aFuiqItnCKu7uKlw7-UIQAe2y_-ismeBcw==
+        provider_title: opec.org
+        resolved_url: https://www.opec.org/pr-detail/566-31-may-2025.html
+        resolved_domain: opec.org
+        publisher: OPEC
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_011
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQECMuGOzELqFbczntYgUMsoS1heDaq0dG0PHMf4ICYfrCkCVPgIvuemYqHVvLSvXTJZevcwISTQ-r72A42h6GPfD11kzBszLJEAt83s2iPU97ODeQezxxWPF4aWVM4RycGhlyCNbCi0cdWXlrH8Kz0gHbG6jAUqUR6YFKiJsCLiiAwEkr--b3-jhBjRBnl1G8o7SBaz_YIrA7LoWJihcjMEvf5dtWwH
+        provider_title: enerdata.net
+        resolved_url: https://www.enerdata.net/publications/daily-energy-news/opec-announces-accelerated-oil-output-hike-june-2025.html
+        resolved_domain: enerdata.net
+        publisher: enerdata.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_012
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHQedXr_Lh69sW0CMp_Lz6Tc7w9h9VhGvKfI62Bm4mgZhKPfjUkpvDS3ew30PB4dZriPJzJ-14S0iYePKdnHlWPbrJviAKuRMqeb8YuD4BMTGW8aIlusbdk2wl9MKKhgslwj5_SGoxEZl_3AVuk6vDhtEwKQ4w1srfJ7N8ElTnYl1ZHhG3foWIPnub_r4P9AhEQaTc=
+        provider_title: oilandgasmiddleeast.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 405: Not Allowed'
+      - source_id: source_013
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHvyVx5K4_3WdNlYdS40Bn9x0Rm_Ue2VZ_aNWrpgrBeEtD74jykY8-vfIyynWGLnGR-U1u3uwB9bmiEPbtZtrbaKLk-awt5B0LMy-tE8WqX_Ewh0XlirJXF2daBMmsR-kaYhK8sim_hgOukcHWFBnK4RoaHy_XmmrVHvfnwKcg=
+        provider_title: ebc.com
+        resolved_url: https://www.ebc.com/forex/how-traders-profited-from-oil-spot-price-swings
+        resolved_domain: ebc.com
+        publisher: ebc.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_014
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG4xXevR52Hoa-f1nm29cN9u9dTatu0g4DpraKIEHdj2cRePMgTIfEGtYWLa-sAWdGPXUwT7XbzCs8bAKN8EFW8QssQEb7AEX13KkW5bZJVsJhUYcjVA3kRJFOo4IDbFv8yOLtO_NqrWwnB_JIjTM-OYdWA8H7zp7gnPL161bVGzD7xDoF2dg==
+        provider_title: thenationalnews.com
+        resolved_url: https://www.thenationalnews.com/business/energy/2025/05/03/opec-oil-prices-brent/
+        resolved_domain: thenationalnews.com
+        publisher: thenationalnews.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      warnings: []
+      active_evidence_type: main_verifier_cleaned_summaries
+      destination_page_content_included: false
+    cutoff_verification_audit:
+      verifier_id: main_code_cutoff_verifier
+      queries:
+      - verified_summary_id: verified_summary:sha256:25808ad5df7f4e3b0ab2ead8802f822d1d45f9d808ba1742dbad998e8ea4bb38
+        query_area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - "For the week of June 2\u20136, 2025, spot prices were $63.27, $64.10,\
+            \ and $63.57 per barrel."
+          source_count: 11
+        removed_flagged_claims:
+        - "For the week of June 2\u20136, 2025, spot prices were $63.27, $64.10, and\
+          \ $63.57 per barrel."
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:d7b7ce4138326c92f2bb94d39acd2b63a94ff653f28d4575901493c95c40eead
+        query_area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - In May 2025, OPEC+ began unwinding some of its voluntary production cuts.
+            Reports indicated that OPEC crude oil production increased during May,
+            with the group deciding to add approximately 411,000 barrels per day (bpd)
+            to supply.
+          - Global oil supply rose by 330,000 bpd in May 2025, reaching 105 million
+            barrels per day (mb/d), which was 1.8 mb/d higher than the previous year.
+            Gains were described as being evenly split between OPEC+ and non-OPEC+
+            producers.
+          - Domestic U.S. drilling activity saw a continued decline, with the oil
+            rig count dropping for several consecutive weeks leading into early June
+            2025, reaching its lowest point since late 2021.
+          - Early June 2025 was marked by significant market volatility driven by
+            geopolitical tensions. Specifically, events such as drone operations in
+            the Russia-Ukraine conflict and initial concerns regarding Middle Eastern
+            stability influenced price movements.
+          - Prior to the mid-month geopolitical spikes, oil prices in early June were
+            generally range-bound. While some analysts noted that prices had been
+            under downward pressure due to the accelerated OPEC+ production increases
+            and economic uncertainties, the market remained highly sensitive to any
+            potential disruptions in physical flows.
+          - Global oil stocks had risen for three consecutive months as of April 2025,
+            with preliminary data suggesting a further surge in inventories during
+            May.
+          source_count: 8
+        removed_flagged_claims:
+        - In May 2025, OPEC+ began unwinding some of its voluntary production cuts.
+          Reports indicated that OPEC crude oil production increased during May, with
+          the group deciding to add approximately 411,000 barrels per day (bpd) to
+          supply.
+        - Global oil supply rose by 330,000 bpd in May 2025, reaching 105 million
+          barrels per day (mb/d), which was 1.8 mb/d higher than the previous year.
+          Gains were described as being evenly split between OPEC+ and non-OPEC+ producers.
+        - Domestic U.S. drilling activity saw a continued decline, with the oil rig
+          count dropping for several consecutive weeks leading into early June 2025,
+          reaching its lowest point since late 2021.
+        - Early June 2025 was marked by significant market volatility driven by geopolitical
+          tensions. Specifically, events such as drone operations in the Russia-Ukraine
+          conflict and initial concerns regarding Middle Eastern stability influenced
+          price movements.
+        - Prior to the mid-month geopolitical spikes, oil prices in early June were
+          generally range-bound. While some analysts noted that prices had been under
+          downward pressure due to the accelerated OPEC+ production increases and
+          economic uncertainties, the market remained highly sensitive to any potential
+          disruptions in physical flows.
+        - Global oil stocks had risen for three consecutive months as of April 2025,
+          with preliminary data suggesting a further surge in inventories during May.
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620
+        query_area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - Reports from June 2025 indicated that oil prices had experienced downward
+            pressure, with the OPEC Reference Basket (ORB) dropping by $5.36 in May
+            2025 to $63.62 per barrel.
+          source_count: 6
+        removed_flagged_claims:
+        - Reports from June 2025 indicated that oil prices had experienced downward
+          pressure, with the OPEC Reference Basket (ORB) dropping by $5.36 in May
+          2025 to $63.62 per barrel.
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149
+        query_area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - "During the week of June 2\u20136, 2025, WTI crude oil prices saw a significant\
+            \ rally, gaining 6.2% for the week."
+          - This early June rally saw WTI break above key technical resistance levels,
+            settling at $64.60 per barrel by the end of that week.
+          source_count: 2
+        removed_flagged_claims:
+        - "During the week of June 2\u20136, 2025, WTI crude oil prices saw a significant\
+          \ rally, gaining 6.2% for the week."
+        - This early June rally saw WTI break above key technical resistance levels,
+          settling at $64.60 per barrel by the end of that week.
+        audit_only: true
+      audit_only: true
+    source_validation_audit:
+      audit_enabled: false
+      executed: false
+      validator_id: source_validator_v52_audit_only
+      records: []
+      audit_only: true
+    claim_support_audit:
+      verifier_id: claim_support_verifier_v52_audit_only
+      audit_only: true
+      executed: false
+      completed: false
+      reason: audit switch is off
+      findings: []
+    claim_support_findings: []
+    policy_decision:
+      policy_id: graduated_evidence_policy_v52
+      horizon: 5
+      eligible: true
+      evidence_tier: none
+      evidence_tier_level: 0
+      resolved_source_ids: []
+      resolved_publishers: []
+      qualifying_claim_ids: []
+      eligibility_reasons:
+      - Neutral proposal requires no evidence.
+      center_action: no_change
+      uncertainty_action: unchanged
+    forecast_transformation:
+      engine_id: python_forecast_engine_v52
+      horizon: 5
+      original_point_forecast: 60.55688585599732
+      original_quantiles:
+        '0.05': 55.84928708100362
+        '0.1': 56.830733633527416
+        '0.2': 58.094279352450386
+        '0.3': 59.276721347279576
+        '0.4': 60.00110350448173
+        '0.5': 60.55688585599732
+        '0.6': 61.31001968658367
+        '0.7': 62.287921839754226
+        '0.8': 63.2454415198994
+        '0.9': 64.42903607657982
+        '0.95': 65.41722196665346
+      p10_p90_width: 7.598302443052404
+      center_action: no_change
+      action_fraction: 0.0
+      raw_center_adjustment: 0.0
+      novelty_multiplier: 1.0
+      novelty_adjusted_amount: 0.0
+      emergency_cap: 60.790000915527344
+      applied_center_adjustment: 0.0
+      uncertainty_action: unchanged
+      uncertainty_multiplier: 1.0
+      pre_floor_quantiles:
+        '0.05': 55.84928708100362
+        '0.1': 56.830733633527416
+        '0.2': 58.094279352450386
+        '0.3': 59.276721347279576
+        '0.4': 60.00110350448173
+        '0.5': 60.55688585599732
+        '0.6': 61.31001968658367
+        '0.7': 62.287921839754226
+        '0.8': 63.2454415198994
+        '0.9': 64.42903607657982
+        '0.95': 65.41722196665346
+      final_point_forecast: 60.55688585599732
+      final_quantiles:
+        '0.05': 55.84928708100362
+        '0.1': 56.830733633527416
+        '0.2': 58.094279352450386
+        '0.3': 59.276721347279576
+        '0.4': 60.00110350448173
+        '0.5': 60.55688585599732
+        '0.6': 61.31001968658367
+        '0.7': 62.287921839754226
+        '0.8': 63.2454415198994
+        '0.9': 64.42903607657982
+        '0.95': 65.41722196665346
+      floor_applied: false
+      warnings: []
+    unadjusted_ensemble:
+      point_forecast: 60.55688585599732
+      quantiles:
+        '0.05': 55.84928708100362
+        '0.1': 56.830733633527416
+        '0.2': 58.094279352450386
+        '0.3': 59.276721347279576
+        '0.4': 60.00110350448173
+        '0.5': 60.55688585599732
+        '0.6': 61.31001968658367
+        '0.7': 62.287921839754226
+        '0.8': 63.2454415198994
+        '0.9': 64.42903607657982
+        '0.95': 65.41722196665346
+    market_diagnostics:
+      latest_observation_date: '2025-05-30'
+      latest_value: 60.790000915527344
+      calendar_gap_days: 3
+      return_1b: -0.0024613999764007133
+      return_5b: -0.00669934382844628
+      return_21b: 0.04432231354806704
+      realized_volatility_21b: 0.27801220743800376
+      drawdown_63b: -0.1522799931440777
+      jump_zscore_63b: -0.02380822138700579
+      covariate_latest_values:
+        brent_log_ret_1b_l1b: -0.0039047295850964114
+        natgas_log_ret_1b_l1b: -0.021524735913139748
+        gasoline_log_ret_1b_l1b: -0.010249563485997907
+        gold_log_ret_1b_l1b: -0.008537804000789136
+        dollar_index_log_ret_1b_l1b: 0.0005035300605269822
+        oil_curve_contango_l1b: -0.7064896971407592
+        vix_level_l1b: 18.56999969482422
+    task_binding:
+      cutoff: '2025-06-02'
+      target_series_id: wti_crude_oil_price
+      horizons:
+      - 5
+      - 10
+      - 21
+      frequency: B
+      validated: true
+    audit_switch: false
+    audit_only_controls:
+      source_validator_executed: false
+      claim_support_verifier_executed: false
+      claim_support_verifier_completed: false
+    active_evidence_declaration: The LLM used the authoritative numerical-suite output
+      and main-verifier-cleaned summaries with mechanically resolved source identities.
+      Destination-page and audit-only content were not exposed. Optional diagnostic
+      code use is separately declared in code_execution_audit.
+    audit_findings_changed_forecast: false
+    llm_authored_final_numbers: false
+- predictor_id: agent_predictor_cfm_agent_v_5_2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:04:03.169964'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 61.255772120329155
+    quantiles:
+      '0.05': 54.14835713680338
+      '0.1': 55.18418027585649
+      '0.2': 56.86688797414946
+      '0.3': 59.273483740394695
+      '0.4': 60.42173450911771
+      '0.5': 61.255772120329155
+      '0.6': 62.0704329811506
+      '0.7': 62.97610857175444
+      '0.8': 63.99422491155124
+      '0.9': 65.09449028856082
+      '0.95': 66.38690165712836
+  metadata:
+    context_assessment:
+      research_packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    model_suite_id: model_suite:sha256:e1cfc4b23727aa7e3177c42738c442b6c98c84f5f5381902365f0e3c76307a82
+    numerical_suite_audit:
+      model_suite:
+        model_suite_id: model_suite:sha256:e1cfc4b23727aa7e3177c42738c442b6c98c84f5f5381902365f0e3c76307a82
+        target_series_id: wti_crude_oil_price
+        cutoff_date: '2025-06-02'
+        horizons:
+        - 5
+        - 10
+        - 21
+        frequency: B
+        model_num_samples: 1000
+        rng_seed: 2052286392
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:7a5367b8120a7522dec3f1cbfadc744eae8519458ddadf2c09758049bf9ae4bc
+        models:
+          arima:
+            model_name: arima
+            predictor_id: darts_autoarima
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.579814228693834
+              quantiles:
+                '0.05': 52.968360528542256
+                '0.1': 54.686887502162755
+                '0.2': 56.72570877754043
+                '0.3': 58.44321325604885
+                '0.4': 59.489406528505725
+                '0.5': 60.579814228693834
+                '0.6': 61.58460840824639
+                '0.7': 62.834852422354416
+                '0.8': 64.04052481400969
+                '0.9': 66.34501925184
+                '0.95': 68.04164909912988
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 60.98718806405927
+              quantiles:
+                '0.05': 51.2892346162915
+                '0.1': 53.0624400348172
+                '0.2': 55.185848385971575
+                '0.3': 57.55638729260419
+                '0.4': 59.3914916684483
+                '0.5': 60.98718806405927
+                '0.6': 62.41035619553421
+                '0.7': 64.26824249035853
+                '0.8': 66.29895148084545
+                '0.9': 68.46232726448982
+                '0.95': 70.6069992825297
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 60.79691606525057
+              quantiles:
+                '0.05': 47.443445676414484
+                '0.1': 49.83672224947937
+                '0.2': 53.36769365538477
+                '0.3': 56.03239100806535
+                '0.4': 58.12007217543334
+                '0.5': 60.79691606525057
+                '0.6': 63.2329590993992
+                '0.7': 65.70637623977944
+                '0.8': 68.69574806798767
+                '0.9': 71.76071971046643
+                '0.95': 75.56575910200468
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          kalman:
+            model_name: kalman
+            predictor_id: darts_kalman
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.75503528650333
+              quantiles:
+                '0.05': 57.79070126655423
+                '0.1': 58.48080216918084
+                '0.2': 59.370208760193044
+                '0.3': 59.832688828112836
+                '0.4': 60.304870895170396
+                '0.5': 60.75503528650333
+                '0.6': 61.23308721888569
+                '0.7': 61.80600721689132
+                '0.8': 62.397150890675604
+                '0.9': 63.11071643877319
+                '0.95': 63.69740306603726
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 60.89602993158681
+              quantiles:
+                '0.05': 57.89606288077733
+                '0.1': 58.54269643574965
+                '0.2': 59.32802882937166
+                '0.3': 59.91293167598438
+                '0.4': 60.393428747937136
+                '0.5': 60.89602993158681
+                '0.6': 61.35831007330365
+                '0.7': 61.80307627118107
+                '0.8': 62.40841502778749
+                '0.9': 63.12007043352928
+                '0.95': 63.75802386670325
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 60.69488235394074
+              quantiles:
+                '0.05': 57.70006964278622
+                '0.1': 58.35069398197453
+                '0.2': 59.14538456252146
+                '0.3': 59.69875976781996
+                '0.4': 60.218231430869615
+                '0.5': 60.69488235394074
+                '0.6': 61.10604996199314
+                '0.7': 61.47305739148813
+                '0.8': 62.02439992845279
+                '0.9': 62.88384868924173
+                '0.95': 63.709954400090226
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          lightgbm:
+            model_name: lightgbm
+            predictor_id: darts_lightgbm_cov
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.33580805279483
+              quantiles:
+                '0.05': 56.78879944791438
+                '0.1': 57.324511229238674
+                '0.2': 58.18692051961767
+                '0.3': 59.55426195767704
+                '0.4': 60.209033089769086
+                '0.5': 60.33580805279483
+                '0.6': 61.11236343261895
+                '0.7': 62.22290588001697
+                '0.8': 63.298648855012935
+                '0.9': 63.83137253912627
+                '0.95': 64.51261373479323
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 61.88409836534139
+              quantiles:
+                '0.05': 53.25977391334131
+                '0.1': 53.94740435700263
+                '0.2': 56.086786707105155
+                '0.3': 60.35113225259552
+                '0.4': 61.48028311096769
+                '0.5': 61.88409836534139
+                '0.6': 62.44263267461396
+                '0.7': 62.857006953723705
+                '0.8': 63.27530822602079
+                '0.9': 63.70107316766339
+                '0.95': 64.79568182215215
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 59.57357992417391
+              quantiles:
+                '0.05': 52.53915311545198
+                '0.1': 53.49914801280354
+                '0.2': 55.42368426060833
+                '0.3': 57.59976113212878
+                '0.4': 57.80954834802441
+                '0.5': 59.57357992417391
+                '0.6': 60.04636964241483
+                '0.7': 60.26738324168595
+                '0.8': 61.32749238433085
+                '0.9': 65.11191071526973
+                '0.95': 65.25632794573228
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: 4561
+              effective_training_examples_estimate: 4520
+              target_lags: 21
+              covariate_lags: 21
+              covariates:
+              - brent_log_ret_1b_l1b
+              - natgas_log_ret_1b_l1b
+              - gasoline_log_ret_1b_l1b
+              - gold_log_ret_1b_l1b
+              - dollar_index_log_ret_1b_l1b
+              - oil_curve_contango_l1b
+              - vix_level_l1b
+              covariate_observations:
+                brent_log_ret_1b_l1b: 4435
+                natgas_log_ret_1b_l1b: 5382
+                gasoline_log_ret_1b_l1b: 5384
+                gold_log_ret_1b_l1b: 5377
+                dollar_index_log_ret_1b_l1b: 5399
+                oil_curve_contango_l1b: 4562
+                vix_level_l1b: 5387
+              notes: 'Aligned observations use the common business-day span after
+                Darts-style calendar regularization. Effective examples are an auditable
+                estimate: aligned_observations - max(lags) - max_horizon + 1.'
+            num_samples: 1000
+            error: null
+        ensemble:
+          model_name: ensemble
+          predictor_id: cfm_arima_kalman_lightgbm_ensemble
+          status: ok
+          forecasts:
+          - horizon: 5
+            forecast_date: '2025-06-09'
+            point_forecast: 60.55688585599732
+            quantiles:
+              '0.05': 55.84928708100362
+              '0.1': 56.830733633527416
+              '0.2': 58.094279352450386
+              '0.3': 59.276721347279576
+              '0.4': 60.00110350448173
+              '0.5': 60.55688585599732
+              '0.6': 61.31001968658367
+              '0.7': 62.287921839754226
+              '0.8': 63.2454415198994
+              '0.9': 64.42903607657982
+              '0.95': 65.41722196665346
+          - horizon: 10
+            forecast_date: '2025-06-16'
+            point_forecast: 61.255772120329155
+            quantiles:
+              '0.05': 54.14835713680338
+              '0.1': 55.18418027585649
+              '0.2': 56.86688797414946
+              '0.3': 59.273483740394695
+              '0.4': 60.42173450911771
+              '0.5': 61.255772120329155
+              '0.6': 62.0704329811506
+              '0.7': 62.97610857175444
+              '0.8': 63.99422491155124
+              '0.9': 65.09449028856082
+              '0.95': 66.38690165712836
+          - horizon: 21
+            forecast_date: '2025-07-01'
+            point_forecast: 60.355126114455075
+            quantiles:
+              '0.05': 52.56088947821756
+              '0.1': 53.89552141475248
+              '0.2': 55.97892082617152
+              '0.3': 57.77697063600469
+              '0.4': 58.715950651442455
+              '0.5': 60.355126114455075
+              '0.6': 61.46179290126906
+              '0.7': 62.482272290984504
+              '0.8': 64.01588012692376
+              '0.9': 66.58549303832596
+              '0.95': 68.17734714927573
+          training_data:
+            target_observations: 5382
+            first_target_date: '2004-01-05'
+            last_target_date: '2025-05-30'
+            aligned_observations: 4561
+            effective_training_examples_estimate: 4520
+            target_lags: null
+            covariate_lags: null
+            covariates:
+            - brent_log_ret_1b_l1b
+            - natgas_log_ret_1b_l1b
+            - gasoline_log_ret_1b_l1b
+            - gold_log_ret_1b_l1b
+            - dollar_index_log_ret_1b_l1b
+            - oil_curve_contango_l1b
+            - vix_level_l1b
+            covariate_observations: {}
+            notes: Ensemble consumes forecast distributions, not raw observations.
+          num_samples: 1000
+          error: null
+        configured_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        active_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        successful_models:
+        - arima
+        - kalman
+        - lightgbm
+        failed_models: []
+        model_disagreement_std:
+          '5': 0.17191500046360514
+          '10': 0.4458496412524035
+          '21': 0.5542042675272738
+        diagnostics:
+          latest_observation_date: '2025-05-30'
+          latest_value: 60.790000915527344
+          calendar_gap_days: 3
+          return_1b: -0.0024613999764007133
+          return_5b: -0.00669934382844628
+          return_21b: 0.04432231354806704
+          realized_volatility_21b: 0.27801220743800376
+          drawdown_63b: -0.1522799931440777
+          jump_zscore_63b: -0.02380822138700579
+          covariate_latest_values:
+            brent_log_ret_1b_l1b: -0.0039047295850964114
+            natgas_log_ret_1b_l1b: -0.021524735913139748
+            gasoline_log_ret_1b_l1b: -0.010249563485997907
+            gold_log_ret_1b_l1b: -0.008537804000789136
+            dollar_index_log_ret_1b_l1b: 0.0005035300605269822
+            oil_curve_contango_l1b: -0.7064896971407592
+            vix_level_l1b: 18.56999969482422
+      execution:
+        tool_name: run_authoritative_suite
+        attempt_count: 1
+        validation_failure_count: 0
+        successful_execution_count: 1
+        attempt_errors: []
+        rng_seed: 2052286392
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:7a5367b8120a7522dec3f1cbfadc744eae8519458ddadf2c09758049bf9ae4bc
+    research_execution_audit:
+      tool_name: run_research_pipeline
+      expected_cutoff: '2025-06-02'
+      attempt_count: 1
+      successful_execution_count: 1
+      rejected_duplicate_count: 0
+      in_progress: false
+      attempt_errors: []
+    code_execution_audit:
+      code_execution_available: true
+      code_execution_used: false
+      code_execution_call_count: 0
+      code_execution_purposes: []
+    llm_context_assessment:
+      research_packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    structured_output_control_audit:
+      control_id: structured_assessment_retry_v52
+      maximum_correction_retries: 1
+      initial_response: "{\n  \"research_packet_id\": \"research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740\"\
+        ,\n  \"evidence_claims\": [\n    {\n      \"claim_id\": \"claim_001\",\n \
+        \     \"statement\": \"Eight OPEC+ countries, including Saudi Arabia and Russia,\
+        \ implemented a production adjustment of 411,000 barrels per day for June\
+        \ 2025 as part of a scheduled gradual phase-out of voluntary production cuts.\"\
+        ,\n      \"claim_type\": \"physical_supply\",\n      \"supporting_summary_ids\"\
+        : [\n        \"verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_010\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_002\",\n      \"statement\": \"As of early June 2025, market participants\
+        \ were driven by optimism over U.S.-China trade talks and concerns regarding\
+        \ geopolitical tensions in the Middle East, leading to a weekly increase in\
+        \ WTI prices.\",\n      \"claim_type\": \"market_reaction\",\n      \"supporting_summary_ids\"\
+        : [\n        \"verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_013\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    }\n  ],\n  \"physical_status\"\
+        : \"stable\",\n  \"incremental_novelty\": \"low\",\n  \"material_evidence_conflict\"\
+        : false,\n  \"confidence\": 0.85,\n  \"horizon_actions\": [\n    {\n     \
+        \ \"horizon\": 5,\n      \"center_action\": \"small_up\",\n      \"uncertainty_action\"\
+        : \"unchanged\",\n      \"persistence_profile\": \"temporary\",\n      \"\
+        cited_claim_ids\": [\n        \"claim_001\",\n        \"claim_002\"\n    \
+        \  ],\n      \"narrowing_uncertainty_resolved\": \"The market is reacting\
+        \ to supply adjustment schedules and positive trade sentiment.\",\n      \"\
+        rationale\": \"Prices are showing upward momentum driven by recent geopolitical\
+        \ news and trade optimism, supported by OPEC+ supply adjustments.\"\n    },\n\
+        \    {\n      \"horizon\": 10,\n      \"center_action\": \"no_change\",\n\
+        \      \"uncertainty_action\": \"small_wider\",\n      \"persistence_profile\"\
+        : \"decaying\",\n      \"cited_claim_ids\": [\n        \"claim_001\"\n   \
+        \   ],\n      \"narrowing_uncertainty_resolved\": \"Uncertainty remains regarding\
+        \ the long-term impact of the phased production increases.\",\n      \"rationale\"\
+        : \"Market sentiment may balance out the current upward pressure as the reality\
+        \ of OPEC+ production increases settles in.\"\n    },\n    {\n      \"horizon\"\
+        : 21,\n      \"center_action\": \"small_down\",\n      \"uncertainty_action\"\
+        : \"moderately_wider\",\n      \"persistence_profile\": \"temporary\",\n \
+        \     \"cited_claim_ids\": [\n        \"claim_001\"\n      ],\n      \"narrowing_uncertainty_resolved\"\
+        : \"Longer term, the market remains sensitive to global demand growth headwinds.\"\
+        ,\n      \"rationale\": \"Underlying concerns about weak demand growth in\
+        \ the second quarter may exert downward pressure on prices over the longer\
+        \ 21-day horizon.\"\n    }\n  ],\n  \"research_summary\": \"In early June\
+        \ 2025, WTI crude oil prices saw a recovery in momentum, driven by geopolitical\
+        \ concerns in the Middle East and positive sentiment from U.S.-China trade\
+        \ discussions. OPEC+ continues to implement its scheduled phased return of\
+        \ production volumes, which participants justify as maintaining healthy market\
+        \ fundamentals amid currently low inventories. Despite this, demand growth\
+        \ remains constrained by reports of weaker delivery performance in the United\
+        \ States and China.\",\n  \"overall_rationale\": \"The recent price surge\
+        \ is a reaction to immediate short-term supply anxiety and trade optimism.\
+        \ However, the systematic implementation of planned production increases by\
+        \ OPEC+ and persistent signals of cooling demand suggest that current upward\
+        \ pressures are likely temporary and may fade over the coming weeks.\",\n\
+        \  \"warnings\": []\n}"
+      initial_validation_failed: true
+      initial_validation_errors:
+      - type: literal_error
+        loc:
+        - physical_status
+        msg: Input should be 'normal', 'elevated_risk', 'partial_disruption', 'confirmed_disruption'
+          or 'unknown'
+        input: stable
+        ctx:
+          expected: '''normal'', ''elevated_risk'', ''partial_disruption'', ''confirmed_disruption''
+            or ''unknown'''
+      - type: literal_error
+        loc:
+        - incremental_novelty
+        msg: Input should be 'likely_new_relative_to_model_data', 'possibly_partly_reflected',
+          'likely_reflected_in_model_data' or 'indeterminate'
+        input: low
+        ctx:
+          expected: '''likely_new_relative_to_model_data'', ''possibly_partly_reflected'',
+            ''likely_reflected_in_model_data'' or ''indeterminate'''
+      correction_retry_attempted: true
+      retry_response: null
+      retry_validation_errors:
+      - type: AttributeError
+        msg: '''CfmV52Settings'' object has no attribute ''structured_output_retry_timeout_seconds'''
+      retry_succeeded: false
+      neutral_fallback_applied: true
+      final_disposition: neutral_fallback_after_retry_failure
+    active_research_packet:
+      packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      cutoff_date: '2025-06-02'
+      queries:
+      - area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+      - area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+      - area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+      - area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+      verified_summaries:
+      - verified_summary_id: verified_summary:sha256:25808ad5df7f4e3b0ab2ead8802f822d1d45f9d808ba1742dbad998e8ea4bb38
+        query_area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: "During late May and early June 2025, West Texas Intermediate\
+          \ (WTI) crude oil prices experienced a period of range-bound trading.\n\n\
+          ### WTI Price Trends\n*   **Late May 2025:** WTI spot prices remained in\
+          \ a relatively narrow range. For the week of May 26\u201330, 2025, daily\
+          \ spot prices were recorded at $61.61, $62.54, $61.66, and $61.46 per barrel.\
+          \ The monthly average for May 2025 was approximately $62.20 per barrel.\n\
+          *   **Early June 2025:** Prices showed signs of a slight recovery as the\
+          \ month began.\n\n### Major Energy Market Context\nMarket observers characterized\
+          \ May 2025 as a \"hinge point\" that potentially rewired global energy market\
+          \ dynamics. Key factors influencing the market during this period included:\n\
+          \n*   **Supply Strategy Adjustments:** Several major producing nations reportedly\
+          \ recalibrated their output strategies. Notably, OPEC+ had previously decided\
+          \ to increase output, with plans to unwind a portion of voluntary production\
+          \ cuts through June 2025.\n*   **Geopolitical and Policy Shifts:** The energy\
+          \ sector saw a confluence of geopolitical actions and policy announcements.\
+          \ This included efforts by consuming nations to secure alternative supply\
+          \ routes and storage capacities, alongside evolving regulatory frameworks\
+          \ in major economies regarding fossil fuel investments and renewable energy.\n\
+          *   **Demand Signals:** Global oil demand growth faced headwinds, with reports\
+          \ of weak second-quarter deliveries in the United States and China. Additionally,\
+          \ the rapid rise of AI and the associated surge in data center power demand\
+          \ began to emerge as a significant driver of electricity and natural gas\
+          \ consumption."
+        associated_source_ids:
+        - source_001
+        - source_002
+        - source_003
+        - source_004
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:d7b7ce4138326c92f2bb94d39acd2b63a94ff653f28d4575901493c95c40eead
+        query_area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: 'As of early June 2025, the global crude oil market was characterized
+          by a transition in supply dynamics and heightened sensitivity to geopolitical
+          risks.
+
+
+          ### Global Supply and Production Trends
+
+
+          ### Market Sentiment and Geopolitical Factors'
+        associated_source_ids:
+        - source_005
+        - source_006
+        - source_007
+        - source_008
+        - source_009
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620
+        query_area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: 'In early June 2025, OPEC+ continued its strategy of a gradual
+          and flexible return of voluntary production adjustments.
+
+
+          ### OPEC+ Production Policy
+
+          *   **Production Adjustment:** Following a virtual meeting on May 31, 2025,
+          eight OPEC+ countries (Saudi Arabia, Russia, Iraq, UAE, Kuwait, Kazakhstan,
+          Algeria, and Oman) reaffirmed their commitment to market stability. They
+          implemented a production adjustment of **411,000 barrels per day (bpd)**
+          for June 2025, relative to the previous month''s required levels.
+
+          *   **Strategy:** This move was part of a broader plan, agreed upon on December
+          5, 2024, to gradually phase out 2.2 million bpd of voluntary production
+          adjustments over an 18-month period that began on April 1, 2025. The group
+          maintained that these increases could be paused or reversed depending on
+          evolving market conditions.
+
+          *   **Commitment:** The participating countries reiterated their commitment
+          to full conformity with the Declaration of Cooperation and their intention
+          to compensate for any overproduced volumes since January 2024.
+
+
+          ### Oil Inventory and Market Context
+
+          *   **Market Fundamentals:** In their late May/early June assessments, the
+          participating OPEC+ countries cited "healthy market fundamentals," specifically
+          noting **low oil inventories** as a justification for their production adjustments.
+
+          *   **Market Trends:** Despite this, global oil demand growth for 2025 remained
+          projected at approximately 1.3 million bpd, with significant contributions
+          from non-OECD countries.'
+        associated_source_ids:
+        - source_010
+        - source_011
+        - source_012
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149
+        query_area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: "As of June 2, 2025, the WTI crude oil market was characterized\
+          \ by a significant upward trend, with prices experiencing a notable surge\
+          \ during the first week of June 2025.\n\n### Market Context and Reaction\n\
+          *   **Price Performance:** This marked a reversal in momentum, representing\
+          \ the first weekly increase for the benchmark in three weeks.\n*   **Drivers\
+          \ of the Rally:**\n    *   **Trade Optimism:** The surge was largely fueled\
+          \ by optimism surrounding U.S.-China trade talks, which improved market\
+          \ risk appetite and bolstered expectations for stronger global fuel demand.\n\
+          \    *   **Geopolitical Tensions:** Concerns regarding potential Israeli\
+          \ strikes on Iranian nuclear sites created fears of supply disruptions in\
+          \ the Middle East, adding upward pressure to prices.\n    *   **OPEC+ Policy:**\
+          \ Market participants were closely monitoring OPEC+ supply policies during\
+          \ this period. Leading up to June 2025, the group had been implementing\
+          \ a gradual return of voluntary production adjustments, with a scheduled\
+          \ production adjustment of 411,000 barrels per day for June 2025."
+        associated_source_ids:
+        - source_013
+        - source_014
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      sources:
+      - source_id: source_001
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFioBxceuCejXpoCKEJlsnhgtmTzgMO-Bx3agCATaElQAHl5LScpsOhjZDxjhZGOVBgVonSpPSeXcutJ5onOm17RQ9LYVQLwl2i60rGOY7zltFaJktSybwtaDk1EosSpnRTVBQQS8mpCp6OoNKhJRNttm9heXqk80dr7_QEXLCeARfkjTUGa_1o1pOcZfm5H67qKaNwatW1fsY57PI7MvrGbg3ZudMO60Ao4b4RHY_I
+        provider_title: windows.net
+        resolved_url: https://iea.blob.core.windows.net/assets/49666e25-2275-47cc-9343-cebb3477619c/-17JUNE2025_OilMarketReport_Corrigendum.pdf
+        resolved_domain: iea.blob.core.windows.net
+        publisher: iea.blob.core.windows.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_002
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEZuWbytRZkC5V8NTDjd9l2pPyLVsBfdw2G4BWcdNzKFxzjD2GovYBLAtsVdheKwxcc6duxCZmTCorBB56HTrAy-zogr4tTQMC4UzFwjvkDqW7pn10d0kOGmq5FJ3HiQUZ0
+        provider_title: eia.gov
+        resolved_url: https://www.eia.gov/dnav/pet/hist/rwtcd.htm
+        resolved_domain: eia.gov
+        publisher: U.S. Energy Information Administration
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_003
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEo24z57UegOT3WNCBNEKBriv3YS-fKkAo5M0pf-5JaGsQIsgyjZNN-0Iot5ZN5vrMSzdrnM-i7zOpeQlKFvIlbu1CbAER2IBQC_09Xnpv93jkqlrU2WPzX4OYk0G2qC9LbBzbem7Sll93d9GH6EhEFjw==
+        provider_title: ycharts.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 405: Not Allowed'
+      - source_id: source_004
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH7HQdrp7_M3oNtf-TRMvh7qPk8t5DVSXULeC6gvNCQcl9Re2XNZdcJDwvHXLw5bmi1RDDmXHs6FFN23mio2BgrutYzXr856LI-EhXDtqmRaI6fNOp_7ACk0znKRJzHP9LLQoTX5XDathbTjlmc18rKidj1QYI1-IlkNd1w5klgrf1daQq7jWbblijgr0qSodnQrJOeut0g-tpoBEM259FR
+        provider_title: vanhessen.com
+        resolved_url: https://www.vanhessen.com/en/info/404/
+        resolved_domain: vanhessen.com
+        publisher: vanhessen.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_005
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHbiQB4k8j38dxHvr9LfaWoFjHJczlOx833P8scxnX8v1x6hvGFzhmBwQ5pIir2XWq8K_rxBRmhoyOVIUH6jLCRB1gzcEeuknHwmBNmUYFvV9me0qoQHoexxnlhWWbCNj8mULAijNEMPKyy0cO3
+        provider_title: iea.org
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 403: Forbidden'
+      - source_id: source_006
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE7QseHayu87hlNTOHgTXQD7Wu7LKueyvTSlbneYrFvZbYUd2f5VnUITApHTEmvh0xQlDkNL2EN9gV5tfP67foZAs59MniAITY1TpYTplOpVkS2GJZTJ8ViYdYBpUSjq6AMKYBeRZrZuzsEGskPqIDErhHNYJgvZ9W90b5QAKkf00t9KDAkZy9nkMlCrn0noZYanTYvH4E1tz7j91dBQLXq12kg-_BOMT27oGOGs5pT
+        provider_title: windows.net
+        resolved_url: https://iea.blob.core.windows.net/assets/49666e25-2275-47cc-9343-cebb3477619c/-17JUNE2025_OilMarketReport_Corrigendum.pdf
+        resolved_domain: iea.blob.core.windows.net
+        publisher: iea.blob.core.windows.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_007
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH6YG1GlpezLlZ3skC2sJoJLPBg2fPtA7q3CWqwZTxkFIH6e_0P7CrpQ7G2VKyrQ6Lbc9UUCYoUZG7NM66iSduzTJac1A13bWtF-cpMxCM19QgeAIAnx8LlzprM7G8SBZnWnNPc9lL9NcHrbM-IyMc6IA==
+        provider_title: commodia.com
+        resolved_url: https://newsletter.commodia.com/p/forecast-update-june-2025
+        resolved_domain: newsletter.commodia.com
+        publisher: newsletter.commodia.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_008
+        rank: 4
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF15HsbDT2h5kFFyhA4VQL8j6Ety7U6lOBK69uKfu8P4sCio2lVqX6W0z7SZY5ME88g_td_f2LoElmqD0o6_o_xW3ACNN-CoI4HOTRA9I0atlhV8rFkYYLg3P5ax9kAoFxgymcJWqo1LuC3iXHbC-Oh92_i-OqregbptOzXqLglD4dA9lkKmwTIsSSMoRnSt5dD5CFpRfgoh39R8FPa5JpfRmH0bJI=
+        provider_title: kamcoinvest.com
+        resolved_url: https://www.kamcoinvest.com/sites/default/files/research/pdf/Oil%20Market%20Monthly%20Report%20-%20Jun-2025.pdf
+        resolved_domain: kamcoinvest.com
+        publisher: kamcoinvest.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_009
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF1th_D8931JAtlpr85ZA_RjetsNkZcVs63F70hl8oMZGm1ICFAUmR4Q8MsWqPRjaBG5N7QhpUoqXEgqzaqQayjVBEkXTKnztLKAR-YR_nbloPt_i0jFKvmZa51mZv3dmFSh12ziIS_nhz4LFDn6tx9pQap0DhBwDBMR2Ny9RmvyGvUnNFKAm4H0QZYPz2Ib9eWqkFuqnXZhunm-bcKBjs=
+        provider_title: domesticoperating.com
+        resolved_url: https://www.domesticoperating.com/blog/2025/06/12/wti-crude-oil-price-surges-3-as-global-supply-tightens/
+        resolved_domain: domesticoperating.com
+        publisher: domesticoperating.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_010
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFLNeFYzKou-G5CTGSELtaQtCc2Uxp_0kJ1zbWCjLT4y1zG1EoPZeORDK42Id0MLnkS7HBIqBOa57ITtehKMKPtBQmQE0orNGkMbZFUVdJ9aFuiqItnCKu7uKlw7-UIQAe2y_-ismeBcw==
+        provider_title: opec.org
+        resolved_url: https://www.opec.org/pr-detail/566-31-may-2025.html
+        resolved_domain: opec.org
+        publisher: OPEC
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_011
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQECMuGOzELqFbczntYgUMsoS1heDaq0dG0PHMf4ICYfrCkCVPgIvuemYqHVvLSvXTJZevcwISTQ-r72A42h6GPfD11kzBszLJEAt83s2iPU97ODeQezxxWPF4aWVM4RycGhlyCNbCi0cdWXlrH8Kz0gHbG6jAUqUR6YFKiJsCLiiAwEkr--b3-jhBjRBnl1G8o7SBaz_YIrA7LoWJihcjMEvf5dtWwH
+        provider_title: enerdata.net
+        resolved_url: https://www.enerdata.net/publications/daily-energy-news/opec-announces-accelerated-oil-output-hike-june-2025.html
+        resolved_domain: enerdata.net
+        publisher: enerdata.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_012
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHQedXr_Lh69sW0CMp_Lz6Tc7w9h9VhGvKfI62Bm4mgZhKPfjUkpvDS3ew30PB4dZriPJzJ-14S0iYePKdnHlWPbrJviAKuRMqeb8YuD4BMTGW8aIlusbdk2wl9MKKhgslwj5_SGoxEZl_3AVuk6vDhtEwKQ4w1srfJ7N8ElTnYl1ZHhG3foWIPnub_r4P9AhEQaTc=
+        provider_title: oilandgasmiddleeast.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 405: Not Allowed'
+      - source_id: source_013
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHvyVx5K4_3WdNlYdS40Bn9x0Rm_Ue2VZ_aNWrpgrBeEtD74jykY8-vfIyynWGLnGR-U1u3uwB9bmiEPbtZtrbaKLk-awt5B0LMy-tE8WqX_Ewh0XlirJXF2daBMmsR-kaYhK8sim_hgOukcHWFBnK4RoaHy_XmmrVHvfnwKcg=
+        provider_title: ebc.com
+        resolved_url: https://www.ebc.com/forex/how-traders-profited-from-oil-spot-price-swings
+        resolved_domain: ebc.com
+        publisher: ebc.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_014
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG4xXevR52Hoa-f1nm29cN9u9dTatu0g4DpraKIEHdj2cRePMgTIfEGtYWLa-sAWdGPXUwT7XbzCs8bAKN8EFW8QssQEb7AEX13KkW5bZJVsJhUYcjVA3kRJFOo4IDbFv8yOLtO_NqrWwnB_JIjTM-OYdWA8H7zp7gnPL161bVGzD7xDoF2dg==
+        provider_title: thenationalnews.com
+        resolved_url: https://www.thenationalnews.com/business/energy/2025/05/03/opec-oil-prices-brent/
+        resolved_domain: thenationalnews.com
+        publisher: thenationalnews.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      warnings: []
+      active_evidence_type: main_verifier_cleaned_summaries
+      destination_page_content_included: false
+    cutoff_verification_audit:
+      verifier_id: main_code_cutoff_verifier
+      queries:
+      - verified_summary_id: verified_summary:sha256:25808ad5df7f4e3b0ab2ead8802f822d1d45f9d808ba1742dbad998e8ea4bb38
+        query_area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - "For the week of June 2\u20136, 2025, spot prices were $63.27, $64.10,\
+            \ and $63.57 per barrel."
+          source_count: 11
+        removed_flagged_claims:
+        - "For the week of June 2\u20136, 2025, spot prices were $63.27, $64.10, and\
+          \ $63.57 per barrel."
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:d7b7ce4138326c92f2bb94d39acd2b63a94ff653f28d4575901493c95c40eead
+        query_area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - In May 2025, OPEC+ began unwinding some of its voluntary production cuts.
+            Reports indicated that OPEC crude oil production increased during May,
+            with the group deciding to add approximately 411,000 barrels per day (bpd)
+            to supply.
+          - Global oil supply rose by 330,000 bpd in May 2025, reaching 105 million
+            barrels per day (mb/d), which was 1.8 mb/d higher than the previous year.
+            Gains were described as being evenly split between OPEC+ and non-OPEC+
+            producers.
+          - Domestic U.S. drilling activity saw a continued decline, with the oil
+            rig count dropping for several consecutive weeks leading into early June
+            2025, reaching its lowest point since late 2021.
+          - Early June 2025 was marked by significant market volatility driven by
+            geopolitical tensions. Specifically, events such as drone operations in
+            the Russia-Ukraine conflict and initial concerns regarding Middle Eastern
+            stability influenced price movements.
+          - Prior to the mid-month geopolitical spikes, oil prices in early June were
+            generally range-bound. While some analysts noted that prices had been
+            under downward pressure due to the accelerated OPEC+ production increases
+            and economic uncertainties, the market remained highly sensitive to any
+            potential disruptions in physical flows.
+          - Global oil stocks had risen for three consecutive months as of April 2025,
+            with preliminary data suggesting a further surge in inventories during
+            May.
+          source_count: 8
+        removed_flagged_claims:
+        - In May 2025, OPEC+ began unwinding some of its voluntary production cuts.
+          Reports indicated that OPEC crude oil production increased during May, with
+          the group deciding to add approximately 411,000 barrels per day (bpd) to
+          supply.
+        - Global oil supply rose by 330,000 bpd in May 2025, reaching 105 million
+          barrels per day (mb/d), which was 1.8 mb/d higher than the previous year.
+          Gains were described as being evenly split between OPEC+ and non-OPEC+ producers.
+        - Domestic U.S. drilling activity saw a continued decline, with the oil rig
+          count dropping for several consecutive weeks leading into early June 2025,
+          reaching its lowest point since late 2021.
+        - Early June 2025 was marked by significant market volatility driven by geopolitical
+          tensions. Specifically, events such as drone operations in the Russia-Ukraine
+          conflict and initial concerns regarding Middle Eastern stability influenced
+          price movements.
+        - Prior to the mid-month geopolitical spikes, oil prices in early June were
+          generally range-bound. While some analysts noted that prices had been under
+          downward pressure due to the accelerated OPEC+ production increases and
+          economic uncertainties, the market remained highly sensitive to any potential
+          disruptions in physical flows.
+        - Global oil stocks had risen for three consecutive months as of April 2025,
+          with preliminary data suggesting a further surge in inventories during May.
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620
+        query_area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - Reports from June 2025 indicated that oil prices had experienced downward
+            pressure, with the OPEC Reference Basket (ORB) dropping by $5.36 in May
+            2025 to $63.62 per barrel.
+          source_count: 6
+        removed_flagged_claims:
+        - Reports from June 2025 indicated that oil prices had experienced downward
+          pressure, with the OPEC Reference Basket (ORB) dropping by $5.36 in May
+          2025 to $63.62 per barrel.
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149
+        query_area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - "During the week of June 2\u20136, 2025, WTI crude oil prices saw a significant\
+            \ rally, gaining 6.2% for the week."
+          - This early June rally saw WTI break above key technical resistance levels,
+            settling at $64.60 per barrel by the end of that week.
+          source_count: 2
+        removed_flagged_claims:
+        - "During the week of June 2\u20136, 2025, WTI crude oil prices saw a significant\
+          \ rally, gaining 6.2% for the week."
+        - This early June rally saw WTI break above key technical resistance levels,
+          settling at $64.60 per barrel by the end of that week.
+        audit_only: true
+      audit_only: true
+    source_validation_audit:
+      audit_enabled: false
+      executed: false
+      validator_id: source_validator_v52_audit_only
+      records: []
+      audit_only: true
+    claim_support_audit:
+      verifier_id: claim_support_verifier_v52_audit_only
+      audit_only: true
+      executed: false
+      completed: false
+      reason: audit switch is off
+      findings: []
+    claim_support_findings: []
+    policy_decision:
+      policy_id: graduated_evidence_policy_v52
+      horizon: 10
+      eligible: true
+      evidence_tier: none
+      evidence_tier_level: 0
+      resolved_source_ids: []
+      resolved_publishers: []
+      qualifying_claim_ids: []
+      eligibility_reasons:
+      - Neutral proposal requires no evidence.
+      center_action: no_change
+      uncertainty_action: unchanged
+    forecast_transformation:
+      engine_id: python_forecast_engine_v52
+      horizon: 10
+      original_point_forecast: 61.255772120329155
+      original_quantiles:
+        '0.05': 54.14835713680338
+        '0.1': 55.18418027585649
+        '0.2': 56.86688797414946
+        '0.3': 59.273483740394695
+        '0.4': 60.42173450911771
+        '0.5': 61.255772120329155
+        '0.6': 62.0704329811506
+        '0.7': 62.97610857175444
+        '0.8': 63.99422491155124
+        '0.9': 65.09449028856082
+        '0.95': 66.38690165712836
+      p10_p90_width: 9.910310012704329
+      center_action: no_change
+      action_fraction: 0.0
+      raw_center_adjustment: 0.0
+      novelty_multiplier: 1.0
+      novelty_adjusted_amount: 0.0
+      emergency_cap: 60.790000915527344
+      applied_center_adjustment: 0.0
+      uncertainty_action: unchanged
+      uncertainty_multiplier: 1.0
+      pre_floor_quantiles:
+        '0.05': 54.14835713680338
+        '0.1': 55.18418027585649
+        '0.2': 56.86688797414946
+        '0.3': 59.273483740394695
+        '0.4': 60.42173450911771
+        '0.5': 61.255772120329155
+        '0.6': 62.0704329811506
+        '0.7': 62.97610857175444
+        '0.8': 63.99422491155124
+        '0.9': 65.09449028856082
+        '0.95': 66.38690165712836
+      final_point_forecast: 61.255772120329155
+      final_quantiles:
+        '0.05': 54.14835713680338
+        '0.1': 55.18418027585649
+        '0.2': 56.86688797414946
+        '0.3': 59.273483740394695
+        '0.4': 60.42173450911771
+        '0.5': 61.255772120329155
+        '0.6': 62.0704329811506
+        '0.7': 62.97610857175444
+        '0.8': 63.99422491155124
+        '0.9': 65.09449028856082
+        '0.95': 66.38690165712836
+      floor_applied: false
+      warnings: []
+    unadjusted_ensemble:
+      point_forecast: 61.255772120329155
+      quantiles:
+        '0.05': 54.14835713680338
+        '0.1': 55.18418027585649
+        '0.2': 56.86688797414946
+        '0.3': 59.273483740394695
+        '0.4': 60.42173450911771
+        '0.5': 61.255772120329155
+        '0.6': 62.0704329811506
+        '0.7': 62.97610857175444
+        '0.8': 63.99422491155124
+        '0.9': 65.09449028856082
+        '0.95': 66.38690165712836
+    market_diagnostics:
+      latest_observation_date: '2025-05-30'
+      latest_value: 60.790000915527344
+      calendar_gap_days: 3
+      return_1b: -0.0024613999764007133
+      return_5b: -0.00669934382844628
+      return_21b: 0.04432231354806704
+      realized_volatility_21b: 0.27801220743800376
+      drawdown_63b: -0.1522799931440777
+      jump_zscore_63b: -0.02380822138700579
+      covariate_latest_values:
+        brent_log_ret_1b_l1b: -0.0039047295850964114
+        natgas_log_ret_1b_l1b: -0.021524735913139748
+        gasoline_log_ret_1b_l1b: -0.010249563485997907
+        gold_log_ret_1b_l1b: -0.008537804000789136
+        dollar_index_log_ret_1b_l1b: 0.0005035300605269822
+        oil_curve_contango_l1b: -0.7064896971407592
+        vix_level_l1b: 18.56999969482422
+    task_binding:
+      cutoff: '2025-06-02'
+      target_series_id: wti_crude_oil_price
+      horizons:
+      - 5
+      - 10
+      - 21
+      frequency: B
+      validated: true
+    audit_switch: false
+    audit_only_controls:
+      source_validator_executed: false
+      claim_support_verifier_executed: false
+      claim_support_verifier_completed: false
+    active_evidence_declaration: The LLM used the authoritative numerical-suite output
+      and main-verifier-cleaned summaries with mechanically resolved source identities.
+      Destination-page and audit-only content were not exposed. Optional diagnostic
+      code use is separately declared in code_execution_audit.
+    audit_findings_changed_forecast: false
+    llm_authored_final_numbers: false
+- predictor_id: agent_predictor_cfm_agent_v_5_2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T15:04:03.169964'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 60.355126114455075
+    quantiles:
+      '0.05': 52.56088947821756
+      '0.1': 53.89552141475248
+      '0.2': 55.97892082617152
+      '0.3': 57.77697063600469
+      '0.4': 58.715950651442455
+      '0.5': 60.355126114455075
+      '0.6': 61.46179290126906
+      '0.7': 62.482272290984504
+      '0.8': 64.01588012692376
+      '0.9': 66.58549303832596
+      '0.95': 68.17734714927573
+  metadata:
+    context_assessment:
+      research_packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    model_suite_id: model_suite:sha256:e1cfc4b23727aa7e3177c42738c442b6c98c84f5f5381902365f0e3c76307a82
+    numerical_suite_audit:
+      model_suite:
+        model_suite_id: model_suite:sha256:e1cfc4b23727aa7e3177c42738c442b6c98c84f5f5381902365f0e3c76307a82
+        target_series_id: wti_crude_oil_price
+        cutoff_date: '2025-06-02'
+        horizons:
+        - 5
+        - 10
+        - 21
+        frequency: B
+        model_num_samples: 1000
+        rng_seed: 2052286392
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:7a5367b8120a7522dec3f1cbfadc744eae8519458ddadf2c09758049bf9ae4bc
+        models:
+          arima:
+            model_name: arima
+            predictor_id: darts_autoarima
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.579814228693834
+              quantiles:
+                '0.05': 52.968360528542256
+                '0.1': 54.686887502162755
+                '0.2': 56.72570877754043
+                '0.3': 58.44321325604885
+                '0.4': 59.489406528505725
+                '0.5': 60.579814228693834
+                '0.6': 61.58460840824639
+                '0.7': 62.834852422354416
+                '0.8': 64.04052481400969
+                '0.9': 66.34501925184
+                '0.95': 68.04164909912988
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 60.98718806405927
+              quantiles:
+                '0.05': 51.2892346162915
+                '0.1': 53.0624400348172
+                '0.2': 55.185848385971575
+                '0.3': 57.55638729260419
+                '0.4': 59.3914916684483
+                '0.5': 60.98718806405927
+                '0.6': 62.41035619553421
+                '0.7': 64.26824249035853
+                '0.8': 66.29895148084545
+                '0.9': 68.46232726448982
+                '0.95': 70.6069992825297
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 60.79691606525057
+              quantiles:
+                '0.05': 47.443445676414484
+                '0.1': 49.83672224947937
+                '0.2': 53.36769365538477
+                '0.3': 56.03239100806535
+                '0.4': 58.12007217543334
+                '0.5': 60.79691606525057
+                '0.6': 63.2329590993992
+                '0.7': 65.70637623977944
+                '0.8': 68.69574806798767
+                '0.9': 71.76071971046643
+                '0.95': 75.56575910200468
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          kalman:
+            model_name: kalman
+            predictor_id: darts_kalman
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.75503528650333
+              quantiles:
+                '0.05': 57.79070126655423
+                '0.1': 58.48080216918084
+                '0.2': 59.370208760193044
+                '0.3': 59.832688828112836
+                '0.4': 60.304870895170396
+                '0.5': 60.75503528650333
+                '0.6': 61.23308721888569
+                '0.7': 61.80600721689132
+                '0.8': 62.397150890675604
+                '0.9': 63.11071643877319
+                '0.95': 63.69740306603726
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 60.89602993158681
+              quantiles:
+                '0.05': 57.89606288077733
+                '0.1': 58.54269643574965
+                '0.2': 59.32802882937166
+                '0.3': 59.91293167598438
+                '0.4': 60.393428747937136
+                '0.5': 60.89602993158681
+                '0.6': 61.35831007330365
+                '0.7': 61.80307627118107
+                '0.8': 62.40841502778749
+                '0.9': 63.12007043352928
+                '0.95': 63.75802386670325
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 60.69488235394074
+              quantiles:
+                '0.05': 57.70006964278622
+                '0.1': 58.35069398197453
+                '0.2': 59.14538456252146
+                '0.3': 59.69875976781996
+                '0.4': 60.218231430869615
+                '0.5': 60.69488235394074
+                '0.6': 61.10604996199314
+                '0.7': 61.47305739148813
+                '0.8': 62.02439992845279
+                '0.9': 62.88384868924173
+                '0.95': 63.709954400090226
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: null
+              effective_training_examples_estimate: null
+              target_lags: null
+              covariate_lags: null
+              covariates: []
+              covariate_observations: {}
+              notes: All cutoff-safe target observations are supplied to the Darts
+                model.
+            num_samples: 1000
+            error: null
+          lightgbm:
+            model_name: lightgbm
+            predictor_id: darts_lightgbm_cov
+            status: ok
+            forecasts:
+            - horizon: 5
+              forecast_date: '2025-06-09'
+              point_forecast: 60.33580805279483
+              quantiles:
+                '0.05': 56.78879944791438
+                '0.1': 57.324511229238674
+                '0.2': 58.18692051961767
+                '0.3': 59.55426195767704
+                '0.4': 60.209033089769086
+                '0.5': 60.33580805279483
+                '0.6': 61.11236343261895
+                '0.7': 62.22290588001697
+                '0.8': 63.298648855012935
+                '0.9': 63.83137253912627
+                '0.95': 64.51261373479323
+            - horizon: 10
+              forecast_date: '2025-06-16'
+              point_forecast: 61.88409836534139
+              quantiles:
+                '0.05': 53.25977391334131
+                '0.1': 53.94740435700263
+                '0.2': 56.086786707105155
+                '0.3': 60.35113225259552
+                '0.4': 61.48028311096769
+                '0.5': 61.88409836534139
+                '0.6': 62.44263267461396
+                '0.7': 62.857006953723705
+                '0.8': 63.27530822602079
+                '0.9': 63.70107316766339
+                '0.95': 64.79568182215215
+            - horizon: 21
+              forecast_date: '2025-07-01'
+              point_forecast: 59.57357992417391
+              quantiles:
+                '0.05': 52.53915311545198
+                '0.1': 53.49914801280354
+                '0.2': 55.42368426060833
+                '0.3': 57.59976113212878
+                '0.4': 57.80954834802441
+                '0.5': 59.57357992417391
+                '0.6': 60.04636964241483
+                '0.7': 60.26738324168595
+                '0.8': 61.32749238433085
+                '0.9': 65.11191071526973
+                '0.95': 65.25632794573228
+            training_data:
+              target_observations: 5382
+              first_target_date: '2004-01-05'
+              last_target_date: '2025-05-30'
+              aligned_observations: 4561
+              effective_training_examples_estimate: 4520
+              target_lags: 21
+              covariate_lags: 21
+              covariates:
+              - brent_log_ret_1b_l1b
+              - natgas_log_ret_1b_l1b
+              - gasoline_log_ret_1b_l1b
+              - gold_log_ret_1b_l1b
+              - dollar_index_log_ret_1b_l1b
+              - oil_curve_contango_l1b
+              - vix_level_l1b
+              covariate_observations:
+                brent_log_ret_1b_l1b: 4435
+                natgas_log_ret_1b_l1b: 5382
+                gasoline_log_ret_1b_l1b: 5384
+                gold_log_ret_1b_l1b: 5377
+                dollar_index_log_ret_1b_l1b: 5399
+                oil_curve_contango_l1b: 4562
+                vix_level_l1b: 5387
+              notes: 'Aligned observations use the common business-day span after
+                Darts-style calendar regularization. Effective examples are an auditable
+                estimate: aligned_observations - max(lags) - max_horizon + 1.'
+            num_samples: 1000
+            error: null
+        ensemble:
+          model_name: ensemble
+          predictor_id: cfm_arima_kalman_lightgbm_ensemble
+          status: ok
+          forecasts:
+          - horizon: 5
+            forecast_date: '2025-06-09'
+            point_forecast: 60.55688585599732
+            quantiles:
+              '0.05': 55.84928708100362
+              '0.1': 56.830733633527416
+              '0.2': 58.094279352450386
+              '0.3': 59.276721347279576
+              '0.4': 60.00110350448173
+              '0.5': 60.55688585599732
+              '0.6': 61.31001968658367
+              '0.7': 62.287921839754226
+              '0.8': 63.2454415198994
+              '0.9': 64.42903607657982
+              '0.95': 65.41722196665346
+          - horizon: 10
+            forecast_date: '2025-06-16'
+            point_forecast: 61.255772120329155
+            quantiles:
+              '0.05': 54.14835713680338
+              '0.1': 55.18418027585649
+              '0.2': 56.86688797414946
+              '0.3': 59.273483740394695
+              '0.4': 60.42173450911771
+              '0.5': 61.255772120329155
+              '0.6': 62.0704329811506
+              '0.7': 62.97610857175444
+              '0.8': 63.99422491155124
+              '0.9': 65.09449028856082
+              '0.95': 66.38690165712836
+          - horizon: 21
+            forecast_date: '2025-07-01'
+            point_forecast: 60.355126114455075
+            quantiles:
+              '0.05': 52.56088947821756
+              '0.1': 53.89552141475248
+              '0.2': 55.97892082617152
+              '0.3': 57.77697063600469
+              '0.4': 58.715950651442455
+              '0.5': 60.355126114455075
+              '0.6': 61.46179290126906
+              '0.7': 62.482272290984504
+              '0.8': 64.01588012692376
+              '0.9': 66.58549303832596
+              '0.95': 68.17734714927573
+          training_data:
+            target_observations: 5382
+            first_target_date: '2004-01-05'
+            last_target_date: '2025-05-30'
+            aligned_observations: 4561
+            effective_training_examples_estimate: 4520
+            target_lags: null
+            covariate_lags: null
+            covariates:
+            - brent_log_ret_1b_l1b
+            - natgas_log_ret_1b_l1b
+            - gasoline_log_ret_1b_l1b
+            - gold_log_ret_1b_l1b
+            - dollar_index_log_ret_1b_l1b
+            - oil_curve_contango_l1b
+            - vix_level_l1b
+            covariate_observations: {}
+            notes: Ensemble consumes forecast distributions, not raw observations.
+          num_samples: 1000
+          error: null
+        configured_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        active_ensemble_weights:
+          arima: 0.3333333333333333
+          kalman: 0.3333333333333333
+          lightgbm: 0.3333333333333333
+        successful_models:
+        - arima
+        - kalman
+        - lightgbm
+        failed_models: []
+        model_disagreement_std:
+          '5': 0.17191500046360514
+          '10': 0.4458496412524035
+          '21': 0.5542042675272738
+        diagnostics:
+          latest_observation_date: '2025-05-30'
+          latest_value: 60.790000915527344
+          calendar_gap_days: 3
+          return_1b: -0.0024613999764007133
+          return_5b: -0.00669934382844628
+          return_21b: 0.04432231354806704
+          realized_volatility_21b: 0.27801220743800376
+          drawdown_63b: -0.1522799931440777
+          jump_zscore_63b: -0.02380822138700579
+          covariate_latest_values:
+            brent_log_ret_1b_l1b: -0.0039047295850964114
+            natgas_log_ret_1b_l1b: -0.021524735913139748
+            gasoline_log_ret_1b_l1b: -0.010249563485997907
+            gold_log_ret_1b_l1b: -0.008537804000789136
+            dollar_index_log_ret_1b_l1b: 0.0005035300605269822
+            oil_curve_contango_l1b: -0.7064896971407592
+            vix_level_l1b: 18.56999969482422
+      execution:
+        tool_name: run_authoritative_suite
+        attempt_count: 1
+        validation_failure_count: 0
+        successful_execution_count: 1
+        attempt_errors: []
+        rng_seed: 2052286392
+        rng_seed_derivation: sha256_first_32_bits_of_canonical_task_and_numerical_configuration
+        rng_seed_input_fingerprint: rng_seed_input:sha256:7a5367b8120a7522dec3f1cbfadc744eae8519458ddadf2c09758049bf9ae4bc
+    research_execution_audit:
+      tool_name: run_research_pipeline
+      expected_cutoff: '2025-06-02'
+      attempt_count: 1
+      successful_execution_count: 1
+      rejected_duplicate_count: 0
+      in_progress: false
+      attempt_errors: []
+    code_execution_audit:
+      code_execution_available: true
+      code_execution_used: false
+      code_execution_call_count: 0
+      code_execution_purposes: []
+    llm_context_assessment:
+      research_packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      evidence_claims: []
+      physical_status: unknown
+      incremental_novelty: indeterminate
+      material_evidence_conflict: false
+      confidence: 0.0
+      horizon_actions:
+      - horizon: 5
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 10
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      - horizon: 21
+        center_action: no_change
+        uncertainty_action: unchanged
+        persistence_profile: unknown
+        cited_claim_ids: []
+        narrowing_uncertainty_resolved: ''
+        rationale: Neutral fallback after two invalid structured-output attempts.
+      research_summary: Structured assessment could not be validated after one controlled
+        correction retry.
+      overall_rationale: Python applied the audited neutral fallback.
+      warnings:
+      - structured_output_neutral_fallback
+    structured_output_control_audit:
+      control_id: structured_assessment_retry_v52
+      maximum_correction_retries: 1
+      initial_response: "{\n  \"research_packet_id\": \"research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740\"\
+        ,\n  \"evidence_claims\": [\n    {\n      \"claim_id\": \"claim_001\",\n \
+        \     \"statement\": \"Eight OPEC+ countries, including Saudi Arabia and Russia,\
+        \ implemented a production adjustment of 411,000 barrels per day for June\
+        \ 2025 as part of a scheduled gradual phase-out of voluntary production cuts.\"\
+        ,\n      \"claim_type\": \"physical_supply\",\n      \"supporting_summary_ids\"\
+        : [\n        \"verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_010\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    },\n    {\n      \"claim_id\"\
+        : \"claim_002\",\n      \"statement\": \"As of early June 2025, market participants\
+        \ were driven by optimism over U.S.-China trade talks and concerns regarding\
+        \ geopolitical tensions in the Middle East, leading to a weekly increase in\
+        \ WTI prices.\",\n      \"claim_type\": \"market_reaction\",\n      \"supporting_summary_ids\"\
+        : [\n        \"verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149\"\
+        \n      ],\n      \"supporting_source_ids\": [\n        \"source_013\"\n \
+        \     ],\n      \"contradicting_summary_ids\": [],\n      \"contradicting_source_ids\"\
+        : [],\n      \"material_to_forecast\": true\n    }\n  ],\n  \"physical_status\"\
+        : \"stable\",\n  \"incremental_novelty\": \"low\",\n  \"material_evidence_conflict\"\
+        : false,\n  \"confidence\": 0.85,\n  \"horizon_actions\": [\n    {\n     \
+        \ \"horizon\": 5,\n      \"center_action\": \"small_up\",\n      \"uncertainty_action\"\
+        : \"unchanged\",\n      \"persistence_profile\": \"temporary\",\n      \"\
+        cited_claim_ids\": [\n        \"claim_001\",\n        \"claim_002\"\n    \
+        \  ],\n      \"narrowing_uncertainty_resolved\": \"The market is reacting\
+        \ to supply adjustment schedules and positive trade sentiment.\",\n      \"\
+        rationale\": \"Prices are showing upward momentum driven by recent geopolitical\
+        \ news and trade optimism, supported by OPEC+ supply adjustments.\"\n    },\n\
+        \    {\n      \"horizon\": 10,\n      \"center_action\": \"no_change\",\n\
+        \      \"uncertainty_action\": \"small_wider\",\n      \"persistence_profile\"\
+        : \"decaying\",\n      \"cited_claim_ids\": [\n        \"claim_001\"\n   \
+        \   ],\n      \"narrowing_uncertainty_resolved\": \"Uncertainty remains regarding\
+        \ the long-term impact of the phased production increases.\",\n      \"rationale\"\
+        : \"Market sentiment may balance out the current upward pressure as the reality\
+        \ of OPEC+ production increases settles in.\"\n    },\n    {\n      \"horizon\"\
+        : 21,\n      \"center_action\": \"small_down\",\n      \"uncertainty_action\"\
+        : \"moderately_wider\",\n      \"persistence_profile\": \"temporary\",\n \
+        \     \"cited_claim_ids\": [\n        \"claim_001\"\n      ],\n      \"narrowing_uncertainty_resolved\"\
+        : \"Longer term, the market remains sensitive to global demand growth headwinds.\"\
+        ,\n      \"rationale\": \"Underlying concerns about weak demand growth in\
+        \ the second quarter may exert downward pressure on prices over the longer\
+        \ 21-day horizon.\"\n    }\n  ],\n  \"research_summary\": \"In early June\
+        \ 2025, WTI crude oil prices saw a recovery in momentum, driven by geopolitical\
+        \ concerns in the Middle East and positive sentiment from U.S.-China trade\
+        \ discussions. OPEC+ continues to implement its scheduled phased return of\
+        \ production volumes, which participants justify as maintaining healthy market\
+        \ fundamentals amid currently low inventories. Despite this, demand growth\
+        \ remains constrained by reports of weaker delivery performance in the United\
+        \ States and China.\",\n  \"overall_rationale\": \"The recent price surge\
+        \ is a reaction to immediate short-term supply anxiety and trade optimism.\
+        \ However, the systematic implementation of planned production increases by\
+        \ OPEC+ and persistent signals of cooling demand suggest that current upward\
+        \ pressures are likely temporary and may fade over the coming weeks.\",\n\
+        \  \"warnings\": []\n}"
+      initial_validation_failed: true
+      initial_validation_errors:
+      - type: literal_error
+        loc:
+        - physical_status
+        msg: Input should be 'normal', 'elevated_risk', 'partial_disruption', 'confirmed_disruption'
+          or 'unknown'
+        input: stable
+        ctx:
+          expected: '''normal'', ''elevated_risk'', ''partial_disruption'', ''confirmed_disruption''
+            or ''unknown'''
+      - type: literal_error
+        loc:
+        - incremental_novelty
+        msg: Input should be 'likely_new_relative_to_model_data', 'possibly_partly_reflected',
+          'likely_reflected_in_model_data' or 'indeterminate'
+        input: low
+        ctx:
+          expected: '''likely_new_relative_to_model_data'', ''possibly_partly_reflected'',
+            ''likely_reflected_in_model_data'' or ''indeterminate'''
+      correction_retry_attempted: true
+      retry_response: null
+      retry_validation_errors:
+      - type: AttributeError
+        msg: '''CfmV52Settings'' object has no attribute ''structured_output_retry_timeout_seconds'''
+      retry_succeeded: false
+      neutral_fallback_applied: true
+      final_disposition: neutral_fallback_after_retry_failure
+    active_research_packet:
+      packet_id: research_packet:sha256:7bec7133e244866301f72cb51acda43c216bc45fe40354c0221eb4005b5c0740
+      cutoff_date: '2025-06-02'
+      queries:
+      - area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+      - area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+      - area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+      - area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+      verified_summaries:
+      - verified_summary_id: verified_summary:sha256:25808ad5df7f4e3b0ab2ead8802f822d1d45f9d808ba1742dbad998e8ea4bb38
+        query_area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: "During late May and early June 2025, West Texas Intermediate\
+          \ (WTI) crude oil prices experienced a period of range-bound trading.\n\n\
+          ### WTI Price Trends\n*   **Late May 2025:** WTI spot prices remained in\
+          \ a relatively narrow range. For the week of May 26\u201330, 2025, daily\
+          \ spot prices were recorded at $61.61, $62.54, $61.66, and $61.46 per barrel.\
+          \ The monthly average for May 2025 was approximately $62.20 per barrel.\n\
+          *   **Early June 2025:** Prices showed signs of a slight recovery as the\
+          \ month began.\n\n### Major Energy Market Context\nMarket observers characterized\
+          \ May 2025 as a \"hinge point\" that potentially rewired global energy market\
+          \ dynamics. Key factors influencing the market during this period included:\n\
+          \n*   **Supply Strategy Adjustments:** Several major producing nations reportedly\
+          \ recalibrated their output strategies. Notably, OPEC+ had previously decided\
+          \ to increase output, with plans to unwind a portion of voluntary production\
+          \ cuts through June 2025.\n*   **Geopolitical and Policy Shifts:** The energy\
+          \ sector saw a confluence of geopolitical actions and policy announcements.\
+          \ This included efforts by consuming nations to secure alternative supply\
+          \ routes and storage capacities, alongside evolving regulatory frameworks\
+          \ in major economies regarding fossil fuel investments and renewable energy.\n\
+          *   **Demand Signals:** Global oil demand growth faced headwinds, with reports\
+          \ of weak second-quarter deliveries in the United States and China. Additionally,\
+          \ the rapid rise of AI and the associated surge in data center power demand\
+          \ began to emerge as a significant driver of electricity and natural gas\
+          \ consumption."
+        associated_source_ids:
+        - source_001
+        - source_002
+        - source_003
+        - source_004
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:d7b7ce4138326c92f2bb94d39acd2b63a94ff653f28d4575901493c95c40eead
+        query_area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: 'As of early June 2025, the global crude oil market was characterized
+          by a transition in supply dynamics and heightened sensitivity to geopolitical
+          risks.
+
+
+          ### Global Supply and Production Trends
+
+
+          ### Market Sentiment and Geopolitical Factors'
+        associated_source_ids:
+        - source_005
+        - source_006
+        - source_007
+        - source_008
+        - source_009
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620
+        query_area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: 'In early June 2025, OPEC+ continued its strategy of a gradual
+          and flexible return of voluntary production adjustments.
+
+
+          ### OPEC+ Production Policy
+
+          *   **Production Adjustment:** Following a virtual meeting on May 31, 2025,
+          eight OPEC+ countries (Saudi Arabia, Russia, Iraq, UAE, Kuwait, Kazakhstan,
+          Algeria, and Oman) reaffirmed their commitment to market stability. They
+          implemented a production adjustment of **411,000 barrels per day (bpd)**
+          for June 2025, relative to the previous month''s required levels.
+
+          *   **Strategy:** This move was part of a broader plan, agreed upon on December
+          5, 2024, to gradually phase out 2.2 million bpd of voluntary production
+          adjustments over an 18-month period that began on April 1, 2025. The group
+          maintained that these increases could be paused or reversed depending on
+          evolving market conditions.
+
+          *   **Commitment:** The participating countries reiterated their commitment
+          to full conformity with the Declaration of Cooperation and their intention
+          to compensate for any overproduced volumes since January 2024.
+
+
+          ### Oil Inventory and Market Context
+
+          *   **Market Fundamentals:** In their late May/early June assessments, the
+          participating OPEC+ countries cited "healthy market fundamentals," specifically
+          noting **low oil inventories** as a justification for their production adjustments.
+
+          *   **Market Trends:** Despite this, global oil demand growth for 2025 remained
+          projected at approximately 1.3 million bpd, with significant contributions
+          from non-OECD countries.'
+        associated_source_ids:
+        - source_010
+        - source_011
+        - source_012
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      - verified_summary_id: verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149
+        query_area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        cleaned_summary: "As of June 2, 2025, the WTI crude oil market was characterized\
+          \ by a significant upward trend, with prices experiencing a notable surge\
+          \ during the first week of June 2025.\n\n### Market Context and Reaction\n\
+          *   **Price Performance:** This marked a reversal in momentum, representing\
+          \ the first weekly increase for the benchmark in three weeks.\n*   **Drivers\
+          \ of the Rally:**\n    *   **Trade Optimism:** The surge was largely fueled\
+          \ by optimism surrounding U.S.-China trade talks, which improved market\
+          \ risk appetite and bolstered expectations for stronger global fuel demand.\n\
+          \    *   **Geopolitical Tensions:** Concerns regarding potential Israeli\
+          \ strikes on Iranian nuclear sites created fears of supply disruptions in\
+          \ the Middle East, adding upward pressure to prices.\n    *   **OPEC+ Policy:**\
+          \ Market participants were closely monitoring OPEC+ supply policies during\
+          \ this period. Leading up to June 2025, the group had been implementing\
+          \ a gradual return of voluntary production adjustments, with a scheduled\
+          \ production adjustment of 411,000 barrels per day for June 2025."
+        associated_source_ids:
+        - source_013
+        - source_014
+        verifier_confidence: 9
+        verifier_attempt_count: 1
+      sources:
+      - source_id: source_001
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFioBxceuCejXpoCKEJlsnhgtmTzgMO-Bx3agCATaElQAHl5LScpsOhjZDxjhZGOVBgVonSpPSeXcutJ5onOm17RQ9LYVQLwl2i60rGOY7zltFaJktSybwtaDk1EosSpnRTVBQQS8mpCp6OoNKhJRNttm9heXqk80dr7_QEXLCeARfkjTUGa_1o1pOcZfm5H67qKaNwatW1fsY57PI7MvrGbg3ZudMO60Ao4b4RHY_I
+        provider_title: windows.net
+        resolved_url: https://iea.blob.core.windows.net/assets/49666e25-2275-47cc-9343-cebb3477619c/-17JUNE2025_OilMarketReport_Corrigendum.pdf
+        resolved_domain: iea.blob.core.windows.net
+        publisher: iea.blob.core.windows.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_002
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEZuWbytRZkC5V8NTDjd9l2pPyLVsBfdw2G4BWcdNzKFxzjD2GovYBLAtsVdheKwxcc6duxCZmTCorBB56HTrAy-zogr4tTQMC4UzFwjvkDqW7pn10d0kOGmq5FJ3HiQUZ0
+        provider_title: eia.gov
+        resolved_url: https://www.eia.gov/dnav/pet/hist/rwtcd.htm
+        resolved_domain: eia.gov
+        publisher: U.S. Energy Information Administration
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_003
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEo24z57UegOT3WNCBNEKBriv3YS-fKkAo5M0pf-5JaGsQIsgyjZNN-0Iot5ZN5vrMSzdrnM-i7zOpeQlKFvIlbu1CbAER2IBQC_09Xnpv93jkqlrU2WPzX4OYk0G2qC9LbBzbem7Sll93d9GH6EhEFjw==
+        provider_title: ycharts.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 405: Not Allowed'
+      - source_id: source_004
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH7HQdrp7_M3oNtf-TRMvh7qPk8t5DVSXULeC6gvNCQcl9Re2XNZdcJDwvHXLw5bmi1RDDmXHs6FFN23mio2BgrutYzXr856LI-EhXDtqmRaI6fNOp_7ACk0znKRJzHP9LLQoTX5XDathbTjlmc18rKidj1QYI1-IlkNd1w5klgrf1daQq7jWbblijgr0qSodnQrJOeut0g-tpoBEM259FR
+        provider_title: vanhessen.com
+        resolved_url: https://www.vanhessen.com/en/info/404/
+        resolved_domain: vanhessen.com
+        publisher: vanhessen.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_005
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHbiQB4k8j38dxHvr9LfaWoFjHJczlOx833P8scxnX8v1x6hvGFzhmBwQ5pIir2XWq8K_rxBRmhoyOVIUH6jLCRB1gzcEeuknHwmBNmUYFvV9me0qoQHoexxnlhWWbCNj8mULAijNEMPKyy0cO3
+        provider_title: iea.org
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 403: Forbidden'
+      - source_id: source_006
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE7QseHayu87hlNTOHgTXQD7Wu7LKueyvTSlbneYrFvZbYUd2f5VnUITApHTEmvh0xQlDkNL2EN9gV5tfP67foZAs59MniAITY1TpYTplOpVkS2GJZTJ8ViYdYBpUSjq6AMKYBeRZrZuzsEGskPqIDErhHNYJgvZ9W90b5QAKkf00t9KDAkZy9nkMlCrn0noZYanTYvH4E1tz7j91dBQLXq12kg-_BOMT27oGOGs5pT
+        provider_title: windows.net
+        resolved_url: https://iea.blob.core.windows.net/assets/49666e25-2275-47cc-9343-cebb3477619c/-17JUNE2025_OilMarketReport_Corrigendum.pdf
+        resolved_domain: iea.blob.core.windows.net
+        publisher: iea.blob.core.windows.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_007
+        rank: 3
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH6YG1GlpezLlZ3skC2sJoJLPBg2fPtA7q3CWqwZTxkFIH6e_0P7CrpQ7G2VKyrQ6Lbc9UUCYoUZG7NM66iSduzTJac1A13bWtF-cpMxCM19QgeAIAnx8LlzprM7G8SBZnWnNPc9lL9NcHrbM-IyMc6IA==
+        provider_title: commodia.com
+        resolved_url: https://newsletter.commodia.com/p/forecast-update-june-2025
+        resolved_domain: newsletter.commodia.com
+        publisher: newsletter.commodia.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_008
+        rank: 4
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF15HsbDT2h5kFFyhA4VQL8j6Ety7U6lOBK69uKfu8P4sCio2lVqX6W0z7SZY5ME88g_td_f2LoElmqD0o6_o_xW3ACNN-CoI4HOTRA9I0atlhV8rFkYYLg3P5ax9kAoFxgymcJWqo1LuC3iXHbC-Oh92_i-OqregbptOzXqLglD4dA9lkKmwTIsSSMoRnSt5dD5CFpRfgoh39R8FPa5JpfRmH0bJI=
+        provider_title: kamcoinvest.com
+        resolved_url: https://www.kamcoinvest.com/sites/default/files/research/pdf/Oil%20Market%20Monthly%20Report%20-%20Jun-2025.pdf
+        resolved_domain: kamcoinvest.com
+        publisher: kamcoinvest.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_009
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF1th_D8931JAtlpr85ZA_RjetsNkZcVs63F70hl8oMZGm1ICFAUmR4Q8MsWqPRjaBG5N7QhpUoqXEgqzaqQayjVBEkXTKnztLKAR-YR_nbloPt_i0jFKvmZa51mZv3dmFSh12ziIS_nhz4LFDn6tx9pQap0DhBwDBMR2Ny9RmvyGvUnNFKAm4H0QZYPz2Ib9eWqkFuqnXZhunm-bcKBjs=
+        provider_title: domesticoperating.com
+        resolved_url: https://www.domesticoperating.com/blog/2025/06/12/wti-crude-oil-price-surges-3-as-global-supply-tightens/
+        resolved_domain: domesticoperating.com
+        publisher: domesticoperating.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_010
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFLNeFYzKou-G5CTGSELtaQtCc2Uxp_0kJ1zbWCjLT4y1zG1EoPZeORDK42Id0MLnkS7HBIqBOa57ITtehKMKPtBQmQE0orNGkMbZFUVdJ9aFuiqItnCKu7uKlw7-UIQAe2y_-ismeBcw==
+        provider_title: opec.org
+        resolved_url: https://www.opec.org/pr-detail/566-31-may-2025.html
+        resolved_domain: opec.org
+        publisher: OPEC
+        source_quality: tier_1_primary
+        is_primary_or_official: true
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_011
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQECMuGOzELqFbczntYgUMsoS1heDaq0dG0PHMf4ICYfrCkCVPgIvuemYqHVvLSvXTJZevcwISTQ-r72A42h6GPfD11kzBszLJEAt83s2iPU97ODeQezxxWPF4aWVM4RycGhlyCNbCi0cdWXlrH8Kz0gHbG6jAUqUR6YFKiJsCLiiAwEkr--b3-jhBjRBnl1G8o7SBaz_YIrA7LoWJihcjMEvf5dtWwH
+        provider_title: enerdata.net
+        resolved_url: https://www.enerdata.net/publications/daily-energy-news/opec-announces-accelerated-oil-output-hike-june-2025.html
+        resolved_domain: enerdata.net
+        publisher: enerdata.net
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_012
+        rank: 5
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHQedXr_Lh69sW0CMp_Lz6Tc7w9h9VhGvKfI62Bm4mgZhKPfjUkpvDS3ew30PB4dZriPJzJ-14S0iYePKdnHlWPbrJviAKuRMqeb8YuD4BMTGW8aIlusbdk2wl9MKKhgslwj5_SGoxEZl_3AVuk6vDhtEwKQ4w1srfJ7N8ElTnYl1ZHhG3foWIPnub_r4P9AhEQaTc=
+        provider_title: oilandgasmiddleeast.com
+        resolved_url: null
+        resolved_domain: null
+        publisher: null
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: unresolved
+        resolution_warning: 'resolution_failed: HTTPError: HTTP Error 405: Not Allowed'
+      - source_id: source_013
+        rank: 1
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHvyVx5K4_3WdNlYdS40Bn9x0Rm_Ue2VZ_aNWrpgrBeEtD74jykY8-vfIyynWGLnGR-U1u3uwB9bmiEPbtZtrbaKLk-awt5B0LMy-tE8WqX_Ewh0XlirJXF2daBMmsR-kaYhK8sim_hgOukcHWFBnK4RoaHy_XmmrVHvfnwKcg=
+        provider_title: ebc.com
+        resolved_url: https://www.ebc.com/forex/how-traders-profited-from-oil-spot-price-swings
+        resolved_domain: ebc.com
+        publisher: ebc.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      - source_id: source_014
+        rank: 2
+        grounding_url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG4xXevR52Hoa-f1nm29cN9u9dTatu0g4DpraKIEHdj2cRePMgTIfEGtYWLa-sAWdGPXUwT7XbzCs8bAKN8EFW8QssQEb7AEX13KkW5bZJVsJhUYcjVA3kRJFOo4IDbFv8yOLtO_NqrWwnB_JIjTM-OYdWA8H7zp7gnPL161bVGzD7xDoF2dg==
+        provider_title: thenationalnews.com
+        resolved_url: https://www.thenationalnews.com/business/energy/2025/05/03/opec-oil-prices-brent/
+        resolved_domain: thenationalnews.com
+        publisher: thenationalnews.com
+        source_quality: unclassified
+        is_primary_or_official: false
+        resolution_status: resolved
+        resolution_warning: null
+      warnings: []
+      active_evidence_type: main_verifier_cleaned_summaries
+      destination_page_content_included: false
+    cutoff_verification_audit:
+      verifier_id: main_code_cutoff_verifier
+      queries:
+      - verified_summary_id: verified_summary:sha256:25808ad5df7f4e3b0ab2ead8802f822d1d45f9d808ba1742dbad998e8ea4bb38
+        query_area: underlying_event
+        query: major energy market events WTI price trends late May early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - "For the week of June 2\u20136, 2025, spot prices were $63.27, $64.10,\
+            \ and $63.57 per barrel."
+          source_count: 11
+        removed_flagged_claims:
+        - "For the week of June 2\u20136, 2025, spot prices were $63.27, $64.10, and\
+          \ $63.57 per barrel."
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:d7b7ce4138326c92f2bb94d39acd2b63a94ff653f28d4575901493c95c40eead
+        query_area: physical_flows
+        query: global crude oil supply physical flows report early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - In May 2025, OPEC+ began unwinding some of its voluntary production cuts.
+            Reports indicated that OPEC crude oil production increased during May,
+            with the group deciding to add approximately 411,000 barrels per day (bpd)
+            to supply.
+          - Global oil supply rose by 330,000 bpd in May 2025, reaching 105 million
+            barrels per day (mb/d), which was 1.8 mb/d higher than the previous year.
+            Gains were described as being evenly split between OPEC+ and non-OPEC+
+            producers.
+          - Domestic U.S. drilling activity saw a continued decline, with the oil
+            rig count dropping for several consecutive weeks leading into early June
+            2025, reaching its lowest point since late 2021.
+          - Early June 2025 was marked by significant market volatility driven by
+            geopolitical tensions. Specifically, events such as drone operations in
+            the Russia-Ukraine conflict and initial concerns regarding Middle Eastern
+            stability influenced price movements.
+          - Prior to the mid-month geopolitical spikes, oil prices in early June were
+            generally range-bound. While some analysts noted that prices had been
+            under downward pressure due to the accelerated OPEC+ production increases
+            and economic uncertainties, the market remained highly sensitive to any
+            potential disruptions in physical flows.
+          - Global oil stocks had risen for three consecutive months as of April 2025,
+            with preliminary data suggesting a further surge in inventories during
+            May.
+          source_count: 8
+        removed_flagged_claims:
+        - In May 2025, OPEC+ began unwinding some of its voluntary production cuts.
+          Reports indicated that OPEC crude oil production increased during May, with
+          the group deciding to add approximately 411,000 barrels per day (bpd) to
+          supply.
+        - Global oil supply rose by 330,000 bpd in May 2025, reaching 105 million
+          barrels per day (mb/d), which was 1.8 mb/d higher than the previous year.
+          Gains were described as being evenly split between OPEC+ and non-OPEC+ producers.
+        - Domestic U.S. drilling activity saw a continued decline, with the oil rig
+          count dropping for several consecutive weeks leading into early June 2025,
+          reaching its lowest point since late 2021.
+        - Early June 2025 was marked by significant market volatility driven by geopolitical
+          tensions. Specifically, events such as drone operations in the Russia-Ukraine
+          conflict and initial concerns regarding Middle Eastern stability influenced
+          price movements.
+        - Prior to the mid-month geopolitical spikes, oil prices in early June were
+          generally range-bound. While some analysts noted that prices had been under
+          downward pressure due to the accelerated OPEC+ production increases and
+          economic uncertainties, the market remained highly sensitive to any potential
+          disruptions in physical flows.
+        - Global oil stocks had risen for three consecutive months as of April 2025,
+          with preliminary data suggesting a further surge in inventories during May.
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:48d96e8b471036a5b81b97cfa9d2072f3b02da18dd76098de139473fe80bd620
+        query_area: supply_response
+        query: OPEC production and oil inventory response early June 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - Reports from June 2025 indicated that oil prices had experienced downward
+            pressure, with the OPEC Reference Basket (ORB) dropping by $5.36 in May
+            2025 to $63.62 per barrel.
+          source_count: 6
+        removed_flagged_claims:
+        - Reports from June 2025 indicated that oil prices had experienced downward
+          pressure, with the OPEC Reference Basket (ORB) dropping by $5.36 in May
+          2025 to $63.62 per barrel.
+        audit_only: true
+      - verified_summary_id: verified_summary:sha256:ae3ad2a68a434f2130442046694e9744d3544c4134a9b9c08b8401fad7d7b149
+        query_area: market_reaction
+        query: WTI crude oil market reaction news as of June 2 2025
+        cutoff_date: '2025-06-02'
+        status: accepted
+        attempts:
+        - attempt: 1
+          clean: true
+          confidence: 9
+          flagged_claims:
+          - "During the week of June 2\u20136, 2025, WTI crude oil prices saw a significant\
+            \ rally, gaining 6.2% for the week."
+          - This early June rally saw WTI break above key technical resistance levels,
+            settling at $64.60 per barrel by the end of that week.
+          source_count: 2
+        removed_flagged_claims:
+        - "During the week of June 2\u20136, 2025, WTI crude oil prices saw a significant\
+          \ rally, gaining 6.2% for the week."
+        - This early June rally saw WTI break above key technical resistance levels,
+          settling at $64.60 per barrel by the end of that week.
+        audit_only: true
+      audit_only: true
+    source_validation_audit:
+      audit_enabled: false
+      executed: false
+      validator_id: source_validator_v52_audit_only
+      records: []
+      audit_only: true
+    claim_support_audit:
+      verifier_id: claim_support_verifier_v52_audit_only
+      audit_only: true
+      executed: false
+      completed: false
+      reason: audit switch is off
+      findings: []
+    claim_support_findings: []
+    policy_decision:
+      policy_id: graduated_evidence_policy_v52
+      horizon: 21
+      eligible: true
+      evidence_tier: none
+      evidence_tier_level: 0
+      resolved_source_ids: []
+      resolved_publishers: []
+      qualifying_claim_ids: []
+      eligibility_reasons:
+      - Neutral proposal requires no evidence.
+      center_action: no_change
+      uncertainty_action: unchanged
+    forecast_transformation:
+      engine_id: python_forecast_engine_v52
+      horizon: 21
+      original_point_forecast: 60.355126114455075
+      original_quantiles:
+        '0.05': 52.56088947821756
+        '0.1': 53.89552141475248
+        '0.2': 55.97892082617152
+        '0.3': 57.77697063600469
+        '0.4': 58.715950651442455
+        '0.5': 60.355126114455075
+        '0.6': 61.46179290126906
+        '0.7': 62.482272290984504
+        '0.8': 64.01588012692376
+        '0.9': 66.58549303832596
+        '0.95': 68.17734714927573
+      p10_p90_width: 12.689971623573484
+      center_action: no_change
+      action_fraction: 0.0
+      raw_center_adjustment: 0.0
+      novelty_multiplier: 1.0
+      novelty_adjusted_amount: 0.0
+      emergency_cap: 60.790000915527344
+      applied_center_adjustment: 0.0
+      uncertainty_action: unchanged
+      uncertainty_multiplier: 1.0
+      pre_floor_quantiles:
+        '0.05': 52.56088947821756
+        '0.1': 53.89552141475248
+        '0.2': 55.97892082617152
+        '0.3': 57.77697063600469
+        '0.4': 58.715950651442455
+        '0.5': 60.355126114455075
+        '0.6': 61.46179290126906
+        '0.7': 62.482272290984504
+        '0.8': 64.01588012692376
+        '0.9': 66.58549303832596
+        '0.95': 68.17734714927573
+      final_point_forecast: 60.355126114455075
+      final_quantiles:
+        '0.05': 52.56088947821756
+        '0.1': 53.89552141475248
+        '0.2': 55.97892082617152
+        '0.3': 57.77697063600469
+        '0.4': 58.715950651442455
+        '0.5': 60.355126114455075
+        '0.6': 61.46179290126906
+        '0.7': 62.482272290984504
+        '0.8': 64.01588012692376
+        '0.9': 66.58549303832596
+        '0.95': 68.17734714927573
+      floor_applied: false
+      warnings: []
+    unadjusted_ensemble:
+      point_forecast: 60.355126114455075
+      quantiles:
+        '0.05': 52.56088947821756
+        '0.1': 53.89552141475248
+        '0.2': 55.97892082617152
+        '0.3': 57.77697063600469
+        '0.4': 58.715950651442455
+        '0.5': 60.355126114455075
+        '0.6': 61.46179290126906
+        '0.7': 62.482272290984504
+        '0.8': 64.01588012692376
+        '0.9': 66.58549303832596
+        '0.95': 68.17734714927573
+    market_diagnostics:
+      latest_observation_date: '2025-05-30'
+      latest_value: 60.790000915527344
+      calendar_gap_days: 3
+      return_1b: -0.0024613999764007133
+      return_5b: -0.00669934382844628
+      return_21b: 0.04432231354806704
+      realized_volatility_21b: 0.27801220743800376
+      drawdown_63b: -0.1522799931440777
+      jump_zscore_63b: -0.02380822138700579
+      covariate_latest_values:
+        brent_log_ret_1b_l1b: -0.0039047295850964114
+        natgas_log_ret_1b_l1b: -0.021524735913139748
+        gasoline_log_ret_1b_l1b: -0.010249563485997907
+        gold_log_ret_1b_l1b: -0.008537804000789136
+        dollar_index_log_ret_1b_l1b: 0.0005035300605269822
+        oil_curve_contango_l1b: -0.7064896971407592
+        vix_level_l1b: 18.56999969482422
+    task_binding:
+      cutoff: '2025-06-02'
+      target_series_id: wti_crude_oil_price
+      horizons:
+      - 5
+      - 10
+      - 21
+      frequency: B
+      validated: true
+    audit_switch: false
+    audit_only_controls:
+      source_validator_executed: false
+      claim_support_verifier_executed: false
+      claim_support_verifier_completed: false
+    active_evidence_declaration: The LLM used the authoritative numerical-suite output
+      and main-verifier-cleaned summaries with mechanically resolved source identities.
+      Destination-page and audit-only content were not exposed. Optional diagnostic
+      code use is separately declared in code_execution_audit.
+    audit_findings_changed_forecast: false
+    llm_authored_final_numbers: false
+scores:
+- 2.979904360806216
+- 8.902739130392359
+- 3.240871418285782
+metric: crps
+mean_score: 5.041171636494785
+ran_at: '2026-08-19T15:04:03.198138'
+skipped_origins: 0

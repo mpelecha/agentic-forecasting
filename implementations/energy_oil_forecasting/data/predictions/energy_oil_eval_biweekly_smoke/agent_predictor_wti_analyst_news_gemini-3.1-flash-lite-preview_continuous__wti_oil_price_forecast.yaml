@@ -1,0 +1,102 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T12:00:08.523847'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.5
+    quantiles:
+      '0.05': 63.2
+      '0.1': 63.8
+      '0.2': 64.3
+      '0.3': 64.8
+      '0.4': 65.1
+      '0.5': 65.5
+      '0.6': 65.9
+      '0.7': 66.4
+      '0.8': 67.2
+      '0.9': 68.3
+      '0.95': 69.1
+  metadata:
+    rationale: The forecast is built on the fundamental pillars of disciplined OPEC+
+      supply management through Q1 2026 and elevated geopolitical risk premiums, particularly
+      regarding Middle Eastern shipping lanes. While supply is tight, global demand
+      outlooks are mixed, preventing aggressive speculative buying. The distribution
+      reflects a skewed upside potential, as disruptions could lead to rapid price
+      spikes, while downside risk is tempered by the deliberate supply-control actions
+      of key producers.
+    horizon_rationale: As of Feb 2, 2026, WTI sits at $65.21. Prices are buoyed by
+      geopolitical tensions in the Middle East, particularly concerns over the Strait
+      of Hormuz. OPEC+ has committed to keeping production cuts in place through Q1
+      2026, creating a tight supply outlook. Over the 5-day horizon, the primary driver
+      is the 'risk premium' associated with the regional conflict. We expect moderate
+      upward pressure to persist as markets price in potential supply chain disruptions,
+      but with constraints on runaway upside due to broader demand concerns.
+    langfuse_trace_id: 9e9f6bc709095e97057f4cc0e2313097
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/9e9f6bc709095e97057f4cc0e2313097
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T12:00:08.523847'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 67.0
+    quantiles:
+      '0.05': 61.2
+      '0.1': 62.1
+      '0.2': 63.5
+      '0.3': 64.9
+      '0.4': 66.0
+      '0.5': 67.0
+      '0.6': 68.1
+      '0.7': 69.5
+      '0.8': 71.2
+      '0.9': 73.0
+      '0.95': 74.5
+  metadata:
+    rationale: The forecast is built on the fundamental pillars of disciplined OPEC+
+      supply management through Q1 2026 and elevated geopolitical risk premiums, particularly
+      regarding Middle Eastern shipping lanes. While supply is tight, global demand
+      outlooks are mixed, preventing aggressive speculative buying. The distribution
+      reflects a skewed upside potential, as disruptions could lead to rapid price
+      spikes, while downside risk is tempered by the deliberate supply-control actions
+      of key producers.
+    horizon_rationale: By the 21-day horizon, the market will have had time to digest
+      further data on both regional geopolitical stability and global inventory levels.
+      With OPEC+ production cuts firmly in place, the path of least resistance remains
+      moderately bullish, provided the conflict does not spill over into a full-scale
+      regional crisis (which would spike prices sharply). The range of outcomes widens
+      significantly due to the binary nature of geopolitical risk.
+    langfuse_trace_id: 9e9f6bc709095e97057f4cc0e2313097
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/9e9f6bc709095e97057f4cc0e2313097
+scores:
+- 0.7504129457079672
+- 4.807931442891272
+metric: crps
+mean_score: 2.7791721942996195
+ran_at: '2026-07-25T12:00:08.829261'
+skipped_origins: 0

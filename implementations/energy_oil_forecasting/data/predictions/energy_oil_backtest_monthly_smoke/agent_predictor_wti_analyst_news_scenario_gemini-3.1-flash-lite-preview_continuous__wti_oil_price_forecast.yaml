@@ -1,0 +1,149 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-06-02T00:00:00'
+  end: '2025-06-09T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:05:08.049581'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.75
+    quantiles:
+      '0.05': 56.5
+      '0.1': 58.0
+      '0.2': 59.2
+      '0.3': 60.0
+      '0.4': 60.4
+      '0.5': 60.75
+      '0.6': 61.2
+      '0.7': 61.8
+      '0.8': 62.5
+      '0.9': 63.5
+      '0.95': 64.5
+  metadata:
+    rationale: 'As of 2025-06-02, WTI faces a bearish structural backdrop defined
+      by the OPEC+ decision to increase supply and ongoing concerns regarding tepid
+      global demand growth (notably in the US and China). The market is in a ''wait-and-see''
+      mode. Three primary scenarios inform the forecast: 1. ''Oversupply Reasserts''
+      (Prob 0.6, Price ~55): Demand remains weak, and rising OPEC+/non-OPEC supply
+      builds inventories, leading to a drift lower. 2. ''Range-bound Stability'' (Prob
+      0.3, Price ~62): Macro headwinds and supply increases are balanced by potential
+      SPR refills and geopolitical anxiety. 3. ''Regional Escalation'' (Prob 0.1,
+      Tail Risk, Price ~75+): A sharp, unexpected geopolitical shock in the Persian
+      Gulf disrupts shipping, overriding bearish fundamentals. The final quantiles
+      are structured to reflect this range of outcomes, with the wider distribution
+      at the 21-day horizon accounting for both the downside risks of oversupply and
+      the upside tail risk of geopolitical disruption.'
+    horizon_rationale: Short-term consolidation phase. The market is digesting the
+      OPEC+ decision to increase supply and balancing it against persistent geopolitical
+      premiums. Volatility remains moderate as the market tests support near $60.
+    langfuse_trace_id: fa86ce38fe11e68a8918cc83334cc16a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/fa86ce38fe11e68a8918cc83334cc16a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:05:08.049581'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 61.5
+    quantiles:
+      '0.05': 55.0
+      '0.1': 57.0
+      '0.2': 58.5
+      '0.3': 59.8
+      '0.4': 60.7
+      '0.5': 61.5
+      '0.6': 62.3
+      '0.7': 63.2
+      '0.8': 64.5
+      '0.9': 66.0
+      '0.95': 68.0
+  metadata:
+    rationale: 'As of 2025-06-02, WTI faces a bearish structural backdrop defined
+      by the OPEC+ decision to increase supply and ongoing concerns regarding tepid
+      global demand growth (notably in the US and China). The market is in a ''wait-and-see''
+      mode. Three primary scenarios inform the forecast: 1. ''Oversupply Reasserts''
+      (Prob 0.6, Price ~55): Demand remains weak, and rising OPEC+/non-OPEC supply
+      builds inventories, leading to a drift lower. 2. ''Range-bound Stability'' (Prob
+      0.3, Price ~62): Macro headwinds and supply increases are balanced by potential
+      SPR refills and geopolitical anxiety. 3. ''Regional Escalation'' (Prob 0.1,
+      Tail Risk, Price ~75+): A sharp, unexpected geopolitical shock in the Persian
+      Gulf disrupts shipping, overriding bearish fundamentals. The final quantiles
+      are structured to reflect this range of outcomes, with the wider distribution
+      at the 21-day horizon accounting for both the downside risks of oversupply and
+      the upside tail risk of geopolitical disruption.'
+    horizon_rationale: Mid-horizon volatility increases as incoming data on U.S. inventory
+      levels and preliminary June demand metrics start to sway market sentiment. The
+      market may range trade while waiting for clearer direction from OPEC+.
+    langfuse_trace_id: fa86ce38fe11e68a8918cc83334cc16a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/fa86ce38fe11e68a8918cc83334cc16a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:05:08.049581'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 62.0
+    quantiles:
+      '0.05': 52.0
+      '0.1': 55.0
+      '0.2': 57.5
+      '0.3': 59.5
+      '0.4': 61.0
+      '0.5': 62.0
+      '0.6': 63.5
+      '0.7': 65.5
+      '0.8': 68.0
+      '0.9': 71.0
+      '0.95': 74.0
+  metadata:
+    rationale: 'As of 2025-06-02, WTI faces a bearish structural backdrop defined
+      by the OPEC+ decision to increase supply and ongoing concerns regarding tepid
+      global demand growth (notably in the US and China). The market is in a ''wait-and-see''
+      mode. Three primary scenarios inform the forecast: 1. ''Oversupply Reasserts''
+      (Prob 0.6, Price ~55): Demand remains weak, and rising OPEC+/non-OPEC supply
+      builds inventories, leading to a drift lower. 2. ''Range-bound Stability'' (Prob
+      0.3, Price ~62): Macro headwinds and supply increases are balanced by potential
+      SPR refills and geopolitical anxiety. 3. ''Regional Escalation'' (Prob 0.1,
+      Tail Risk, Price ~75+): A sharp, unexpected geopolitical shock in the Persian
+      Gulf disrupts shipping, overriding bearish fundamentals. The final quantiles
+      are structured to reflect this range of outcomes, with the wider distribution
+      at the 21-day horizon accounting for both the downside risks of oversupply and
+      the upside tail risk of geopolitical disruption.'
+    horizon_rationale: At the 21-day horizon, the impact of the OPEC+ supply increase
+      becomes clearer, and structural demand weaknesses or strength will be more apparent.
+      The wider interval reflects the potential for both a sustained bearish drift
+      due to oversupply and an upside tail case stemming from a geopolitical shock
+      in the Middle East.
+    langfuse_trace_id: fa86ce38fe11e68a8918cc83334cc16a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/fa86ce38fe11e68a8918cc83334cc16a
+scores:
+- 3.2697529816430473
+- 8.164211519099466
+- 2.213635531338778
+metric: crps
+mean_score: 4.549200010693763
+ran_at: '2026-07-22T15:05:08.366701'
+skipped_origins: 0

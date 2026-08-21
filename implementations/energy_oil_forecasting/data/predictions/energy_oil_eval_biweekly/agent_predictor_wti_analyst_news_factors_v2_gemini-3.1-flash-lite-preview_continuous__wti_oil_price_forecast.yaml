@@ -1,0 +1,979 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-06-01T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: Prospective/out-of-sample evaluation period in 2026 for daily WTI crude
+    oil. Evaluates selected contender models on 18 weekly origins from the early 2026
+    geopolitical price shock through its aftermath, to measure adaptive real-time
+    forecasting performance.
+predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:19.228289'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 63.5
+    quantiles:
+      '0.05': 59.0
+      '0.1': 60.5
+      '0.2': 61.5
+      '0.3': 62.5
+      '0.4': 63.0
+      '0.5': 63.5
+      '0.6': 64.0
+      '0.7': 65.0
+      '0.8': 66.5
+      '0.9': 68.0
+      '0.95': 70.0
+  metadata:
+    rationale: 'Core Factors: 1. Global Supply/Demand Balance (Structural shift toward
+      surplus), 2. US Production Efficiency (Structural support for volumes), 3. Geopolitical
+      Vulnerability of Chokepoints (Strait of Hormuz risk). Transitory Factors: 1.
+      Winter Storm Fern recovery (Impact: Medium), 2. US-Iran diplomatic/military
+      friction (Impact: High). Scenarios: 1. ''Normalization'' (60%): Storm impact
+      fades, geopolitical friction stabilizes, structural bearishness pulls price
+      to $58-$60 range. 2. ''Escalation'' (30%): New developments in the Middle East
+      drive prices toward $70+. 3. ''Rapid Surplus Realization'' (10%, Tail): High
+      impact, low probability - economic cooling accelerates oversupply, dragging
+      prices below $55. The interval width reflects the binary nature of the geopolitical
+      risk premium.'
+    horizon_rationale: Short-term horizon (5 days) is dominated by the unwinding of
+      the 'Winter Storm Fern' supply disruption premium. As production recovers, physical
+      pressure should ease slightly.
+    langfuse_trace_id: 81e25128cac4b306f1c6df7383597c89
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/81e25128cac4b306f1c6df7383597c89
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:19.228289'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 55.0
+      '0.1': 57.0
+      '0.2': 58.0
+      '0.3': 59.0
+      '0.4': 59.5
+      '0.5': 60.5
+      '0.6': 61.5
+      '0.7': 63.0
+      '0.8': 65.0
+      '0.9': 68.0
+      '0.95': 72.0
+  metadata:
+    rationale: 'Core Factors: 1. Global Supply/Demand Balance (Structural shift toward
+      surplus), 2. US Production Efficiency (Structural support for volumes), 3. Geopolitical
+      Vulnerability of Chokepoints (Strait of Hormuz risk). Transitory Factors: 1.
+      Winter Storm Fern recovery (Impact: Medium), 2. US-Iran diplomatic/military
+      friction (Impact: High). Scenarios: 1. ''Normalization'' (60%): Storm impact
+      fades, geopolitical friction stabilizes, structural bearishness pulls price
+      to $58-$60 range. 2. ''Escalation'' (30%): New developments in the Middle East
+      drive prices toward $70+. 3. ''Rapid Surplus Realization'' (10%, Tail): High
+      impact, low probability - economic cooling accelerates oversupply, dragging
+      prices below $55. The interval width reflects the binary nature of the geopolitical
+      risk premium.'
+    horizon_rationale: By 21 days, fundamentals (global oversupply fears) exert more
+      pressure if no new kinetic escalation occurs. Tail risk (high scenario) remains
+      significant due to the Strait of Hormuz chokepoint.
+    langfuse_trace_id: 81e25128cac4b306f1c6df7383597c89
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/81e25128cac4b306f1c6df7383597c89
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:28.818186'
+  as_of: '2026-02-16T00:00:00'
+  forecast_date: '2026-02-23T00:00:00'
+  payload:
+    point_forecast: 62.5
+    quantiles:
+      '0.05': 59.0
+      '0.1': 60.0
+      '0.2': 61.0
+      '0.3': 61.8
+      '0.4': 62.2
+      '0.5': 62.5
+      '0.6': 62.9
+      '0.7': 63.5
+      '0.8': 64.2
+      '0.9': 65.5
+      '0.95': 67.0
+  metadata:
+    rationale: "Core Factors: (1) Long-term energy transition reducing demand elasticity,\
+      \ (2) OPEC+ production policy autonomy, (3) Global macroeconomic growth sensitivity.\
+      \ Transitory Factors: (1) Middle East geopolitical risk (Impact: High), (2)\
+      \ Near-term production fluctuations (Impact: Medium). \n\nScenarios: \n1. 'Normalization'\
+      \ (60%): OPEC+ begins gradual supply increases in April; geopolitical tensions\
+      \ stabilize. Target: $60/bbl.\n2. 'Diplomatic Breakthrough' (20%): Significant\
+      \ Iran-US rapprochement, leading to supply-side bearishness. Target: $55/bbl.\n\
+      3. 'Supply Disruption Tail' (20%): Sudden, severe escalation in the Middle East\
+      \ causing temporary supply shocks. Target: $75/bbl. \n\nIntervals are wider\
+      \ at 21 days to reflect the high uncertainty surrounding the timing and magnitude\
+      \ of OPEC+ production changes and the binary nature of geopolitical risks."
+    horizon_rationale: Short-term consolidation as market digests recent inventory
+      increases and potential for diplomatic progress with Iran, offset by residual
+      geopolitical risk premiums.
+    langfuse_trace_id: a17a99aa34b57feb49e4f63edd392099
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a17a99aa34b57feb49e4f63edd392099
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:28.818186'
+  as_of: '2026-02-16T00:00:00'
+  forecast_date: '2026-03-02T00:00:00'
+  payload:
+    point_forecast: 61.5
+    quantiles:
+      '0.05': 57.5
+      '0.1': 58.5
+      '0.2': 59.5
+      '0.3': 60.5
+      '0.4': 61.0
+      '0.5': 61.5
+      '0.6': 62.2
+      '0.7': 63.0
+      '0.8': 64.0
+      '0.9': 66.0
+      '0.95': 68.0
+  metadata:
+    rationale: "Core Factors: (1) Long-term energy transition reducing demand elasticity,\
+      \ (2) OPEC+ production policy autonomy, (3) Global macroeconomic growth sensitivity.\
+      \ Transitory Factors: (1) Middle East geopolitical risk (Impact: High), (2)\
+      \ Near-term production fluctuations (Impact: Medium). \n\nScenarios: \n1. 'Normalization'\
+      \ (60%): OPEC+ begins gradual supply increases in April; geopolitical tensions\
+      \ stabilize. Target: $60/bbl.\n2. 'Diplomatic Breakthrough' (20%): Significant\
+      \ Iran-US rapprochement, leading to supply-side bearishness. Target: $55/bbl.\n\
+      3. 'Supply Disruption Tail' (20%): Sudden, severe escalation in the Middle East\
+      \ causing temporary supply shocks. Target: $75/bbl. \n\nIntervals are wider\
+      \ at 21 days to reflect the high uncertainty surrounding the timing and magnitude\
+      \ of OPEC+ production changes and the binary nature of geopolitical risks."
+    horizon_rationale: Prices likely to soften as markets lean into April OPEC+ supply
+      hike expectations while managing the risk of any sudden Middle East escalation.
+    langfuse_trace_id: a17a99aa34b57feb49e4f63edd392099
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a17a99aa34b57feb49e4f63edd392099
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:28.818186'
+  as_of: '2026-02-16T00:00:00'
+  forecast_date: '2026-03-17T00:00:00'
+  payload:
+    point_forecast: 60.0
+    quantiles:
+      '0.05': 55.0
+      '0.1': 56.5
+      '0.2': 58.0
+      '0.3': 59.0
+      '0.4': 59.5
+      '0.5': 60.0
+      '0.6': 61.0
+      '0.7': 62.5
+      '0.8': 64.5
+      '0.9': 67.5
+      '0.95': 70.0
+  metadata:
+    rationale: "Core Factors: (1) Long-term energy transition reducing demand elasticity,\
+      \ (2) OPEC+ production policy autonomy, (3) Global macroeconomic growth sensitivity.\
+      \ Transitory Factors: (1) Middle East geopolitical risk (Impact: High), (2)\
+      \ Near-term production fluctuations (Impact: Medium). \n\nScenarios: \n1. 'Normalization'\
+      \ (60%): OPEC+ begins gradual supply increases in April; geopolitical tensions\
+      \ stabilize. Target: $60/bbl.\n2. 'Diplomatic Breakthrough' (20%): Significant\
+      \ Iran-US rapprochement, leading to supply-side bearishness. Target: $55/bbl.\n\
+      3. 'Supply Disruption Tail' (20%): Sudden, severe escalation in the Middle East\
+      \ causing temporary supply shocks. Target: $75/bbl. \n\nIntervals are wider\
+      \ at 21 days to reflect the high uncertainty surrounding the timing and magnitude\
+      \ of OPEC+ production changes and the binary nature of geopolitical risks."
+    horizon_rationale: Mid-term trend reflects structural demand growth vs. supply
+      overhang. Scenarios range from bearish (OPEC+ ramp-up) to tail-risk upside (Middle
+      East conflict).
+    langfuse_trace_id: a17a99aa34b57feb49e4f63edd392099
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a17a99aa34b57feb49e4f63edd392099
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:38.717222'
+  as_of: '2026-03-02T00:00:00'
+  forecast_date: '2026-03-09T00:00:00'
+  payload:
+    point_forecast: 76.5
+    quantiles:
+      '0.05': 72.0
+      '0.1': 73.5
+      '0.2': 74.5
+      '0.3': 75.5
+      '0.4': 76.0
+      '0.5': 76.5
+      '0.6': 77.5
+      '0.7': 78.5
+      '0.8': 80.0
+      '0.9': 82.0
+      '0.95': 85.0
+  metadata:
+    rationale: 'The forecast is centered on the ongoing acute geopolitical crisis.
+      Factors: Core: Middle East Geopolitics, Global Demand, US/OPEC+ Production.
+      Transitory: Conflict-Driven Risk Premium (High), Inventory volatility (Medium).
+      Scenarios: Escalation (40%), De-escalation (40%), Tail: Full Conflict (20%).'
+    horizon_rationale: 'As of March 2, 2026, the market is reacting to recent military
+      actions in the Middle East. Core drivers: Geopolitical instability (Strait of
+      Hormuz), global supply-demand balances, and the US SPR/OPEC+ policy framework.
+      Transitory factors: Recent conflict spike (High impact), immediate inventory
+      fluctuations (Medium impact). Scenarios: 1. ''Crisis Escalation'' (Prob 40%,
+      Target $85+): Strait of Hormuz closure/significant supply interruption. 2. ''De-escalation/Status
+      Quo'' (Prob 40%, Target $72): Diplomatic intervention limits supply shocks.
+      3. ''Tail: Full Regional Conflict'' (Prob 20%, Target $100+): Widespread conflict
+      causes severe supply outages. Interval covers this spread.'
+    langfuse_trace_id: ee41cd3356c90a10683ba32b429b600e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ee41cd3356c90a10683ba32b429b600e
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:38.717222'
+  as_of: '2026-03-02T00:00:00'
+  forecast_date: '2026-03-16T00:00:00'
+  payload:
+    point_forecast: 75.0
+    quantiles:
+      '0.05': 68.0
+      '0.1': 70.0
+      '0.2': 72.0
+      '0.3': 73.5
+      '0.4': 74.5
+      '0.5': 75.0
+      '0.6': 76.5
+      '0.7': 78.0
+      '0.8': 80.5
+      '0.9': 84.0
+      '0.95': 88.0
+  metadata:
+    rationale: 'The forecast is centered on the ongoing acute geopolitical crisis.
+      Factors: Core: Middle East Geopolitics, Global Demand, US/OPEC+ Production.
+      Transitory: Conflict-Driven Risk Premium (High), Inventory volatility (Medium).
+      Scenarios: Escalation (40%), De-escalation (40%), Tail: Full Conflict (20%).'
+    horizon_rationale: By 10 days, market differentiation occurs between those pricing
+      in a sustained 'risk premium' and those expecting a diplomatic 'cooling off'.
+      The range expands to account for the uncertainty regarding the duration of the
+      current military posture.
+    langfuse_trace_id: ee41cd3356c90a10683ba32b429b600e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ee41cd3356c90a10683ba32b429b600e
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:38.717222'
+  as_of: '2026-03-02T00:00:00'
+  forecast_date: '2026-03-31T00:00:00'
+  payload:
+    point_forecast: 73.0
+    quantiles:
+      '0.05': 65.0
+      '0.1': 67.5
+      '0.2': 70.0
+      '0.3': 71.5
+      '0.4': 72.5
+      '0.5': 73.0
+      '0.6': 75.0
+      '0.7': 77.0
+      '0.8': 80.0
+      '0.9': 85.0
+      '0.95': 92.0
+  metadata:
+    rationale: 'The forecast is centered on the ongoing acute geopolitical crisis.
+      Factors: Core: Middle East Geopolitics, Global Demand, US/OPEC+ Production.
+      Transitory: Conflict-Driven Risk Premium (High), Inventory volatility (Medium).
+      Scenarios: Escalation (40%), De-escalation (40%), Tail: Full Conflict (20%).'
+    horizon_rationale: At 21 days, the supply-demand fundamentals will assert more
+      control if the conflict does not broaden significantly. The wide right-side
+      tail (90th-95th percentiles) reflects the persistent risk of a catastrophic
+      geopolitical 'black swan' event involving the Strait of Hormuz, while the lower
+      end accounts for a return toward pre-crisis price levels if tensions subside.
+    langfuse_trace_id: ee41cd3356c90a10683ba32b429b600e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ee41cd3356c90a10683ba32b429b600e
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:49.958013'
+  as_of: '2026-03-16T00:00:00'
+  forecast_date: '2026-03-23T00:00:00'
+  payload:
+    point_forecast: 102.5
+    quantiles:
+      '0.05': 92.0
+      '0.1': 95.0
+      '0.2': 98.0
+      '0.3': 100.5
+      '0.4': 101.5
+      '0.5': 102.5
+      '0.6': 104.0
+      '0.7': 106.0
+      '0.8': 109.0
+      '0.9': 115.0
+      '0.95': 122.0
+  metadata:
+    rationale: 'Core Factors: (1) Strait of Hormuz maritime vulnerability (Structural/Geopolitical);
+      (2) Middle Eastern production capacity/infrastructure reliance (Structural);
+      (3) U.S. Strategic Petroleum Reserve (SPR) availability (Policy/Inventory).
+      Transitory Factors: (1) Current geopolitical risk premium spike (High Impact,
+      ~17M bpd loss); (2) Immediate market panic over logistics/insurance (Medium
+      Impact). Scenarios: 1. ''Persistent Crisis'' (60%): Gulf production remains
+      shut, shipping remains blocked; price grinds higher toward $110-120. 2. ''Diplomatic
+      Breakthrough'' (25%): Low probability but high impact; regional actors negotiate
+      safe passage; price drops to $80-90. 3. ''Full-Scale Escalation'' (15%): Further
+      damage to infrastructure; major supply destruction; potential for $150+ spikes.
+      The intervals represent the widening divergence between these scenarios.'
+    horizon_rationale: Over a 5-day horizon, the market is primarily reacting to the
+      acute supply shock of the Strait of Hormuz closure. My baseline assumes persistent
+      supply constraints and high geopolitical risk premiums. The range accounts for
+      both rapid profit-taking (bearish) and further escalations (bullish).
+    langfuse_trace_id: 233d1983d47aaa5183c572d5e541610f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/233d1983d47aaa5183c572d5e541610f
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:49.958013'
+  as_of: '2026-03-16T00:00:00'
+  forecast_date: '2026-03-30T00:00:00'
+  payload:
+    point_forecast: 105.0
+    quantiles:
+      '0.05': 88.0
+      '0.1': 92.0
+      '0.2': 96.0
+      '0.3': 100.0
+      '0.4': 103.0
+      '0.5': 105.0
+      '0.6': 108.0
+      '0.7': 112.0
+      '0.8': 118.0
+      '0.9': 125.0
+      '0.95': 135.0
+  metadata:
+    rationale: 'Core Factors: (1) Strait of Hormuz maritime vulnerability (Structural/Geopolitical);
+      (2) Middle Eastern production capacity/infrastructure reliance (Structural);
+      (3) U.S. Strategic Petroleum Reserve (SPR) availability (Policy/Inventory).
+      Transitory Factors: (1) Current geopolitical risk premium spike (High Impact,
+      ~17M bpd loss); (2) Immediate market panic over logistics/insurance (Medium
+      Impact). Scenarios: 1. ''Persistent Crisis'' (60%): Gulf production remains
+      shut, shipping remains blocked; price grinds higher toward $110-120. 2. ''Diplomatic
+      Breakthrough'' (25%): Low probability but high impact; regional actors negotiate
+      safe passage; price drops to $80-90. 3. ''Full-Scale Escalation'' (15%): Further
+      damage to infrastructure; major supply destruction; potential for $150+ spikes.
+      The intervals represent the widening divergence between these scenarios.'
+    horizon_rationale: By 10 days, if no diplomatic resolution appears, market anxiety
+      likely compounds. The potential for U.S. SPR releases to dampen price growth
+      is factored into the lower quantiles, but the dominant momentum remains upward
+      due to the physical absence of ~17M bpd of production.
+    langfuse_trace_id: 233d1983d47aaa5183c572d5e541610f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/233d1983d47aaa5183c572d5e541610f
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:58:49.958013'
+  as_of: '2026-03-16T00:00:00'
+  forecast_date: '2026-04-14T00:00:00'
+  payload:
+    point_forecast: 108.0
+    quantiles:
+      '0.05': 82.0
+      '0.1': 88.0
+      '0.2': 94.0
+      '0.3': 100.0
+      '0.4': 105.0
+      '0.5': 108.0
+      '0.6': 112.0
+      '0.7': 120.0
+      '0.8': 128.0
+      '0.9': 140.0
+      '0.95': 155.0
+  metadata:
+    rationale: 'Core Factors: (1) Strait of Hormuz maritime vulnerability (Structural/Geopolitical);
+      (2) Middle Eastern production capacity/infrastructure reliance (Structural);
+      (3) U.S. Strategic Petroleum Reserve (SPR) availability (Policy/Inventory).
+      Transitory Factors: (1) Current geopolitical risk premium spike (High Impact,
+      ~17M bpd loss); (2) Immediate market panic over logistics/insurance (Medium
+      Impact). Scenarios: 1. ''Persistent Crisis'' (60%): Gulf production remains
+      shut, shipping remains blocked; price grinds higher toward $110-120. 2. ''Diplomatic
+      Breakthrough'' (25%): Low probability but high impact; regional actors negotiate
+      safe passage; price drops to $80-90. 3. ''Full-Scale Escalation'' (15%): Further
+      damage to infrastructure; major supply destruction; potential for $150+ spikes.
+      The intervals represent the widening divergence between these scenarios.'
+    horizon_rationale: 'At 21 days, the divergence between reality and market pricing
+      grows. If the disruption remains in place, severe global shortages of refined
+      products may trigger extreme pricing. The wide interval reflects the high uncertainty:
+      a sudden breakthrough would crash the price toward $80, while a long-term closure
+      could push prices to record levels.'
+    langfuse_trace_id: 233d1983d47aaa5183c572d5e541610f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/233d1983d47aaa5183c572d5e541610f
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:00.996521'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-06T00:00:00'
+  payload:
+    point_forecast: 102.5
+    quantiles:
+      '0.05': 92.0
+      '0.1': 95.0
+      '0.2': 97.5
+      '0.3': 99.5
+      '0.4': 101.0
+      '0.5': 102.5
+      '0.6': 104.0
+      '0.7': 106.5
+      '0.8': 109.0
+      '0.9': 113.0
+      '0.95': 116.0
+  metadata:
+    rationale: "Core Factors: (1) Strait of Hormuz transit risk (structural, high\
+      \ impact on physical supply); (2) Global spare capacity limits (structural,\
+      \ prevents rapid correction); (3) Strategic Petroleum Reserve (SPR) policy (structural,\
+      \ key defensive tool). Transitory Factors: (1) Immediate conflict intensity\
+      \ (High impact, drives daily volatility); (2) IEA emergency release efficacy\
+      \ (Medium impact, temporary supply fill). \n\nScenarios: \n1. 'Persistent Blockade'\
+      \ (Prob: 0.50): Conflict escalates or remains deadlocked; transit remains broken;\
+      \ prices grind higher/stay elevated. ($115+).\n2. 'Diplomatic De-escalation'\
+      \ (Prob: 0.35): Tensions ease enough to allow partial tanker transit; prices\
+      \ pull back significantly but hold above pre-crisis levels ($80-90).\n3. 'Total\
+      \ Supply Collapse' (Tail - Prob: 0.15): Full-scale conflict spreading; production\
+      \ facilities in the region are permanently hit; SPR fails to bridge the gap\
+      \ ($135+). \n\nThe 80% interval (0.1 to 0.9) reflects the wide uncertainty of\
+      \ the geopolitical outcome. The 0.5 quantile reflects a weighted expectation\
+      \ of ongoing moderate crisis management."
+    horizon_rationale: 'Short term: Continued panic buying due to physical supply
+      fears from the Strait of Hormuz blockage. High volatility expected.'
+    langfuse_trace_id: d5e24e34645c617e6cf1ab815d057185
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d5e24e34645c617e6cf1ab815d057185
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:00.996521'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-13T00:00:00'
+  payload:
+    point_forecast: 105.0
+    quantiles:
+      '0.05': 85.0
+      '0.1': 90.0
+      '0.2': 95.0
+      '0.3': 98.0
+      '0.4': 101.5
+      '0.5': 105.0
+      '0.6': 109.0
+      '0.7': 113.0
+      '0.8': 118.0
+      '0.9': 124.0
+      '0.95': 128.0
+  metadata:
+    rationale: "Core Factors: (1) Strait of Hormuz transit risk (structural, high\
+      \ impact on physical supply); (2) Global spare capacity limits (structural,\
+      \ prevents rapid correction); (3) Strategic Petroleum Reserve (SPR) policy (structural,\
+      \ key defensive tool). Transitory Factors: (1) Immediate conflict intensity\
+      \ (High impact, drives daily volatility); (2) IEA emergency release efficacy\
+      \ (Medium impact, temporary supply fill). \n\nScenarios: \n1. 'Persistent Blockade'\
+      \ (Prob: 0.50): Conflict escalates or remains deadlocked; transit remains broken;\
+      \ prices grind higher/stay elevated. ($115+).\n2. 'Diplomatic De-escalation'\
+      \ (Prob: 0.35): Tensions ease enough to allow partial tanker transit; prices\
+      \ pull back significantly but hold above pre-crisis levels ($80-90).\n3. 'Total\
+      \ Supply Collapse' (Tail - Prob: 0.15): Full-scale conflict spreading; production\
+      \ facilities in the region are permanently hit; SPR fails to bridge the gap\
+      \ ($135+). \n\nThe 80% interval (0.1 to 0.9) reflects the wide uncertainty of\
+      \ the geopolitical outcome. The 0.5 quantile reflects a weighted expectation\
+      \ of ongoing moderate crisis management."
+    horizon_rationale: 'Medium term: Market testing the efficacy of SPR releases.
+      If logistical bottlenecks persist, upside risk remains dominant.'
+    langfuse_trace_id: d5e24e34645c617e6cf1ab815d057185
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d5e24e34645c617e6cf1ab815d057185
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:00.996521'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-28T00:00:00'
+  payload:
+    point_forecast: 98.0
+    quantiles:
+      '0.05': 75.0
+      '0.1': 82.0
+      '0.2': 88.0
+      '0.3': 92.0
+      '0.4': 95.5
+      '0.5': 98.0
+      '0.6': 101.0
+      '0.7': 106.0
+      '0.8': 112.0
+      '0.9': 120.0
+      '0.95': 126.0
+  metadata:
+    rationale: "Core Factors: (1) Strait of Hormuz transit risk (structural, high\
+      \ impact on physical supply); (2) Global spare capacity limits (structural,\
+      \ prevents rapid correction); (3) Strategic Petroleum Reserve (SPR) policy (structural,\
+      \ key defensive tool). Transitory Factors: (1) Immediate conflict intensity\
+      \ (High impact, drives daily volatility); (2) IEA emergency release efficacy\
+      \ (Medium impact, temporary supply fill). \n\nScenarios: \n1. 'Persistent Blockade'\
+      \ (Prob: 0.50): Conflict escalates or remains deadlocked; transit remains broken;\
+      \ prices grind higher/stay elevated. ($115+).\n2. 'Diplomatic De-escalation'\
+      \ (Prob: 0.35): Tensions ease enough to allow partial tanker transit; prices\
+      \ pull back significantly but hold above pre-crisis levels ($80-90).\n3. 'Total\
+      \ Supply Collapse' (Tail - Prob: 0.15): Full-scale conflict spreading; production\
+      \ facilities in the region are permanently hit; SPR fails to bridge the gap\
+      \ ($135+). \n\nThe 80% interval (0.1 to 0.9) reflects the wide uncertainty of\
+      \ the geopolitical outcome. The 0.5 quantile reflects a weighted expectation\
+      \ of ongoing moderate crisis management."
+    horizon_rationale: 'Longer term: Potential partial easing of tensions or successful
+      integration of alternative supply routes/OPEC+ output, though price remains
+      elevated due to reduced global spare capacity.'
+    langfuse_trace_id: d5e24e34645c617e6cf1ab815d057185
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d5e24e34645c617e6cf1ab815d057185
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:10.573193'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-04-20T00:00:00'
+  payload:
+    point_forecast: 94.5
+    quantiles:
+      '0.05': 85.0
+      '0.1': 88.0
+      '0.2': 90.5
+      '0.3': 92.0
+      '0.4': 93.5
+      '0.5': 94.5
+      '0.6': 96.0
+      '0.7': 98.5
+      '0.8': 102.0
+      '0.9': 106.0
+      '0.95': 110.0
+  metadata:
+    rationale: 'Core Factors: 1. Geopolitical stability of the Strait of Hormuz (Critical
+      durability). 2. Global oil production capacity (Durable supply/demand constraint).
+      3. Macro-economic growth affecting global energy consumption (Durable demand
+      driver). Transitory Factors: 1. U.S.-Iran Ceasefire Agreement (High impact,
+      transitory - status of current negotiations). 2. Market sentiment reaction to
+      diplomatic signals (Medium impact, transitory - short-term price swings). Scenarios:
+      1. ''Ceasefire Holds/Extends'' (Probability 0.6, $75-$85/bbl target): Ceasefire
+      success leads to gradual removal of the risk premium. 2. ''Conflict Resumes''
+      (Probability 0.3, $105-$115/bbl target): Negotiations fail; supply disruptions
+      return, driving sharp price spikes. 3. ''Full Regional Escalation'' (Tail risk,
+      Probability 0.1, >$125/bbl target): Total closure of maritime chokepoints and
+      regional war. The wide intervals reflect the high uncertainty of these scenarios.'
+    horizon_rationale: Short-term horizon (5 days) is dominated by the volatility
+      of the ongoing two-week ceasefire. Market is currently between 96.57 and the
+      recent highs, testing lower support as ceasefire news propagates. The 5-day
+      interval reflects high uncertainty surrounding whether the pause in hostilities
+      will hold.
+    langfuse_trace_id: b5978335baf00481d9c651e948779074
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b5978335baf00481d9c651e948779074
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:10.573193'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-04-27T00:00:00'
+  payload:
+    point_forecast: 92.0
+    quantiles:
+      '0.05': 80.0
+      '0.1': 83.0
+      '0.2': 86.0
+      '0.3': 89.0
+      '0.4': 90.5
+      '0.5': 92.0
+      '0.6': 94.0
+      '0.7': 97.5
+      '0.8': 102.0
+      '0.9': 108.0
+      '0.95': 113.0
+  metadata:
+    rationale: 'Core Factors: 1. Geopolitical stability of the Strait of Hormuz (Critical
+      durability). 2. Global oil production capacity (Durable supply/demand constraint).
+      3. Macro-economic growth affecting global energy consumption (Durable demand
+      driver). Transitory Factors: 1. U.S.-Iran Ceasefire Agreement (High impact,
+      transitory - status of current negotiations). 2. Market sentiment reaction to
+      diplomatic signals (Medium impact, transitory - short-term price swings). Scenarios:
+      1. ''Ceasefire Holds/Extends'' (Probability 0.6, $75-$85/bbl target): Ceasefire
+      success leads to gradual removal of the risk premium. 2. ''Conflict Resumes''
+      (Probability 0.3, $105-$115/bbl target): Negotiations fail; supply disruptions
+      return, driving sharp price spikes. 3. ''Full Regional Escalation'' (Tail risk,
+      Probability 0.1, >$125/bbl target): Total closure of maritime chokepoints and
+      regional war. The wide intervals reflect the high uncertainty of these scenarios.'
+    horizon_rationale: '10-day horizon coincides with the conclusion of the announced
+      two-week ceasefire. This creates a binary risk event: either an extension of
+      the diplomatic process (bearish/neutral) or a collapse into renewed conflict
+      (bullish).'
+    langfuse_trace_id: b5978335baf00481d9c651e948779074
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b5978335baf00481d9c651e948779074
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:10.573193'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-05-12T00:00:00'
+  payload:
+    point_forecast: 88.0
+    quantiles:
+      '0.05': 72.0
+      '0.1': 76.0
+      '0.2': 80.0
+      '0.3': 84.0
+      '0.4': 86.5
+      '0.5': 88.0
+      '0.6': 91.0
+      '0.7': 96.0
+      '0.8': 102.0
+      '0.9': 110.0
+      '0.95': 116.0
+  metadata:
+    rationale: 'Core Factors: 1. Geopolitical stability of the Strait of Hormuz (Critical
+      durability). 2. Global oil production capacity (Durable supply/demand constraint).
+      3. Macro-economic growth affecting global energy consumption (Durable demand
+      driver). Transitory Factors: 1. U.S.-Iran Ceasefire Agreement (High impact,
+      transitory - status of current negotiations). 2. Market sentiment reaction to
+      diplomatic signals (Medium impact, transitory - short-term price swings). Scenarios:
+      1. ''Ceasefire Holds/Extends'' (Probability 0.6, $75-$85/bbl target): Ceasefire
+      success leads to gradual removal of the risk premium. 2. ''Conflict Resumes''
+      (Probability 0.3, $105-$115/bbl target): Negotiations fail; supply disruptions
+      return, driving sharp price spikes. 3. ''Full Regional Escalation'' (Tail risk,
+      Probability 0.1, >$125/bbl target): Total closure of maritime chokepoints and
+      regional war. The wide intervals reflect the high uncertainty of these scenarios.'
+    horizon_rationale: Over 21 days, the market will likely move past the immediate
+      ceasefire news to reflect the underlying structural reality of supply/demand,
+      provided the Strait of Hormuz is not completely closed. Significant downward
+      potential exists if geopolitical risk premiums unwind, balanced against upside
+      risk if the conflict escalates.
+    langfuse_trace_id: b5978335baf00481d9c651e948779074
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b5978335baf00481d9c651e948779074
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:21.103761'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-04T00:00:00'
+  payload:
+    point_forecast: 94.0
+    quantiles:
+      '0.05': 85.0
+      '0.1': 88.0
+      '0.2': 90.0
+      '0.3': 92.0
+      '0.4': 93.0
+      '0.5': 94.0
+      '0.6': 95.0
+      '0.7': 97.0
+      '0.8': 99.0
+      '0.9': 102.0
+      '0.95': 105.0
+  metadata:
+    rationale: 'Core Factors: 1. Global Geopolitical Stability (Strait of Hormuz dependency),
+      2. Long-term Secular Oil Demand Trends, 3. US/Global Macroeconomic Health. Transitory
+      Factors: 1. US-Iran Military Escalation (Impact: High), 2. Global Economic Demand
+      Contraction (Impact: Medium). Scenarios: 1. ''Persistent Tension'' (Prob 0.5,
+      Target $90s): Conflict remains a ''frozen'' blockade; demand concerns weigh
+      moderately. 2. ''De-escalation/Ceasefire'' (Prob 0.35, Target $75-$80): Diplomatic
+      breakthrough leads to partial reopening of transit. 3. ''Full Regional War''
+      (Tail Case, Prob 0.15, Target >$120): Uncontrolled escalation, complete closure
+      of all regional transit, severe global supply shock. Intervals were widened
+      significantly to account for these scenario divergences as the horizon increases.'
+    horizon_rationale: Over the 5-day horizon, the market remains pinned to the Strait
+      of Hormuz conflict. The point forecast reflects current pricing with a slight
+      cooling bias given recent diplomatic posturing. The range accounts for immediate
+      sensitivity to news headlines.
+    langfuse_trace_id: c13f12953ea57df9128eb66a13f2edb3
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c13f12953ea57df9128eb66a13f2edb3
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:21.103761'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-11T00:00:00'
+  payload:
+    point_forecast: 93.0
+    quantiles:
+      '0.05': 80.0
+      '0.1': 84.0
+      '0.2': 87.0
+      '0.3': 90.0
+      '0.4': 92.0
+      '0.5': 93.0
+      '0.6': 95.0
+      '0.7': 98.0
+      '0.8': 103.0
+      '0.9': 108.0
+      '0.95': 112.0
+  metadata:
+    rationale: 'Core Factors: 1. Global Geopolitical Stability (Strait of Hormuz dependency),
+      2. Long-term Secular Oil Demand Trends, 3. US/Global Macroeconomic Health. Transitory
+      Factors: 1. US-Iran Military Escalation (Impact: High), 2. Global Economic Demand
+      Contraction (Impact: Medium). Scenarios: 1. ''Persistent Tension'' (Prob 0.5,
+      Target $90s): Conflict remains a ''frozen'' blockade; demand concerns weigh
+      moderately. 2. ''De-escalation/Ceasefire'' (Prob 0.35, Target $75-$80): Diplomatic
+      breakthrough leads to partial reopening of transit. 3. ''Full Regional War''
+      (Tail Case, Prob 0.15, Target >$120): Uncontrolled escalation, complete closure
+      of all regional transit, severe global supply shock. Intervals were widened
+      significantly to account for these scenario divergences as the horizon increases.'
+    horizon_rationale: At 10 days, the divergence between the 'Diplomatic De-escalation'
+      and 'Persistent Conflict/Escalation' scenarios becomes more pronounced, widening
+      the tails. Demand concerns noted by the IEA begin to pull against the 'War Premium'.
+    langfuse_trace_id: c13f12953ea57df9128eb66a13f2edb3
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c13f12953ea57df9128eb66a13f2edb3
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:21.103761'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-26T00:00:00'
+  payload:
+    point_forecast: 91.0
+    quantiles:
+      '0.05': 72.0
+      '0.1': 78.0
+      '0.2': 83.0
+      '0.3': 87.0
+      '0.4': 89.0
+      '0.5': 91.0
+      '0.6': 94.0
+      '0.7': 98.0
+      '0.8': 105.0
+      '0.9': 113.0
+      '0.95': 120.0
+  metadata:
+    rationale: 'Core Factors: 1. Global Geopolitical Stability (Strait of Hormuz dependency),
+      2. Long-term Secular Oil Demand Trends, 3. US/Global Macroeconomic Health. Transitory
+      Factors: 1. US-Iran Military Escalation (Impact: High), 2. Global Economic Demand
+      Contraction (Impact: Medium). Scenarios: 1. ''Persistent Tension'' (Prob 0.5,
+      Target $90s): Conflict remains a ''frozen'' blockade; demand concerns weigh
+      moderately. 2. ''De-escalation/Ceasefire'' (Prob 0.35, Target $75-$80): Diplomatic
+      breakthrough leads to partial reopening of transit. 3. ''Full Regional War''
+      (Tail Case, Prob 0.15, Target >$120): Uncontrolled escalation, complete closure
+      of all regional transit, severe global supply shock. Intervals were widened
+      significantly to account for these scenario divergences as the horizon increases.'
+    horizon_rationale: 'By 21 days, the cumulative effect of demand destruction and
+      the possibility of a lasting ceasefire vs. a total blockade creates a very wide
+      distribution. The tail cases are significant here: full resolution could lead
+      to a sharp retracement, whereas further escalation or a widening of the regional
+      conflict pushes toward the 52-week highs.'
+    langfuse_trace_id: c13f12953ea57df9128eb66a13f2edb3
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c13f12953ea57df9128eb66a13f2edb3
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:31.468876'
+  as_of: '2026-05-11T00:00:00'
+  forecast_date: '2026-05-18T00:00:00'
+  payload:
+    point_forecast: 96.0
+    quantiles:
+      '0.05': 85.0
+      '0.1': 89.0
+      '0.2': 91.5
+      '0.3': 93.5
+      '0.4': 95.0
+      '0.5': 96.0
+      '0.6': 97.5
+      '0.7': 99.0
+      '0.8': 102.0
+      '0.9': 106.0
+      '0.95': 110.0
+  metadata:
+    rationale: 'Analysis focuses on the ''Strait of Hormuz Supply Crisis'' as of 2026-05-11.
+      Core factors include (1) Global reliance on Hormuz throughput, (2) Structural
+      decline in spare capacity, and (3) Long-term energy security investment cycles.
+      Transitory factors (high impact) include (1) Active diplomatic de-escalation
+      channels and (2) Short-term inventory exhaustion rates. Scenarios: 1. ''Persistent
+      Blockade'' (Prob 0.5): Sustained high prices as global inventories deplete,
+      settling around $95-$105. 2. ''Diplomatic De-escalation'' (Prob 0.3): Price
+      sharp correction to $70-$80 upon resolution. 3. ''Escalation Tail'' (Prob 0.2):
+      Full regional conflict driving supply cuts and testing $120+. The wide interval
+      in the 21-day horizon reflects the high probability of a discrete, binary news
+      event forcing a shift between these scenarios.'
+    horizon_rationale: Over a 5-day horizon, the market remains pinned by the Strait
+      of Hormuz disruption. Volatility is elevated, causing a wide distribution. The
+      core factors are the physical supply constraint and the geopolitical risk premium.
+      The transitory factor is the immediate outcome of diplomatic signalling, which
+      carries high impact.
+    langfuse_trace_id: 289a95536aa4a08edf747cbd717bf353
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/289a95536aa4a08edf747cbd717bf353
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:31.468876'
+  as_of: '2026-05-11T00:00:00'
+  forecast_date: '2026-06-09T00:00:00'
+  payload:
+    point_forecast: 88.0
+    quantiles:
+      '0.05': 65.0
+      '0.1': 72.0
+      '0.2': 78.0
+      '0.3': 82.0
+      '0.4': 85.5
+      '0.5': 88.0
+      '0.6': 91.0
+      '0.7': 95.0
+      '0.8': 101.0
+      '0.9': 108.0
+      '0.95': 115.0
+  metadata:
+    rationale: 'Analysis focuses on the ''Strait of Hormuz Supply Crisis'' as of 2026-05-11.
+      Core factors include (1) Global reliance on Hormuz throughput, (2) Structural
+      decline in spare capacity, and (3) Long-term energy security investment cycles.
+      Transitory factors (high impact) include (1) Active diplomatic de-escalation
+      channels and (2) Short-term inventory exhaustion rates. Scenarios: 1. ''Persistent
+      Blockade'' (Prob 0.5): Sustained high prices as global inventories deplete,
+      settling around $95-$105. 2. ''Diplomatic De-escalation'' (Prob 0.3): Price
+      sharp correction to $70-$80 upon resolution. 3. ''Escalation Tail'' (Prob 0.2):
+      Full regional conflict driving supply cuts and testing $120+. The wide interval
+      in the 21-day horizon reflects the high probability of a discrete, binary news
+      event forcing a shift between these scenarios.'
+    horizon_rationale: 'By 21 days, the market faces two distinct paths: a persistent,
+      high-price environment due to continued supply shortages, or a gradual re-integration
+      of regional supply. Our range incorporates both the potential for significant
+      upside if the crisis deepens and the downside risk of a diplomatic breakthrough.'
+    langfuse_trace_id: 289a95536aa4a08edf747cbd717bf353
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/289a95536aa4a08edf747cbd717bf353
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:48.564391'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-01T00:00:00'
+  payload:
+    point_forecast: 95.0
+    quantiles:
+      '0.05': 88.0
+      '0.1': 90.0
+      '0.2': 92.0
+      '0.3': 93.5
+      '0.4': 94.5
+      '0.5': 95.0
+      '0.6': 97.0
+      '0.7': 99.0
+      '0.8': 102.0
+      '0.9': 108.0
+      '0.95': 115.0
+  metadata:
+    rationale: 'Core Factors: 1. Geopolitical Risk (Middle East/Strait of Hormuz):
+      The primary driver of the current supply shock and price premium. 2. Global
+      Macro/Demand: High energy prices causing demand contraction. 3. Energy Transition
+      Dynamics: The paradox of needing fossil fuels while incentivizing long-term
+      energy security. Transitory Factors: 1. IEA/Strategic Stock Releases (Impact:
+      Medium): Temporary measure to cap price spikes. 2. Short-term peace sentiment
+      (Impact: High): Causes violent, transient price corrections. Scenarios: 1. ''Tense
+      Standoff'' (Prob: 0.5, Price: $90): Stability in supply losses, moderate demand
+      contraction. 2. ''Diplomatic De-escalation'' (Prob: 0.3, Price: $75): Major,
+      swift resolution, release of risk premium. 3. ''Full Regional War'' (Tail/Prob:
+      0.2, Price: $135): Total blockage of critical channels, extreme supply scarcity.
+      Interval width (e.g., 0.1 to 0.9) is dictated by the high uncertainty of these
+      geopolitical scenarios.'
+    horizon_rationale: In the immediate 5-day horizon, the market is pricing in high
+      volatility and uncertainty surrounding Middle East supply stability. The base
+      case (50th percentile) reflects a modest cooling from the recent $96.60 close
+      as traders digest recent IEA intervention announcements. The tails remain fat
+      due to the risk of either sudden escalation (upside) or temporary diplomatic
+      breakthrough (downside).
+    langfuse_trace_id: bc51603d39ebc8c093337249a9c74f4d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/bc51603d39ebc8c093337249a9c74f4d
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:48.564391'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-08T00:00:00'
+  payload:
+    point_forecast: 93.0
+    quantiles:
+      '0.05': 80.0
+      '0.1': 85.0
+      '0.2': 88.0
+      '0.3': 90.5
+      '0.4': 92.0
+      '0.5': 93.0
+      '0.6': 96.0
+      '0.7': 99.0
+      '0.8': 105.0
+      '0.9': 112.0
+      '0.95': 120.0
+  metadata:
+    rationale: 'Core Factors: 1. Geopolitical Risk (Middle East/Strait of Hormuz):
+      The primary driver of the current supply shock and price premium. 2. Global
+      Macro/Demand: High energy prices causing demand contraction. 3. Energy Transition
+      Dynamics: The paradox of needing fossil fuels while incentivizing long-term
+      energy security. Transitory Factors: 1. IEA/Strategic Stock Releases (Impact:
+      Medium): Temporary measure to cap price spikes. 2. Short-term peace sentiment
+      (Impact: High): Causes violent, transient price corrections. Scenarios: 1. ''Tense
+      Standoff'' (Prob: 0.5, Price: $90): Stability in supply losses, moderate demand
+      contraction. 2. ''Diplomatic De-escalation'' (Prob: 0.3, Price: $75): Major,
+      swift resolution, release of risk premium. 3. ''Full Regional War'' (Tail/Prob:
+      0.2, Price: $135): Total blockage of critical channels, extreme supply scarcity.
+      Interval width (e.g., 0.1 to 0.9) is dictated by the high uncertainty of these
+      geopolitical scenarios.'
+    horizon_rationale: At 10 days, the potential for demand destruction to exert downward
+      pressure on prices increases, leading to a wider distribution of outcomes. The
+      scenario spread reflects whether the market views the current supply outage
+      as a permanent structural break or a manageable crisis.
+    langfuse_trace_id: bc51603d39ebc8c093337249a9c74f4d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/bc51603d39ebc8c093337249a9c74f4d
+- predictor_id: agent_predictor_wti_analyst_news_factors_v2_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T07:59:48.564391'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-23T00:00:00'
+  payload:
+    point_forecast: 90.0
+    quantiles:
+      '0.05': 75.0
+      '0.1': 80.0
+      '0.2': 84.0
+      '0.3': 87.0
+      '0.4': 89.0
+      '0.5': 90.0
+      '0.6': 94.0
+      '0.7': 98.0
+      '0.8': 105.0
+      '0.9': 118.0
+      '0.95': 130.0
+  metadata:
+    rationale: 'Core Factors: 1. Geopolitical Risk (Middle East/Strait of Hormuz):
+      The primary driver of the current supply shock and price premium. 2. Global
+      Macro/Demand: High energy prices causing demand contraction. 3. Energy Transition
+      Dynamics: The paradox of needing fossil fuels while incentivizing long-term
+      energy security. Transitory Factors: 1. IEA/Strategic Stock Releases (Impact:
+      Medium): Temporary measure to cap price spikes. 2. Short-term peace sentiment
+      (Impact: High): Causes violent, transient price corrections. Scenarios: 1. ''Tense
+      Standoff'' (Prob: 0.5, Price: $90): Stability in supply losses, moderate demand
+      contraction. 2. ''Diplomatic De-escalation'' (Prob: 0.3, Price: $75): Major,
+      swift resolution, release of risk premium. 3. ''Full Regional War'' (Tail/Prob:
+      0.2, Price: $135): Total blockage of critical channels, extreme supply scarcity.
+      Interval width (e.g., 0.1 to 0.9) is dictated by the high uncertainty of these
+      geopolitical scenarios.'
+    horizon_rationale: By 21 days, the impact of sustained high prices on global economic
+      activity is expected to act as a significant drag. The core bearish thesis relies
+      on global demand contraction, while the extreme bullish tail ($130+) is reserved
+      for the 'Full Regional War' scenario, where the Strait of Hormuz closure is
+      perceived as irreversible in the short term.
+    langfuse_trace_id: bc51603d39ebc8c093337249a9c74f4d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/bc51603d39ebc8c093337249a9c74f4d
+scores:
+- 0.8461158689388558
+- 10.233551277602018
+- 2.493303787609763
+- 7.568019885859215
+- 32.552974291084226
+- 15.373302428190375
+- 13.954545454545457
+- 21.95437741870723
+- 11.43611844906137
+- 3.396364385431461
+- 11.06975284292678
+- 5.872481669276215
+- 4.5525614840925215
+- 3.7498347384870527
+- 3.438264074404376
+- 3.1339676912165864
+- 7.622810111558143
+- 8.651403127623002
+- 3.2384296133498514
+- 3.444545399058947
+- 8.19702778965974
+- 3.4355369126501145
+- 2.514047922181688
+- 2.7735528867106782
+- 13.69909182461825
+metric: crps
+mean_score: 8.208079253393757
+ran_at: '2026-07-25T07:59:48.868005'
+skipped_origins: 0

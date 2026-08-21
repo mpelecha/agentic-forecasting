@@ -1,0 +1,154 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-06-02T00:00:00'
+  end: '2025-06-09T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:05:46.788880'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 57.5
+      '0.1': 58.5
+      '0.2': 59.2
+      '0.3': 59.8
+      '0.4': 60.2
+      '0.5': 60.5
+      '0.6': 60.9
+      '0.7': 61.5
+      '0.8': 62.5
+      '0.9': 64.0
+      '0.95': 65.5
+  metadata:
+    rationale: "My analysis is driven by the structural transition of the market toward\
+      \ a supply surplus, as OPEC+ initiates the unwinding of voluntary production\
+      \ cuts amid tepid global demand growth. \n\nScenarios:\n1. 'Structural Surplus':\
+      \ (Probability 0.6, 21-day target $55). OPEC+ continues the gradual unwinding\
+      \ of cuts; global demand fails to surprise to the upside. Bearish.\n2. 'Status\
+      \ Quo/Range Bound': (Probability 0.3, 21-day target $60). OPEC+ slows the pace\
+      \ of output increases due to market weakness; geopolitical anxiety provides\
+      \ a floor. Neutral.\n3. 'Geopolitical Tail Shock': (Probability 0.1, 21-day\
+      \ target $75+). A major escalation in the Middle East severely restricts shipping\
+      \ through the Persian Gulf, creating an immediate supply gap despite the global\
+      \ surplus outlook. Bullish (Tail Case).\n\nThe final quantile interval width\
+      \ is set to be deliberately wide, reflecting the dichotomy between the cooling\
+      \ fundamentals and the high-impact/low-probability geopolitical tail risk."
+    horizon_rationale: Over the 5-day horizon, price action remains dominated by the
+      consolidation near the $60 support level. Market sentiment is cautious as participants
+      process the ongoing OPEC+ supply unwinding and the broader economic outlook.
+      With limited immediate triggers, volatility is expected to be contained within
+      a moderate band.
+    langfuse_trace_id: 8ef96690d21b744e7c9ad5d4ff2f269c
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8ef96690d21b744e7c9ad5d4ff2f269c
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:05:46.788880'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 59.5
+    quantiles:
+      '0.05': 55.0
+      '0.1': 56.5
+      '0.2': 57.8
+      '0.3': 58.5
+      '0.4': 59.0
+      '0.5': 59.5
+      '0.6': 60.2
+      '0.7': 61.2
+      '0.8': 62.5
+      '0.9': 65.0
+      '0.95': 67.0
+  metadata:
+    rationale: "My analysis is driven by the structural transition of the market toward\
+      \ a supply surplus, as OPEC+ initiates the unwinding of voluntary production\
+      \ cuts amid tepid global demand growth. \n\nScenarios:\n1. 'Structural Surplus':\
+      \ (Probability 0.6, 21-day target $55). OPEC+ continues the gradual unwinding\
+      \ of cuts; global demand fails to surprise to the upside. Bearish.\n2. 'Status\
+      \ Quo/Range Bound': (Probability 0.3, 21-day target $60). OPEC+ slows the pace\
+      \ of output increases due to market weakness; geopolitical anxiety provides\
+      \ a floor. Neutral.\n3. 'Geopolitical Tail Shock': (Probability 0.1, 21-day\
+      \ target $75+). A major escalation in the Middle East severely restricts shipping\
+      \ through the Persian Gulf, creating an immediate supply gap despite the global\
+      \ surplus outlook. Bullish (Tail Case).\n\nThe final quantile interval width\
+      \ is set to be deliberately wide, reflecting the dichotomy between the cooling\
+      \ fundamentals and the high-impact/low-probability geopolitical tail risk."
+    horizon_rationale: By the 10-day horizon, the market will likely have adjusted
+      to the initial sentiment surrounding the latest OPEC+ supply statements. The
+      risk of the price drifting lower is elevated if global demand data continues
+      to underwhelm, testing the $57 support level.
+    langfuse_trace_id: 8ef96690d21b744e7c9ad5d4ff2f269c
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8ef96690d21b744e7c9ad5d4ff2f269c
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:05:46.788880'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 58.0
+    quantiles:
+      '0.05': 52.0
+      '0.1': 54.0
+      '0.2': 55.5
+      '0.3': 56.5
+      '0.4': 57.2
+      '0.5': 58.0
+      '0.6': 59.5
+      '0.7': 61.0
+      '0.8': 63.5
+      '0.9': 67.0
+      '0.95': 70.0
+  metadata:
+    rationale: "My analysis is driven by the structural transition of the market toward\
+      \ a supply surplus, as OPEC+ initiates the unwinding of voluntary production\
+      \ cuts amid tepid global demand growth. \n\nScenarios:\n1. 'Structural Surplus':\
+      \ (Probability 0.6, 21-day target $55). OPEC+ continues the gradual unwinding\
+      \ of cuts; global demand fails to surprise to the upside. Bearish.\n2. 'Status\
+      \ Quo/Range Bound': (Probability 0.3, 21-day target $60). OPEC+ slows the pace\
+      \ of output increases due to market weakness; geopolitical anxiety provides\
+      \ a floor. Neutral.\n3. 'Geopolitical Tail Shock': (Probability 0.1, 21-day\
+      \ target $75+). A major escalation in the Middle East severely restricts shipping\
+      \ through the Persian Gulf, creating an immediate supply gap despite the global\
+      \ surplus outlook. Bullish (Tail Case).\n\nThe final quantile interval width\
+      \ is set to be deliberately wide, reflecting the dichotomy between the cooling\
+      \ fundamentals and the high-impact/low-probability geopolitical tail risk."
+    horizon_rationale: Over the 21-day horizon, the structural narrative of a supply-led
+      market surplus becomes more influential. If OPEC+ maintains its course of unwinding
+      cuts, sustained downward pressure is likely. The 80% confidence interval is
+      widened to account for both the potential for a sharper downward drift toward
+      $52 if surplus expectations intensify, and a significant upside move to $70
+      if geopolitical risks in the Middle East suddenly escalate into a major supply
+      disruption.
+    langfuse_trace_id: 8ef96690d21b744e7c9ad5d4ff2f269c
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8ef96690d21b744e7c9ad5d4ff2f269c
+scores:
+- 3.1538024019603896
+- 9.674128874471366
+- 4.155783181939245
+metric: crps
+mean_score: 5.661238152790333
+ran_at: '2026-07-22T15:05:47.107895'
+skipped_origins: 0

@@ -1,0 +1,135 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-06-02T00:00:00'
+  end: '2025-06-09T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T11:58:35.743598'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 57.5
+      '0.1': 58.2
+      '0.2': 59.1
+      '0.3': 59.8
+      '0.4': 60.2
+      '0.5': 60.5
+      '0.6': 60.8
+      '0.7': 61.3
+      '0.8': 62.0
+      '0.9': 63.0
+      '0.95': 63.8
+  metadata:
+    rationale: "The oil market is currently facing a supply-driven bearish environment\
+      \ following confirmed plans by OPEC+ to continue gradually increasing production\
+      \ through July 2025. This strategy, aimed at regaining market share, is occurring\
+      \ alongside lingering concerns regarding global demand growth, particularly\
+      \ in major Asian economies. Geopolitical risks are monitored but are not currently\
+      \ providing a significant premium to prices. My forecast reflects a cautious,\
+      \ bearish outlook, anticipating that WTI will test support levels near $57\u2013\
+      $58 in the coming weeks."
+    horizon_rationale: Short-term pressure remains elevated due to the recent OPEC+
+      decision to proceed with production increases. With WTI closing at $60.79, the
+      market is testing support levels. I expect a slight consolidation or minor downside
+      in the coming 5 days as the market absorbs the July production hike news.
+    langfuse_trace_id: f08816e60b0b6047b68dffb6f7a7fe08
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f08816e60b0b6047b68dffb6f7a7fe08
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T11:58:35.743598'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 60.0
+    quantiles:
+      '0.05': 56.5
+      '0.1': 57.2
+      '0.2': 58.0
+      '0.3': 59.0
+      '0.4': 59.6
+      '0.5': 60.0
+      '0.6': 60.5
+      '0.7': 61.0
+      '0.8': 62.0
+      '0.9': 63.5
+      '0.95': 64.5
+  metadata:
+    rationale: "The oil market is currently facing a supply-driven bearish environment\
+      \ following confirmed plans by OPEC+ to continue gradually increasing production\
+      \ through July 2025. This strategy, aimed at regaining market share, is occurring\
+      \ alongside lingering concerns regarding global demand growth, particularly\
+      \ in major Asian economies. Geopolitical risks are monitored but are not currently\
+      \ providing a significant premium to prices. My forecast reflects a cautious,\
+      \ bearish outlook, anticipating that WTI will test support levels near $57\u2013\
+      $58 in the coming weeks."
+    horizon_rationale: Over a 10-day horizon, the supply-side narrative dominated
+      by OPEC+'s proactive unwinding of cuts will likely keep a lid on prices. The
+      absence of major bullish catalysts and concerns over demand resilience in China/India
+      suggest a bearish bias.
+    langfuse_trace_id: f08816e60b0b6047b68dffb6f7a7fe08
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f08816e60b0b6047b68dffb6f7a7fe08
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-25T11:58:35.743598'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 59.0
+    quantiles:
+      '0.05': 54.5
+      '0.1': 55.5
+      '0.2': 56.8
+      '0.3': 57.8
+      '0.4': 58.5
+      '0.5': 59.0
+      '0.6': 59.8
+      '0.7': 60.8
+      '0.8': 62.0
+      '0.9': 64.0
+      '0.95': 65.5
+  metadata:
+    rationale: "The oil market is currently facing a supply-driven bearish environment\
+      \ following confirmed plans by OPEC+ to continue gradually increasing production\
+      \ through July 2025. This strategy, aimed at regaining market share, is occurring\
+      \ alongside lingering concerns regarding global demand growth, particularly\
+      \ in major Asian economies. Geopolitical risks are monitored but are not currently\
+      \ providing a significant premium to prices. My forecast reflects a cautious,\
+      \ bearish outlook, anticipating that WTI will test support levels near $57\u2013\
+      $58 in the coming weeks."
+    horizon_rationale: By the 21-day horizon, the market will have had time to digest
+      further macroeconomic data and potentially reassess the impact of the July OPEC+
+      output increase. Continued supply growth against sluggish demand growth suggests
+      a sustained bearish trend towards the recent $57 support area.
+    langfuse_trace_id: f08816e60b0b6047b68dffb6f7a7fe08
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f08816e60b0b6047b68dffb6f7a7fe08
+scores:
+- 3.685042237841395
+- 10.249335486041614
+- 4.136774362611379
+metric: crps
+mean_score: 6.023717362164796
+ran_at: '2026-07-25T11:58:36.055227'
+skipped_origins: 0

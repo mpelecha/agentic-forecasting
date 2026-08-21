@@ -1,0 +1,157 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:09:42.318506'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.0
+    quantiles:
+      '0.05': 62.5
+      '0.1': 63.2
+      '0.2': 63.8
+      '0.3': 64.2
+      '0.4': 64.6
+      '0.5': 65.0
+      '0.6': 65.5
+      '0.7': 66.0
+      '0.8': 66.5
+      '0.9': 67.5
+      '0.95': 68.2
+  metadata:
+    rationale: The outlook is balanced between OPEC+ supply restraint and a cautious
+      global demand environment. Geopolitical risks provide a floor for prices but
+      the market seems constrained by persistent surplus concerns. Forecasts incorporate
+      a consolidation phase followed by a slight downward drift due to seasonal demand
+      patterns and supply management discipline.
+    horizon_rationale: Short-term momentum is slightly bullish following the rebound
+      in late January. We expect prices to consolidate near the $65 level as the market
+      monitors OPEC+'s supply discipline and persistent geopolitical risk premiums.
+    langfuse_trace_id: d40ef8437a7cb5f2178d2c6267d107aa
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d40ef8437a7cb5f2178d2c6267d107aa
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:09:42.318506'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 63.5
+    quantiles:
+      '0.05': 58.0
+      '0.1': 59.5
+      '0.2': 60.8
+      '0.3': 61.8
+      '0.4': 62.8
+      '0.5': 63.5
+      '0.6': 64.5
+      '0.7': 65.5
+      '0.8': 66.5
+      '0.9': 68.0
+      '0.95': 69.2
+  metadata:
+    rationale: The outlook is balanced between OPEC+ supply restraint and a cautious
+      global demand environment. Geopolitical risks provide a floor for prices but
+      the market seems constrained by persistent surplus concerns. Forecasts incorporate
+      a consolidation phase followed by a slight downward drift due to seasonal demand
+      patterns and supply management discipline.
+    horizon_rationale: At a one-month horizon, expectations of a structural surplus
+      in the global market remain a ceiling. If no major geopolitical escalation occurs,
+      the fundamental balance suggests potential downward pressure towards the $60-$63
+      range, despite OPEC+'s efforts to support prices.
+    langfuse_trace_id: d40ef8437a7cb5f2178d2c6267d107aa
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d40ef8437a7cb5f2178d2c6267d107aa
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:09:52.826230'
+  as_of: '2026-02-09T00:00:00'
+  forecast_date: '2026-02-23T00:00:00'
+  payload:
+    point_forecast: 64.8
+    quantiles:
+      '0.05': 59.5
+      '0.1': 60.5
+      '0.2': 61.8
+      '0.3': 63.2
+      '0.4': 64.0
+      '0.5': 64.8
+      '0.6': 65.8
+      '0.7': 67.2
+      '0.8': 68.5
+      '0.9': 70.5
+      '0.95': 72.0
+  metadata:
+    rationale: As of Feb 9, 2026, WTI is driven by a heightened geopolitical risk
+      premium related to Middle East shipping lanes and a firm OPEC+ policy to sustain
+      production cuts through Q1 2026. The market remains sensitive to any further
+      escalation in the region. My forecasts reflect a cautious, moderately bullish
+      outlook, balancing the risk of supply disruptions against underlying demand
+      uncertainties.
+    horizon_rationale: Over 10 days, the potential for escalation in the Strait of
+      Hormuz remains a primary driver. With OPEC+ production quotas firmly in place,
+      any further supply threats will disproportionately impact spot prices.
+    langfuse_trace_id: 47ba1cb230b816f1c25de99956be741b
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/47ba1cb230b816f1c25de99956be741b
+- predictor_id: agent_predictor_wti_analyst_news_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-16T18:09:52.826230'
+  as_of: '2026-02-09T00:00:00'
+  forecast_date: '2026-03-10T00:00:00'
+  payload:
+    point_forecast: 65.5
+    quantiles:
+      '0.05': 58.0
+      '0.1': 59.5
+      '0.2': 61.5
+      '0.3': 63.5
+      '0.4': 64.8
+      '0.5': 65.5
+      '0.6': 66.5
+      '0.7': 68.5
+      '0.8': 70.5
+      '0.9': 73.0
+      '0.95': 75.0
+  metadata:
+    rationale: As of Feb 9, 2026, WTI is driven by a heightened geopolitical risk
+      premium related to Middle East shipping lanes and a firm OPEC+ policy to sustain
+      production cuts through Q1 2026. The market remains sensitive to any further
+      escalation in the region. My forecasts reflect a cautious, moderately bullish
+      outlook, balancing the risk of supply disruptions against underlying demand
+      uncertainties.
+    horizon_rationale: For the 21-day horizon, the risk premium remains elevated.
+      While global demand concerns and high inventory levels could temper rallies,
+      the persistent supply-side vulnerability keeps the distribution skewed towards
+      the upside.
+    langfuse_trace_id: 47ba1cb230b816f1c25de99956be741b
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/47ba1cb230b816f1c25de99956be741b
+scores:
+- 0.5381816517223003
+- 8.993881856114413
+- 1.2233877639139983
+- 14.485534138324834
+metric: crps
+mean_score: 6.310246352518886
+ran_at: '2026-08-16T18:09:53.123435'
+skipped_origins: 0

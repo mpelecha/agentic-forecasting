@@ -1,0 +1,458 @@
+spec:
+  task:
+    task_id: wti_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: WTI price forecast
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-05-25T00:00:00'
+  end: '2026-05-26T00:00:00'
+  stride: 1
+  origin_dates: null
+  warmup: 0
+  description: ''
+predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_forecast
+  issued_at: '2026-08-20T07:53:15.448115'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-01T00:00:00'
+  payload:
+    point_forecast: 97.5
+    quantiles:
+      '0.05': 81.65664952583454
+      '0.1': 91.0
+      '0.2': 93.5
+      '0.3': 95.0
+      '0.4': 96.5
+      '0.5': 97.5
+      '0.6': 99.0
+      '0.7': 101.0
+      '0.8': 104.0
+      '0.9': 108.0
+      '0.95': 125.66260102127947
+  metadata:
+    factors:
+    - name: Strait of Hormuz Supply Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Demand Contraction
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Global Inventory Buffers
+      category: financial
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Protracted Impasse
+      probability: 0.5
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Contraction: neutral
+        Global Inventory Buffers: bearish
+    - name: Diplomatic De-escalation
+      probability: 0.3
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bearish
+        Global Demand Contraction: bearish
+        Global Inventory Buffers: neutral
+    - name: Inventory Exhaustion Spike
+      probability: 0.2
+      price_low: 110.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Contraction: neutral
+        Global Inventory Buffers: bullish
+    rationale: The market is currently defined by the high-stakes standoff in the
+      Strait of Hormuz. The primary risk is that the supply shortfall, currently mitigated
+      by inventory, will lead to a sharp price spike if those buffers are exhausted.
+      Conversely, any sign of diplomatic progress would likely trigger a rapid unwinding
+      of the geopolitical risk premium.
+    horizon_rationale: Short-term volatility remains elevated due to the Strait of
+      Hormuz closure. Prices are consolidating near $96-$97 as the market balances
+      the supply shock against demand destruction.
+    langfuse_trace_id: 5c69978ce7180088c2199c4820cbcd91
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5c69978ce7180088c2199c4820cbcd91
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_forecast
+  issued_at: '2026-08-20T07:53:15.448115'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-08T00:00:00'
+  payload:
+    point_forecast: 99.0
+    quantiles:
+      '0.05': 78.09934440657646
+      '0.1': 89.0
+      '0.2': 92.0
+      '0.3': 95.0
+      '0.4': 97.5
+      '0.5': 99.0
+      '0.6': 102.0
+      '0.7': 105.0
+      '0.8': 109.0
+      '0.9': 114.0
+      '0.95': 133.1814423055318
+  metadata:
+    factors:
+    - name: Strait of Hormuz Supply Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Demand Contraction
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Global Inventory Buffers
+      category: financial
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Protracted Impasse
+      probability: 0.5
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Contraction: neutral
+        Global Inventory Buffers: bearish
+    - name: Diplomatic De-escalation
+      probability: 0.3
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bearish
+        Global Demand Contraction: bearish
+        Global Inventory Buffers: neutral
+    - name: Inventory Exhaustion Spike
+      probability: 0.2
+      price_low: 110.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Contraction: neutral
+        Global Inventory Buffers: bullish
+    rationale: The market is currently defined by the high-stakes standoff in the
+      Strait of Hormuz. The primary risk is that the supply shortfall, currently mitigated
+      by inventory, will lead to a sharp price spike if those buffers are exhausted.
+      Conversely, any sign of diplomatic progress would likely trigger a rapid unwinding
+      of the geopolitical risk premium.
+    horizon_rationale: As the horizon extends, the risk of inventory depletion begins
+      to outweigh the immediate demand-side cooling, creating a slight upward bias
+      in the median forecast.
+    langfuse_trace_id: 5c69978ce7180088c2199c4820cbcd91
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5c69978ce7180088c2199c4820cbcd91
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_forecast
+  issued_at: '2026-08-20T07:53:15.448115'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-23T00:00:00'
+  payload:
+    point_forecast: 102.0
+    quantiles:
+      '0.05': 75.0
+      '0.1': 85.0
+      '0.2': 90.0
+      '0.3': 95.0
+      '0.4': 99.0
+      '0.5': 102.0
+      '0.6': 106.0
+      '0.7': 111.0
+      '0.8': 117.0
+      '0.9': 124.0
+      '0.95': 140.0
+  metadata:
+    factors:
+    - name: Strait of Hormuz Supply Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Demand Contraction
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Global Inventory Buffers
+      category: financial
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Protracted Impasse
+      probability: 0.5
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Contraction: neutral
+        Global Inventory Buffers: bearish
+    - name: Diplomatic De-escalation
+      probability: 0.3
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bearish
+        Global Demand Contraction: bearish
+        Global Inventory Buffers: neutral
+    - name: Inventory Exhaustion Spike
+      probability: 0.2
+      price_low: 110.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Contraction: neutral
+        Global Inventory Buffers: bullish
+    rationale: The market is currently defined by the high-stakes standoff in the
+      Strait of Hormuz. The primary risk is that the supply shortfall, currently mitigated
+      by inventory, will lead to a sharp price spike if those buffers are exhausted.
+      Conversely, any sign of diplomatic progress would likely trigger a rapid unwinding
+      of the geopolitical risk premium.
+    horizon_rationale: By the 21-day horizon, the market faces a critical juncture
+      regarding inventory levels. The probability of a significant price spike increases
+      if no diplomatic resolution is reached.
+    langfuse_trace_id: 5c69978ce7180088c2199c4820cbcd91
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5c69978ce7180088c2199c4820cbcd91
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_forecast
+  issued_at: '2026-08-20T07:53:27.224893'
+  as_of: '2026-05-26T00:00:00'
+  forecast_date: '2026-06-02T00:00:00'
+  payload:
+    point_forecast: 97.5
+    quantiles:
+      '0.05': 81.65664952583454
+      '0.1': 91.0
+      '0.2': 93.5
+      '0.3': 95.0
+      '0.4': 96.5
+      '0.5': 97.5
+      '0.6': 99.0
+      '0.7': 101.0
+      '0.8': 104.0
+      '0.9': 108.0
+      '0.95': 125.66260102127947
+  metadata:
+    factors:
+    - name: Global Inventory Levels
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: US-Iran Diplomatic Status
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Diplomatic De-escalation
+      probability: 0.4
+      price_low: 75.0
+      price_high: 88.0
+      is_tail_case: false
+      stances:
+        Global Inventory Levels: neutral
+        Strait of Hormuz Disruption: bearish
+        US-Iran Diplomatic Status: bullish
+    - name: Prolonged Impasse
+      probability: 0.5
+      price_low: 95.0
+      price_high: 110.0
+      is_tail_case: false
+      stances:
+        Global Inventory Levels: bullish
+        Strait of Hormuz Disruption: bullish
+        US-Iran Diplomatic Status: neutral
+    - name: Escalation/Supply Shock
+      probability: 0.1
+      price_low: 115.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Global Inventory Levels: bullish
+        Strait of Hormuz Disruption: bullish
+        US-Iran Diplomatic Status: bearish
+    rationale: The market is currently dominated by the Strait of Hormuz disruption.
+      The forecast reflects a high-uncertainty environment where the primary driver
+      is the binary outcome of the US-Iran diplomatic standoff. Inventory levels are
+      critically low, providing a strong floor for prices, while the potential for
+      further escalation creates a significant tail risk to the upside.
+    horizon_rationale: Short-term volatility remains elevated due to the Strait of
+      Hormuz impasse. The market is range-bound, awaiting a catalyst for either de-escalation
+      or a supply-shock breakout.
+    langfuse_trace_id: 963e55c900a0f0cee765064534be654a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/963e55c900a0f0cee765064534be654a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_forecast
+  issued_at: '2026-08-20T07:53:27.224893'
+  as_of: '2026-05-26T00:00:00'
+  forecast_date: '2026-06-09T00:00:00'
+  payload:
+    point_forecast: 98.0
+    quantiles:
+      '0.05': 78.09934440657646
+      '0.1': 89.0
+      '0.2': 92.0
+      '0.3': 94.5
+      '0.4': 96.5
+      '0.5': 98.0
+      '0.6': 100.0
+      '0.7': 103.0
+      '0.8': 107.0
+      '0.9': 112.0
+      '0.95': 132.5615734242165
+  metadata:
+    factors:
+    - name: Global Inventory Levels
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: US-Iran Diplomatic Status
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Diplomatic De-escalation
+      probability: 0.4
+      price_low: 75.0
+      price_high: 88.0
+      is_tail_case: false
+      stances:
+        Global Inventory Levels: neutral
+        Strait of Hormuz Disruption: bearish
+        US-Iran Diplomatic Status: bullish
+    - name: Prolonged Impasse
+      probability: 0.5
+      price_low: 95.0
+      price_high: 110.0
+      is_tail_case: false
+      stances:
+        Global Inventory Levels: bullish
+        Strait of Hormuz Disruption: bullish
+        US-Iran Diplomatic Status: neutral
+    - name: Escalation/Supply Shock
+      probability: 0.1
+      price_low: 115.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Global Inventory Levels: bullish
+        Strait of Hormuz Disruption: bullish
+        US-Iran Diplomatic Status: bearish
+    rationale: The market is currently dominated by the Strait of Hormuz disruption.
+      The forecast reflects a high-uncertainty environment where the primary driver
+      is the binary outcome of the US-Iran diplomatic standoff. Inventory levels are
+      critically low, providing a strong floor for prices, while the potential for
+      further escalation creates a significant tail risk to the upside.
+    horizon_rationale: As the horizon extends, the probability of a definitive diplomatic
+      signal or a further escalation increases, widening the distribution of potential
+      outcomes.
+    langfuse_trace_id: 963e55c900a0f0cee765064534be654a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/963e55c900a0f0cee765064534be654a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_forecast
+  issued_at: '2026-08-20T07:53:27.224893'
+  as_of: '2026-05-26T00:00:00'
+  forecast_date: '2026-06-24T00:00:00'
+  payload:
+    point_forecast: 99.0
+    quantiles:
+      '0.05': 75.0
+      '0.1': 85.0
+      '0.2': 90.0
+      '0.3': 94.0
+      '0.4': 97.0
+      '0.5': 99.0
+      '0.6': 102.0
+      '0.7': 106.0
+      '0.8': 111.0
+      '0.9': 118.0
+      '0.95': 140.0
+  metadata:
+    factors:
+    - name: Global Inventory Levels
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: US-Iran Diplomatic Status
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Diplomatic De-escalation
+      probability: 0.4
+      price_low: 75.0
+      price_high: 88.0
+      is_tail_case: false
+      stances:
+        Global Inventory Levels: neutral
+        Strait of Hormuz Disruption: bearish
+        US-Iran Diplomatic Status: bullish
+    - name: Prolonged Impasse
+      probability: 0.5
+      price_low: 95.0
+      price_high: 110.0
+      is_tail_case: false
+      stances:
+        Global Inventory Levels: bullish
+        Strait of Hormuz Disruption: bullish
+        US-Iran Diplomatic Status: neutral
+    - name: Escalation/Supply Shock
+      probability: 0.1
+      price_low: 115.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Global Inventory Levels: bullish
+        Strait of Hormuz Disruption: bullish
+        US-Iran Diplomatic Status: bearish
+    rationale: The market is currently dominated by the Strait of Hormuz disruption.
+      The forecast reflects a high-uncertainty environment where the primary driver
+      is the binary outcome of the US-Iran diplomatic standoff. Inventory levels are
+      critically low, providing a strong floor for prices, while the potential for
+      further escalation creates a significant tail risk to the upside.
+    horizon_rationale: By the 21-day horizon, the cumulative effect of inventory drawdowns
+      and the persistence of the geopolitical risk premium suggest a higher ceiling
+      if the impasse continues, but a sharp correction if a resolution is reached.
+    langfuse_trace_id: 963e55c900a0f0cee765064534be654a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/963e55c900a0f0cee765064534be654a
+scores:
+- 3.786658425727462
+- 5.318031924905814
+- 20.85611661800668
+- 2.81575069423776
+- 6.774070505303001
+- 22.131078042274662
+metric: crps
+mean_score: 10.280284368409232
+ran_at: '2026-08-20T07:53:29.180163'
+skipped_origins: 0

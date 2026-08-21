@@ -1,0 +1,115 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2021-08-18T00:00:00'
+  end: '2021-08-19T00:00:00'
+  stride: 5
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: darts_autoarima
+predictions:
+- predictor_id: darts_autoarima
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T19:03:32.314317'
+  as_of: '2021-08-18T00:00:00'
+  forecast_date: '2021-08-25T00:00:00'
+  payload:
+    point_forecast: 66.62089907693677
+    quantiles:
+      '0.05': 59.877895902946456
+      '0.1': 61.341976825356696
+      '0.2': 63.10012516460199
+      '0.3': 64.44445380054256
+      '0.4': 65.56535964607251
+      '0.5': 66.62089907693677
+      '0.6': 67.84309754932113
+      '0.7': 68.9437626894823
+      '0.8': 70.63587803599485
+      '0.9': 71.83595419807249
+      '0.95': 73.90705301073318
+  metadata: {}
+- predictor_id: darts_autoarima
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T19:03:32.314317'
+  as_of: '2021-08-18T00:00:00'
+  forecast_date: '2021-09-01T00:00:00'
+  payload:
+    point_forecast: 66.29863269451347
+    quantiles:
+      '0.05': 55.52063598298775
+      '0.1': 58.17015943442871
+      '0.2': 60.980399481907
+      '0.3': 62.894217017321
+      '0.4': 64.59252044466604
+      '0.5': 66.29863269451347
+      '0.6': 67.76155596436898
+      '0.7': 69.42363571003058
+      '0.8': 71.04750446227199
+      '0.9': 73.58790095846878
+      '0.95': 76.80789323576256
+  metadata: {}
+- predictor_id: darts_autoarima
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T19:03:32.314317'
+  as_of: '2021-08-18T00:00:00'
+  forecast_date: '2021-09-16T00:00:00'
+  payload:
+    point_forecast: 66.99344902252878
+    quantiles:
+      '0.05': 52.7807898698944
+      '0.1': 55.18015904544234
+      '0.2': 58.47733760568341
+      '0.3': 61.729290557203264
+      '0.4': 64.48612922806673
+      '0.5': 66.99344902252878
+      '0.6': 69.53093251254968
+      '0.7': 71.5596559008641
+      '0.8': 74.0044667723425
+      '0.9': 77.19320957802779
+      '0.95': 79.78786337242587
+  metadata: {}
+- predictor_id: darts_autoarima
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-19T19:03:32.314317'
+  as_of: '2021-08-18T00:00:00'
+  forecast_date: '2021-11-15T00:00:00'
+  payload:
+    point_forecast: 67.18336925064361
+    quantiles:
+      '0.05': 41.77985174628325
+      '0.1': 49.08983770736417
+      '0.2': 55.140267937634675
+      '0.3': 58.59519553957482
+      '0.4': 63.03890317906421
+      '0.5': 67.18336925064361
+      '0.6': 71.36224739845956
+      '0.7': 74.96512747808089
+      '0.8': 80.09907215939909
+      '0.9': 85.38566906606758
+      '0.95': 90.84096331694876
+  metadata: {}
+scores:
+- 1.369311083842532
+- 1.9465615334515567
+- 3.6159240258344787
+- 8.095893721199445
+metric: crps
+mean_score: 3.756922591082003
+ran_at: '2026-08-19T19:03:32.353797'
+skipped_origins: 0

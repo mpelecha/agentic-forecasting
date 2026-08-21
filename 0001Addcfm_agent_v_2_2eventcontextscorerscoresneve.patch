@@ -1,0 +1,1703 @@
+From a918aa09fd632ab6b67bfd244f462cdf6bbc5fbe Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 30 Jul 2026 10:59:40 +0000
+Subject: [PATCH] Add cfm_agent_v_2_2: event-context scorer (scores, never
+ prices)
+
+Implements the Job 1 / Job 2 split from the team discussion: the LLM
+assesses context; a future calibration layer (plain code, fit against
+quant-baseline residuals) turns scores into price effects.
+
+Changes from cfm_agent_v_2_1:
+- Scope widens from geopolitics-only to all news-visible drivers, in
+  five tagged categories (geopolitical, weather, operational, policy,
+  demand_expectations).
+- The output contract drops the forecasts block entirely. Factors carry
+  signed impact scores (-3..+3) and confidence (0..1); scenarios carry
+  probability and a conditional impact score. No price field exists
+  anywhere in the schema.
+- Ships CfmEventScorer instead of an AgentPredictor wiring: the output
+  is not a forecast, so it does not convert to harness Predictions. The
+  scorer drives the same ADK machinery (verified search, skill toolset,
+  Langfuse tracing) with its own bounded validation-retry loop, and
+  emits a flat calibration_row() for the future score-to-price fit.
+
+cfm_agent_v_2_0 and cfm_agent_v_2_1 are unmodified.
+---
+ .../cfm_agent_v_2_2/README.md                 |  67 ++++
+ .../cfm_agent_v_2_2/__init__.py               |  34 +++
+ .../cfm_agent_v_2_2/agent.py                  | 289 ++++++++++++++++++
+ .../cfm_agent_v_2_2/config.py                 |  43 +++
+ .../cfm_agent_v_2_2/outputs.py                | 239 +++++++++++++++
+ .../cfm_agent_v_2_2/prompts.py                | 112 +++++++
+ .../cfm_agent_v_2_2/schemas.py                | 181 +++++++++++
+ .../skills/event-context-analysis/SKILL.md    |  87 ++++++
+ .../references/scoring-examples.md            | 115 +++++++
+ .../cfm_agent_v_2_2/tests/__init__.py         |   1 +
+ .../cfm_agent_v_2_2/tests/conftest.py         |  36 +++
+ .../cfm_agent_v_2_2/tests/test_agent.py       |  35 +++
+ .../cfm_agent_v_2_2/tests/test_outputs.py     | 233 ++++++++++++++
+ .../cfm_agent_v_2_2/tests/test_skills.py      |  22 ++
+ .../cfm_agent_v_2_2/tools/__init__.py         |   8 +
+ .../cfm_agent_v_2_2/tools/verified_search.py  |  42 +++
+ 16 files changed, 1544 insertions(+)
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/README.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/__init__.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/agent.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/config.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/prompts.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/schemas.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/references/scoring-examples.md
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/__init__.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/conftest.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_agent.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_skills.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/__init__.py
+ create mode 100644 implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py
+
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/README.md b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/README.md
+new file mode 100644
+index 0000000..462f8cb
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/README.md
+@@ -0,0 +1,67 @@
++# cfm_agent_v_2_2
++
++CFM Agent v2.2 is an event-context scorer, not a forecaster. It reads
++news-visible drivers of WTI and expresses them as bounded scores. It
++never states a price, a price range, or a quantile.
++
++## The division of labor
++
++- **Job 1 — assess context (this package).** The LLM searches verified,
++  cutoff-safe news and sorts it into scored factors and
++  probability-weighted scenarios. Interpretation is what an LLM is
++  suited for.
++- **Job 2 — turn context into a number (not this package).** A
++  calibration layer — plain code, fit against quant-baseline residuals,
++  versioned and backtested — maps scores to price effects. It consumes
++  `WtiEventScoreOutput.calibration_features()`.
++
++## What changed from v2.1
++
++- Scope widened from geopolitics-only to all news-visible drivers, in
++  five tagged categories: `geopolitical`, `weather`, `operational`,
++  `policy`, `demand_expectations`.
++- The output contract lost its `forecasts` block entirely. Factors carry
++  a signed `impact_score` (-3..+3) and a `confidence` (0..1); scenarios
++  carry a `probability` and a conditional `impact_score`. No price
++  fields exist anywhere in the schema.
++- The package ships `CfmEventScorer` instead of an `AgentPredictor`
++  wiring: the output is not a forecast, so it cannot convert to harness
++  `Prediction` objects. The scorer drives the same ADK machinery
++  (verified search, skill toolset, Langfuse tracing) and owns a bounded
++  validation-retry loop.
++
++## Hard validators (rejected and retried, not silently accepted)
++
++- 2-4 core factors (score 0 allowed: dormant theme), 1-3 transitory
++  factors (score 0 forbidden).
++- Scenario probabilities sum to 1 (±0.02).
++- At least one tail case and one non-tail scenario; a tail case must
++  never carry the highest probability and must have |impact_score| ≥ 2.
++- Every scenario's stances cover exactly the shared factor names.
++- At least two scenarios differ in stance on at least two factors.
++- Factor evidence indices must point into `verified_evidence`.
++
++## Build and run
++
++```python
++from datetime import datetime
++
++from energy_oil_forecasting.cfm_agent_v_2_2 import CfmEventScorer
++from energy_oil_forecasting.data import build_wti_service
++
++service = build_wti_service()
++scorer = CfmEventScorer()
++result = scorer.score(service.context(datetime(2026, 3, 2)))
++
++result.output.factors          # scored factors, by category and tier
++result.output.scenarios        # probability-weighted scenario set
++result.calibration_row()       # flat row for the calibration dataset
++```
++
++## Validation
++
++```bash
++uv run ruff check implementations/energy_oil_forecasting/cfm_agent_v_2_2
++uv run python -m compileall -q implementations/energy_oil_forecasting/cfm_agent_v_2_2
++uv run pytest -q implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests
++```
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/__init__.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/__init__.py
+new file mode 100644
+index 0000000..43a32bd
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/__init__.py
+@@ -0,0 +1,34 @@
++"""CFM Agent v2.2: news-visible event context expressed as scores, never prices."""
++
++from energy_oil_forecasting.cfm_agent_v_2_2.agent import (
++    CfmEventScorer,
++    CfmEventScoreResult,
++    build_cfm_agent_v22_config,
++)
++from energy_oil_forecasting.cfm_agent_v_2_2.config import (
++    AGENT_NAME,
++    DEFAULT_SETTINGS,
++    CfmEventScorerSettings,
++)
++from energy_oil_forecasting.cfm_agent_v_2_2.outputs import WtiEventScoreOutput
++from energy_oil_forecasting.cfm_agent_v_2_2.schemas import (
++    EventCategory,
++    WtiEventFactor,
++    WtiEventScenario,
++    WtiEventVerifiedEvidence,
++)
++
++
++__all__ = [
++    "AGENT_NAME",
++    "CfmEventScoreResult",
++    "CfmEventScorer",
++    "CfmEventScorerSettings",
++    "DEFAULT_SETTINGS",
++    "EventCategory",
++    "WtiEventFactor",
++    "WtiEventScenario",
++    "WtiEventScoreOutput",
++    "WtiEventVerifiedEvidence",
++    "build_cfm_agent_v22_config",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/agent.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/agent.py
+new file mode 100644
+index 0000000..f9adc68
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/agent.py
+@@ -0,0 +1,289 @@
++"""CFM Agent v2.2: an event-context scorer. It speaks in scores, never prices.
++
++Design note
++-----------
++This agent implements the Job 1 half of the Job 1 / Job 2 split:
++
++- Job 1 (this agent): read the news, sort it into scored factors and
++  probability-weighted scenarios. Interpretation — the part an LLM is
++  suited for.
++- Job 2 (not this agent): map scores to price effects. That translation
++  belongs to a deterministic, versioned calibration layer fit against
++  quant-baseline residuals.
++
++Because the output is not a forecast, this package has no
++``AgentPredictor`` and does not plug into the backtest harness as a
++predictor. :class:`CfmEventScorer` below drives the same ADK machinery
++(verified search, skill toolset, Langfuse tracing) and returns a
++validated :class:`WtiEventScoreOutput` plus a flat calibration row.
++"""
++
++from __future__ import annotations
++
++import asyncio
++import json
++import logging
++import threading
++from collections.abc import Coroutine
++from typing import Any, TypeVar
++
++from aieng.forecasting.data.context import ForecastContext
++from aieng.forecasting.methods.agentic import AgentConfig, build_adk_agent
++from aieng.forecasting.methods.agentic.adk_runner import AdkTextRunner, AdkTextRunnerConfig
++from aieng.forecasting.methods.agentic.agent_factory import AS_OF_STATE_KEY
++from aieng.forecasting.models import LITE_MODEL
++from energy_oil_forecasting.cfm_agent_v_2_2.config import (
++    AGENT_NAME,
++    DEFAULT_SETTINGS,
++    SKILLS_ROOT,
++    CfmEventScorerSettings,
++)
++from energy_oil_forecasting.cfm_agent_v_2_2.outputs import WtiEventScoreOutput
++from energy_oil_forecasting.cfm_agent_v_2_2.prompts import CfmEventScorePromptBuilder
++from energy_oil_forecasting.cfm_agent_v_2_2.tools import build_verified_search_config
++from pydantic import BaseModel, ValidationError
++
++
++logger: logging.Logger = logging.getLogger(__name__)
++T = TypeVar("T")
++
++
++_PERSONA = """\
++## Role
++
++You are CFM Agent v2.2, a disciplined market-context analyst for WTI crude
++oil. You assess every driver that is visible only through news and text —
++geopolitics, weather, operational disruptions, domestic policy, and
++demand-expectation headlines — and you express your assessment as bounded
++scores. You never state a price target, price range, or quantile. A
++separate calibrated code layer turns your scores into prices.
++
++## Operating principles
++
++- Load the `event-context-analysis` skill before writing any factors or
++  scenarios. Load its `references/scoring-examples.md` resource before
++  writing your first score.
++- Search for evidence relevant to the scoring date, actively seeking
++  sources that disagree with each other and a historical episode that
++  resembles the current situation.
++- Use only verifier-approved web evidence and cite it by index in each
++  factor's `evidence_indices`.
++- Tag every factor with its category. Do not restate a driver already
++  covered by structured data — dollar index, VIX, oil curve contango,
++  cross-commodity returns, EIA inventory, CFTC positioning — and never
++  derive a factor from the price history itself.
++- Score with the skill's rubric: signed integers -3..+3, magnitude from
++  the rubric's anchors, confidence from evidence quality.
++- Build 2-3 named scenarios that genuinely disagree, with probabilities
++  that sum to 1 and one explicit low-probability, high-impact tail case.
++- Output no prices. The output schema has no price field; do not put
++  price levels in rationale text either.
++- Call `set_model_response` exactly once for structured tasks.\
++"""
++
++
++def _run_coroutine_sync(coro: Coroutine[Any, Any, T]) -> T:
++    """Run an async coroutine from a sync caller, inside or outside a loop.
++
++    Mirrors the pattern used by the shared ``AgentPredictor`` (that helper
++    is module-private, so it is reimplemented here): use ``asyncio.run``
++    when no loop is running; otherwise run on a fresh loop in a daemon
++    thread so a Jupyter caller's loop is not disturbed.
++    """
++    try:
++        asyncio.get_running_loop()
++    except RuntimeError:
++        return asyncio.run(coro)
++
++    results: list[T] = []
++    errors: list[BaseException] = []
++
++    def _target() -> None:
++        try:
++            results.append(asyncio.run(coro))
++        except BaseException as exc:  # noqa: BLE001 — re-raised on the caller thread below.
++            errors.append(exc)
++
++    thread = threading.Thread(target=_target, daemon=True)
++    thread.start()
++    thread.join()
++    if errors:
++        raise errors[0]
++    return results[0]
++
++
++def _strip_markdown_fence(text: str) -> str:
++    """Strip a surrounding markdown code fence, if present."""
++    stripped = text.strip()
++    if stripped.startswith("```"):
++        first_newline = stripped.find("\n")
++        stripped = stripped[first_newline + 1 :] if first_newline != -1 else ""
++        if stripped.endswith("```"):
++            stripped = stripped[:-3]
++    return stripped.strip()
++
++
++def build_cfm_agent_v22_config(
++    model: str = LITE_MODEL,
++    *,
++    settings: CfmEventScorerSettings = DEFAULT_SETTINGS,
++    search_model: str = LITE_MODEL,
++) -> AgentConfig:
++    """Build the ``cfm_agent_v_2_2`` configuration: search plus one skill, no quant tool."""
++    return AgentConfig(
++        name=AGENT_NAME,
++        description=(
++            "Event-context scorer for WTI: news-visible drivers expressed as bounded, "
++            "schema-validated scores across five categories. No prices, no quant models — "
++            "a separate calibration layer maps scores to price effects."
++        ),
++        model=model,
++        instruction=_PERSONA,
++        max_output_tokens=settings.max_output_tokens,
++        context_retrieval=build_verified_search_config(
++            search_model=search_model,
++            verifier_model=settings.verifier_model,
++            verifier_max_attempts=settings.verifier_max_attempts,
++            verifier_confidence_threshold=settings.verifier_confidence_threshold,
++        ),
++        skills_dirs=[SKILLS_ROOT / "event-context-analysis"],
++    )
++
++
++class CfmEventScoreResult(BaseModel):
++    """One validated scoring run: the score card plus run provenance."""
++
++    as_of: str
++    output: WtiEventScoreOutput
++    langfuse_trace_id: str | None = None
++    attempts: int
++
++    def calibration_row(self) -> dict[str, float | str]:
++        """Return the flat row to append to the calibration dataset."""
++        return {"as_of": self.as_of, **self.output.calibration_features()}
++
++
++class CfmEventScorer:
++    """Drive the v2.2 agent for one origin date and validate its score card.
++
++    Runs the same ADK machinery as the shared ``AgentPredictor`` (verified
++    search, skill toolset, Langfuse tracing) but returns scores instead of
++    predictions, and owns its own bounded validation-retry loop — the
++    scorer runs outside the backtest harness and its retry wrapper.
++    """
++
++    def __init__(
++        self,
++        config: AgentConfig | None = None,
++        *,
++        settings: CfmEventScorerSettings = DEFAULT_SETTINGS,
++        enable_langfuse_tracing: bool | None = None,
++        runner: AdkTextRunner | None = None,
++    ) -> None:
++        if enable_langfuse_tracing is None:
++            try:
++                import langfuse  # noqa: F401, PLC0415
++
++                enable_langfuse_tracing = True
++            except ModuleNotFoundError:
++                enable_langfuse_tracing = False
++
++        self.settings = settings
++        self.agent_config = config if config is not None else build_cfm_agent_v22_config(settings=settings)
++        self._prompt_builder = CfmEventScorePromptBuilder()
++
++        if runner is None:
++            built_agent = build_adk_agent(self.agent_config, output_schema=WtiEventScoreOutput)
++            self._agent = built_agent
++            self._runner = AdkTextRunner(
++                agent=built_agent,
++                config=AdkTextRunnerConfig(
++                    app_name="agentic_forecasting_event_scorer",
++                    default_user_id="forecasting_agent",
++                    fresh_session_per_message=True,
++                    enable_langfuse_tracing=enable_langfuse_tracing,
++                    langfuse_tags=["event_scorer", "track1"],
++                    langfuse_trace_name=self.scorer_id,
++                    langfuse_propagate_metadata={
++                        "scorer_id": self.scorer_id,
++                        "agent_name": built_agent.name,
++                        "model": str(built_agent.model),
++                    },
++                ),
++            )
++        else:
++            self._runner = runner
++            self._agent = runner.agent
++
++    @property
++    def scorer_id(self) -> str:
++        """Stable identifier for this scorer, mirroring ``AgentPredictor.predictor_id``."""
++        model = getattr(self._agent, "model", None)
++        if not isinstance(model, str):
++            inner = getattr(model, "model", None)
++            model = inner if isinstance(inner, str) else None
++        model_suffix = f"_{model.rsplit('/', 1)[-1]}" if model else ""
++        return f"event_scorer_{self._agent.name}{model_suffix}"
++
++    def score(self, context: ForecastContext) -> CfmEventScoreResult:
++        """Score the news-visible event context at ``context.as_of``.
++
++        Runs the agent, validates the JSON response against
++        :class:`WtiEventScoreOutput`, and retries with the validation
++        error appended to the prompt, up to
++        ``settings.max_validation_attempts`` times. Raises the final
++        validation error when every attempt fails.
++        """
++        as_of = str(context.as_of)[:10]
++        base_prompt = self._prompt_builder(context=context)
++        initial_state = {AS_OF_STATE_KEY: as_of}
++
++        prompt = base_prompt
++        last_error: Exception | None = None
++        for attempt in range(1, self.settings.max_validation_attempts + 1):
++            output_str = _run_coroutine_sync(self._runner.run_text_async(prompt, initial_state=initial_state))
++            output_str = _strip_markdown_fence(output_str)
++
++            try:
++                output = WtiEventScoreOutput.model_validate_json(output_str)
++            except ValidationError:
++                try:
++                    output = WtiEventScoreOutput.model_validate(json.loads(output_str))
++                except Exception as error:
++                    last_error = error
++                    logger.warning(
++                        "Score validation failed (attempt %d/%d): %s",
++                        attempt,
++                        self.settings.max_validation_attempts,
++                        error,
++                    )
++                    prompt = (
++                        f"{base_prompt}\n\n"
++                        f"Your previous response failed schema validation with this error:\n{error}\n"
++                        f"Return only corrected JSON that satisfies the output schema."
++                    )
++                    continue
++
++            return CfmEventScoreResult(
++                as_of=as_of,
++                output=output,
++                langfuse_trace_id=self._runner.last_trace_id,
++                attempts=attempt,
++            )
++
++        assert last_error is not None
++        raise last_error
++
++
++def __getattr__(name: str) -> Any:
++    """Expose a root agent lazily for ADK interactive use."""
++    if name == "root_agent":
++        return build_adk_agent(build_cfm_agent_v22_config())
++    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
++
++
++__all__ = [
++    "CfmEventScoreResult",
++    "CfmEventScorer",
++    "build_cfm_agent_v22_config",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/config.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/config.py
+new file mode 100644
+index 0000000..fc98321
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/config.py
+@@ -0,0 +1,43 @@
++"""Configuration models and constants for ``cfm_agent_v_2_2``."""
++
++from __future__ import annotations
++
++from pathlib import Path
++
++from aieng.forecasting.models import ADVANCED_MODEL
++from pydantic import BaseModel, ConfigDict, Field
++
++
++AGENT_NAME = "cfm_agent_v_2_2"
++PACKAGE_ROOT = Path(__file__).resolve().parent
++SKILLS_ROOT = PACKAGE_ROOT / "skills"
++
++
++class CfmEventScorerSettings(BaseModel):
++    """Runtime settings for the event-context scoring agent.
++
++    Verifier defaults match ``cfm_agent_v_2_1``. ``max_validation_attempts``
++    bounds the scorer's own retry loop: unlike the forecast predictors, the
++    scorer runs outside the backtest harness and its retry wrapper, so it
++    must re-run the agent itself when the output fails schema validation.
++    """
++
++    model_config = ConfigDict(extra="forbid", frozen=True)
++
++    verifier_model: str = ADVANCED_MODEL
++    verifier_max_attempts: int = Field(default=3, ge=1)
++    verifier_confidence_threshold: int = Field(default=8, ge=1, le=10)
++    max_output_tokens: int = Field(default=24_576, ge=1)
++    max_validation_attempts: int = Field(default=3, ge=1)
++
++
++DEFAULT_SETTINGS = CfmEventScorerSettings()
++
++
++__all__ = [
++    "AGENT_NAME",
++    "CfmEventScorerSettings",
++    "DEFAULT_SETTINGS",
++    "PACKAGE_ROOT",
++    "SKILLS_ROOT",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py
+new file mode 100644
+index 0000000..3375d8f
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/outputs.py
+@@ -0,0 +1,239 @@
++"""Structured, schema-validated score output for CFM Agent v2.2.
++
++This output is deliberately NOT an
++:class:`~aieng.forecasting.methods.agentic.outputs.AgentForecastOutput`:
++it contains no forecast, no price, and no quantile grid, so it has no
++``to_predictions`` and does not plug into the backtest harness as a
++predictor. The division of labor (Kam's Job 1 / Job 2 split):
++
++- Job 1 — assess context. The LLM reads news, sorts it into scored
++  factors and probability-weighted scenarios. That is this package.
++- Job 2 — turn context into a number. A calibration layer (plain code,
++  fit against quant-baseline residuals, versioned and backtested) maps
++  scores to price effects. That layer consumes ``calibration_features()``
++  below and lives outside this package.
++
++Factor tier counts are 2-4 core and 1-3 transitory — wider than
++``cfm_agent_v_2_1``'s geopolitical-only bounds, because the scope now
++spans five news-visible categories and simultaneous transitory events
++(a hurricane during a shipping disruption) are common.
++"""
++
++from __future__ import annotations
++
++import json
++from math import isclose
++from typing import get_args
++
++from energy_oil_forecasting.cfm_agent_v_2_2.schemas import (
++    EventCategory,
++    WtiEventFactor,
++    WtiEventScenario,
++    WtiEventVerifiedEvidence,
++)
++from pydantic import BaseModel, Field, model_validator
++
++
++# Scenario probabilities must sum to 1 within this absolute tolerance.
++_PROBABILITY_SUM_TOLERANCE = 0.02
++
++# A tail case must be genuinely high-impact: |impact_score| at or above this.
++_MIN_TAIL_IMPACT = 2
++
++
++class WtiEventScoreOutput(BaseModel):
++    """Scored event context for WTI: factors, scenarios, evidence — no prices.
++
++    Attributes
++    ----------
++    factors : list[WtiEventFactor]
++        2-4 core factors and 1-3 transitory factors, identified once.
++    scenarios : list[WtiEventScenario]
++        2 or more named, competing scenarios with probabilities that sum
++        to 1. At least one tail case; at least one non-tail scenario; at
++        least two scenarios must differ in stance on two or more factors.
++    verified_evidence : list[WtiEventVerifiedEvidence]
++        Verifier-approved sources the factors cite by index.
++    """
++
++    model_config = {"extra": "ignore"}
++
++    factors: list[WtiEventFactor] = Field(
++        description="The shared factor set: 2-4 core and 1-3 transitory, identified once."
++    )
++    scenarios: list[WtiEventScenario] = Field(
++        min_length=2,
++        description="2-3 named, competing scenarios; probabilities sum to 1.",
++    )
++    verified_evidence: list[WtiEventVerifiedEvidence] = Field(default_factory=list)
++    research_summary: str = ""
++    overall_rationale: str = Field(min_length=1)
++    warnings: list[str] = Field(default_factory=list)
++
++    @model_validator(mode="after")
++    def _factor_names_are_unique(self) -> "WtiEventScoreOutput":
++        """Reject duplicate factor names — stances key on them."""
++        names = [factor.name for factor in self.factors]
++        if len(names) != len(set(names)):
++            raise ValueError("Factor names must be unique.")
++        return self
++
++    @model_validator(mode="after")
++    def _factor_tier_counts_are_valid(self) -> "WtiEventScoreOutput":
++        """Require 2-4 core factors and 1-3 transitory factors."""
++        core = [factor for factor in self.factors if factor.tier == "core"]
++        transitory = [factor for factor in self.factors if factor.tier == "transitory"]
++        if not (2 <= len(core) <= 4):
++            raise ValueError(f"Expected 2-4 core factors, got {len(core)}.")
++        if not (1 <= len(transitory) <= 3):
++            raise ValueError(f"Expected 1-3 transitory factors, got {len(transitory)}.")
++        return self
++
++    @model_validator(mode="after")
++    def _evidence_indices_are_in_range(self) -> "WtiEventScoreOutput":
++        """Reject a factor evidence index that does not point into verified_evidence."""
++        for factor in self.factors:
++            if any(index < 0 or index >= len(self.verified_evidence) for index in factor.evidence_indices):
++                raise ValueError(f"Factor '{factor.name}' has an out-of-range evidence index.")
++        return self
++
++    @model_validator(mode="after")
++    def _scenario_probabilities_sum_to_one(self) -> "WtiEventScoreOutput":
++        """Require scenario probabilities to sum to 1 within tolerance."""
++        total = sum(scenario.probability for scenario in self.scenarios)
++        if not isclose(total, 1.0, abs_tol=_PROBABILITY_SUM_TOLERANCE):
++            raise ValueError(f"Scenario probabilities must sum to 1, got {total:.3f}.")
++        return self
++
++    @model_validator(mode="after")
++    def _scenarios_include_tail_and_non_tail(self) -> "WtiEventScoreOutput":
++        """Require at least one tail case and at least one non-tail scenario."""
++        tails = [scenario for scenario in self.scenarios if scenario.is_tail_case]
++        non_tails = [scenario for scenario in self.scenarios if not scenario.is_tail_case]
++        if not tails:
++            raise ValueError("At least one scenario must set is_tail_case=True.")
++        if not non_tails:
++            raise ValueError("At least one scenario must be a non-tail (mainline) case.")
++
++        max_non_tail_probability = max(scenario.probability for scenario in non_tails)
++        for tail in tails:
++            if tail.probability > max_non_tail_probability:
++                raise ValueError(
++                    f"Tail scenario '{tail.name}' has probability {tail.probability:.2f}, higher than "
++                    f"every non-tail scenario — a tail case must be low-probability."
++                )
++            if abs(tail.impact_score) < _MIN_TAIL_IMPACT:
++                raise ValueError(
++                    f"Tail scenario '{tail.name}' has |impact_score| {abs(tail.impact_score)} — "
++                    f"a tail case must be high-impact (|impact_score| >= {_MIN_TAIL_IMPACT})."
++                )
++        return self
++
++    @model_validator(mode="after")
++    def _scenario_stances_cover_every_factor(self) -> "WtiEventScoreOutput":
++        """Require each scenario's stances to cover exactly the shared factor names."""
++        expected = {factor.name for factor in self.factors}
++        for scenario in self.scenarios:
++            actual = set(scenario.stances)
++            if actual != expected:
++                missing = sorted(expected - actual)
++                extra = sorted(actual - expected)
++                raise ValueError(
++                    f"Scenario '{scenario.name}' stances must cover exactly the shared factors. "
++                    f"Missing: {missing}; extra: {extra}."
++                )
++        return self
++
++    @model_validator(mode="after")
++    def _scenarios_genuinely_disagree(self) -> "WtiEventScoreOutput":
++        """Require at least two scenarios to differ in stance on at least two shared factors."""
++        factor_names = [factor.name for factor in self.factors]
++        for i in range(len(self.scenarios)):
++            for j in range(i + 1, len(self.scenarios)):
++                first, second = self.scenarios[i], self.scenarios[j]
++                differences = sum(1 for name in factor_names if first.stances.get(name) != second.stances.get(name))
++                if differences >= 2:
++                    return self
++        raise ValueError(
++            "No two scenarios differ in stance on at least two shared factors — "
++            "scenarios must genuinely disagree, not just differ in tone."
++        )
++
++    def calibration_features(self) -> dict[str, float]:
++        """Return the flat numeric features the calibration layer consumes.
++
++        The calibration layer regresses these against quant-baseline
++        residuals (actual move minus the quant pillar's expected move) to
++        learn a score-to-price mapping. Keep this row format stable:
++        every stored row feeds the future fit.
++        """
++        core = [factor for factor in self.factors if factor.tier == "core"]
++        transitory = [factor for factor in self.factors if factor.tier == "transitory"]
++        tails = [scenario for scenario in self.scenarios if scenario.is_tail_case]
++
++        features: dict[str, float] = {
++            "net_core_score": float(sum(factor.impact_score for factor in core)),
++            "net_transitory_score": float(sum(factor.impact_score for factor in transitory)),
++            "confidence_weighted_core_score": float(
++                sum(factor.impact_score * factor.confidence for factor in core)
++            ),
++            "confidence_weighted_transitory_score": float(
++                sum(factor.impact_score * factor.confidence for factor in transitory)
++            ),
++            "expected_scenario_impact": float(
++                sum(scenario.probability * scenario.impact_score for scenario in self.scenarios)
++            ),
++            "tail_probability": float(sum(tail.probability for tail in tails)),
++            "tail_impact_score": float(max((tail.impact_score for tail in tails), key=abs)),
++        }
++        for category in get_args(EventCategory):
++            features[f"score_{category}"] = float(
++                sum(factor.impact_score for factor in self.factors if factor.category == category)
++            )
++        return features
++
++    @classmethod
++    def prompt_schema_json(cls) -> str:
++        """Return a JSON template for use in agent instruction strings."""
++        template: dict[str, object] = {
++            "factors": [
++                {
++                    "name": "<string>",
++                    "category": (
++                        "<'geopolitical' | 'weather' | 'operational' | 'policy' | 'demand_expectations'>"
++                    ),
++                    "tier": "<'core' | 'transitory'>",
++                    "rationale": "<string>",
++                    "impact_score": "<integer -3..+3; sign is price direction, + = up; core may be 0, transitory must not>",
++                    "confidence": "<float 0..1 — evidence quality behind the score>",
++                    "evidence_indices": ["<zero-based index into verified_evidence>"],
++                }
++            ],
++            "scenarios": [
++                {
++                    "name": "<string>",
++                    "stances": {"<factor name>": "<'bullish' | 'bearish' | 'neutral'>"},
++                    "probability": "<float in (0, 1]; the set must sum to 1>",
++                    "impact_score": "<integer -3..+3: net price pressure if this scenario plays out>",
++                    "is_tail_case": "<true for the low-probability, high-impact scenario (|impact_score| >= 2)>",
++                    "rationale": "<one or two sentences>",
++                }
++            ],
++            "verified_evidence": [
++                {
++                    "title": "<source title>",
++                    "source_url": "<URL>",
++                    "claim": "<verified claim>",
++                    "forecast_effect": (
++                        "<center_up|center_down|uncertainty_wider|uncertainty_narrower|context_only>"
++                    ),
++                }
++            ],
++            "research_summary": "<concise summary>",
++            "overall_rationale": "<string>",
++            "warnings": ["<warning strings>"],
++        }
++        return json.dumps(template, indent=2)
++
++
++__all__ = ["WtiEventScoreOutput"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/prompts.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/prompts.py
+new file mode 100644
+index 0000000..566c1db
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/prompts.py
+@@ -0,0 +1,112 @@
++"""Prompt builder for the event-context scoring task.
++
++The payload carries compressed price history for situational awareness
++only — the recent level and the 52-week range help the agent judge what
++kind of regime it is scoring. The agent must not restate price history
++as a factor and must not output a price; the output schema has no price
++field to put one in.
++
++``compress_history`` is reimplemented here rather than imported from
++``cfm_agent_v_2_1`` (packages stay standalone by convention).
++"""
++
++from __future__ import annotations
++
++import json
++from typing import Any
++
++import pandas as pd
++from aieng.forecasting.data.context import ForecastContext
++from energy_oil_forecasting.cfm_agent_v_2_2.config import AGENT_NAME
++from energy_oil_forecasting.cfm_agent_v_2_2.outputs import WtiEventScoreOutput
++from energy_oil_forecasting.data import WTI_SERIES_ID
++
++
++def compress_history(df: pd.DataFrame) -> str:
++    """Compress WTI daily history to stay within context limits.
++
++    Three-tier compression, most granular near the scoring date:
++    - last 63 trading days: daily bars
++    - 63 trading days to 1 year back: weekly averages
++    - older than 1 year: quarterly averages
++
++    The CSV header is ``date,close``.
++
++    Parameters
++    ----------
++    df : pd.DataFrame
++        DataFrame with columns ``timestamp`` and ``value``.
++
++    Returns
++    -------
++    str
++        CSV string with header ``date,close``.
++    """
++    df = df.copy()
++    df["timestamp"] = pd.to_datetime(df["timestamp"])
++    max_date = df["timestamp"].max()
++
++    daily_cutoff = max_date - pd.tseries.offsets.BDay(63)
++    weekly_cutoff = max_date - pd.DateOffset(years=1)
++
++    daily = df[df["timestamp"] >= daily_cutoff].copy()
++    weekly_band = df[(df["timestamp"] >= weekly_cutoff) & (df["timestamp"] < daily_cutoff)].copy()
++    quarterly_band = df[df["timestamp"] < weekly_cutoff].copy()
++
++    rows: list[str] = ["date,close"]
++
++    if not quarterly_band.empty:
++        quarterly_indexed = quarterly_band.set_index("timestamp")["value"]
++        quarterly: pd.Series = quarterly_indexed.resample("QE").mean().dropna()
++        for date, val in quarterly.items():
++            rows.append(f"{date.date()},{val:.2f}")
++
++    if not weekly_band.empty:
++        weekly_indexed = weekly_band.set_index("timestamp")["value"]
++        weekly: pd.Series = weekly_indexed.resample("W").mean().dropna()
++        for date, val in weekly.items():
++            rows.append(f"{date.date()},{val:.2f}")
++
++    for _, row in daily.iterrows():
++        rows.append(f"{row['timestamp'].date()},{row['value']:.2f}")
++
++    return "\n".join(rows)
++
++
++class CfmEventScorePromptBuilder:
++    """Serialize the scoring task, compressed target history, and output schema."""
++
++    def __init__(self, target_series_id: str = WTI_SERIES_ID) -> None:
++        self._target_series_id = target_series_id
++        self._schema = WtiEventScoreOutput.prompt_schema_json()
++
++    def __call__(self, *, context: ForecastContext) -> str:
++        """Build the event-scoring payload for one origin date."""
++        df = context.get_series(self._target_series_id)
++        compressed = compress_history(df)
++
++        last_row = df.iloc[-1]
++        last_close = float(last_row["value"])
++        last_date = str(pd.Timestamp(last_row["timestamp"]).date())
++        trailing_252 = df["value"].tail(252)
++
++        payload: dict[str, Any] = {
++            "agent_name": AGENT_NAME,
++            "task": "wti_event_context_scores",
++            "target_series_id": self._target_series_id,
++            "as_of": str(context.as_of)[:10],
++            "target_summary": {
++                "last_close_usd_bbl": last_close,
++                "last_date": last_date,
++                "n_trading_days": int(len(df)),
++                "52w_high": float(trailing_252.max()),
++                "52w_low": float(trailing_252.min()),
++            },
++            "target_history_csv": compressed,
++            "output_schema": self._schema,
++        }
++
++        return json.dumps(payload, indent=2)
++
++
++__all__ = ["CfmEventScorePromptBuilder", "compress_history"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/schemas.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/schemas.py
+new file mode 100644
+index 0000000..e55616c
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/schemas.py
+@@ -0,0 +1,181 @@
++"""Event factor, scenario, and evidence contracts for CFM Agent v2.2.
++
++CFM Agent v2.2 speaks in scores, never in prices. Each factor and scenario
++carries a signed, bounded ``impact_score`` (-3 to +3); a separate,
++deterministic calibration layer — not this package, and not an LLM — maps
++scores to price effects. No schema in this module has a price field.
++
++The scope is wider than ``cfm_agent_v_2_1``: not geopolitics only, but
++every driver that is visible only through news and text — anything the
++quant pillar (price/financial covariates) and the physical pillar (EIA
++supply/demand data) cannot see. Each factor declares which ``category``
++it belongs to so the calibration layer can fit per-category coefficients.
++
++Cross-object checks that need the full factor or scenario list live on
++:class:`~energy_oil_forecasting.cfm_agent_v_2_2.outputs.WtiEventScoreOutput`.
++"""
++
++from __future__ import annotations
++
++from math import isfinite
++from typing import Literal
++
++from pydantic import BaseModel, Field, field_validator, model_validator
++
++
++EventCategory = Literal[
++    "geopolitical",
++    "weather",
++    "operational",
++    "policy",
++    "demand_expectations",
++]
++
++
++class WtiEventFactor(BaseModel):
++    """One news-visible driver, scored but never priced.
++
++    Attributes
++    ----------
++    name : str
++        Short factor label.
++    category : EventCategory
++        Which news-visible channel the factor belongs to. The calibration
++        layer uses this to fit per-category score-to-price coefficients.
++    tier : Literal["core", "transitory"]
++        ``"core"`` for durable themes (plausibly relevant in five years or
++        more); ``"transitory"`` for situational developments that could
++        resolve, reverse, or become irrelevant within months.
++    rationale : str
++        Why this factor is currently relevant, grounded in retrieved evidence.
++    impact_score : int
++        Signed score from -3 to +3. Sign is price direction (+ = upward
++        pressure on WTI); magnitude is strength. Core factors may score 0
++        (a dormant theme still worth tracking); transitory factors must
++        not — a transitory factor with no impact should not be listed.
++    confidence : float
++        0 to 1. How well the retrieved evidence supports the score's sign
++        and magnitude, not how likely the factor is to matter.
++    evidence_indices : list[int]
++        Zero-based indices into the output's ``verified_evidence`` list.
++    """
++
++    model_config = {"extra": "ignore"}
++
++    name: str = Field(min_length=1, description="Short factor label.")
++    category: EventCategory = Field(
++        description="News-visible channel: geopolitical, weather, operational, policy, or demand_expectations."
++    )
++    tier: Literal["core", "transitory"] = Field(
++        description="'core' for durable themes; 'transitory' for situational developments."
++    )
++    rationale: str = Field(min_length=1, description="Why this factor is currently relevant.")
++    impact_score: int = Field(
++        ge=-3,
++        le=3,
++        description="Signed score -3..+3. Sign is price direction (+ = up); magnitude is strength.",
++    )
++    confidence: float = Field(
++        ge=0.0,
++        le=1.0,
++        description="0..1: how well the evidence supports the score's sign and magnitude.",
++    )
++    evidence_indices: list[int] = Field(
++        default_factory=list,
++        description="Zero-based indices into verified_evidence.",
++    )
++
++    @field_validator("confidence")
++    @classmethod
++    def _confidence_is_finite(cls, value: float) -> float:
++        """Reject NaN and infinite confidence values."""
++        if not isfinite(value):
++            raise ValueError("confidence must be a finite number.")
++        return value
++
++    @model_validator(mode="after")
++    def _transitory_factors_have_nonzero_impact(self) -> "WtiEventFactor":
++        """Require a nonzero score for transitory factors; core factors may be dormant (0)."""
++        if self.tier == "transitory" and self.impact_score == 0:
++            raise ValueError(
++                "Transitory factors must have a nonzero impact_score — "
++                "a transitory factor with no impact should not be listed."
++            )
++        return self
++
++
++class WtiEventScenario(BaseModel):
++    """One named, competing scenario with a probability and a conditional score.
++
++    Attributes
++    ----------
++    name : str
++        Short scenario label, e.g. ``"Disruption clears"``.
++    stances : dict[str, Literal["bullish", "bearish", "neutral"]]
++        This scenario's price-direction stance on each factor in the
++        output's shared ``factors`` list, keyed by factor name.
++    probability : float
++        Probability of this scenario, in (0, 1]. Probabilities across the
++        scenario set must sum to 1 (checked on the output).
++    impact_score : int
++        Signed score from -3 to +3: the net price pressure if this
++        scenario plays out. Not a price — the calibration layer prices it.
++    is_tail_case : bool
++        ``True`` for the required low-probability, high-impact scenario.
++    rationale : str
++        One or two sentences describing the scenario's storyline.
++    """
++
++    model_config = {"extra": "ignore"}
++
++    name: str = Field(min_length=1, description="Short scenario name.")
++    stances: dict[str, Literal["bullish", "bearish", "neutral"]] = Field(
++        description="Price-direction stance on each shared factor, keyed by factor name."
++    )
++    probability: float = Field(
++        gt=0.0,
++        le=1.0,
++        description="Scenario probability in (0, 1]; the set must sum to 1.",
++    )
++    impact_score: int = Field(
++        ge=-3,
++        le=3,
++        description="Signed score -3..+3: net price pressure if this scenario plays out.",
++    )
++    is_tail_case: bool = Field(
++        default=False, description="True for the required low-probability, high-impact scenario."
++    )
++    rationale: str = Field(min_length=1, description="Short storyline for this scenario.")
++
++    @field_validator("probability")
++    @classmethod
++    def _probability_is_finite(cls, value: float) -> float:
++        """Reject NaN and infinite probabilities."""
++        if not isfinite(value):
++            raise ValueError("probability must be a finite number.")
++        return value
++
++
++class WtiEventVerifiedEvidence(BaseModel):
++    """One concise, verifier-approved piece of evidence cited by the scores."""
++
++    model_config = {"extra": "ignore"}
++
++    title: str = Field(min_length=1)
++    source_url: str = Field(min_length=1)
++    claim: str = Field(min_length=1)
++    forecast_effect: Literal[
++        "center_up",
++        "center_down",
++        "uncertainty_wider",
++        "uncertainty_narrower",
++        "context_only",
++    ]
++
++
++__all__ = [
++    "EventCategory",
++    "WtiEventFactor",
++    "WtiEventScenario",
++    "WtiEventVerifiedEvidence",
++]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md
+new file mode 100644
+index 0000000..2c5942a
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/SKILL.md
+@@ -0,0 +1,87 @@
++---
++name: event-context-analysis
++description: Score all news-visible WTI drivers across five categories, with a probability-weighted scenario set. Scores only, never prices.
++---
++
++# Event Context Analysis
++
++Load `references/scoring-examples.md` via
++`load_skill_resource("event-context-analysis", "references/scoring-examples.md")`
++before writing any factors or scenarios.
++
++## Scope
++
++Cover every driver that is visible only through news and text. Five
++categories:
++
++- `geopolitical`: conflict, sanctions, shipping-lane risk, OPEC+ policy,
++  diplomatic developments.
++- `weather`: hurricanes, freezes, floods, and other natural events that
++  disrupt production, refining, or transport.
++- `operational`: strikes, accidents, outages, cyberattacks on energy
++  infrastructure.
++- `policy`: domestic government action — SPR releases and refills,
++  drilling rules, tariffs, price caps.
++- `demand_expectations`: headline shocks to expected demand — stimulus or
++  lockdown news, recession fear waves — before any indicator prints.
++
++Do not restate a driver already covered by structured data: dollar index,
++VIX, oil curve contango, cross-commodity returns, EIA inventory, CFTC
++positioning. Never derive a factor from the price history itself. If a
++candidate factor is just structured data restated in words, drop it.
++
++## Search strategy
++
++1. Start broad: search current market drivers as of the cutoff date.
++2. Run 1-2 follow-up searches on whatever the first search actually
++   surfaced as relevant — do not default to a fixed topic list.
++3. Actively search for sources that disagree with each other, and for a
++   past episode that resembles the current situation. Report both sides
++   when sources conflict; do not report only the majority view.
++
++## Scoring rubric
++
++`impact_score` is a signed integer from -3 to +3. The sign is price
++direction: positive means upward pressure on WTI. The magnitude:
++
++- 1: mild — could plausibly move price up to about 2%.
++- 2: significant — could plausibly move price 2-5%.
++- 3: extreme — regime-level, could plausibly move price more than 5%.
++
++`confidence` is 0 to 1 and measures evidence quality behind the score,
++not how likely the factor is to matter:
++
++- 0.8-1.0: multiple independent, verifier-approved sources agree.
++- 0.4-0.7: a single solid source, or sources that partly conflict.
++- 0.1-0.3: thin, indirect, or rumor-level evidence.
++
++Never output a price level, a price range, or a quantile — in any field,
++including rationale text. A separate calibrated code layer maps your
++scores to prices.
++
++## Factors
++
++1. Identify 2-4 core factors: themes durable enough to plausibly matter
++   in five years or more. A core factor may score 0 when the theme is
++   currently dormant but still worth tracking.
++2. Identify 1-3 transitory factors: situational developments that could
++   resolve, reverse, or become irrelevant within months. A transitory
++   factor must have a nonzero score — if it has no impact, do not list it.
++3. Tag every factor with exactly one category, and cite its evidence by
++   index in `evidence_indices`.
++4. Identify this factor set once. Every scenario tags the same shared set.
++
++## Scenarios
++
++1. Build 2-3 named, competing scenarios, each with a `stances` entry
++   (bullish/bearish/neutral) for every factor, a `probability`, a signed
++   `impact_score` (net price pressure if the scenario plays out), and a
++   one-to-two sentence `rationale`.
++2. Probabilities must sum to 1 across the scenario set.
++3. Scenarios must genuinely disagree: at least two scenarios must differ
++   in stance on at least two factors, not just differ in tone.
++4. Exactly the tail role: at least one scenario sets `is_tail_case: true`.
++   A tail case must be genuinely low-probability (never the most likely
++   scenario) and genuinely high-impact (|impact_score| of 2 or 3).
++
++**No scripts in this skill. Do not call `run_skill_script`.**
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/references/scoring-examples.md b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/references/scoring-examples.md
+new file mode 100644
+index 0000000..1d6fbc8
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/skills/event-context-analysis/references/scoring-examples.md
+@@ -0,0 +1,115 @@
++# Event Scoring Examples
++
++These are worked examples of the `WtiEventFactor` and `WtiEventScenario`
++shape. They illustrate structure, scoring, and tone only. Do not copy the
++numbers or claims into a real scoring run — always ground a real factor
++or scenario in evidence retrieved for that run's own cutoff date.
++
++---
++
++## Example 1: A Gulf hurricane (weather, transitory)
++
++A named storm heading for Gulf of Mexico production is a **weather**
++factor and almost always **transitory**: large potential impact now, but
++it resolves within weeks. It is not in any structured data series until
++after the fact — exactly the kind of driver this agent exists to score.
++
++```json
++{
++  "name": "Gulf hurricane approaching production areas",
++  "category": "weather",
++  "tier": "transitory",
++  "rationale": "A major storm is forecast to cross key offshore production and refining areas within days; operators have begun evacuating platforms.",
++  "impact_score": 2,
++  "confidence": 0.8,
++  "evidence_indices": [0]
++}
++```
++
++Score logic: shut-in production supports price (+), scale is significant
++but not regime-level (2), and multiple independent sources confirm the
++evacuation reports (0.8).
++
++---
++
++## Example 2: OPEC+ production policy (geopolitical, core, currently dormant)
++
++The cartel's supply stance is a durable **core** theme. In a quiet
++period, it can carry a score of 0 — still listed, because scenarios need
++a stance on it, but currently exerting no directional pressure.
++
++```json
++{
++  "name": "OPEC+ cohesion and spare capacity",
++  "category": "geopolitical",
++  "tier": "core",
++  "rationale": "No meeting is imminent and current quotas are holding; the theme is dormant but remains the dominant supply-side lever.",
++  "impact_score": 0,
++  "confidence": 0.6,
++  "evidence_indices": []
++}
++```
++
++Note: a transitory factor must never score 0. Only core themes may be
++dormant.
++
++---
++
++## Example 3: China stimulus headlines (demand_expectations, transitory)
++
++Stimulus or lockdown headlines move expected demand before any indicator
++prints. The *headline shock* belongs to this agent; the *indicator* (PMI,
++imports) is structured macro data and does not.
++
++```json
++{
++  "name": "China stimulus headlines lifting demand expectations",
++  "category": "demand_expectations",
++  "tier": "transitory",
++  "rationale": "State media signaled a larger-than-expected fiscal package; commodity demand expectations rose across markets, ahead of any data print.",
++  "impact_score": 1,
++  "confidence": 0.5,
++  "evidence_indices": [1]
++}
++```
++
++---
++
++## Example 4: A full scenario set
++
++Three scenarios over the factors above. Probabilities sum to 1. The
++first two differ in stance on two factors (genuine disagreement). The
++third is the tail case: least likely, high impact.
++
++```json
++[
++  {
++    "name": "Storm weakens, status quo holds",
++    "stances": {"Gulf hurricane approaching production areas": "neutral", "OPEC+ cohesion and spare capacity": "neutral", "China stimulus headlines lifting demand expectations": "bullish"},
++    "probability": 0.5,
++    "impact_score": 0,
++    "is_tail_case": false,
++    "rationale": "The storm misses key infrastructure; mild demand tailwind persists."
++  },
++  {
++    "name": "Direct hit with extended shut-ins",
++    "stances": {"Gulf hurricane approaching production areas": "bullish", "OPEC+ cohesion and spare capacity": "neutral", "China stimulus headlines lifting demand expectations": "neutral"},
++    "probability": 0.35,
++    "impact_score": 2,
++    "is_tail_case": false,
++    "rationale": "The storm crosses production areas; shut-ins and refinery outages last weeks."
++  },
++  {
++    "name": "Compound shock: hurricane plus OPEC+ discipline break",
++    "stances": {"Gulf hurricane approaching production areas": "bullish", "OPEC+ cohesion and spare capacity": "bearish", "China stimulus headlines lifting demand expectations": "neutral"},
++    "probability": 0.15,
++    "impact_score": -2,
++    "is_tail_case": true,
++    "rationale": "Storm damage coincides with a quota dispute that opens the taps; the supply surge dominates once outages clear."
++  }
++]
++```
++
++Note what the tail case is: a genuinely different storyline, not a
++stronger version of the mainline. Its probability (0.15) is the lowest
++in the set, and its |impact_score| is 2 — both are hard requirements.
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/__init__.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/__init__.py
+new file mode 100644
+index 0000000..4446412
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/__init__.py
+@@ -0,0 +1 @@
++"""Tests for cfm_agent_v_2_2."""
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/conftest.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/conftest.py
+new file mode 100644
+index 0000000..4e43fca
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/conftest.py
+@@ -0,0 +1,36 @@
++"""Shared fixtures for CFM Agent v2.2 tests."""
++
++from __future__ import annotations
++
++import numpy as np
++import pandas as pd
++import pytest
++from aieng.forecasting.data import DataService, SeriesMetadata, StaticFrameAdapter
++from energy_oil_forecasting.data import WTI_SERIES_ID
++
++
++@pytest.fixture
++def synthetic_service() -> DataService:
++    """Return a cutoff-aware service with a synthetic WTI-like series."""
++    dates = pd.bdate_range("2020-01-01", periods=800)
++    x = np.arange(len(dates), dtype=float)
++    service = DataService()
++    wti = pd.DataFrame(
++        {
++            "timestamp": dates,
++            "value": 55.0 + 0.02 * x + np.sin(x / 20.0),
++            "released_at": dates + pd.offsets.BDay(1),
++        }
++    )
++    service.register(
++        WTI_SERIES_ID,
++        StaticFrameAdapter(wti),
++        SeriesMetadata(
++            series_id=WTI_SERIES_ID,
++            description="Synthetic WTI",
++            source="test",
++            units="USD/bbl",
++            frequency="B",
++        ),
++    )
++    return service
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_agent.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_agent.py
+new file mode 100644
+index 0000000..9900adf
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_agent.py
+@@ -0,0 +1,35 @@
++"""Agent composition and prompt contract tests."""
++
++from __future__ import annotations
++
++import json
++from datetime import datetime
++
++from energy_oil_forecasting.cfm_agent_v_2_2 import (
++    AGENT_NAME,
++    build_cfm_agent_v22_config,
++)
++from energy_oil_forecasting.cfm_agent_v_2_2.prompts import CfmEventScorePromptBuilder
++
++
++def test_agent_has_exact_identity_tools_and_skills() -> None:
++    config = build_cfm_agent_v22_config()
++    assert config.name == AGENT_NAME == "cfm_agent_v_2_2"
++    assert config.context_retrieval.enabled is True
++    assert config.context_retrieval.enforce_cutoff is True
++    assert not (config.code_execution and config.code_execution.enabled)
++    assert not config.function_tools
++    assert [path.name for path in config.skills_dirs] == ["event-context-analysis"]
++
++
++def test_prompt_carries_scoring_contract_and_no_forecast_fields(synthetic_service) -> None:
++    context = synthetic_service.context(datetime(2021, 6, 1))
++    payload = json.loads(CfmEventScorePromptBuilder()(context=context))
++    assert payload["agent_name"] == "cfm_agent_v_2_2"
++    assert payload["task"] == "wti_event_context_scores"
++    assert payload["as_of"] == "2021-06-01"
++    assert "output_schema" in payload
++    assert payload["target_history_csv"].startswith("date,close")
++    # A scorer has no forecast contract to carry.
++    assert "horizons" not in payload
++    assert "standard_quantiles" not in payload
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py
+new file mode 100644
+index 0000000..f2c0668
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_outputs.py
+@@ -0,0 +1,233 @@
++"""Schema and cross-object validator tests for CFM Agent v2.2 score output."""
++
++from __future__ import annotations
++
++import copy
++
++import pytest
++from energy_oil_forecasting.cfm_agent_v_2_2.outputs import WtiEventScoreOutput
++from energy_oil_forecasting.cfm_agent_v_2_2.schemas import WtiEventFactor, WtiEventScenario
++from pydantic import ValidationError
++
++
++def valid_output() -> dict[str, object]:
++    """Return a fully valid ``WtiEventScoreOutput`` fixture.
++
++    Two core factors (one dormant), one transitory factor; three
++    scenarios with probabilities 0.5/0.35/0.15 and a genuine tail case.
++    """
++    return {
++        "factors": [
++            {
++                "name": "A",
++                "category": "geopolitical",
++                "tier": "core",
++                "rationale": "Durable geopolitical driver.",
++                "impact_score": 1,
++                "confidence": 0.8,
++                "evidence_indices": [0],
++            },
++            {
++                "name": "B",
++                "category": "policy",
++                "tier": "core",
++                "rationale": "Dormant policy theme, still worth tracking.",
++                "impact_score": 0,
++                "confidence": 0.6,
++            },
++            {
++                "name": "C",
++                "category": "weather",
++                "tier": "transitory",
++                "rationale": "A storm approaching production areas.",
++                "impact_score": 2,
++                "confidence": 0.7,
++            },
++        ],
++        "scenarios": [
++            {
++                "name": "Status quo",
++                "stances": {"A": "neutral", "B": "neutral", "C": "bullish"},
++                "probability": 0.5,
++                "impact_score": 0,
++                "is_tail_case": False,
++                "rationale": "Nothing escalates; mild weather premium fades.",
++            },
++            {
++                "name": "Disruption clears",
++                "stances": {"A": "bearish", "B": "neutral", "C": "bearish"},
++                "probability": 0.35,
++                "impact_score": -1,
++                "is_tail_case": False,
++                "rationale": "Tensions ease and the storm misses key areas.",
++            },
++            {
++                "name": "Compound escalation",
++                "stances": {"A": "bullish", "B": "bullish", "C": "bullish"},
++                "probability": 0.15,
++                "impact_score": 3,
++                "is_tail_case": True,
++                "rationale": "Conflict escalates while the storm hits production.",
++            },
++        ],
++        "verified_evidence": [
++            {
++                "title": "Example source",
++                "source_url": "https://example.com/evidence",
++                "claim": "A verified development affecting factor A.",
++                "forecast_effect": "center_up",
++            }
++        ],
++        "research_summary": "One material verified event was found.",
++        "overall_rationale": "Scores span a dormant policy theme and an active weather event.",
++        "warnings": [],
++    }
++
++
++def test_valid_output_parses_and_yields_calibration_features() -> None:
++    output = WtiEventScoreOutput.model_validate(valid_output())
++    features = output.calibration_features()
++
++    assert features["net_core_score"] == 1.0
++    assert features["net_transitory_score"] == 2.0
++    assert features["confidence_weighted_core_score"] == pytest.approx(0.8)
++    assert features["confidence_weighted_transitory_score"] == pytest.approx(1.4)
++    assert features["expected_scenario_impact"] == pytest.approx(0.5 * 0 + 0.35 * -1 + 0.15 * 3)
++    assert features["tail_probability"] == pytest.approx(0.15)
++    assert features["tail_impact_score"] == 3.0
++    assert features["score_geopolitical"] == 1.0
++    assert features["score_weather"] == 2.0
++    assert features["score_policy"] == 0.0
++    assert features["score_operational"] == 0.0
++    assert features["score_demand_expectations"] == 0.0
++
++
++def test_calibration_row_is_flat_and_stamped_with_as_of() -> None:
++    output = WtiEventScoreOutput.model_validate(valid_output())
++    # calibration_features must be flat numeric — the stored dataset depends on it.
++    assert all(isinstance(value, float) for value in output.calibration_features().values())
++
++
++def test_probability_sum_must_be_one() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["scenarios"][0]["probability"] = 0.6
++    with pytest.raises(ValidationError, match="sum to 1"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_missing_tail_case_is_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    for scenario in raw["scenarios"]:
++        scenario["is_tail_case"] = False
++    with pytest.raises(ValidationError, match="is_tail_case=True"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_tail_case_with_highest_probability_is_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["scenarios"][0]["probability"] = 0.25
++    raw["scenarios"][1]["probability"] = 0.15
++    raw["scenarios"][2]["probability"] = 0.6
++    with pytest.raises(ValidationError, match="low-probability"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_tail_case_with_weak_impact_is_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["scenarios"][2]["impact_score"] = 1
++    with pytest.raises(ValidationError, match="high-impact"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_stance_coverage_mismatch_is_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    del raw["scenarios"][0]["stances"]["C"]
++    with pytest.raises(ValidationError, match="cover exactly the shared factors"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_scenarios_must_genuinely_disagree() -> None:
++    raw = copy.deepcopy(valid_output())
++    for scenario in raw["scenarios"]:
++        scenario["stances"] = {"A": "bullish", "B": "neutral", "C": "neutral"}
++    with pytest.raises(ValidationError, match="genuinely disagree"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_factor_tier_counts_out_of_range_is_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["factors"] = [raw["factors"][0], raw["factors"][2]]  # one core, one transitory
++    for scenario in raw["scenarios"]:
++        scenario["stances"] = {"A": scenario["stances"]["A"], "C": scenario["stances"]["C"]}
++    with pytest.raises(ValidationError, match="2-4 core factors"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_duplicate_factor_names_are_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["factors"][1]["name"] = "A"
++    with pytest.raises(ValidationError, match="unique"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_out_of_range_evidence_index_is_rejected() -> None:
++    raw = copy.deepcopy(valid_output())
++    raw["factors"][0]["evidence_indices"] = [3]
++    with pytest.raises(ValidationError, match="evidence index"):
++        WtiEventScoreOutput.model_validate(raw)
++
++
++def test_impact_score_out_of_bounds_is_rejected() -> None:
++    with pytest.raises(ValidationError):
++        WtiEventFactor.model_validate(
++            {
++                "name": "A",
++                "category": "geopolitical",
++                "tier": "core",
++                "rationale": "Out of bounds.",
++                "impact_score": 5,
++                "confidence": 0.5,
++            }
++        )
++
++
++def test_transitory_factor_with_zero_impact_is_rejected() -> None:
++    with pytest.raises(ValidationError, match="nonzero"):
++        WtiEventFactor.model_validate(
++            {
++                "name": "C",
++                "category": "weather",
++                "tier": "transitory",
++                "rationale": "Pointless if zero.",
++                "impact_score": 0,
++                "confidence": 0.5,
++            }
++        )
++
++
++def test_core_factor_may_be_dormant_with_zero_impact() -> None:
++    factor = WtiEventFactor.model_validate(
++        {
++            "name": "B",
++            "category": "policy",
++            "tier": "core",
++            "rationale": "Dormant but tracked.",
++            "impact_score": 0,
++            "confidence": 0.5,
++        }
++    )
++    assert factor.impact_score == 0
++
++
++def test_scenario_probability_must_be_positive() -> None:
++    with pytest.raises(ValidationError):
++        WtiEventScenario.model_validate(
++            {
++                "name": "Impossible",
++                "stances": {"A": "neutral"},
++                "probability": 0.0,
++                "impact_score": 1,
++                "is_tail_case": False,
++                "rationale": "Zero-probability scenarios are not allowed.",
++            }
++        )
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_skills.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_skills.py
+new file mode 100644
+index 0000000..09e9d77
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tests/test_skills.py
+@@ -0,0 +1,22 @@
++"""Skill registration contract tests."""
++
++from __future__ import annotations
++
++from pathlib import Path
++
++import yaml
++from energy_oil_forecasting.cfm_agent_v_2_2.config import SKILLS_ROOT
++
++
++EXPECTED = ["event-context-analysis"]
++
++
++def test_all_skills_have_exact_adk_compatible_names() -> None:
++    assert sorted(path.name for path in SKILLS_ROOT.iterdir() if path.is_dir()) == sorted(EXPECTED)
++    for name in EXPECTED:
++        path = Path(SKILLS_ROOT) / name / "SKILL.md"
++        text = path.read_text(encoding="utf-8")
++        frontmatter = text.split("---", 2)[1]
++        parsed = yaml.safe_load(frontmatter)
++        assert parsed["name"] == name
++        assert parsed["description"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/__init__.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/__init__.py
+new file mode 100644
+index 0000000..c54096e
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/__init__.py
+@@ -0,0 +1,8 @@
++"""The one tool capability for ``cfm_agent_v_2_2``."""
++
++from energy_oil_forecasting.cfm_agent_v_2_2.tools.verified_search import (
++    build_verified_search_config,
++)
++
++
++__all__ = ["build_verified_search_config"]
+diff --git a/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py
+new file mode 100644
+index 0000000..b19a795
+--- /dev/null
++++ b/implementations/energy_oil_forecasting/cfm_agent_v_2_2/tools/verified_search.py
+@@ -0,0 +1,42 @@
++"""Verified cutoff-aware web-search configuration.
++
++Same search instruction and verifier wiring as ``cfm_agent_v_2_1``
++(reimplemented here — packages stay standalone by convention).
++"""
++
++from __future__ import annotations
++
++from aieng.forecasting.methods.agentic.agent_factory import ContextRetrievalConfig
++from aieng.forecasting.models import LITE_MODEL
++
++
++_SEARCH_INSTRUCTION = """\
++You are a cutoff-aware market research specialist. Search for evidence relevant
++to the user's forecasting question. Separate facts from interpretation and cite
++the retrieved sources. When a cutoff date is supplied, include only information
++that was publicly knowable on or before that date. Never fill gaps from model
++memory. If verified evidence is insufficient or conflicting, say so explicitly.
++Prioritize primary sources and reputable independent reporting.\
++"""
++
++
++def build_verified_search_config(
++    *,
++    search_model: str = LITE_MODEL,
++    verifier_model: str,
++    verifier_max_attempts: int,
++    verifier_confidence_threshold: int,
++) -> ContextRetrievalConfig:
++    """Return search configuration with the repository's claim verifier enabled."""
++    return ContextRetrievalConfig(
++        enabled=True,
++        instruction=_SEARCH_INSTRUCTION,
++        search_model=search_model,
++        enforce_cutoff=True,
++        verifier_model=verifier_model,
++        verifier_max_attempts=verifier_max_attempts,
++        verifier_confidence_threshold=verifier_confidence_threshold,
++    )
++
++
++__all__ = ["build_verified_search_config"]
+-- 
+2.43.0
+

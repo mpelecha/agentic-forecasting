@@ -1,0 +1,141 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-06-02T00:00:00'
+  end: '2025-06-09T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: "Two-origin smoke backtest for local and CI testing of the NB04 pipeline.\
+    \ Uses the same tasks, horizons, and warmup as energy_oil_backtest but with only\
+    \ 2 weekly origins so the full notebook can be exercised without burning tokens\
+    \ on 51 \xD7 5 predictor evaluations."
+predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:23:11.798937'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 56.5
+      '0.1': 57.5
+      '0.2': 58.5
+      '0.3': 59.5
+      '0.4': 60.0
+      '0.5': 60.5
+      '0.6': 61.5
+      '0.7': 62.5
+      '0.8': 63.5
+      '0.9': 65.0
+      '0.95': 67.0
+  metadata:
+    rationale: 'As of June 2, 2025, WTI is caught between bearish supply fundamentals
+      (OPEC+ aggressive output unwinding) and persistent geopolitical risk. Three
+      primary scenarios inform this forecast: 1. ''Structural Surplus Reasserts''
+      (Prob 0.6): OPEC+ production increases continue to pressure prices lower toward
+      $55/bbl. 2. ''Geopolitical Friction'' (Prob 0.3): Escalation in Persian Gulf
+      shipping lane risks triggers a flight to supply security, pushing prices back
+      toward $65-$70/bbl. 3. ''Tail Risk: Regional War'' (Prob 0.1): Large-impact
+      disruption leads to a severe supply shock, potentially spiking prices to $80+/bbl.
+      The final intervals reflect this divergence, especially at the 21-day horizon,
+      where fundamental market forces and tail-risk volatility create a significant
+      spread.'
+    horizon_rationale: Short-term range bound following recent testing of $60 support.
+      OPEC+ output unwinding is the primary bearish weight, but market remains cautious
+      of near-term geopolitical headline shocks in the Middle East.
+    langfuse_trace_id: 24e45fb0774bd62661ee6b5abeb87044
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/24e45fb0774bd62661ee6b5abeb87044
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:23:11.798937'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 60.0
+    quantiles:
+      '0.05': 55.0
+      '0.1': 56.5
+      '0.2': 58.0
+      '0.3': 59.0
+      '0.4': 59.5
+      '0.5': 60.0
+      '0.6': 61.0
+      '0.7': 62.0
+      '0.8': 63.5
+      '0.9': 66.0
+      '0.95': 68.5
+  metadata:
+    rationale: 'As of June 2, 2025, WTI is caught between bearish supply fundamentals
+      (OPEC+ aggressive output unwinding) and persistent geopolitical risk. Three
+      primary scenarios inform this forecast: 1. ''Structural Surplus Reasserts''
+      (Prob 0.6): OPEC+ production increases continue to pressure prices lower toward
+      $55/bbl. 2. ''Geopolitical Friction'' (Prob 0.3): Escalation in Persian Gulf
+      shipping lane risks triggers a flight to supply security, pushing prices back
+      toward $65-$70/bbl. 3. ''Tail Risk: Regional War'' (Prob 0.1): Large-impact
+      disruption leads to a severe supply shock, potentially spiking prices to $80+/bbl.
+      The final intervals reflect this divergence, especially at the 21-day horizon,
+      where fundamental market forces and tail-risk volatility create a significant
+      spread.'
+    horizon_rationale: Market continues to price in the structural supply surplus
+      from OPEC+ adjustments. The range widens as the potential for renewed geopolitical
+      tension in the Persian Gulf conflicts with the fundamental bearish outlook.
+    langfuse_trace_id: 24e45fb0774bd62661ee6b5abeb87044
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/24e45fb0774bd62661ee6b5abeb87044
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T14:23:11.798937'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 58.5
+    quantiles:
+      '0.05': 52.0
+      '0.1': 54.0
+      '0.2': 56.0
+      '0.3': 57.5
+      '0.4': 58.0
+      '0.5': 58.5
+      '0.6': 60.0
+      '0.7': 62.0
+      '0.8': 65.0
+      '0.9': 68.5
+      '0.95': 72.0
+  metadata:
+    rationale: 'As of June 2, 2025, WTI is caught between bearish supply fundamentals
+      (OPEC+ aggressive output unwinding) and persistent geopolitical risk. Three
+      primary scenarios inform this forecast: 1. ''Structural Surplus Reasserts''
+      (Prob 0.6): OPEC+ production increases continue to pressure prices lower toward
+      $55/bbl. 2. ''Geopolitical Friction'' (Prob 0.3): Escalation in Persian Gulf
+      shipping lane risks triggers a flight to supply security, pushing prices back
+      toward $65-$70/bbl. 3. ''Tail Risk: Regional War'' (Prob 0.1): Large-impact
+      disruption leads to a severe supply shock, potentially spiking prices to $80+/bbl.
+      The final intervals reflect this divergence, especially at the 21-day horizon,
+      where fundamental market forces and tail-risk volatility create a significant
+      spread.'
+    horizon_rationale: By horizon 21, the structural oversupply narrative is expected
+      to dominate, putting downward pressure on prices toward the $55-$58 support
+      zone. The tails are skewed wide to account for high-impact geopolitical scenarios.
+    langfuse_trace_id: 24e45fb0774bd62661ee6b5abeb87044
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/24e45fb0774bd62661ee6b5abeb87044
+scores:
+- 2.7744635589851834
+- 8.811318957115995
+- 3.6376013637574256
+metric: crps
+mean_score: 5.074461293286202
+ran_at: '2026-07-22T14:23:12.131349'
+skipped_origins: 0

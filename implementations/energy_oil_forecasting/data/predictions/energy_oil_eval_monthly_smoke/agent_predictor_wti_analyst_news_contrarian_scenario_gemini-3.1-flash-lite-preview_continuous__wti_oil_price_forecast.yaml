@@ -1,0 +1,104 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-02-09T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: Two-origin smoke evaluation for local and CI testing of the NB04 pipeline.
+    Uses the same tasks, horizons, warmup, and geopolitical period as energy_oil_eval
+    but with only 2 origins to keep cost negligible.
+predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:06:19.851980'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.5
+    quantiles:
+      '0.05': 63.5
+      '0.1': 64.0
+      '0.2': 64.5
+      '0.3': 65.0
+      '0.4': 65.2
+      '0.5': 65.5
+      '0.6': 65.8
+      '0.7': 66.2
+      '0.8': 66.8
+      '0.9': 67.5
+      '0.95': 68.2
+  metadata:
+    rationale: 'Analysis based on: 1. OPEC+ decision (Jan 2026) to pause production
+      increases through Feb/Mar (Bullish). 2. Persistent seasonal demand lull (Bearish).
+      3. Geopolitical tension in the Persian Gulf (''Tenterhooks'' - Bullish risk).
+      Scenarios: (a) ''Status Quo'' (60%): Supply cuts hold, prices fluctuate $63-$68.
+      (b) ''Demand Slump'' (25%): Seasonal weakness dominates, prices retest $60.
+      (c) ''Geopolitical Tail Shock'' (15%): Low probability spike due to regional
+      instability, prices challenge $75+. The 80% interval is widened at the 21-day
+      horizon to capture the divergence between the demand-led bearish scenario and
+      the geopolitical-driven bullish tail.'
+    horizon_rationale: Short-term horizon (5 days) reflects the current momentum following
+      recent gains to $65.20. Market is consolidating as it assesses the impact of
+      the OPEC+ extension of supply cuts and awaits further geopolitical signals.
+      Volatility is expected to remain constrained.
+    langfuse_trace_id: 95e65d3321d79391111f1adcb926dc48
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/95e65d3321d79391111f1adcb926dc48
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:06:19.851980'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 66.5
+    quantiles:
+      '0.05': 60.0
+      '0.1': 61.5
+      '0.2': 63.5
+      '0.3': 64.5
+      '0.4': 65.5
+      '0.5': 66.5
+      '0.6': 67.5
+      '0.7': 69.0
+      '0.8': 70.5
+      '0.9': 72.5
+      '0.95': 74.5
+  metadata:
+    rationale: 'Analysis based on: 1. OPEC+ decision (Jan 2026) to pause production
+      increases through Feb/Mar (Bullish). 2. Persistent seasonal demand lull (Bearish).
+      3. Geopolitical tension in the Persian Gulf (''Tenterhooks'' - Bullish risk).
+      Scenarios: (a) ''Status Quo'' (60%): Supply cuts hold, prices fluctuate $63-$68.
+      (b) ''Demand Slump'' (25%): Seasonal weakness dominates, prices retest $60.
+      (c) ''Geopolitical Tail Shock'' (15%): Low probability spike due to regional
+      instability, prices challenge $75+. The 80% interval is widened at the 21-day
+      horizon to capture the divergence between the demand-led bearish scenario and
+      the geopolitical-driven bullish tail.'
+    horizon_rationale: 'Over 21 days, uncertainty peaks. The interval widens to account
+      for: (1) ''Geopolitical Escalation'' scenario (upside) where Persian Gulf tensions
+      spike; (2) ''Demand Weakness/Seasonal Surplus'' (downside) if data reveals deeper-than-expected
+      consumption lulls; (3) ''Tail Risk'' (large impact/low probability) of sudden
+      regional conflict causing price shocks >$75. Overall, the range reflects significant
+      disagreement between supply-constrained bullishness and structural demand-side
+      bearishness.'
+    langfuse_trace_id: 95e65d3321d79391111f1adcb926dc48
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/95e65d3321d79391111f1adcb926dc48
+scores:
+- 0.7328921735779313
+- 5.241815740411933
+metric: crps
+mean_score: 2.9873539569949323
+ran_at: '2026-07-22T15:06:20.160769'
+skipped_origins: 0

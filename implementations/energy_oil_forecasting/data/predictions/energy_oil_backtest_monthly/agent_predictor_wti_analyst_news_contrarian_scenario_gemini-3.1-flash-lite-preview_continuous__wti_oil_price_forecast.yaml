@@ -1,0 +1,1337 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2025-01-06T00:00:00'
+  end: '2025-12-22T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: Weekly rolling backtest in 2025 for daily WTI crude oil price forecasting.
+    Evaluates trajectory forecasts (5, 10, 21 business days) with CRPS/MAE and binary
+    up-shock forecasts (climb > $5 in 5 business days) with Brier Score. Used to select
+    the top contender models.
+predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:22:40.848101'
+  as_of: '2025-01-06T00:00:00'
+  forecast_date: '2025-01-13T00:00:00'
+  payload:
+    point_forecast: 74.5
+    quantiles:
+      '0.05': 71.0
+      '0.1': 72.0
+      '0.2': 72.8
+      '0.3': 73.5
+      '0.4': 74.0
+      '0.5': 74.5
+      '0.6': 75.0
+      '0.7': 75.8
+      '0.8': 76.5
+      '0.9': 77.5
+      '0.95': 78.5
+  metadata:
+    rationale: 'As of Jan 6, 2025, the market is tugged between supply constraints
+      (sanctions, OPEC+ cuts) and long-term surplus risks (non-OPEC+ output). Scenario
+      Analysis: 1) ''Status Quo/Consolidation'' (Prob 0.6, Range $70-$75): OPEC+ maintains
+      discipline; demand remains seasonally stable. 2) ''Geopolitical Spike'' (Prob
+      0.25, Range $78-$85): Regional tensions in the Persian Gulf threaten shipping,
+      providing a sharp but potentially transient spike. 3) ''Surplus Reassertion''
+      (Prob 0.15, Tail Case, Range $62-$68): Non-OPEC+ supply growth (US/Brazil/Guyana)
+      exceeds expectations and OPEC+ producers begin prioritizing market share, breaking
+      price support. My interval accounts for the potential impact of these scenarios,
+      resulting in a slightly wider distribution as the horizon increases.'
+    horizon_rationale: Short-term momentum is driven by cold weather and heightened
+      geopolitical sanctions, but supply availability remains robust. Prices are likely
+      to consolidate near the $74-$75 level as market participants weigh production
+      discipline against non-OPEC+ growth.
+    langfuse_trace_id: 5f791d246c1229be9e46138ad1ac63b7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5f791d246c1229be9e46138ad1ac63b7
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:22:40.848101'
+  as_of: '2025-01-06T00:00:00'
+  forecast_date: '2025-02-04T00:00:00'
+  payload:
+    point_forecast: 73.0
+    quantiles:
+      '0.05': 67.0
+      '0.1': 68.5
+      '0.2': 70.0
+      '0.3': 71.2
+      '0.4': 72.1
+      '0.5': 73.0
+      '0.6': 74.0
+      '0.7': 75.2
+      '0.8': 76.5
+      '0.9': 79.0
+      '0.95': 81.0
+  metadata:
+    rationale: 'As of Jan 6, 2025, the market is tugged between supply constraints
+      (sanctions, OPEC+ cuts) and long-term surplus risks (non-OPEC+ output). Scenario
+      Analysis: 1) ''Status Quo/Consolidation'' (Prob 0.6, Range $70-$75): OPEC+ maintains
+      discipline; demand remains seasonally stable. 2) ''Geopolitical Spike'' (Prob
+      0.25, Range $78-$85): Regional tensions in the Persian Gulf threaten shipping,
+      providing a sharp but potentially transient spike. 3) ''Surplus Reassertion''
+      (Prob 0.15, Tail Case, Range $62-$68): Non-OPEC+ supply growth (US/Brazil/Guyana)
+      exceeds expectations and OPEC+ producers begin prioritizing market share, breaking
+      price support. My interval accounts for the potential impact of these scenarios,
+      resulting in a slightly wider distribution as the horizon increases.'
+    horizon_rationale: Over the 21-day horizon, the potential for non-OPEC+ supply
+      gains and moderating demand growth may weigh on prices. The wide interval reflects
+      the high uncertainty regarding geopolitical escalation vs. a return to fundamental
+      oversupply.
+    langfuse_trace_id: 5f791d246c1229be9e46138ad1ac63b7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5f791d246c1229be9e46138ad1ac63b7
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:01.517599'
+  as_of: '2025-02-04T00:00:00'
+  forecast_date: '2025-02-11T00:00:00'
+  payload:
+    point_forecast: 73.1
+    quantiles:
+      '0.05': 70.2
+      '0.1': 71.0
+      '0.2': 71.8
+      '0.3': 72.4
+      '0.4': 72.8
+      '0.5': 73.1
+      '0.6': 73.5
+      '0.7': 74.0
+      '0.8': 74.8
+      '0.9': 76.2
+      '0.95': 77.5
+  metadata:
+    rationale: 'I am operating under three competing scenarios: 1) ''Market Surplus
+      Reasserts'' (Prob: 0.50): Fundamental data showing rising non-OPEC supply and
+      weak demand dominates, pushing prices toward $68-$70 range. 2) ''Geopolitical
+      Friction'' (Prob: 0.35): Tensions in the Persian Gulf and sanctions enforcement
+      keep a floor under prices near $75-$78. 3) ''Tail Risk - Regional Conflict Escalation''
+      (Prob: 0.15): A sharp, unexpected disruption in oil shipping leads to a sudden
+      jump above $85. My final interval width (e.g., 0.1/0.9 quantiles at 21 days:
+      $66-$79) captures the tension between these scenarios, with the central point
+      favoring a moderate drift downward as fundamentals currently signal surplus.'
+    horizon_rationale: Short-term view reflects a consolidation around the $73 level,
+      balancing geopolitical risk premiums against recent cooling of economic sentiment.
+      Market is waiting for further signals from OPEC+ or changes in US policy.
+    langfuse_trace_id: 915ae58355f563aa4b7abf840eef0263
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/915ae58355f563aa4b7abf840eef0263
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:01.517599'
+  as_of: '2025-02-04T00:00:00'
+  forecast_date: '2025-02-18T00:00:00'
+  payload:
+    point_forecast: 72.5
+    quantiles:
+      '0.05': 68.5
+      '0.1': 69.5
+      '0.2': 70.5
+      '0.3': 71.5
+      '0.4': 72.0
+      '0.5': 72.5
+      '0.6': 73.2
+      '0.7': 74.0
+      '0.8': 75.5
+      '0.9': 77.5
+      '0.95': 79.5
+  metadata:
+    rationale: 'I am operating under three competing scenarios: 1) ''Market Surplus
+      Reasserts'' (Prob: 0.50): Fundamental data showing rising non-OPEC supply and
+      weak demand dominates, pushing prices toward $68-$70 range. 2) ''Geopolitical
+      Friction'' (Prob: 0.35): Tensions in the Persian Gulf and sanctions enforcement
+      keep a floor under prices near $75-$78. 3) ''Tail Risk - Regional Conflict Escalation''
+      (Prob: 0.15): A sharp, unexpected disruption in oil shipping leads to a sudden
+      jump above $85. My final interval width (e.g., 0.1/0.9 quantiles at 21 days:
+      $66-$79) captures the tension between these scenarios, with the central point
+      favoring a moderate drift downward as fundamentals currently signal surplus.'
+    horizon_rationale: Over 10 days, structural concerns regarding non-OPEC+ supply
+      growth and sluggish demand start to weigh slightly more than immediate geopolitical
+      risk, nudging the central expectation slightly lower.
+    langfuse_trace_id: 915ae58355f563aa4b7abf840eef0263
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/915ae58355f563aa4b7abf840eef0263
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:01.517599'
+  as_of: '2025-02-04T00:00:00'
+  forecast_date: '2025-03-05T00:00:00'
+  payload:
+    point_forecast: 71.0
+    quantiles:
+      '0.05': 64.0
+      '0.1': 66.0
+      '0.2': 68.0
+      '0.3': 69.5
+      '0.4': 70.5
+      '0.5': 71.0
+      '0.6': 72.0
+      '0.7': 73.5
+      '0.8': 75.5
+      '0.9': 79.0
+      '0.95': 82.0
+  metadata:
+    rationale: 'I am operating under three competing scenarios: 1) ''Market Surplus
+      Reasserts'' (Prob: 0.50): Fundamental data showing rising non-OPEC supply and
+      weak demand dominates, pushing prices toward $68-$70 range. 2) ''Geopolitical
+      Friction'' (Prob: 0.35): Tensions in the Persian Gulf and sanctions enforcement
+      keep a floor under prices near $75-$78. 3) ''Tail Risk - Regional Conflict Escalation''
+      (Prob: 0.15): A sharp, unexpected disruption in oil shipping leads to a sudden
+      jump above $85. My final interval width (e.g., 0.1/0.9 quantiles at 21 days:
+      $66-$79) captures the tension between these scenarios, with the central point
+      favoring a moderate drift downward as fundamentals currently signal surplus.'
+    horizon_rationale: 'The 21-day horizon acknowledges the potential for a market
+      surplus to reassert itself as the dominant fundamental force, widening the range
+      to account for tail risks in both directions: escalation (geopolitics) vs. demand
+      erosion (macro data).'
+    langfuse_trace_id: 915ae58355f563aa4b7abf840eef0263
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/915ae58355f563aa4b7abf840eef0263
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:18.664805'
+  as_of: '2025-03-05T00:00:00'
+  forecast_date: '2025-03-12T00:00:00'
+  payload:
+    point_forecast: 68.0
+    quantiles:
+      '0.05': 65.5
+      '0.1': 66.0
+      '0.2': 66.8
+      '0.3': 67.3
+      '0.4': 67.6
+      '0.5': 68.0
+      '0.6': 68.5
+      '0.7': 69.2
+      '0.8': 70.0
+      '0.9': 71.0
+      '0.95': 72.0
+  metadata:
+    rationale: 'Scenarios: 1. ''Structural Surplus Reasserts'' (Prob 0.6, Price $64):
+      Markets focus on the incoming April 1 OPEC+ supply increases. 2. ''Geopolitical
+      Risk Flare-up'' (Prob 0.3, Price $75): Tensions in the Persian Gulf intensify,
+      spiking prices despite fundamentals. 3. ''Full Regional Conflict'' (Tail case,
+      Prob 0.1, Price $85+): Sudden escalation disrupts major shipping lanes. The
+      forecast intervals reflect the high uncertainty of these competing forces.'
+    horizon_rationale: Short term stabilization after recent sell-off. Market awaits
+      further clarity on demand data while OPEC+ cuts remain in place through March.
+    langfuse_trace_id: ecc264c45f34b378c610197146aee859
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ecc264c45f34b378c610197146aee859
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:18.664805'
+  as_of: '2025-03-05T00:00:00'
+  forecast_date: '2025-03-19T00:00:00'
+  payload:
+    point_forecast: 67.5
+    quantiles:
+      '0.05': 64.0
+      '0.1': 65.0
+      '0.2': 66.0
+      '0.3': 66.8
+      '0.4': 67.2
+      '0.5': 67.5
+      '0.6': 68.2
+      '0.7': 69.5
+      '0.8': 70.8
+      '0.9': 72.5
+      '0.95': 74.0
+  metadata:
+    rationale: 'Scenarios: 1. ''Structural Surplus Reasserts'' (Prob 0.6, Price $64):
+      Markets focus on the incoming April 1 OPEC+ supply increases. 2. ''Geopolitical
+      Risk Flare-up'' (Prob 0.3, Price $75): Tensions in the Persian Gulf intensify,
+      spiking prices despite fundamentals. 3. ''Full Regional Conflict'' (Tail case,
+      Prob 0.1, Price $85+): Sudden escalation disrupts major shipping lanes. The
+      forecast intervals reflect the high uncertainty of these competing forces.'
+    horizon_rationale: Moving toward the end of Q1, markets begin pricing in the April
+      1st start of the OPEC+ production increase. Increased uncertainty regarding
+      demand leads to a widening of the distribution.
+    langfuse_trace_id: ecc264c45f34b378c610197146aee859
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ecc264c45f34b378c610197146aee859
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:18.664805'
+  as_of: '2025-03-05T00:00:00'
+  forecast_date: '2025-04-03T00:00:00'
+  payload:
+    point_forecast: 66.0
+    quantiles:
+      '0.05': 61.0
+      '0.1': 63.0
+      '0.2': 64.0
+      '0.3': 64.8
+      '0.4': 65.5
+      '0.5': 66.0
+      '0.6': 67.5
+      '0.7': 69.0
+      '0.8': 71.0
+      '0.9': 74.0
+      '0.95': 77.0
+  metadata:
+    rationale: 'Scenarios: 1. ''Structural Surplus Reasserts'' (Prob 0.6, Price $64):
+      Markets focus on the incoming April 1 OPEC+ supply increases. 2. ''Geopolitical
+      Risk Flare-up'' (Prob 0.3, Price $75): Tensions in the Persian Gulf intensify,
+      spiking prices despite fundamentals. 3. ''Full Regional Conflict'' (Tail case,
+      Prob 0.1, Price $85+): Sudden escalation disrupts major shipping lanes. The
+      forecast intervals reflect the high uncertainty of these competing forces.'
+    horizon_rationale: Over 21 days, the fundamental bearishness of expected supply
+      increases (April 1st) outweighs current geopolitical risk, pulling the median
+      lower. Wide tails reflect potential for sharp reactions if geopolitical tensions
+      flare up.
+    langfuse_trace_id: ecc264c45f34b378c610197146aee859
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ecc264c45f34b378c610197146aee859
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:37.698380'
+  as_of: '2025-04-03T00:00:00'
+  forecast_date: '2025-04-10T00:00:00'
+  payload:
+    point_forecast: 71.0
+    quantiles:
+      '0.05': 67.5
+      '0.1': 68.5
+      '0.2': 69.2
+      '0.3': 69.8
+      '0.4': 70.4
+      '0.5': 71.0
+      '0.6': 71.6
+      '0.7': 72.2
+      '0.8': 73.0
+      '0.9': 74.5
+      '0.95': 76.0
+  metadata:
+    rationale: 'Scenarios: 1. ''Surplus Reasserts'' (Prob: 0.60, 21-day: $65): OPEC+
+      production increases combined with cooling global demand lead to persistent
+      oversupply. Bullish on OPEC policy (for market share), Bearish on demand/inventory.
+      2. ''Geopolitical Spike'' (Prob: 0.30, 21-day: $78): Escalation in Persian Gulf
+      shipping risk disrupts supply chain, temporarily overwhelming fundamentals.
+      Bullish on shipping risk/geopolitics, Neutral/Bearish on demand. 3. ''Tail:
+      Full Regional Conflict'' (Prob: 0.10, 21-day: $95): Major disruption in Gulf
+      transit. Bullish on all factors. Final intervals are wide ($14 spread at 21
+      days) to capture these competing regimes of ''fundamental weakness'' vs ''geopolitical
+      risk premium''.'
+    horizon_rationale: Short-term range dominated by the market absorbing the April
+      OPEC+ production increases. Price is expected to trade sideways-to-lower as
+      technical support at $70 is tested.
+    langfuse_trace_id: 31c1125e10160f6e107c5902f7ec530d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/31c1125e10160f6e107c5902f7ec530d
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:37.698380'
+  as_of: '2025-04-03T00:00:00'
+  forecast_date: '2025-04-17T00:00:00'
+  payload:
+    point_forecast: 70.2
+    quantiles:
+      '0.05': 66.0
+      '0.1': 67.2
+      '0.2': 68.0
+      '0.3': 68.8
+      '0.4': 69.5
+      '0.5': 70.2
+      '0.6': 70.9
+      '0.7': 71.6
+      '0.8': 72.8
+      '0.9': 74.5
+      '0.95': 76.5
+  metadata:
+    rationale: 'Scenarios: 1. ''Surplus Reasserts'' (Prob: 0.60, 21-day: $65): OPEC+
+      production increases combined with cooling global demand lead to persistent
+      oversupply. Bullish on OPEC policy (for market share), Bearish on demand/inventory.
+      2. ''Geopolitical Spike'' (Prob: 0.30, 21-day: $78): Escalation in Persian Gulf
+      shipping risk disrupts supply chain, temporarily overwhelming fundamentals.
+      Bullish on shipping risk/geopolitics, Neutral/Bearish on demand. 3. ''Tail:
+      Full Regional Conflict'' (Prob: 0.10, 21-day: $95): Major disruption in Gulf
+      transit. Bullish on all factors. Final intervals are wide ($14 spread at 21
+      days) to capture these competing regimes of ''fundamental weakness'' vs ''geopolitical
+      risk premium''.'
+    horizon_rationale: As the market settles into the new supply reality, weak demand
+      signals and trade tension concerns are expected to weigh more heavily, putting
+      downward pressure on the midpoint.
+    langfuse_trace_id: 31c1125e10160f6e107c5902f7ec530d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/31c1125e10160f6e107c5902f7ec530d
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:37.698380'
+  as_of: '2025-04-03T00:00:00'
+  forecast_date: '2025-05-02T00:00:00'
+  payload:
+    point_forecast: 68.5
+    quantiles:
+      '0.05': 63.0
+      '0.1': 64.5
+      '0.2': 65.8
+      '0.3': 66.8
+      '0.4': 67.7
+      '0.5': 68.5
+      '0.6': 69.4
+      '0.7': 70.5
+      '0.8': 72.0
+      '0.9': 74.5
+      '0.95': 77.0
+  metadata:
+    rationale: 'Scenarios: 1. ''Surplus Reasserts'' (Prob: 0.60, 21-day: $65): OPEC+
+      production increases combined with cooling global demand lead to persistent
+      oversupply. Bullish on OPEC policy (for market share), Bearish on demand/inventory.
+      2. ''Geopolitical Spike'' (Prob: 0.30, 21-day: $78): Escalation in Persian Gulf
+      shipping risk disrupts supply chain, temporarily overwhelming fundamentals.
+      Bullish on shipping risk/geopolitics, Neutral/Bearish on demand. 3. ''Tail:
+      Full Regional Conflict'' (Prob: 0.10, 21-day: $95): Major disruption in Gulf
+      transit. Bullish on all factors. Final intervals are wide ($14 spread at 21
+      days) to capture these competing regimes of ''fundamental weakness'' vs ''geopolitical
+      risk premium''.'
+    horizon_rationale: By the 21-day horizon, the market will be pricing in the upcoming
+      May supply increases. In the base case, weak macro demand leads to a drift lower.
+      The tail scenarios account for potential volatility from Middle East geopolitical
+      risk.
+    langfuse_trace_id: 31c1125e10160f6e107c5902f7ec530d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/31c1125e10160f6e107c5902f7ec530d
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:53.449313'
+  as_of: '2025-05-02T00:00:00'
+  forecast_date: '2025-05-09T00:00:00'
+  payload:
+    point_forecast: 58.5
+    quantiles:
+      '0.05': 55.0
+      '0.1': 56.5
+      '0.2': 57.2
+      '0.3': 57.8
+      '0.4': 58.2
+      '0.5': 58.5
+      '0.6': 59.0
+      '0.7': 59.8
+      '0.8': 61.0
+      '0.9': 62.5
+      '0.95': 64.0
+  metadata:
+    rationale: "Three competing scenarios drive this forecast:\n1. 'Surplus Reasserts'\
+      \ (60% probability): OPEC+ continues its gradual unwind, demand data remains\
+      \ soft, inventory builds accelerate, pushing WTI toward $50\u2013$55 at the\
+      \ 21-day horizon.\n2. 'Range-Bound Equilibrium' (30% probability): Geopolitical\
+      \ tensions and active SPR policy management offset supply increases, keeping\
+      \ WTI in the $58\u2013$62 range.\n3. 'Middle East Escalation' (10% probability,\
+      \ tail case): A major disruption to shipping lanes or infrastructure creates\
+      \ an immediate spike, potentially pushing WTI to $70+ regardless of fundamental\
+      \ surpluses.\n\nThe final quantile grid reflects a bearish center of mass consistent\
+      \ with the structural surplus thesis, while providing sufficient tail-width\
+      \ to capture the high-impact geopolitical risk."
+    horizon_rationale: Short-term pressure persists following the April sell-off.
+      The market remains sensitive to technical support levels near $58. Scenarios
+      suggest a consolidation or slight downward drift in the immediate 5-day horizon.
+    langfuse_trace_id: 8ba89c64ea1285112e4b87690d2f6353
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8ba89c64ea1285112e4b87690d2f6353
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:53.449313'
+  as_of: '2025-05-02T00:00:00'
+  forecast_date: '2025-05-16T00:00:00'
+  payload:
+    point_forecast: 57.5
+    quantiles:
+      '0.05': 53.0
+      '0.1': 54.5
+      '0.2': 55.8
+      '0.3': 56.5
+      '0.4': 57.0
+      '0.5': 57.5
+      '0.6': 58.2
+      '0.7': 59.5
+      '0.8': 61.5
+      '0.9': 64.0
+      '0.95': 66.0
+  metadata:
+    rationale: "Three competing scenarios drive this forecast:\n1. 'Surplus Reasserts'\
+      \ (60% probability): OPEC+ continues its gradual unwind, demand data remains\
+      \ soft, inventory builds accelerate, pushing WTI toward $50\u2013$55 at the\
+      \ 21-day horizon.\n2. 'Range-Bound Equilibrium' (30% probability): Geopolitical\
+      \ tensions and active SPR policy management offset supply increases, keeping\
+      \ WTI in the $58\u2013$62 range.\n3. 'Middle East Escalation' (10% probability,\
+      \ tail case): A major disruption to shipping lanes or infrastructure creates\
+      \ an immediate spike, potentially pushing WTI to $70+ regardless of fundamental\
+      \ surpluses.\n\nThe final quantile grid reflects a bearish center of mass consistent\
+      \ with the structural surplus thesis, while providing sufficient tail-width\
+      \ to capture the high-impact geopolitical risk."
+    horizon_rationale: The 10-day horizon incorporates the potential for further bearish
+      re-pricing if inventory reports confirm the predicted supply-side overhang.
+      The divergence between structural bearishness and the geopolitical risk premium
+      becomes more apparent here.
+    langfuse_trace_id: 8ba89c64ea1285112e4b87690d2f6353
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8ba89c64ea1285112e4b87690d2f6353
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:23:53.449313'
+  as_of: '2025-05-02T00:00:00'
+  forecast_date: '2025-06-02T00:00:00'
+  payload:
+    point_forecast: 56.0
+    quantiles:
+      '0.05': 50.0
+      '0.1': 52.0
+      '0.2': 53.5
+      '0.3': 54.8
+      '0.4': 55.5
+      '0.5': 56.0
+      '0.6': 57.5
+      '0.7': 59.5
+      '0.8': 62.0
+      '0.9': 66.0
+      '0.95': 69.0
+  metadata:
+    rationale: "Three competing scenarios drive this forecast:\n1. 'Surplus Reasserts'\
+      \ (60% probability): OPEC+ continues its gradual unwind, demand data remains\
+      \ soft, inventory builds accelerate, pushing WTI toward $50\u2013$55 at the\
+      \ 21-day horizon.\n2. 'Range-Bound Equilibrium' (30% probability): Geopolitical\
+      \ tensions and active SPR policy management offset supply increases, keeping\
+      \ WTI in the $58\u2013$62 range.\n3. 'Middle East Escalation' (10% probability,\
+      \ tail case): A major disruption to shipping lanes or infrastructure creates\
+      \ an immediate spike, potentially pushing WTI to $70+ regardless of fundamental\
+      \ surpluses.\n\nThe final quantile grid reflects a bearish center of mass consistent\
+      \ with the structural surplus thesis, while providing sufficient tail-width\
+      \ to capture the high-impact geopolitical risk."
+    horizon_rationale: "Over 21 days, the 'Surplus Reasserts' scenario dominates,\
+      \ driven by ongoing OPEC+ output hikes and weaker-than-expected demand signals.\
+      \ However, the wide 80% interval ($52\u2013$66) is maintained to account for\
+      \ the 'Middle East Escalation' tail-risk scenario, which could rapidly reverse\
+      \ bearish sentiment."
+    langfuse_trace_id: 8ba89c64ea1285112e4b87690d2f6353
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8ba89c64ea1285112e4b87690d2f6353
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:06.577776'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-09T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 57.5
+      '0.1': 58.5
+      '0.2': 59.2
+      '0.3': 59.8
+      '0.4': 60.2
+      '0.5': 60.5
+      '0.6': 60.8
+      '0.7': 61.2
+      '0.8': 62.0
+      '0.9': 63.0
+      '0.95': 64.5
+  metadata:
+    rationale: "### Scenario Decomposition\n\n1. **Surplus Reasserts (Probability:\
+      \ 0.60)**\n   - **Dynamics**: OPEC+ increases supply as planned, demand growth\
+      \ slows, US output remains near record highs.\n   - **Tag**: OPEC+ (bearish),\
+      \ Persian Gulf (neutral), Demand (bearish), Inventory (bearish).\n   - **Implied\
+      \ Price (21d)**: $56.00\n   - **Driver**: Confirmed production increases and\
+      \ slowing global demand growth identified in early June 2025 news.\n\n2. **Stagnation/Wait-and-See\
+      \ (Probability: 0.30)**\n   - **Dynamics**: OPEC+ is cautious about the speed\
+      \ of unwinding cuts; trade tensions lead to policy pauses.\n   - **Tag**: OPEC+\
+      \ (neutral), Persian Gulf (neutral), Demand (neutral), Inventory (neutral).\n\
+      \   - **Implied Price (21d)**: $60.00\n   - **Driver**: Uncertain impact of\
+      \ tariffs on global trade and potential for slower global growth mitigating\
+      \ consumption.\n\n3. **Geopolitical Tail Spike (Probability: 0.10)**\n   - **Dynamics**:\
+      \ Sudden disruption in Persian Gulf shipping lanes leading to a panic bid for\
+      \ physical barrels.\n   - **Tag**: OPEC+ (bullish/constrained), Persian Gulf\
+      \ (bullish), Demand (neutral), Inventory (bearish-drawdown).\n   - **Implied\
+      \ Price (21d)**: $70.00+\n   - **Driver**: Tail-risk event involving major maritime\
+      \ disruption. While low probability, it represents a 'large impact' scenario.\n\
+      \n### Mapping Scenarios to Interval Width\nMy final quantile grid uses a wider\
+      \ spread at the 21-day horizon (10% to 90% is 55.0 to 64.0) to accommodate the\
+      \ core bearish expectation (Surplus) while retaining significant room (up to\
+      \ 67.0+ at the 0.95 level) to account for a geopolitical spike. The consensus\
+      \ is heavily weighted toward surplus, consistent with the bearish analyst sentiment\
+      \ as of June 2025."
+    horizon_rationale: Short-term momentum is bearish following the May 31 OPEC+ confirmation
+      of production increases. The market is consolidating near $60-$61 support. Risks
+      are skewed slightly to the downside as the market begins to factor in the physical
+      arrival of increased supply, tempered by limited short-term geopolitical risk
+      premiums.
+    langfuse_trace_id: f25b3d4e9687392070170e5c6817c876
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f25b3d4e9687392070170e5c6817c876
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:06.577776'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-06-16T00:00:00'
+  payload:
+    point_forecast: 59.8
+    quantiles:
+      '0.05': 56.0
+      '0.1': 57.0
+      '0.2': 58.0
+      '0.3': 58.8
+      '0.4': 59.4
+      '0.5': 59.8
+      '0.6': 60.2
+      '0.7': 60.8
+      '0.8': 61.8
+      '0.9': 63.5
+      '0.95': 65.5
+  metadata:
+    rationale: "### Scenario Decomposition\n\n1. **Surplus Reasserts (Probability:\
+      \ 0.60)**\n   - **Dynamics**: OPEC+ increases supply as planned, demand growth\
+      \ slows, US output remains near record highs.\n   - **Tag**: OPEC+ (bearish),\
+      \ Persian Gulf (neutral), Demand (bearish), Inventory (bearish).\n   - **Implied\
+      \ Price (21d)**: $56.00\n   - **Driver**: Confirmed production increases and\
+      \ slowing global demand growth identified in early June 2025 news.\n\n2. **Stagnation/Wait-and-See\
+      \ (Probability: 0.30)**\n   - **Dynamics**: OPEC+ is cautious about the speed\
+      \ of unwinding cuts; trade tensions lead to policy pauses.\n   - **Tag**: OPEC+\
+      \ (neutral), Persian Gulf (neutral), Demand (neutral), Inventory (neutral).\n\
+      \   - **Implied Price (21d)**: $60.00\n   - **Driver**: Uncertain impact of\
+      \ tariffs on global trade and potential for slower global growth mitigating\
+      \ consumption.\n\n3. **Geopolitical Tail Spike (Probability: 0.10)**\n   - **Dynamics**:\
+      \ Sudden disruption in Persian Gulf shipping lanes leading to a panic bid for\
+      \ physical barrels.\n   - **Tag**: OPEC+ (bullish/constrained), Persian Gulf\
+      \ (bullish), Demand (neutral), Inventory (bearish-drawdown).\n   - **Implied\
+      \ Price (21d)**: $70.00+\n   - **Driver**: Tail-risk event involving major maritime\
+      \ disruption. While low probability, it represents a 'large impact' scenario.\n\
+      \n### Mapping Scenarios to Interval Width\nMy final quantile grid uses a wider\
+      \ spread at the 21-day horizon (10% to 90% is 55.0 to 64.0) to accommodate the\
+      \ core bearish expectation (Surplus) while retaining significant room (up to\
+      \ 67.0+ at the 0.95 level) to account for a geopolitical spike. The consensus\
+      \ is heavily weighted toward surplus, consistent with the bearish analyst sentiment\
+      \ as of June 2025."
+    horizon_rationale: As the horizon extends, the impact of increased OPEC+ flows
+      becomes more apparent. Market sentiment is heavily focused on the potential
+      for global oversupply. The 10-day outlook maintains a bearish tilt, though wider
+      tails account for potential volatility in trade-tariff headlines.
+    langfuse_trace_id: f25b3d4e9687392070170e5c6817c876
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f25b3d4e9687392070170e5c6817c876
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:06.577776'
+  as_of: '2025-06-02T00:00:00'
+  forecast_date: '2025-07-01T00:00:00'
+  payload:
+    point_forecast: 58.5
+    quantiles:
+      '0.05': 54.0
+      '0.1': 55.0
+      '0.2': 56.5
+      '0.3': 57.5
+      '0.4': 58.0
+      '0.5': 58.5
+      '0.6': 59.2
+      '0.7': 60.0
+      '0.8': 61.5
+      '0.9': 64.0
+      '0.95': 67.0
+  metadata:
+    rationale: "### Scenario Decomposition\n\n1. **Surplus Reasserts (Probability:\
+      \ 0.60)**\n   - **Dynamics**: OPEC+ increases supply as planned, demand growth\
+      \ slows, US output remains near record highs.\n   - **Tag**: OPEC+ (bearish),\
+      \ Persian Gulf (neutral), Demand (bearish), Inventory (bearish).\n   - **Implied\
+      \ Price (21d)**: $56.00\n   - **Driver**: Confirmed production increases and\
+      \ slowing global demand growth identified in early June 2025 news.\n\n2. **Stagnation/Wait-and-See\
+      \ (Probability: 0.30)**\n   - **Dynamics**: OPEC+ is cautious about the speed\
+      \ of unwinding cuts; trade tensions lead to policy pauses.\n   - **Tag**: OPEC+\
+      \ (neutral), Persian Gulf (neutral), Demand (neutral), Inventory (neutral).\n\
+      \   - **Implied Price (21d)**: $60.00\n   - **Driver**: Uncertain impact of\
+      \ tariffs on global trade and potential for slower global growth mitigating\
+      \ consumption.\n\n3. **Geopolitical Tail Spike (Probability: 0.10)**\n   - **Dynamics**:\
+      \ Sudden disruption in Persian Gulf shipping lanes leading to a panic bid for\
+      \ physical barrels.\n   - **Tag**: OPEC+ (bullish/constrained), Persian Gulf\
+      \ (bullish), Demand (neutral), Inventory (bearish-drawdown).\n   - **Implied\
+      \ Price (21d)**: $70.00+\n   - **Driver**: Tail-risk event involving major maritime\
+      \ disruption. While low probability, it represents a 'large impact' scenario.\n\
+      \n### Mapping Scenarios to Interval Width\nMy final quantile grid uses a wider\
+      \ spread at the 21-day horizon (10% to 90% is 55.0 to 64.0) to accommodate the\
+      \ core bearish expectation (Surplus) while retaining significant room (up to\
+      \ 67.0+ at the 0.95 level) to account for a geopolitical spike. The consensus\
+      \ is heavily weighted toward surplus, consistent with the bearish analyst sentiment\
+      \ as of June 2025."
+    horizon_rationale: By the 21-day horizon, the market will be digesting inventory
+      data post-OPEC+ increase. The scenario of surplus reassertion dominates the
+      median forecast. The wide 80% interval (55.0 to 64.0) reflects the high uncertainty
+      regarding whether geopolitical risks in the Middle East might spike and offset
+      the fundamentals, even as the base case remains bearish.
+    langfuse_trace_id: f25b3d4e9687392070170e5c6817c876
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/f25b3d4e9687392070170e5c6817c876
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:20.094601'
+  as_of: '2025-07-01T00:00:00'
+  forecast_date: '2025-07-08T00:00:00'
+  payload:
+    point_forecast: 65.5
+    quantiles:
+      '0.05': 60.5
+      '0.1': 62.0
+      '0.2': 63.5
+      '0.3': 64.5
+      '0.4': 65.0
+      '0.5': 65.5
+      '0.6': 66.5
+      '0.7': 68.0
+      '0.8': 69.5
+      '0.9': 71.0
+      '0.95': 73.0
+  metadata:
+    rationale: 'My analysis is driven by three competing scenarios: 1) ''Surplus Reasserts''
+      (Prob 0.5): OPEC+ production increases combined with lackluster demand growth
+      leads to a persistent price slide toward $60. 2) ''Geopolitical Friction'' (Prob
+      0.35): Tensions in the Strait of Hormuz fluctuate, keeping a moderate risk premium
+      and preventing a collapse, anchoring prices near $68-$72. 3) ''Conflict Tail
+      Case'' (Prob 0.15): Full-scale disruption of regional oil flows leads to a sharp
+      spike above $80, low probability but high impact. My quantile grid incorporates
+      these scenarios by maintaining a wide 80% interval (0.1 to 0.9), particularly
+      at the 21-day horizon, ensuring the tail-case impact is captured. Key assumptions:
+      OPEC+ continues the gradual unwinding of cuts, and global oil demand remains
+      sluggish in OECD regions while showing moderate growth elsewhere.'
+    horizon_rationale: Short-term stabilization near current levels. The market is
+      assessing the sustainability of the recent pullback while monitoring potential
+      geopolitical flare-ups. The range is moderately wide to account for volatility.
+    langfuse_trace_id: 7890d325ab6a3b1df75571d560eb8f26
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/7890d325ab6a3b1df75571d560eb8f26
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:20.094601'
+  as_of: '2025-07-01T00:00:00'
+  forecast_date: '2025-07-15T00:00:00'
+  payload:
+    point_forecast: 66.0
+    quantiles:
+      '0.05': 59.0
+      '0.1': 60.5
+      '0.2': 62.5
+      '0.3': 64.0
+      '0.4': 65.0
+      '0.5': 66.0
+      '0.6': 67.5
+      '0.7': 69.5
+      '0.8': 71.5
+      '0.9': 74.0
+      '0.95': 76.5
+  metadata:
+    rationale: 'My analysis is driven by three competing scenarios: 1) ''Surplus Reasserts''
+      (Prob 0.5): OPEC+ production increases combined with lackluster demand growth
+      leads to a persistent price slide toward $60. 2) ''Geopolitical Friction'' (Prob
+      0.35): Tensions in the Strait of Hormuz fluctuate, keeping a moderate risk premium
+      and preventing a collapse, anchoring prices near $68-$72. 3) ''Conflict Tail
+      Case'' (Prob 0.15): Full-scale disruption of regional oil flows leads to a sharp
+      spike above $80, low probability but high impact. My quantile grid incorporates
+      these scenarios by maintaining a wide 80% interval (0.1 to 0.9), particularly
+      at the 21-day horizon, ensuring the tail-case impact is captured. Key assumptions:
+      OPEC+ continues the gradual unwinding of cuts, and global oil demand remains
+      sluggish in OECD regions while showing moderate growth elsewhere.'
+    horizon_rationale: Over 10 days, the 'Surplus Reasserts' scenario (bearish) and
+      'Escalation/Supply Shock' scenario (bullish) begin to diverge more clearly,
+      widening the quantile intervals as market participants look for clearer signals
+      from OPEC+ on production adherence.
+    langfuse_trace_id: 7890d325ab6a3b1df75571d560eb8f26
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/7890d325ab6a3b1df75571d560eb8f26
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:20.094601'
+  as_of: '2025-07-01T00:00:00'
+  forecast_date: '2025-07-30T00:00:00'
+  payload:
+    point_forecast: 67.0
+    quantiles:
+      '0.05': 56.5
+      '0.1': 58.5
+      '0.2': 61.0
+      '0.3': 63.5
+      '0.4': 65.5
+      '0.5': 67.0
+      '0.6': 69.0
+      '0.7': 71.5
+      '0.8': 74.5
+      '0.9': 78.0
+      '0.95': 81.0
+  metadata:
+    rationale: 'My analysis is driven by three competing scenarios: 1) ''Surplus Reasserts''
+      (Prob 0.5): OPEC+ production increases combined with lackluster demand growth
+      leads to a persistent price slide toward $60. 2) ''Geopolitical Friction'' (Prob
+      0.35): Tensions in the Strait of Hormuz fluctuate, keeping a moderate risk premium
+      and preventing a collapse, anchoring prices near $68-$72. 3) ''Conflict Tail
+      Case'' (Prob 0.15): Full-scale disruption of regional oil flows leads to a sharp
+      spike above $80, low probability but high impact. My quantile grid incorporates
+      these scenarios by maintaining a wide 80% interval (0.1 to 0.9), particularly
+      at the 21-day horizon, ensuring the tail-case impact is captured. Key assumptions:
+      OPEC+ continues the gradual unwinding of cuts, and global oil demand remains
+      sluggish in OECD regions while showing moderate growth elsewhere.'
+    horizon_rationale: At 21 days (roughly one month), uncertainty over fundamentals
+      (OPEC+ compliance and non-OECD demand) combined with the 'Tail Scenario' of
+      regional conflict escalation creates a broad probability distribution. The wider
+      interval reflects the possibility of a significant shift in either direction
+      based on data releases and conflict developments.
+    langfuse_trace_id: 7890d325ab6a3b1df75571d560eb8f26
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/7890d325ab6a3b1df75571d560eb8f26
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:33.432488'
+  as_of: '2025-07-30T00:00:00'
+  forecast_date: '2025-08-06T00:00:00'
+  payload:
+    point_forecast: 69.5
+    quantiles:
+      '0.05': 66.5
+      '0.1': 67.2
+      '0.2': 68.0
+      '0.3': 68.7
+      '0.4': 69.1
+      '0.5': 69.5
+      '0.6': 69.9
+      '0.7': 70.4
+      '0.8': 71.0
+      '0.9': 71.8
+      '0.95': 72.5
+  metadata:
+    rationale: 'The WTI forecast is driven by a tug-of-war: sluggish global demand
+      (IEA) vs. the geopolitical war premium in the Persian Gulf. Assumptions: 1.
+      OPEC+ adheres to the August adjustment plan of 548,000 bpd. 2. No total closure
+      of the Strait of Hormuz, but heightened threat perception. 3. US SPR replenishment
+      continues without major market impact. The scenarios consider: ''Surplus Reasserts''
+      (weak macro demand leads to price drop), ''Escalation'' (Middle East tensions
+      remain elevated supporting prices), and ''Tail-Event'' (sudden regional war,
+      major disruption to shipping).'
+    horizon_rationale: 'Short-term range bound by the conflict between geopolitical
+      risk (Strait of Hormuz) and bearish demand data (IEA growth projections). With
+      OPEC+ adjusting output in August, volatility remains high. Assumptions: Neutral
+      on near-term geopolitical escalation, continued steady OPEC+ output.'
+    langfuse_trace_id: 95c4d14704558cbd09803ca04adb9c92
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/95c4d14704558cbd09803ca04adb9c92
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:33.432488'
+  as_of: '2025-07-30T00:00:00'
+  forecast_date: '2025-08-13T00:00:00'
+  payload:
+    point_forecast: 69.8
+    quantiles:
+      '0.05': 65.0
+      '0.1': 66.0
+      '0.2': 67.5
+      '0.3': 68.5
+      '0.4': 69.2
+      '0.5': 69.8
+      '0.6': 70.5
+      '0.7': 71.5
+      '0.8': 72.5
+      '0.9': 74.0
+      '0.95': 75.0
+  metadata:
+    rationale: 'The WTI forecast is driven by a tug-of-war: sluggish global demand
+      (IEA) vs. the geopolitical war premium in the Persian Gulf. Assumptions: 1.
+      OPEC+ adheres to the August adjustment plan of 548,000 bpd. 2. No total closure
+      of the Strait of Hormuz, but heightened threat perception. 3. US SPR replenishment
+      continues without major market impact. The scenarios consider: ''Surplus Reasserts''
+      (weak macro demand leads to price drop), ''Escalation'' (Middle East tensions
+      remain elevated supporting prices), and ''Tail-Event'' (sudden regional war,
+      major disruption to shipping).'
+    horizon_rationale: Mid-term horizon incorporates the impact of scheduled August
+      OPEC+ production adjustments. Geopolitical risk premium remains the primary
+      differentiator for the upper quantiles if tensions rise.
+    langfuse_trace_id: 95c4d14704558cbd09803ca04adb9c92
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/95c4d14704558cbd09803ca04adb9c92
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:33.432488'
+  as_of: '2025-07-30T00:00:00'
+  forecast_date: '2025-08-28T00:00:00'
+  payload:
+    point_forecast: 70.5
+    quantiles:
+      '0.05': 62.0
+      '0.1': 64.0
+      '0.2': 66.0
+      '0.3': 68.0
+      '0.4': 69.5
+      '0.5': 70.5
+      '0.6': 71.5
+      '0.7': 73.0
+      '0.8': 75.0
+      '0.9': 77.0
+      '0.95': 80.0
+  metadata:
+    rationale: 'The WTI forecast is driven by a tug-of-war: sluggish global demand
+      (IEA) vs. the geopolitical war premium in the Persian Gulf. Assumptions: 1.
+      OPEC+ adheres to the August adjustment plan of 548,000 bpd. 2. No total closure
+      of the Strait of Hormuz, but heightened threat perception. 3. US SPR replenishment
+      continues without major market impact. The scenarios consider: ''Surplus Reasserts''
+      (weak macro demand leads to price drop), ''Escalation'' (Middle East tensions
+      remain elevated supporting prices), and ''Tail-Event'' (sudden regional war,
+      major disruption to shipping).'
+    horizon_rationale: 'The widest interval reflects the heightened uncertainty of
+      three scenarios: 1. ''Surplus Reasserts'' (40% probability, price $62) driven
+      by weak demand growth. 2. ''Escalation'' (45% probability, price $72) driven
+      by Persian Gulf security incidents. 3. ''Full Conflict Tail-Risk'' (15% probability,
+      price $85+) driven by a major shipping lane shutdown. The final quantile grid
+      captures the material possibility of either a fundamental glut or a significant
+      supply disruption.'
+    langfuse_trace_id: 95c4d14704558cbd09803ca04adb9c92
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/95c4d14704558cbd09803ca04adb9c92
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:54.893007'
+  as_of: '2025-08-28T00:00:00'
+  forecast_date: '2025-09-04T00:00:00'
+  payload:
+    point_forecast: 63.5
+    quantiles:
+      '0.05': 60.5
+      '0.1': 61.2
+      '0.2': 62.1
+      '0.3': 62.7
+      '0.4': 63.1
+      '0.5': 63.5
+      '0.6': 63.9
+      '0.7': 64.5
+      '0.8': 65.2
+      '0.9': 66.0
+      '0.95': 67.0
+  metadata:
+    rationale: "Market analysis is split between a bearish fundamental narrative (OPEC+\
+      \ unwinding production cuts into softening global demand) and lingering geopolitical\
+      \ tail risks. \n\nScenarios:\n1. 'Surplus Reasserts' (Prob: 0.6): OPEC+ production\
+      \ increases combined with ongoing weak demand from major economies drive prices\
+      \ toward the low $60s.\n2. 'Status Quo/Range' (Prob: 0.3): Market fluctuates\
+      \ around $63-$65 as supply additions are offset by stock replenishment and geopolitical\
+      \ nerves keeping a floor.\n3. 'Geopolitical Shock' (Prob: 0.1, Tail): An abrupt\
+      \ escalation in the Persian Gulf drives a temporary spike to $70+ (impacts 0.90/0.95\
+      \ quantiles).\n\nKey Assumptions: OPEC+ continues the phased production increase\
+      \ as planned; no major, sustained shipping lane blockage; U.S. demand growth\
+      \ remains modest."
+    horizon_rationale: Short-term range bound. Market is digesting the recent OPEC+
+      decision and balancing concerns about slowing demand against the potential for
+      inventory tight-spots. The point forecast reflects a slight drift lower toward
+      local support levels.
+    langfuse_trace_id: 65ac1aa49683e7b2fb194fbd9d8d1d0f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/65ac1aa49683e7b2fb194fbd9d8d1d0f
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:54.893007'
+  as_of: '2025-08-28T00:00:00'
+  forecast_date: '2025-09-11T00:00:00'
+  payload:
+    point_forecast: 62.8
+    quantiles:
+      '0.05': 59.0
+      '0.1': 60.0
+      '0.2': 61.0
+      '0.3': 61.8
+      '0.4': 62.3
+      '0.5': 62.8
+      '0.6': 63.4
+      '0.7': 64.1
+      '0.8': 65.0
+      '0.9': 66.5
+      '0.95': 68.0
+  metadata:
+    rationale: "Market analysis is split between a bearish fundamental narrative (OPEC+\
+      \ unwinding production cuts into softening global demand) and lingering geopolitical\
+      \ tail risks. \n\nScenarios:\n1. 'Surplus Reasserts' (Prob: 0.6): OPEC+ production\
+      \ increases combined with ongoing weak demand from major economies drive prices\
+      \ toward the low $60s.\n2. 'Status Quo/Range' (Prob: 0.3): Market fluctuates\
+      \ around $63-$65 as supply additions are offset by stock replenishment and geopolitical\
+      \ nerves keeping a floor.\n3. 'Geopolitical Shock' (Prob: 0.1, Tail): An abrupt\
+      \ escalation in the Persian Gulf drives a temporary spike to $70+ (impacts 0.90/0.95\
+      \ quantiles).\n\nKey Assumptions: OPEC+ continues the phased production increase\
+      \ as planned; no major, sustained shipping lane blockage; U.S. demand growth\
+      \ remains modest."
+    horizon_rationale: Over 10 days, the 'oversupply' narrative begins to exert slightly
+      more pressure as data reinforces the slowing demand outlook. The distribution
+      widens to account for the persistent, though currently subdued, geopolitical
+      tail risks in the Persian Gulf.
+    langfuse_trace_id: 65ac1aa49683e7b2fb194fbd9d8d1d0f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/65ac1aa49683e7b2fb194fbd9d8d1d0f
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:24:54.893007'
+  as_of: '2025-08-28T00:00:00'
+  forecast_date: '2025-09-26T00:00:00'
+  payload:
+    point_forecast: 61.5
+    quantiles:
+      '0.05': 56.5
+      '0.1': 58.0
+      '0.2': 59.5
+      '0.3': 60.5
+      '0.4': 61.0
+      '0.5': 61.5
+      '0.6': 62.2
+      '0.7': 63.0
+      '0.8': 64.5
+      '0.9': 67.0
+      '0.95': 69.5
+  metadata:
+    rationale: "Market analysis is split between a bearish fundamental narrative (OPEC+\
+      \ unwinding production cuts into softening global demand) and lingering geopolitical\
+      \ tail risks. \n\nScenarios:\n1. 'Surplus Reasserts' (Prob: 0.6): OPEC+ production\
+      \ increases combined with ongoing weak demand from major economies drive prices\
+      \ toward the low $60s.\n2. 'Status Quo/Range' (Prob: 0.3): Market fluctuates\
+      \ around $63-$65 as supply additions are offset by stock replenishment and geopolitical\
+      \ nerves keeping a floor.\n3. 'Geopolitical Shock' (Prob: 0.1, Tail): An abrupt\
+      \ escalation in the Persian Gulf drives a temporary spike to $70+ (impacts 0.90/0.95\
+      \ quantiles).\n\nKey Assumptions: OPEC+ continues the phased production increase\
+      \ as planned; no major, sustained shipping lane blockage; U.S. demand growth\
+      \ remains modest."
+    horizon_rationale: By 21 days, the market enters the new month of OPEC+ supply
+      adjustments. The bearish fundamental case (surplus buildup) dominates the central
+      expectation, while the wide upper tail accounts for potential abrupt shifts
+      if geopolitical tensions in the Middle East flare up.
+    langfuse_trace_id: 65ac1aa49683e7b2fb194fbd9d8d1d0f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/65ac1aa49683e7b2fb194fbd9d8d1d0f
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:07.462826'
+  as_of: '2025-09-26T00:00:00'
+  forecast_date: '2025-10-03T00:00:00'
+  payload:
+    point_forecast: 64.8
+    quantiles:
+      '0.05': 61.5
+      '0.1': 62.2
+      '0.2': 63.1
+      '0.3': 63.8
+      '0.4': 64.3
+      '0.5': 64.8
+      '0.6': 65.3
+      '0.7': 65.9
+      '0.8': 66.8
+      '0.9': 67.5
+      '0.95': 68.2
+  metadata:
+    rationale: "Market Analysis: The WTI market is currently defined by a tug-of-war\
+      \ between a looming structural supply glut (IEA warnings, rising non-OPEC+ output,\
+      \ OPEC+ output hikes) and a price floor anchored by persistent geopolitical\
+      \ tensions in the Middle East and limited spare capacity. \n\nScenarios:\n1.\
+      \ 'Surplus Reasserts' (Prob: 0.55, Horizon 21 price ~$61.00): OPEC+ supply increases\
+      \ materialize, non-OPEC+ production continues record output, and demand remains\
+      \ muted, leading to inventory builds.\n2. 'Geopolitical Escalation' (Prob: 0.30,\
+      \ Horizon 21 price ~$70.00): A sharp, unforeseen supply disruption in the Persian\
+      \ Gulf overrides structural bearishness, causing a price spike.\n3. 'Stable\
+      \ Range' (Prob: 0.15, Horizon 21 price ~$65.00): The market remains firmly in\
+      \ its current range as investors wait for stronger data to confirm either the\
+      \ surplus or a sustained supply-demand tightening.\n\nThe final quantile grid\
+      \ reflects this uncertainty, with wide 80% intervals ($8-$10 spread) to accommodate\
+      \ both the structural surplus and the risk of a sharp geopolitical price spike."
+    horizon_rationale: Short-term stabilization near current levels. The market remains
+      range-bound between $61.50 and $66.50. Risk of volatility from Middle East geopolitical
+      headlines is high, but without a massive supply shock, the price stays anchored
+      by the structural surplus overhang.
+    langfuse_trace_id: c9006916a0c10bed2203e11c03be3a04
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c9006916a0c10bed2203e11c03be3a04
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:07.462826'
+  as_of: '2025-09-26T00:00:00'
+  forecast_date: '2025-10-10T00:00:00'
+  payload:
+    point_forecast: 64.2
+    quantiles:
+      '0.05': 59.8
+      '0.1': 60.5
+      '0.2': 61.8
+      '0.3': 62.7
+      '0.4': 63.5
+      '0.5': 64.2
+      '0.6': 64.9
+      '0.7': 65.8
+      '0.8': 66.8
+      '0.9': 68.1
+      '0.95': 69.0
+  metadata:
+    rationale: "Market Analysis: The WTI market is currently defined by a tug-of-war\
+      \ between a looming structural supply glut (IEA warnings, rising non-OPEC+ output,\
+      \ OPEC+ output hikes) and a price floor anchored by persistent geopolitical\
+      \ tensions in the Middle East and limited spare capacity. \n\nScenarios:\n1.\
+      \ 'Surplus Reasserts' (Prob: 0.55, Horizon 21 price ~$61.00): OPEC+ supply increases\
+      \ materialize, non-OPEC+ production continues record output, and demand remains\
+      \ muted, leading to inventory builds.\n2. 'Geopolitical Escalation' (Prob: 0.30,\
+      \ Horizon 21 price ~$70.00): A sharp, unforeseen supply disruption in the Persian\
+      \ Gulf overrides structural bearishness, causing a price spike.\n3. 'Stable\
+      \ Range' (Prob: 0.15, Horizon 21 price ~$65.00): The market remains firmly in\
+      \ its current range as investors wait for stronger data to confirm either the\
+      \ surplus or a sustained supply-demand tightening.\n\nThe final quantile grid\
+      \ reflects this uncertainty, with wide 80% intervals ($8-$10 spread) to accommodate\
+      \ both the structural surplus and the risk of a sharp geopolitical price spike."
+    horizon_rationale: Slight downward pressure as the market re-evaluates the OPEC+
+      output increase. US resilient supply and modest demand growth continue to weigh
+      on the price, though the range narrows as extreme tail-event risks are discounted.
+    langfuse_trace_id: c9006916a0c10bed2203e11c03be3a04
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c9006916a0c10bed2203e11c03be3a04
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:07.462826'
+  as_of: '2025-09-26T00:00:00'
+  forecast_date: '2025-10-27T00:00:00'
+  payload:
+    point_forecast: 63.5
+    quantiles:
+      '0.05': 58.0
+      '0.1': 59.2
+      '0.2': 60.5
+      '0.3': 61.8
+      '0.4': 62.7
+      '0.5': 63.5
+      '0.6': 64.4
+      '0.7': 65.5
+      '0.8': 66.9
+      '0.9': 68.5
+      '0.95': 69.8
+  metadata:
+    rationale: "Market Analysis: The WTI market is currently defined by a tug-of-war\
+      \ between a looming structural supply glut (IEA warnings, rising non-OPEC+ output,\
+      \ OPEC+ output hikes) and a price floor anchored by persistent geopolitical\
+      \ tensions in the Middle East and limited spare capacity. \n\nScenarios:\n1.\
+      \ 'Surplus Reasserts' (Prob: 0.55, Horizon 21 price ~$61.00): OPEC+ supply increases\
+      \ materialize, non-OPEC+ production continues record output, and demand remains\
+      \ muted, leading to inventory builds.\n2. 'Geopolitical Escalation' (Prob: 0.30,\
+      \ Horizon 21 price ~$70.00): A sharp, unforeseen supply disruption in the Persian\
+      \ Gulf overrides structural bearishness, causing a price spike.\n3. 'Stable\
+      \ Range' (Prob: 0.15, Horizon 21 price ~$65.00): The market remains firmly in\
+      \ its current range as investors wait for stronger data to confirm either the\
+      \ surplus or a sustained supply-demand tightening.\n\nThe final quantile grid\
+      \ reflects this uncertainty, with wide 80% intervals ($8-$10 spread) to accommodate\
+      \ both the structural surplus and the risk of a sharp geopolitical price spike."
+    horizon_rationale: Increased probability of re-testing lower support levels as
+      the market builds in the October OPEC+ output hike and fears of winter inventory
+      surpluses manifest. The interval remains wide to account for the ongoing tug-of-war
+      between structural oversupply and the tail risk of regional geopolitical conflict.
+    langfuse_trace_id: c9006916a0c10bed2203e11c03be3a04
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c9006916a0c10bed2203e11c03be3a04
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:23.655736'
+  as_of: '2025-10-27T00:00:00'
+  forecast_date: '2025-11-03T00:00:00'
+  payload:
+    point_forecast: 61.0
+    quantiles:
+      '0.05': 57.5
+      '0.1': 58.5
+      '0.2': 59.5
+      '0.3': 60.2
+      '0.4': 60.6
+      '0.5': 61.0
+      '0.6': 61.4
+      '0.7': 62.0
+      '0.8': 63.0
+      '0.9': 64.5
+      '0.95': 66.0
+  metadata:
+    rationale: 'Scenarios: 1. ''Structural Surplus'': 60% probability. Prices drift
+      lower toward $55-$58 as OPEC+ increases output and demand remains sluggish.
+      2. ''Geopolitical Shock'': 25% probability. Tail event: Shipping lane disruption
+      drives short-term spike toward $75+. 3. ''Stabilization'': 15% probability.
+      OPEC+ pauses cuts, price flattens around $60-62. My quantiles span from $54
+      to $70 to accommodate the fundamental bearishness and the volatile geopolitical
+      risk premium.'
+    horizon_rationale: 'Short-term: The market is digesting the return to $61.5 after
+      recent volatility. Given the structural surplus and OPEC+''s strategy, resistance
+      is high near $63. Support is seen near the $57.5 level.'
+    langfuse_trace_id: 3bccf4a634c35f4311536aa43072234a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/3bccf4a634c35f4311536aa43072234a
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:23.655736'
+  as_of: '2025-10-27T00:00:00'
+  forecast_date: '2025-11-10T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 56.0
+      '0.1': 57.5
+      '0.2': 58.5
+      '0.3': 59.5
+      '0.4': 60.0
+      '0.5': 60.5
+      '0.6': 61.2
+      '0.7': 62.0
+      '0.8': 63.5
+      '0.9': 65.5
+      '0.95': 67.5
+  metadata:
+    rationale: 'Scenarios: 1. ''Structural Surplus'': 60% probability. Prices drift
+      lower toward $55-$58 as OPEC+ increases output and demand remains sluggish.
+      2. ''Geopolitical Shock'': 25% probability. Tail event: Shipping lane disruption
+      drives short-term spike toward $75+. 3. ''Stabilization'': 15% probability.
+      OPEC+ pauses cuts, price flattens around $60-62. My quantiles span from $54
+      to $70 to accommodate the fundamental bearishness and the volatile geopolitical
+      risk premium.'
+    horizon_rationale: 'Medium-term: Increased production from OPEC+ continues to
+      weigh on the price. The bearish scenario of persistent supply-side pressure
+      dominates the point forecast, while the wide upper-tail reflects the ongoing
+      geopolitical risk premium (shipping/Middle East).'
+    langfuse_trace_id: 3bccf4a634c35f4311536aa43072234a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/3bccf4a634c35f4311536aa43072234a
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:23.655736'
+  as_of: '2025-10-27T00:00:00'
+  forecast_date: '2025-11-25T00:00:00'
+  payload:
+    point_forecast: 59.5
+    quantiles:
+      '0.05': 54.0
+      '0.1': 56.0
+      '0.2': 57.5
+      '0.3': 58.5
+      '0.4': 59.0
+      '0.5': 59.5
+      '0.6': 60.5
+      '0.7': 62.0
+      '0.8': 64.0
+      '0.9': 67.0
+      '0.95': 70.0
+  metadata:
+    rationale: 'Scenarios: 1. ''Structural Surplus'': 60% probability. Prices drift
+      lower toward $55-$58 as OPEC+ increases output and demand remains sluggish.
+      2. ''Geopolitical Shock'': 25% probability. Tail event: Shipping lane disruption
+      drives short-term spike toward $75+. 3. ''Stabilization'': 15% probability.
+      OPEC+ pauses cuts, price flattens around $60-62. My quantiles span from $54
+      to $70 to accommodate the fundamental bearishness and the volatile geopolitical
+      risk premium.'
+    horizon_rationale: 'Longer-term (approx 1 month): The fundamental trajectory remains
+      bearish as the market enters a period of confirmed surplus. Geopolitical tail
+      risk is wider, accounting for potential escalations that would disrupt supply,
+      while the lower tail accounts for potential deeper, price-insensitive market-share
+      competition by OPEC+.'
+    langfuse_trace_id: 3bccf4a634c35f4311536aa43072234a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/3bccf4a634c35f4311536aa43072234a
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:38.674731'
+  as_of: '2025-11-25T00:00:00'
+  forecast_date: '2025-12-02T00:00:00'
+  payload:
+    point_forecast: 58.5
+    quantiles:
+      '0.05': 56.5
+      '0.1': 57.0
+      '0.2': 57.5
+      '0.3': 57.9
+      '0.4': 58.2
+      '0.5': 58.5
+      '0.6': 58.8
+      '0.7': 59.2
+      '0.8': 59.8
+      '0.9': 60.5
+      '0.95': 61.2
+  metadata:
+    rationale: Market outlook remains dominated by a structural supply surplus. OPEC+
+      is maintaining production discipline, but U.S. output remains at record highs.
+      Geopolitical risks are present but secondary to fundamentals. The forecast utilizes
+      a wide 80% interval (0.1/0.9 quantiles) to account for volatility inherent in
+      the 'controlled downdraft' and the potential for a tail-case geopolitical event
+      in the Persian Gulf/shipping lanes.
+    horizon_rationale: Short-term pressure remains due to the structural surplus,
+      with markets consolidating around the $58-$59 range. OPEC+ and SPR replenishment
+      news are priced in, limiting immediate upside.
+    langfuse_trace_id: ca9b98af8d523e97ecd4eaed793cff47
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ca9b98af8d523e97ecd4eaed793cff47
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:38.674731'
+  as_of: '2025-11-25T00:00:00'
+  forecast_date: '2025-12-09T00:00:00'
+  payload:
+    point_forecast: 58.0
+    quantiles:
+      '0.05': 55.5
+      '0.1': 56.0
+      '0.2': 56.8
+      '0.3': 57.3
+      '0.4': 57.7
+      '0.5': 58.0
+      '0.6': 58.4
+      '0.7': 59.0
+      '0.8': 59.9
+      '0.9': 61.0
+      '0.95': 62.0
+  metadata:
+    rationale: Market outlook remains dominated by a structural supply surplus. OPEC+
+      is maintaining production discipline, but U.S. output remains at record highs.
+      Geopolitical risks are present but secondary to fundamentals. The forecast utilizes
+      a wide 80% interval (0.1/0.9 quantiles) to account for volatility inherent in
+      the 'controlled downdraft' and the potential for a tail-case geopolitical event
+      in the Persian Gulf/shipping lanes.
+    horizon_rationale: Over 10 days, the persistent bearish fundamentals (strong US
+      output, sluggish demand) likely edge prices slightly lower. Wide intervals account
+      for potential geopolitical headline risk in the Middle East.
+    langfuse_trace_id: ca9b98af8d523e97ecd4eaed793cff47
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ca9b98af8d523e97ecd4eaed793cff47
+- predictor_id: agent_predictor_wti_analyst_news_contrarian_scenario_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-07-22T15:25:38.674731'
+  as_of: '2025-11-25T00:00:00'
+  forecast_date: '2025-12-24T00:00:00'
+  payload:
+    point_forecast: 57.5
+    quantiles:
+      '0.05': 53.0
+      '0.1': 54.5
+      '0.2': 55.5
+      '0.3': 56.3
+      '0.4': 56.9
+      '0.5': 57.5
+      '0.6': 58.2
+      '0.7': 59.5
+      '0.8': 61.0
+      '0.9': 63.0
+      '0.95': 65.0
+  metadata:
+    rationale: Market outlook remains dominated by a structural supply surplus. OPEC+
+      is maintaining production discipline, but U.S. output remains at record highs.
+      Geopolitical risks are present but secondary to fundamentals. The forecast utilizes
+      a wide 80% interval (0.1/0.9 quantiles) to account for volatility inherent in
+      the 'controlled downdraft' and the potential for a tail-case geopolitical event
+      in the Persian Gulf/shipping lanes.
+    horizon_rationale: 'By horizon 21, the surplus regime may exert further downward
+      pressure unless offset by a tail event. Scenarios: ''Bearish Consolidation''
+      (prob 0.6, price ~$57), ''Supply Shock/Geopolitical Escalation'' (prob 0.1,
+      price >$65, tail case), ''OPEC+ Surprise Cut'' (prob 0.3, price ~$61).'
+    langfuse_trace_id: ca9b98af8d523e97ecd4eaed793cff47
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ca9b98af8d523e97ecd4eaed793cff47
+scores:
+- 2.91504101713827
+- 1.0446283766060822
+- 0.4778512119261689
+- 0.8161161186281313
+- 3.199423041225464
+- 0.5158677408517891
+- 0.7357014805817408
+- 1.1723137721542483
+- 9.788677991126196
+- 4.161322008873805
+- 8.497602390257779
+- 1.3771903739487832
+- 2.798596109437549
+- 3.425124258246304
+- 3.5643810808166005
+- 10.214624742239963
+- 4.5119809741816255
+- 1.5384305843637012
+- 1.4026443229233918
+- 2.4214876033057844
+- 4.140910616787997
+- 5.580576986517787
+- 3.5809927065510383
+- 0.4662810333504159
+- 0.6547934855311364
+- 2.511075156976369
+- 2.800990667421955
+- 3.7454530195756384
+- 1.4739663179255715
+- 0.5318181124600491
+- 0.7675205640556396
+- 1.419421140812645
+- 0.35322308500936167
+- 0.47892561983471044
+- 0.9235533028594715
+metric: crps
+mean_score: 2.685957343271519
+ran_at: '2026-07-22T15:25:38.944887'
+skipped_origins: 0
