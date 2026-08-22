@@ -52,11 +52,11 @@ class CfmV52Settings(BaseModel):
     search_verifier_model: str = "gemini-3.5-flash"
     search_verifier_max_attempts: int = Field(default=3, ge=1, le=5)
     search_verifier_confidence_threshold: int = Field(default=8, ge=1, le=10)
-    structured_output_retry_model: str = "gemini-3.1-flash-lite"  # 2026.08.19: changed from 3.5-flash to minimize token usage in backtest comparison
+    structured_output_retry_model: str = "gemini-3.1-flash-lite-preview"  # 2026.08.19: changed from 3.5-flash to minimize token usage in backtest comparison
     structured_output_retry_timeout_seconds: float = Field(default=60.0, gt=0.0, le=300.0)
     audit_enabled: bool = False
     code_execution_enabled: bool = True
-    claim_support_verifier_model: str = "gemini-3.1-flash-lite"  # 2026.08.19: changed from 3.5-flash to minimize token usage in backtest comparison
+    claim_support_verifier_model: str = "gemini-3.1-flash-lite-preview"  # 2026.08.19: changed from 3.5-flash to minimize token usage in backtest comparison
     claim_support_verifier_timeout_seconds: float = Field(default=60.0, gt=0.0, le=300.0)
     policy_mode: Literal["constrained_actions", "ensemble_locked"] = "constrained_actions"
 
