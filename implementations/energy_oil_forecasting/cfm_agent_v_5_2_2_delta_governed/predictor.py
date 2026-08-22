@@ -22,8 +22,6 @@ from aieng.forecasting.evaluation.task import ForecastingTask
 from aieng.forecasting.methods.agentic import AgentConfig, AgentPredictor
 from energy_oil_forecasting.cfm_agent_v_5_2.config import CfmV52Settings
 from energy_oil_forecasting.cfm_agent_v_5_2.predictor import CfmV51Predictor
-from energy_oil_forecasting.cfm_agent_v_5_2.prompts import CfmV51PromptBuilder
-from energy_oil_forecasting.cfm_agent_v_5_2.response_control import StructuredAssessmentController
 from energy_oil_forecasting.cfm_agent_v_5_2.tools import AuditedCodeExecutionTool, ResearchPipelineTool
 from energy_oil_forecasting.cfm_agent_v_5_2.tools.market_data_arima_only import AuthoritativeSuiteToolArimaOnly
 from energy_oil_forecasting.cfm_agent_v_5_2_2_delta_governed.forecast_engine import PythonForecastEngineDeltaGoverned
@@ -31,6 +29,10 @@ from energy_oil_forecasting.cfm_agent_v_5_2_2_delta_governed.outputs import CfmC
 from energy_oil_forecasting.cfm_agent_v_5_2_2_delta_governed.policy import (
     EnsembleLockedPolicyDeltaGoverned,
     EvidencePolicyDeltaGoverned,
+)
+from energy_oil_forecasting.cfm_agent_v_5_2_2_delta_governed.prompts import CfmDeltaGovernedPromptBuilder
+from energy_oil_forecasting.cfm_agent_v_5_2_2_delta_governed.response_control import (
+    StructuredAssessmentControllerDeltaGoverned,
 )
 
 
@@ -55,10 +57,10 @@ class CfmDeltaGovernedPredictor(CfmV51Predictor):
         self.engine = PythonForecastEngineDeltaGoverned(settings)
         self.inner = AgentPredictor(
             agent_config=config,
-            prompt_builder=CfmV51PromptBuilder(),
+            prompt_builder=CfmDeltaGovernedPromptBuilder(),
             output_schema=CfmContextAssessmentOutputDeltaGoverned,
         )
-        self.assessment_controller = StructuredAssessmentController(self.inner, settings)
+        self.assessment_controller = StructuredAssessmentControllerDeltaGoverned(self.inner, settings)
 
     def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
         self.engine.prepare(context, task)
