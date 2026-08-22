@@ -43,17 +43,18 @@ class CfmContextAssessmentOutputDeltaGoverned(CfmContextAssessmentOutput):
                 "incremental_novelty": "indeterminate",
                 "material_evidence_conflict": False,
                 "confidence": "<0..1>",
+                "center_action_guide": (
+                    "center_action below must be a bare JSON INTEGER in {-2,-1,0,1,2} — never a quoted "
+                    "string, never a price. A discrete rank on how bullish/bearish the evidence is. Each "
+                    f"rank maps to a target percentile of the REAL historical h-day price-move distribution "
+                    f"({mapping_str}). 0 = no directional view beyond the median historical move. Negative = "
+                    "bearish, positive = bullish. Do not compute the dollar amount yourself — Python converts "
+                    "your rank into a number using actual price history, never a number you invent."
+                ),
                 "horizon_actions": [
                     {
                         "horizon": "<requested>",
-                        "center_action": (
-                            "<integer in {-2,-1,0,1,2} — a discrete rank on how bullish/bearish the "
-                            "evidence is, NOT a price and NOT a percentage. Each rank maps to a target "
-                            f"percentile of the REAL historical h-day price-move distribution ({mapping_str}). "
-                            "0 = no directional view beyond the median historical move. Negative = bearish, "
-                            "positive = bullish. Do not compute the dollar amount yourself — Python converts "
-                            "your rank into a number using actual price history, never a number you invent.>"
-                        ),
+                        "center_action": 0,
                         "uncertainty_action": (
                             "<unchanged|small_wider|moderately_wider|substantially_wider"
                             "|small_narrower|moderately_narrower|substantially_narrower>"
