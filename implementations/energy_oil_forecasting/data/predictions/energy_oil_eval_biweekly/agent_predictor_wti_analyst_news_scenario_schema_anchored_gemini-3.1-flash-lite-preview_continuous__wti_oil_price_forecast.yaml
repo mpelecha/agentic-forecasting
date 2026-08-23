@@ -1,0 +1,2482 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2026-02-02T00:00:00'
+  end: '2026-06-01T00:00:00'
+  stride: 10
+  origin_dates: null
+  warmup: 250
+  description: Prospective/out-of-sample evaluation period in 2026 for daily WTI crude
+    oil. Evaluates selected contender models on 18 weekly origins from the early 2026
+    geopolitical price shock through its aftermath, to measure adaptive real-time
+    forecasting performance.
+predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:02:25.642151'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.52724809869456
+    quantiles:
+      '0.05': 57.02040955777211
+      '0.1': 60.39312838830692
+      '0.2': 61.83739907376244
+      '0.3': 63.20609688403159
+      '0.4': 64.28870804007731
+      '0.5': 65.52724809869456
+      '0.6': 66.79088320443739
+      '0.7': 67.84846533249674
+      '0.8': 69.26587503520369
+      '0.9': 71.42018274478684
+      '0.95': 81.27406512558414
+  metadata:
+    factors:
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Supply/Demand Balance
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Winter Storm Fern Supply Disruptions
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Geopolitical De-escalation
+      probability: 0.4
+      price_low: 55.0
+      price_high: 60.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk Premium: bearish
+        Global Supply/Demand Balance: bearish
+        Winter Storm Fern Supply Disruptions: bearish
+    - name: Persistent Supply Tightness
+      probability: 0.45
+      price_low: 63.0
+      price_high: 70.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk Premium: bullish
+        Global Supply/Demand Balance: neutral
+        Winter Storm Fern Supply Disruptions: bullish
+    - name: Major Middle East Conflict Escalation
+      probability: 0.15
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk Premium: bullish
+        Global Supply/Demand Balance: bullish
+        Winter Storm Fern Supply Disruptions: bullish
+    rationale: The market is currently caught between short-term supply constraints
+      (weather and geopolitical risk) and a longer-term bearish fundamental outlook.
+      The forecast reflects a gradual normalization of supply as weather impacts fade,
+      while maintaining a significant risk premium due to geopolitical instability.
+    horizon_rationale: Short-term price action is dominated by the risk premium from
+      Middle East tensions and lingering supply tightness following Winter Storm Fern.
+      The 5-day horizon reflects a consolidation phase as the market assesses the
+      persistence of these supply bottlenecks.
+    langfuse_trace_id: bc63ed8fb771f6c9b26502772a1e7e2f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/bc63ed8fb771f6c9b26502772a1e7e2f
+    arima_anchor:
+      point_forecast: 65.41410579675521
+      quantiles:
+        '0.05': 58.83258507173436
+        '0.1': 60.27998608636757
+        '0.2': 61.72425677182309
+        '0.3': 63.09295458209224
+        '0.4': 64.17556573813796
+        '0.5': 65.41410579675521
+        '0.6': 66.67774090249804
+        '0.7': 67.7353230305574
+        '0.8': 69.15273273326434
+        '0.9': 71.3070404428475
+        '0.95': 72.8456791100705
+    scenario_probability_weighted_price_max_horizon: 65.3
+    scenario_implied_target_percentile: 51.55415194539472
+    scenario_center_shift: 0.11314230193934616
+    historical_delta_percentiles:
+      '10': -3.9799976348876953
+      '25': -1.8199996948242188
+      '50': 0.26000022888183594
+      '75': 2.080000877380371
+      '90': 3.80999755859375
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:02:25.642151'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 65.07900224570788
+    quantiles:
+      '0.05': 49.91552431264302
+      '0.1': 54.32841994048515
+      '0.2': 57.51147147086909
+      '0.3': 60.952311613952524
+      '0.4': 62.92467713502654
+      '0.5': 65.07900224570788
+      '0.6': 67.17724693838794
+      '0.7': 70.15907194918753
+      '0.8': 73.2876939361117
+      '0.9': 77.03893715483304
+      '0.95': 90.0
+  metadata:
+    factors:
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Supply/Demand Balance
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Winter Storm Fern Supply Disruptions
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Geopolitical De-escalation
+      probability: 0.4
+      price_low: 55.0
+      price_high: 60.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk Premium: bearish
+        Global Supply/Demand Balance: bearish
+        Winter Storm Fern Supply Disruptions: bearish
+    - name: Persistent Supply Tightness
+      probability: 0.45
+      price_low: 63.0
+      price_high: 70.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk Premium: bullish
+        Global Supply/Demand Balance: neutral
+        Winter Storm Fern Supply Disruptions: bullish
+    - name: Major Middle East Conflict Escalation
+      probability: 0.15
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk Premium: bullish
+        Global Supply/Demand Balance: bullish
+        Winter Storm Fern Supply Disruptions: bullish
+    rationale: The market is currently caught between short-term supply constraints
+      (weather and geopolitical risk) and a longer-term bearish fundamental outlook.
+      The forecast reflects a gradual normalization of supply as weather impacts fade,
+      while maintaining a significant risk premium due to geopolitical instability.
+    horizon_rationale: By the 21-day horizon, the market may begin to shift focus
+      back toward the broader fundamental outlook of potential supply surpluses, assuming
+      no major escalation in geopolitical conflicts.
+    langfuse_trace_id: bc63ed8fb771f6c9b26502772a1e7e2f
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/bc63ed8fb771f6c9b26502772a1e7e2f
+    arima_anchor:
+      point_forecast: 64.83531109735472
+      quantiles:
+        '0.05': 49.67183316428985
+        '0.1': 54.084728792131976
+        '0.2': 57.26778032251592
+        '0.3': 60.70862046559935
+        '0.4': 62.68098598667337
+        '0.5': 64.83531109735472
+        '0.6': 66.93355579003477
+        '0.7': 69.91538080083437
+        '0.8': 73.04400278775853
+        '0.9': 76.79524600647987
+        '0.95': 80.54603938331952
+    scenario_probability_weighted_price_max_horizon: 65.3
+    scenario_implied_target_percentile: 51.55415194539472
+    scenario_center_shift: 0.24369114835317118
+    historical_delta_percentiles:
+      '10': -8.3800048828125
+      '25': -4.0
+      '50': 0.6399993896484375
+      '75': 4.560001373291016
+      '90': 8.119998931884766
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:02:36.754584'
+  as_of: '2026-02-16T00:00:00'
+  forecast_date: '2026-02-23T00:00:00'
+  payload:
+    point_forecast: 63.13289325775534
+    quantiles:
+      '0.05': 55.65565823102494
+      '0.1': 57.63365600776341
+      '0.2': 59.54438778422237
+      '0.3': 60.89249134523034
+      '0.4': 62.07747684351519
+      '0.5': 63.13289325775534
+      '0.6': 64.30133447458931
+      '0.7': 65.34720860350102
+      '0.8': 66.85072227622592
+      '0.9': 68.67058254914147
+      '0.95': 73.88882700524557
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk (Middle East)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: U.S. Crude Inventories
+      category: macro
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Geopolitical De-escalation
+      probability: 0.45
+      price_low: 55.0
+      price_high: 61.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        Geopolitical Risk (Middle East): bearish
+        U.S. Crude Inventories: bearish
+    - name: Supply Disruption Shock
+      probability: 0.2
+      price_low: 68.0
+      price_high: 78.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        Geopolitical Risk (Middle East): bullish
+        U.S. Crude Inventories: bullish
+    - name: Status Quo Consolidation
+      probability: 0.35
+      price_low: 60.0
+      price_high: 65.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        Geopolitical Risk (Middle East): neutral
+        U.S. Crude Inventories: neutral
+    rationale: The market is currently caught between a geopolitical risk premium
+      and bearish fundamental data. My forecast reflects a slight downward bias as
+      the market potentially prices out the risk premium if no immediate conflict
+      occurs, while maintaining wide tails to account for the high-impact, low-probability
+      event of a supply disruption.
+    horizon_rationale: Short-term consolidation expected as the market balances geopolitical
+      risk premiums against recent bearish inventory and demand data.
+    langfuse_trace_id: 75635c5717766759f273dcb86301e28e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/75635c5717766759f273dcb86301e28e
+    arima_anchor:
+      point_forecast: 63.19070415114349
+      quantiles:
+        '0.05': 56.338268422396425
+        '0.1': 57.691466901151564
+        '0.2': 59.602198677610524
+        '0.3': 60.95030223861849
+        '0.4': 62.135287736903344
+        '0.5': 63.19070415114349
+        '0.6': 64.35914536797746
+        '0.7': 65.40501949688917
+        '0.8': 66.90853316961407
+        '0.9': 68.72839344252962
+        '0.95': 70.02895963354852
+    scenario_probability_weighted_price_max_horizon: 62.575
+    scenario_implied_target_percentile: 49.30515750590571
+    scenario_center_shift: -0.057810893388153595
+    historical_delta_percentiles:
+      '10': -3.9749984741210938
+      '25': -1.8199996948242188
+      '50': 0.26000022888183594
+      '75': 2.079998016357422
+      '90': 3.80999755859375
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:02:36.754584'
+  as_of: '2026-02-16T00:00:00'
+  forecast_date: '2026-03-02T00:00:00'
+  payload:
+    point_forecast: 62.378012012972604
+    quantiles:
+      '0.05': 52.84540424892904
+      '0.1': 54.72749056028507
+      '0.2': 56.87536828331559
+      '0.3': 59.00883829877767
+      '0.4': 60.60618645570665
+      '0.5': 62.378012012972604
+      '0.6': 63.993156407529995
+      '0.7': 65.75228528335371
+      '0.8': 67.65274490399953
+      '0.9': 70.19913976362801
+      '0.95': 76.55426640053504
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk (Middle East)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: U.S. Crude Inventories
+      category: macro
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Geopolitical De-escalation
+      probability: 0.45
+      price_low: 55.0
+      price_high: 61.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        Geopolitical Risk (Middle East): bearish
+        U.S. Crude Inventories: bearish
+    - name: Supply Disruption Shock
+      probability: 0.2
+      price_low: 68.0
+      price_high: 78.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        Geopolitical Risk (Middle East): bullish
+        U.S. Crude Inventories: bullish
+    - name: Status Quo Consolidation
+      probability: 0.35
+      price_low: 60.0
+      price_high: 65.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        Geopolitical Risk (Middle East): neutral
+        U.S. Crude Inventories: neutral
+    rationale: The market is currently caught between a geopolitical risk premium
+      and bearish fundamental data. My forecast reflects a slight downward bias as
+      the market potentially prices out the risk premium if no immediate conflict
+      occurs, while maintaining wide tails to account for the high-impact, low-probability
+      event of a supply disruption.
+    horizon_rationale: Increased uncertainty over the 10-day horizon as the market
+      awaits further clarity on U.S.-Iran diplomatic developments and subsequent inventory
+      reports.
+    langfuse_trace_id: 75635c5717766759f273dcb86301e28e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/75635c5717766759f273dcb86301e28e
+    arima_anchor:
+      point_forecast: 62.46431143801617
+      quantiles:
+        '0.05': 52.931703673972606
+        '0.1': 54.81378998532863
+        '0.2': 56.96166770835915
+        '0.3': 59.09513772382123
+        '0.4': 60.69248588075021
+        '0.5': 62.46431143801617
+        '0.6': 64.07945583257356
+        '0.7': 65.83858470839728
+        '0.8': 67.7390443290431
+        '0.9': 70.28543918867157
+        '0.95': 73.42165616565853
+    scenario_probability_weighted_price_max_horizon: 62.575
+    scenario_implied_target_percentile: 49.30515750590571
+    scenario_center_shift: -0.08629942504356469
+    historical_delta_percentiles:
+      '10': -5.760002136230469
+      '25': -2.634998321533203
+      '50': 0.470001220703125
+      '75': 3.0
+      '90': 5.470001220703125
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:02:36.754584'
+  as_of: '2026-02-16T00:00:00'
+  forecast_date: '2026-03-17T00:00:00'
+  payload:
+    point_forecast: 62.644668306682505
+    quantiles:
+      '0.05': 47.83341055046573
+      '0.1': 51.178063769943144
+      '0.2': 55.19012636784334
+      '0.3': 58.05934104437497
+      '0.4': 60.37718695736706
+      '0.5': 62.644668306682505
+      '0.6': 64.92731867536482
+      '0.7': 67.2885765116016
+      '0.8': 70.12093935484495
+      '0.9': 74.18883299952996
+      '0.95': 78.0
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk (Middle East)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: U.S. Crude Inventories
+      category: macro
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Geopolitical De-escalation
+      probability: 0.45
+      price_low: 55.0
+      price_high: 61.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        Geopolitical Risk (Middle East): bearish
+        U.S. Crude Inventories: bearish
+    - name: Supply Disruption Shock
+      probability: 0.2
+      price_low: 68.0
+      price_high: 78.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        Geopolitical Risk (Middle East): bullish
+        U.S. Crude Inventories: bullish
+    - name: Status Quo Consolidation
+      probability: 0.35
+      price_low: 60.0
+      price_high: 65.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        Geopolitical Risk (Middle East): neutral
+        U.S. Crude Inventories: neutral
+    rationale: The market is currently caught between a geopolitical risk premium
+      and bearish fundamental data. My forecast reflects a slight downward bias as
+      the market potentially prices out the risk premium if no immediate conflict
+      occurs, while maintaining wide tails to account for the high-impact, low-probability
+      event of a supply disruption.
+    horizon_rationale: Over the 21-day horizon, fundamental pressures (IEA demand
+      outlook) may weigh more heavily if geopolitical tensions do not escalate into
+      physical supply disruptions.
+    langfuse_trace_id: 75635c5717766759f273dcb86301e28e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/75635c5717766759f273dcb86301e28e
+    arima_anchor:
+      point_forecast: 62.774187102377525
+      quantiles:
+        '0.05': 47.96292934616075
+        '0.1': 51.307582565638164
+        '0.2': 55.31964516353836
+        '0.3': 58.18885984006999
+        '0.4': 60.50670575306208
+        '0.5': 62.774187102377525
+        '0.6': 65.05683747105984
+        '0.7': 67.41809530729662
+        '0.8': 70.25045815053997
+        '0.9': 74.31835179522498
+        '0.95': 77.06999221715067
+    scenario_probability_weighted_price_max_horizon: 62.575
+    scenario_implied_target_percentile: 49.30515750590571
+    scenario_center_shift: -0.12951879569501923
+    historical_delta_percentiles:
+      '10': -8.353002548217773
+      '25': -3.9900054931640625
+      '50': 0.6700000762939453
+      '75': 4.569999694824219
+      '90': 8.111000442504887
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:03:26.938795'
+  as_of: '2026-03-02T00:00:00'
+  forecast_date: '2026-03-09T00:00:00'
+  payload:
+    point_forecast: 70.36136267585458
+    quantiles:
+      '0.05': 61.79907124851888
+      '0.1': 65.1151201909702
+      '0.2': 66.70837113633625
+      '0.3': 68.11304432626416
+      '0.4': 69.22772229585097
+      '0.5': 70.36136267585458
+      '0.6': 71.30225925406451
+      '0.7': 72.55923346742561
+      '0.8': 74.04038709876207
+      '0.9': 75.88913954155844
+      '0.95': 98.43250634004302
+  metadata:
+    factors:
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Supply/Demand Balance
+      category: macro
+      tier: core
+      impact_score: null
+    - name: US Inventory Levels
+      category: macro
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Prolonged Conflict
+      probability: 0.4
+      price_low: 75.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Supply/Demand Balance: bullish
+        US Inventory Levels: bullish
+    - name: Diplomatic De-escalation
+      probability: 0.45
+      price_low: 60.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bearish
+        Global Supply/Demand Balance: bearish
+        US Inventory Levels: neutral
+    - name: Total Regional War
+      probability: 0.15
+      price_low: 90.0
+      price_high: 120.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Supply/Demand Balance: bullish
+        US Inventory Levels: bullish
+    rationale: 'The market is currently dominated by the sudden closure of the Strait
+      of Hormuz. My forecast reflects a significant upward shift from the statistical
+      baseline, accounting for the high geopolitical risk premium. The scenarios capture
+      the binary nature of the current crisis: either a rapid de-escalation or a sustained/worsening
+      conflict.'
+    horizon_rationale: The market is reacting to the closure of the Strait of Hormuz.
+      Short-term volatility is extreme, with a significant geopolitical risk premium
+      being priced in immediately.
+    langfuse_trace_id: ff5b93d04aaa512a446431a2995bf670
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ff5b93d04aaa512a446431a2995bf670
+    arima_anchor:
+      point_forecast: 66.81536658210457
+      quantiles:
+        '0.05': 59.967472076682675
+        '0.1': 61.5691240972202
+        '0.2': 63.162375042586255
+        '0.3': 64.56704823251415
+        '0.4': 65.68172620210096
+        '0.5': 66.81536658210457
+        '0.6': 67.7562631603145
+        '0.7': 69.01323737367561
+        '0.8': 70.49439100501206
+        '0.9': 72.34314344780843
+        '0.95': 74.33410312263615
+    scenario_probability_weighted_price_max_horizon: 79.45
+    scenario_implied_target_percentile: 90.0
+    scenario_center_shift: 3.5459960937500035
+    historical_delta_percentiles:
+      '10': -3.970001220703125
+      '25': -1.8199996948242188
+      '50': 0.26000213623046875
+      '75': 2.079998016357422
+      '90': 3.805998229980472
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:03:26.938795'
+  as_of: '2026-03-02T00:00:00'
+  forecast_date: '2026-03-16T00:00:00'
+  payload:
+    point_forecast: 72.3657456713019
+    quantiles:
+      '0.05': 60.86849988444475
+      '0.1': 64.74314476332384
+      '0.2': 67.06558262617764
+      '0.3': 68.97908119416554
+      '0.4': 70.59809847127852
+      '0.5': 72.3657456713019
+      '0.6': 73.65769035128513
+      '0.7': 75.01204781172191
+      '0.8': 77.0029552056198
+      '0.9': 79.37518362232997
+      '0.95': 108.03831374725291
+  metadata:
+    factors:
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Supply/Demand Balance
+      category: macro
+      tier: core
+      impact_score: null
+    - name: US Inventory Levels
+      category: macro
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Prolonged Conflict
+      probability: 0.4
+      price_low: 75.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Supply/Demand Balance: bullish
+        US Inventory Levels: bullish
+    - name: Diplomatic De-escalation
+      probability: 0.45
+      price_low: 60.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bearish
+        Global Supply/Demand Balance: bearish
+        US Inventory Levels: neutral
+    - name: Total Regional War
+      probability: 0.15
+      price_low: 90.0
+      price_high: 120.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Supply/Demand Balance: bullish
+        US Inventory Levels: bullish
+    rationale: 'The market is currently dominated by the sudden closure of the Strait
+      of Hormuz. My forecast reflects a significant upward shift from the statistical
+      baseline, accounting for the high geopolitical risk premium. The scenarios capture
+      the binary nature of the current crisis: either a rapid de-escalation or a sustained/worsening
+      conflict.'
+    horizon_rationale: As the duration of the supply disruption becomes clearer, the
+      market will either consolidate at higher levels or begin to price in potential
+      diplomatic interventions or alternative supply routes.
+    langfuse_trace_id: ff5b93d04aaa512a446431a2995bf670
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ff5b93d04aaa512a446431a2995bf670
+    arima_anchor:
+      point_forecast: 67.37474759390932
+      quantiles:
+        '0.05': 57.81120706832112
+        '0.1': 59.75214668593126
+        '0.2': 62.07458454878506
+        '0.3': 63.98808311677296
+        '0.4': 65.60710039388594
+        '0.5': 67.37474759390932
+        '0.6': 68.66669227389255
+        '0.7': 70.02104973432934
+        '0.8': 72.01195712822722
+        '0.9': 74.3841855449374
+        '0.95': 76.41475525751996
+    scenario_probability_weighted_price_max_horizon: 79.45
+    scenario_implied_target_percentile: 90.0
+    scenario_center_shift: 4.9909980773925815
+    historical_delta_percentiles:
+      '10': -5.760002136230469
+      '25': -2.619999885559082
+      '50': 0.470001220703125
+      '75': 3.0
+      '90': 5.4609992980957065
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:03:26.938795'
+  as_of: '2026-03-02T00:00:00'
+  forecast_date: '2026-03-31T00:00:00'
+  payload:
+    point_forecast: 73.9288869189998
+    quantiles:
+      '0.05': 58.00896680907951
+      '0.1': 62.279169442713204
+      '0.2': 66.46815382807485
+      '0.3': 69.71438469458258
+      '0.4': 71.78980563040922
+      '0.5': 73.9288869189998
+      '0.6': 76.58531347131807
+      '0.7': 78.9954706525217
+      '0.8': 81.82077668260276
+      '0.9': 85.30307451181663
+      '0.95': 120.0
+  metadata:
+    factors:
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Supply/Demand Balance
+      category: macro
+      tier: core
+      impact_score: null
+    - name: US Inventory Levels
+      category: macro
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Prolonged Conflict
+      probability: 0.4
+      price_low: 75.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Supply/Demand Balance: bullish
+        US Inventory Levels: bullish
+    - name: Diplomatic De-escalation
+      probability: 0.45
+      price_low: 60.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bearish
+        Global Supply/Demand Balance: bearish
+        US Inventory Levels: neutral
+    - name: Total Regional War
+      probability: 0.15
+      price_low: 90.0
+      price_high: 120.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Supply/Demand Balance: bullish
+        US Inventory Levels: bullish
+    rationale: 'The market is currently dominated by the sudden closure of the Strait
+      of Hormuz. My forecast reflects a significant upward shift from the statistical
+      baseline, accounting for the high geopolitical risk premium. The scenarios capture
+      the binary nature of the current crisis: either a rapid de-escalation or a sustained/worsening
+      conflict.'
+    horizon_rationale: By the 21-day horizon, the market will likely have reached
+      a new equilibrium. The wide range reflects the high uncertainty regarding the
+      duration of the Strait of Hormuz closure.
+    langfuse_trace_id: ff5b93d04aaa512a446431a2995bf670
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ff5b93d04aaa512a446431a2995bf670
+    arima_anchor:
+      point_forecast: 66.52288563726152
+      quantiles:
+        '0.05': 50.60296552734123
+        '0.1': 54.87316816097493
+        '0.2': 59.06215254633658
+        '0.3': 62.3083834128443
+        '0.4': 64.38380434867095
+        '0.5': 66.52288563726152
+        '0.6': 69.1793121895798
+        '0.7': 71.58946937078343
+        '0.8': 74.41477540086449
+        '0.9': 77.89707323007836
+        '0.95': 80.3496936171119
+    scenario_probability_weighted_price_max_horizon: 79.45
+    scenario_implied_target_percentile: 90.0
+    scenario_center_shift: 7.406001281738275
+    historical_delta_percentiles:
+      '10': -8.349999237060548
+      '25': -3.9899978637695312
+      '50': 0.6800003051757812
+      '75': 4.5800018310546875
+      '90': 8.086001586914056
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:00.259692'
+  as_of: '2026-03-16T00:00:00'
+  forecast_date: '2026-03-23T00:00:00'
+  payload:
+    point_forecast: 102.3818538288185
+    quantiles:
+      '0.05': 90.26371784125304
+      '0.1': 96.86386533425717
+      '0.2': 98.65156061278978
+      '0.3': 100.0699938172443
+      '0.4': 101.19831998984928
+      '0.5': 102.3818538288185
+      '0.6': 103.46909631654377
+      '0.7': 104.60017622590011
+      '0.8': 106.20676884868853
+      '0.9': 107.82274261801533
+      '0.95': 133.99765353254307
+  metadata:
+    factors:
+    - name: Geopolitical Risk (Middle East)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Supply Security
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Escalation and Prolonged Disruption
+      probability: 0.5
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Middle East): bullish
+        Global Supply Security: bullish
+        Strait of Hormuz Disruption: bullish
+    - name: Diplomatic De-escalation
+      probability: 0.3
+      price_low: 85.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Middle East): bearish
+        Global Supply Security: bearish
+        Strait of Hormuz Disruption: bearish
+    - name: Total Regional Conflict (Tail Case)
+      probability: 0.2
+      price_low: 130.0
+      price_high: 160.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk (Middle East): bullish
+        Global Supply Security: bullish
+        Strait of Hormuz Disruption: bullish
+    rationale: The WTI market is currently dominated by the severe geopolitical shock
+      resulting from the closure of the Strait of Hormuz. The forecast reflects a
+      high-volatility environment where the primary driver is the duration and intensity
+      of the conflict. The scenarios account for the potential for further escalation
+      (the base case) versus a diplomatic resolution (the bearish case) or a catastrophic
+      expansion of the conflict (the tail case).
+    horizon_rationale: The market is in a state of extreme volatility due to the Strait
+      of Hormuz closure. Short-term price action is dominated by the immediate supply
+      shock and the risk of further escalation. The point forecast reflects a premium
+      over the ARIMA anchor to account for the high probability of continued supply
+      disruption in the coming week.
+    langfuse_trace_id: b9885d107d15ab57d28f4cb4185e9204
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b9885d107d15ab57d28f4cb4185e9204
+    arima_anchor:
+      point_forecast: 98.82185627022476
+      quantiles:
+        '0.05': 91.71969820587731
+        '0.1': 93.30386777566342
+        '0.2': 95.09156305419603
+        '0.3': 96.50999625865055
+        '0.4': 97.63832243125553
+        '0.5': 98.82185627022476
+        '0.6': 99.90909875795002
+        '0.7': 101.04017866730636
+        '0.8': 102.64677129009478
+        '0.9': 104.26274505942158
+        '0.95': 105.65912494965309
+    scenario_probability_weighted_price_max_horizon: 114.75
+    scenario_implied_target_percentile: 90.0
+    scenario_center_shift: 3.55999755859375
+    historical_delta_percentiles:
+      '10': -3.970001220703125
+      '25': -1.8100051879882812
+      '50': 0.26000213623046875
+      '75': 2.089996337890625
+      '90': 3.8199996948242188
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:00.259692'
+  as_of: '2026-03-16T00:00:00'
+  forecast_date: '2026-03-30T00:00:00'
+  payload:
+    point_forecast: 103.74570789684593
+    quantiles:
+      '0.05': 87.85297128632229
+      '0.1': 96.17568850228717
+      '0.2': 98.49297277884803
+      '0.3': 100.64153993256633
+      '0.4': 102.1682000130496
+      '0.5': 103.74570789684593
+      '0.6': 105.31528666169797
+      '0.7': 107.02438812310625
+      '0.8': 109.14951504571762
+      '0.9': 111.33424540993637
+      '0.95': 145.52830995806534
+  metadata:
+    factors:
+    - name: Geopolitical Risk (Middle East)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Supply Security
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Escalation and Prolonged Disruption
+      probability: 0.5
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Middle East): bullish
+        Global Supply Security: bullish
+        Strait of Hormuz Disruption: bullish
+    - name: Diplomatic De-escalation
+      probability: 0.3
+      price_low: 85.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Middle East): bearish
+        Global Supply Security: bearish
+        Strait of Hormuz Disruption: bearish
+    - name: Total Regional Conflict (Tail Case)
+      probability: 0.2
+      price_low: 130.0
+      price_high: 160.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk (Middle East): bullish
+        Global Supply Security: bullish
+        Strait of Hormuz Disruption: bullish
+    rationale: The WTI market is currently dominated by the severe geopolitical shock
+      resulting from the closure of the Strait of Hormuz. The forecast reflects a
+      high-volatility environment where the primary driver is the duration and intensity
+      of the conflict. The scenarios account for the potential for further escalation
+      (the base case) versus a diplomatic resolution (the bearish case) or a catastrophic
+      expansion of the conflict (the tail case).
+    horizon_rationale: Over the 10-day horizon, the market will likely test higher
+      levels if no diplomatic resolution or alternative supply routes are established.
+      The uncertainty band widens significantly as the market prices in the potential
+      for a prolonged conflict.
+    langfuse_trace_id: b9885d107d15ab57d28f4cb4185e9204
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b9885d107d15ab57d28f4cb4185e9204
+    arima_anchor:
+      point_forecast: 98.72471104015648
+      quantiles:
+        '0.05': 89.18408303139462
+        '0.1': 91.15469164559772
+        '0.2': 93.47197592215858
+        '0.3': 95.62054307587688
+        '0.4': 97.14720315636015
+        '0.5': 98.72471104015648
+        '0.6': 100.29428980500852
+        '0.7': 102.0033912664168
+        '0.8': 104.12851818902817
+        '0.9': 106.31324855324692
+        '0.95': 108.2862573767304
+    scenario_probability_weighted_price_max_horizon: 114.75
+    scenario_implied_target_percentile: 90.0
+    scenario_center_shift: 5.0209968566894565
+    historical_delta_percentiles:
+      '10': -5.760002136230469
+      '25': -2.6199951171875
+      '50': 0.48000335693359375
+      '75': 3.0100021362304688
+      '90': 5.50100021362305
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:00.259692'
+  as_of: '2026-03-16T00:00:00'
+  forecast_date: '2026-04-14T00:00:00'
+  payload:
+    point_forecast: 106.15725488105969
+    quantiles:
+      '0.05': 85.0
+      '0.1': 94.8889204367219
+      '0.2': 98.20767903338411
+      '0.3': 101.33486203288304
+      '0.4': 103.80842435313073
+      '0.5': 106.15725488105969
+      '0.6': 108.57221306102136
+      '0.7': 110.90674267287832
+      '0.8': 113.60930466462985
+      '0.9': 117.01393903676886
+      '0.95': 160.0
+  metadata:
+    factors:
+    - name: Geopolitical Risk (Middle East)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Supply Security
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Escalation and Prolonged Disruption
+      probability: 0.5
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Middle East): bullish
+        Global Supply Security: bullish
+        Strait of Hormuz Disruption: bullish
+    - name: Diplomatic De-escalation
+      probability: 0.3
+      price_low: 85.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Middle East): bearish
+        Global Supply Security: bearish
+        Strait of Hormuz Disruption: bearish
+    - name: Total Regional Conflict (Tail Case)
+      probability: 0.2
+      price_low: 130.0
+      price_high: 160.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk (Middle East): bullish
+        Global Supply Security: bullish
+        Strait of Hormuz Disruption: bullish
+    rationale: The WTI market is currently dominated by the severe geopolitical shock
+      resulting from the closure of the Strait of Hormuz. The forecast reflects a
+      high-volatility environment where the primary driver is the duration and intensity
+      of the conflict. The scenarios account for the potential for further escalation
+      (the base case) versus a diplomatic resolution (the bearish case) or a catastrophic
+      expansion of the conflict (the tail case).
+    horizon_rationale: By the 21-day horizon, the physical impact of the supply loss
+      will be fully felt in global inventories. The forecast reflects a high-risk
+      environment where prices could either spike on further escalation or correct
+      if a diplomatic breakthrough occurs, leading to a very wide distribution of
+      outcomes.
+    langfuse_trace_id: b9885d107d15ab57d28f4cb4185e9204
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/b9885d107d15ab57d28f4cb4185e9204
+    arima_anchor:
+      point_forecast: 98.70725411812023
+      quantiles:
+        '0.05': 84.66156439845732
+        '0.1': 87.43891967378245
+        '0.2': 90.75767827044466
+        '0.3': 93.88486126994358
+        '0.4': 96.35842359019128
+        '0.5': 98.70725411812023
+        '0.6': 101.1222122980819
+        '0.7': 103.45674190993887
+        '0.8': 106.1593039016904
+        '0.9': 109.56393827382941
+        '0.95': 112.62752518067805
+    scenario_probability_weighted_price_max_horizon: 114.75
+    scenario_implied_target_percentile: 90.0
+    scenario_center_shift: 7.450000762939453
+    historical_delta_percentiles:
+      '10': -8.349998474121094
+      '25': -3.9899978637695312
+      '50': 0.7000007629394531
+      '75': 4.60999870300293
+      '90': 8.150001525878906
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:11.274820'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-06T00:00:00'
+  payload:
+    point_forecast: 99.70743653986916
+    quantiles:
+      '0.05': 86.36258712530524
+      '0.1': 94.23594282278859
+      '0.2': 96.02693077568065
+      '0.3': 97.50198413244719
+      '0.4': 98.62836472324331
+      '0.5': 99.70743653986916
+      '0.6': 100.9720510951137
+      '0.7': 102.16840379932907
+      '0.8': 103.44048337332481
+      '0.9': 105.2293671599926
+      '0.95': 122.89783263605105
+  metadata:
+    factors:
+    - name: Strait of Hormuz Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: IEA Emergency Stock Releases
+      category: financial
+      tier: transitory
+      impact_score: medium
+    - name: Global Oil Demand Elasticity
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Alternative Supply Infrastructure
+      category: macro
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: De-escalation and Normalization
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Geopolitical Risk: bearish
+        IEA Emergency Stock Releases: bearish
+        Global Oil Demand Elasticity: neutral
+        Alternative Supply Infrastructure: neutral
+    - name: Prolonged Conflict and Supply Squeeze
+      probability: 0.3
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Geopolitical Risk: bullish
+        IEA Emergency Stock Releases: neutral
+        Global Oil Demand Elasticity: neutral
+        Alternative Supply Infrastructure: bearish
+    - name: Total Regional Conflict Escalation
+      probability: 0.2
+      price_low: 110.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Geopolitical Risk: bullish
+        IEA Emergency Stock Releases: bullish
+        Global Oil Demand Elasticity: bearish
+        Alternative Supply Infrastructure: bullish
+    rationale: The WTI market is currently dominated by the acute geopolitical crisis
+      in the Strait of Hormuz. The forecast reflects a high-risk environment where
+      prompt prices are heavily inflated by the supply shock, but the market structure
+      (backwardation) and the expectation of IEA intervention suggest a gradual easing
+      of prices over the coming weeks, provided the conflict does not escalate further.
+    horizon_rationale: The market is in a state of extreme volatility due to the Strait
+      of Hormuz closure. The 5-day horizon remains dominated by the immediate supply
+      shock and the uncertainty surrounding the IEA's emergency stock release effectiveness.
+    langfuse_trace_id: 1ee1eb4fd0bb376ce52d7c9f5cdae84d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/1ee1eb4fd0bb376ce52d7c9f5cdae84d
+    arima_anchor:
+      point_forecast: 99.51836746005458
+      quantiles:
+        '0.05': 92.23664633571924
+        '0.1': 94.046873742974
+        '0.2': 95.83786169586607
+        '0.3': 97.3129150526326
+        '0.4': 98.43929564342872
+        '0.5': 99.51836746005458
+        '0.6': 100.78298201529911
+        '0.7': 101.97933471951448
+        '0.8': 103.25141429351022
+        '0.9': 105.04029808017802
+        '0.95': 106.41151956940328
+    scenario_probability_weighted_price_max_horizon: 100.25
+    scenario_implied_target_percentile: 52.58291911038658
+    scenario_center_shift: 0.18906907981458576
+    historical_delta_percentiles:
+      '10': -3.970001220703125
+      '25': -1.8100051879882812
+      '50': 0.26000213623046875
+      '75': 2.089996337890625
+      '90': 3.825998687744144
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:11.274820'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-13T00:00:00'
+  payload:
+    point_forecast: 100.15954254980723
+    quantiles:
+      '0.05': 83.16895328957798
+      '0.1': 92.51669527220005
+      '0.2': 95.35144726959713
+      '0.3': 97.26399537207664
+      '0.4': 98.68376280582653
+      '0.5': 100.15954254980723
+      '0.6': 101.39879813659323
+      '0.7': 103.1170885233757
+      '0.8': 105.22235240472916
+      '0.9': 107.81809539268905
+      '0.95': 130.83009607752047
+  metadata:
+    factors:
+    - name: Strait of Hormuz Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: IEA Emergency Stock Releases
+      category: financial
+      tier: transitory
+      impact_score: medium
+    - name: Global Oil Demand Elasticity
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Alternative Supply Infrastructure
+      category: macro
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: De-escalation and Normalization
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Geopolitical Risk: bearish
+        IEA Emergency Stock Releases: bearish
+        Global Oil Demand Elasticity: neutral
+        Alternative Supply Infrastructure: neutral
+    - name: Prolonged Conflict and Supply Squeeze
+      probability: 0.3
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Geopolitical Risk: bullish
+        IEA Emergency Stock Releases: neutral
+        Global Oil Demand Elasticity: neutral
+        Alternative Supply Infrastructure: bearish
+    - name: Total Regional Conflict Escalation
+      probability: 0.2
+      price_low: 110.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Geopolitical Risk: bullish
+        IEA Emergency Stock Releases: bullish
+        Global Oil Demand Elasticity: bearish
+        Alternative Supply Infrastructure: bullish
+    rationale: The WTI market is currently dominated by the acute geopolitical crisis
+      in the Strait of Hormuz. The forecast reflects a high-risk environment where
+      prompt prices are heavily inflated by the supply shock, but the market structure
+      (backwardation) and the expectation of IEA intervention suggest a gradual easing
+      of prices over the coming weeks, provided the conflict does not escalate further.
+    horizon_rationale: By 10 days, the market begins to price in the potential for
+      diplomatic de-escalation or the successful integration of alternative supply
+      routes, leading to a slight softening of the prompt premium.
+    langfuse_trace_id: 1ee1eb4fd0bb376ce52d7c9f5cdae84d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/1ee1eb4fd0bb376ce52d7c9f5cdae84d
+    arima_anchor:
+      point_forecast: 99.89892551497528
+      quantiles:
+        '0.05': 89.96397524621246
+        '0.1': 92.2560782373681
+        '0.2': 95.09083023476518
+        '0.3': 97.00337833724468
+        '0.4': 98.42314577099458
+        '0.5': 99.89892551497528
+        '0.6': 101.13818110176128
+        '0.7': 102.85647148854375
+        '0.8': 104.96173536989721
+        '0.9': 107.5574783578571
+        '0.95': 110.15279070706976
+    scenario_probability_weighted_price_max_horizon: 100.25
+    scenario_implied_target_percentile: 52.58291911038658
+    scenario_center_shift: 0.26061703483195076
+    historical_delta_percentiles:
+      '10': -5.760002136230469
+      '25': -2.6199951171875
+      '50': 0.48999786376953125
+      '75': 3.012502670288086
+      '90': 5.540000915527344
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:11.274820'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-28T00:00:00'
+  payload:
+    point_forecast: 99.97505230226095
+    quantiles:
+      '0.05': 80.0
+      '0.1': 89.08735786079802
+      '0.2': 92.18721855915186
+      '0.3': 95.51940543341072
+      '0.4': 97.66711082590562
+      '0.5': 99.97505230226095
+      '0.6': 102.06974732971089
+      '0.7': 104.76951192478533
+      '0.8': 107.60549455664912
+      '0.9': 110.52099020148802
+      '0.95': 140.0
+  metadata:
+    factors:
+    - name: Strait of Hormuz Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: IEA Emergency Stock Releases
+      category: financial
+      tier: transitory
+      impact_score: medium
+    - name: Global Oil Demand Elasticity
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Alternative Supply Infrastructure
+      category: macro
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: De-escalation and Normalization
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Geopolitical Risk: bearish
+        IEA Emergency Stock Releases: bearish
+        Global Oil Demand Elasticity: neutral
+        Alternative Supply Infrastructure: neutral
+    - name: Prolonged Conflict and Supply Squeeze
+      probability: 0.3
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Geopolitical Risk: bullish
+        IEA Emergency Stock Releases: neutral
+        Global Oil Demand Elasticity: neutral
+        Alternative Supply Infrastructure: bearish
+    - name: Total Regional Conflict Escalation
+      probability: 0.2
+      price_low: 110.0
+      price_high: 140.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Geopolitical Risk: bullish
+        IEA Emergency Stock Releases: bullish
+        Global Oil Demand Elasticity: bearish
+        Alternative Supply Infrastructure: bullish
+    rationale: The WTI market is currently dominated by the acute geopolitical crisis
+      in the Strait of Hormuz. The forecast reflects a high-risk environment where
+      prompt prices are heavily inflated by the supply shock, but the market structure
+      (backwardation) and the expectation of IEA intervention suggest a gradual easing
+      of prices over the coming weeks, provided the conflict does not escalate further.
+    horizon_rationale: Over 21 days, the expectation of a resolution to the Strait
+      of Hormuz crisis grows, and the impact of the IEA stock releases becomes more
+      pronounced, exerting downward pressure on prices.
+    langfuse_trace_id: 1ee1eb4fd0bb376ce52d7c9f5cdae84d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/1ee1eb4fd0bb376ce52d7c9f5cdae84d
+    arima_anchor:
+      point_forecast: 99.56901738657841
+      quantiles:
+        '0.05': 85.14386854612945
+        '0.1': 88.68132294511548
+        '0.2': 91.78118364346932
+        '0.3': 95.11337051772819
+        '0.4': 97.26107591022308
+        '0.5': 99.56901738657841
+        '0.6': 101.66371241402835
+        '0.7': 104.3634770091028
+        '0.8': 107.19945964096658
+        '0.9': 110.11495528580548
+        '0.95': 112.5604051950603
+    scenario_probability_weighted_price_max_horizon: 100.25
+    scenario_implied_target_percentile: 52.58291911038658
+    scenario_center_shift: 0.40603491568254424
+    historical_delta_percentiles:
+      '10': -8.334001159667967
+      '25': -3.9899978637695312
+      '50': 0.7099990844726562
+      '75': 4.6399993896484375
+      '90': 8.220001220703125
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:21.768415'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-04-20T00:00:00'
+  payload:
+    point_forecast: 97.57788221351777
+    quantiles:
+      '0.05': 85.34957542143451
+      '0.1': 91.98651886620101
+      '0.2': 93.77559068334833
+      '0.3': 95.13999000909598
+      '0.4': 96.27153910021913
+      '0.5': 97.57788221351777
+      '0.6': 98.50133697622461
+      '0.7': 99.51354881571308
+      '0.8': 100.9326383097716
+      '0.9': 102.70000297563939
+      '0.95': 126.62663459306748
+  metadata:
+    factors:
+    - name: Strait of Hormuz Security
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Energy Demand
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Ceasefire Status
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Ceasefire Holds
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Security: neutral
+        Global Energy Demand: neutral
+        Ceasefire Status: bearish
+    - name: Conflict Resumes/Escalates
+      probability: 0.4
+      price_low: 98.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Security: bullish
+        Global Energy Demand: neutral
+        Ceasefire Status: bullish
+    - name: Total Blockade of Hormuz
+      probability: 0.1
+      price_low: 120.0
+      price_high: 150.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Security: bullish
+        Global Energy Demand: bullish
+        Ceasefire Status: bullish
+    rationale: The WTI market is currently dominated by the binary outcome of the
+      ongoing ceasefire. My forecast reflects a cautious baseline that accounts for
+      the high probability of a return to conflict, while acknowledging the potential
+      for a significant price spike if the Strait of Hormuz is compromised.
+    horizon_rationale: The market is in a 'wait-and-see' mode during the two-week
+      ceasefire. Prices are consolidating near $96, balancing the risk of renewed
+      conflict against the current diplomatic pause.
+    langfuse_trace_id: d6eaf29cb7f35254a3ca7c6447406c7d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d6eaf29cb7f35254a3ca7c6447406c7d
+    arima_anchor:
+      point_forecast: 96.72748916763389
+      quantiles:
+        '0.05': 89.5969769423881
+        '0.1': 91.13612582031713
+        '0.2': 92.92519763746445
+        '0.3': 94.2895969632121
+        '0.4': 95.42114605433525
+        '0.5': 96.72748916763389
+        '0.6': 97.65094393034073
+        '0.7': 98.6631557698292
+        '0.8': 100.08224526388773
+        '0.9': 101.84960992975552
+        '0.95': 103.50295707254088
+    scenario_probability_weighted_price_max_horizon: 99.85
+    scenario_implied_target_percentile: 61.617403929985805
+    scenario_center_shift: 0.8503930458838775
+    historical_delta_percentiles:
+      '10': -3.9769973754882804
+      '25': -1.8175010681152344
+      '50': 0.26000213623046875
+      '75': 2.0900001525878906
+      '90': 3.870000457763672
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:21.768415'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-04-27T00:00:00'
+  payload:
+    point_forecast: 97.26575486443612
+    quantiles:
+      '0.05': 82.5286421006166
+      '0.1': 89.74232736410396
+      '0.2': 92.29805741309598
+      '0.3': 94.1380158081436
+      '0.4': 95.74148070377075
+      '0.5': 97.26575486443612
+      '0.6': 98.77264024860806
+      '0.7': 100.41253474502439
+      '0.8': 102.52773483133548
+      '0.9': 105.44443853937553
+      '0.95': 136.86887159571435
+  metadata:
+    factors:
+    - name: Strait of Hormuz Security
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Energy Demand
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Ceasefire Status
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Ceasefire Holds
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Security: neutral
+        Global Energy Demand: neutral
+        Ceasefire Status: bearish
+    - name: Conflict Resumes/Escalates
+      probability: 0.4
+      price_low: 98.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Security: bullish
+        Global Energy Demand: neutral
+        Ceasefire Status: bullish
+    - name: Total Blockade of Hormuz
+      probability: 0.1
+      price_low: 120.0
+      price_high: 150.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Security: bullish
+        Global Energy Demand: bullish
+        Ceasefire Status: bullish
+    rationale: The WTI market is currently dominated by the binary outcome of the
+      ongoing ceasefire. My forecast reflects a cautious baseline that accounts for
+      the high probability of a return to conflict, while acknowledging the potential
+      for a significant price spike if the Strait of Hormuz is compromised.
+    horizon_rationale: As the ceasefire nears its end, uncertainty regarding the next
+      phase of the conflict will likely increase volatility, leading to a wider distribution
+      of potential outcomes.
+    langfuse_trace_id: d6eaf29cb7f35254a3ca7c6447406c7d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d6eaf29cb7f35254a3ca7c6447406c7d
+    arima_anchor:
+      point_forecast: 96.09007415397761
+      quantiles:
+        '0.05': 86.98295469401964
+        '0.1': 88.56664665364545
+        '0.2': 91.12237670263747
+        '0.3': 92.9623350976851
+        '0.4': 94.56579999331224
+        '0.5': 96.09007415397761
+        '0.6': 97.59695953814955
+        '0.7': 99.23685403456588
+        '0.8': 101.35205412087697
+        '0.9': 104.26875782891702
+        '0.95': 106.45688062598776
+    scenario_probability_weighted_price_max_horizon: 99.85
+    scenario_implied_target_percentile: 61.617403929985805
+    scenario_center_shift: 1.175680710458512
+    historical_delta_percentiles:
+      '10': -5.752000427246093
+      '25': -2.6100006103515625
+      '50': 0.5
+      '75': 3.029998779296875
+      '90': 5.55
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:21.768415'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-05-12T00:00:00'
+  payload:
+    point_forecast: 98.38491806309817
+    quantiles:
+      '0.05': 80.0
+      '0.1': 86.68201822522269
+      '0.2': 90.71366554066154
+      '0.3': 93.37796595275888
+      '0.4': 95.88751659140927
+      '0.5': 98.38491806309817
+      '0.6': 100.71513443788419
+      '0.7': 102.94897038937931
+      '0.8': 105.64759507257959
+      '0.9': 109.74935607041074
+      '0.95': 150.0
+  metadata:
+    factors:
+    - name: Strait of Hormuz Security
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Energy Demand
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Ceasefire Status
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Ceasefire Holds
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Security: neutral
+        Global Energy Demand: neutral
+        Ceasefire Status: bearish
+    - name: Conflict Resumes/Escalates
+      probability: 0.4
+      price_low: 98.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Security: bullish
+        Global Energy Demand: neutral
+        Ceasefire Status: bullish
+    - name: Total Blockade of Hormuz
+      probability: 0.1
+      price_low: 120.0
+      price_high: 150.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Security: bullish
+        Global Energy Demand: bullish
+        Ceasefire Status: bullish
+    rationale: The WTI market is currently dominated by the binary outcome of the
+      ongoing ceasefire. My forecast reflects a cautious baseline that accounts for
+      the high probability of a return to conflict, while acknowledging the potential
+      for a significant price spike if the Strait of Hormuz is compromised.
+    horizon_rationale: By the 21-day horizon, the market will have clarity on whether
+      the ceasefire holds or if the conflict escalates, leading to a bimodal distribution
+      of prices.
+    langfuse_trace_id: d6eaf29cb7f35254a3ca7c6447406c7d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/d6eaf29cb7f35254a3ca7c6447406c7d
+    arima_anchor:
+      point_forecast: 96.54936833079417
+      quantiles:
+        '0.05': 80.98744676030093
+        '0.1': 84.84646849291869
+        '0.2': 88.87811580835753
+        '0.3': 91.54241622045488
+        '0.4': 94.05196685910526
+        '0.5': 96.54936833079417
+        '0.6': 98.87958470558019
+        '0.7': 101.11342065707531
+        '0.8': 103.81204534027559
+        '0.9': 107.91380633810674
+        '0.95': 110.80260360823506
+    scenario_probability_weighted_price_max_horizon: 99.85
+    scenario_implied_target_percentile: 61.617403929985805
+    scenario_center_shift: 1.835549732303999
+    historical_delta_percentiles:
+      '10': -8.302001190185544
+      '25': -3.9800033569335938
+      '50': 0.7099990844726562
+      '75': 4.659998893737793
+      '90': 8.253000640869143
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:33.670126'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-04T00:00:00'
+  payload:
+    point_forecast: 93.02623280064358
+    quantiles:
+      '0.05': 75.72664608159435
+      '0.1': 87.52026062167663
+      '0.2': 89.08327256840644
+      '0.3': 90.52295435127878
+      '0.4': 91.64939502193653
+      '0.5': 93.02623280064358
+      '0.6': 94.30178724594501
+      '0.7': 95.56085767197136
+      '0.8': 96.99719014317071
+      '0.9': 98.71542320907764
+      '0.95': 115.02819472845914
+  metadata:
+    factors:
+    - name: Strait of Hormuz Blockage
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Demand Destruction
+      category: macro
+      tier: transitory
+      impact_score: medium
+    - name: Energy Transition/Long-term Supply
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: financial
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Prolonged Conflict & Demand Destruction
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Blockage: bullish
+        Global Demand Destruction: bearish
+        Energy Transition/Long-term Supply: neutral
+        Geopolitical Risk Premium: bullish
+    - name: Diplomatic Breakthrough/De-escalation
+      probability: 0.3
+      price_low: 65.0
+      price_high: 80.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Blockage: bearish
+        Global Demand Destruction: neutral
+        Energy Transition/Long-term Supply: neutral
+        Geopolitical Risk Premium: bearish
+    - name: Total Regional War (Tail Case)
+      probability: 0.2
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Blockage: bullish
+        Global Demand Destruction: bearish
+        Energy Transition/Long-term Supply: bullish
+        Geopolitical Risk Premium: bullish
+    rationale: The WTI market is currently dominated by the acute supply shock caused
+      by the closure of the Strait of Hormuz. While the supply-risk premium is driving
+      prices higher, the market is also beginning to price in significant demand destruction.
+      The forecast reflects a high degree of uncertainty, with scenarios ranging from
+      a diplomatic resolution to a full-scale regional conflict.
+    horizon_rationale: Short-term volatility remains extreme due to the Strait of
+      Hormuz closure. The market is caught between a massive supply-risk premium and
+      early signs of demand destruction. The 5-day horizon reflects a high probability
+      of continued price swings as traders react to daily news on the conflict.
+    langfuse_trace_id: ba238562afad457f9377dbaf1dd638a8
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ba238562afad457f9377dbaf1dd638a8
+    arima_anchor:
+      point_forecast: 94.40162601110217
+      quantiles:
+        '0.05': 87.32382958517434
+        '0.1': 88.89565383213521
+        '0.2': 90.45866577886503
+        '0.3': 91.89834756173737
+        '0.4': 93.02478823239511
+        '0.5': 94.40162601110217
+        '0.6': 95.67718045640359
+        '0.7': 96.93625088242995
+        '0.8': 98.3725833536293
+        '0.9': 100.09081641953622
+        '0.95': 102.13643932312284
+    scenario_probability_weighted_price_max_horizon: 89.0
+    scenario_implied_target_percentile: 33.4688461576838
+    scenario_center_shift: -1.375393210458577
+    historical_delta_percentiles:
+      '10': -3.9869983673095697
+      '25': -1.8199996948242188
+      '50': 0.26000213623046875
+      '75': 2.0899972915649414
+      '90': 3.870000457763672
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:33.670126'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-11T00:00:00'
+  payload:
+    point_forecast: 92.44373607299323
+    quantiles:
+      '0.05': 70.38043257960635
+      '0.1': 84.61075501812203
+      '0.2': 86.90456568102859
+      '0.3': 89.2608916013007
+      '0.4': 91.03612838882223
+      '0.5': 92.44373607299323
+      '0.6': 93.91935309662188
+      '0.7': 95.35367348871178
+      '0.8': 97.29691811264543
+      '0.9': 99.89052606869502
+      '0.95': 121.27770929026002
+  metadata:
+    factors:
+    - name: Strait of Hormuz Blockage
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Demand Destruction
+      category: macro
+      tier: transitory
+      impact_score: medium
+    - name: Energy Transition/Long-term Supply
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: financial
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Prolonged Conflict & Demand Destruction
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Blockage: bullish
+        Global Demand Destruction: bearish
+        Energy Transition/Long-term Supply: neutral
+        Geopolitical Risk Premium: bullish
+    - name: Diplomatic Breakthrough/De-escalation
+      probability: 0.3
+      price_low: 65.0
+      price_high: 80.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Blockage: bearish
+        Global Demand Destruction: neutral
+        Energy Transition/Long-term Supply: neutral
+        Geopolitical Risk Premium: bearish
+    - name: Total Regional War (Tail Case)
+      probability: 0.2
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Blockage: bullish
+        Global Demand Destruction: bearish
+        Energy Transition/Long-term Supply: bullish
+        Geopolitical Risk Premium: bullish
+    rationale: The WTI market is currently dominated by the acute supply shock caused
+      by the closure of the Strait of Hormuz. While the supply-risk premium is driving
+      prices higher, the market is also beginning to price in significant demand destruction.
+      The forecast reflects a high degree of uncertainty, with scenarios ranging from
+      a diplomatic resolution to a full-scale regional conflict.
+    horizon_rationale: Over 10 days, the market may begin to price in the cumulative
+      impact of demand destruction, potentially softening the supply-risk premium
+      if no further escalation occurs. However, the tail risk of a wider regional
+      conflict remains high.
+    langfuse_trace_id: ba238562afad457f9377dbaf1dd638a8
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ba238562afad457f9377dbaf1dd638a8
+    arima_anchor:
+      point_forecast: 94.5002069696622
+      quantiles:
+        '0.05': 84.41637632760361
+        '0.1': 86.667225914791
+        '0.2': 88.96103657769756
+        '0.3': 91.31736249796967
+        '0.4': 93.0925992854912
+        '0.5': 94.5002069696622
+        '0.6': 95.97582399329085
+        '0.7': 97.41014438538075
+        '0.8': 99.3533890093144
+        '0.9': 101.946996965364
+        '0.95': 103.91409765401716
+    scenario_probability_weighted_price_max_horizon: 89.0
+    scenario_implied_target_percentile: 33.4688461576838
+    scenario_center_shift: -2.0564708966689698
+    historical_delta_percentiles:
+      '10': -5.774000549316405
+      '25': -2.6199951171875
+      '50': 0.48999786376953125
+      '75': 3.029998779296875
+      '90': 5.542000579833982
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:33.670126'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-26T00:00:00'
+  payload:
+    point_forecast: 90.64605759540531
+    quantiles:
+      '0.05': 65.0
+      '0.1': 79.14314002499678
+      '0.2': 83.06082279727669
+      '0.3': 86.11608102500412
+      '0.4': 88.55841102903935
+      '0.5': 90.64605759540531
+      '0.6': 92.69679169019146
+      '0.7': 95.26117995385653
+      '0.8': 97.94560188881822
+      '0.9': 102.15283153984392
+      '0.95': 130.0
+  metadata:
+    factors:
+    - name: Strait of Hormuz Blockage
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    - name: Global Demand Destruction
+      category: macro
+      tier: transitory
+      impact_score: medium
+    - name: Energy Transition/Long-term Supply
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: financial
+      tier: core
+      impact_score: null
+    scenarios:
+    - name: Prolonged Conflict & Demand Destruction
+      probability: 0.5
+      price_low: 80.0
+      price_high: 95.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Blockage: bullish
+        Global Demand Destruction: bearish
+        Energy Transition/Long-term Supply: neutral
+        Geopolitical Risk Premium: bullish
+    - name: Diplomatic Breakthrough/De-escalation
+      probability: 0.3
+      price_low: 65.0
+      price_high: 80.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Blockage: bearish
+        Global Demand Destruction: neutral
+        Energy Transition/Long-term Supply: neutral
+        Geopolitical Risk Premium: bearish
+    - name: Total Regional War (Tail Case)
+      probability: 0.2
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Blockage: bullish
+        Global Demand Destruction: bearish
+        Energy Transition/Long-term Supply: bullish
+        Geopolitical Risk Premium: bullish
+    rationale: The WTI market is currently dominated by the acute supply shock caused
+      by the closure of the Strait of Hormuz. While the supply-risk premium is driving
+      prices higher, the market is also beginning to price in significant demand destruction.
+      The forecast reflects a high degree of uncertainty, with scenarios ranging from
+      a diplomatic resolution to a full-scale regional conflict.
+    horizon_rationale: By 21 days, the market will likely have a clearer picture of
+      the duration of the Strait of Hormuz blockage. If the blockage persists, demand
+      destruction will likely accelerate, putting downward pressure on prices despite
+      the supply constraint. The wide range reflects the binary nature of the geopolitical
+      outcome.
+    langfuse_trace_id: ba238562afad457f9377dbaf1dd638a8
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ba238562afad457f9377dbaf1dd638a8
+    arima_anchor:
+      point_forecast: 93.75391249979764
+      quantiles:
+        '0.05': 79.73520377356915
+        '0.1': 82.25099492938911
+        '0.2': 86.16867770166901
+        '0.3': 89.22393592939645
+        '0.4': 91.66626593343167
+        '0.5': 93.75391249979764
+        '0.6': 95.80464659458379
+        '0.7': 98.36903485824885
+        '0.8': 101.05345679321054
+        '0.9': 105.26068644423624
+        '0.95': 107.9354484445134
+    scenario_probability_weighted_price_max_horizon: 89.0
+    scenario_implied_target_percentile: 33.4688461576838
+    scenario_center_shift: -3.1078549043923305
+    historical_delta_percentiles:
+      '10': -8.302001190185544
+      '25': -3.9899978637695312
+      '50': 0.7099990844726562
+      '75': 4.652500152587891
+      '90': 8.25
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:45.147458'
+  as_of: '2026-05-11T00:00:00'
+  forecast_date: '2026-05-18T00:00:00'
+  payload:
+    point_forecast: 94.62901147684184
+    quantiles:
+      '0.05': 78.83844361988963
+      '0.1': 88.9553898304462
+      '0.2': 90.54931850848114
+      '0.3': 92.43234223124767
+      '0.4': 93.60929919121573
+      '0.5': 94.62901147684184
+      '0.6': 95.72718908094086
+      '0.7': 97.0129545278157
+      '0.8': 98.35486434686243
+      '0.9': 100.17377308709027
+      '0.95': 113.21329992569461
+  metadata:
+    factors:
+    - name: Strait of Hormuz Supply Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Demand Destruction
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Diplomatic Peace Talks
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Diplomatic Breakthrough
+      probability: 0.35
+      price_low: 70.0
+      price_high: 85.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bearish
+        Global Demand Destruction: neutral
+        Diplomatic Peace Talks: bullish
+    - name: Protracted Impasse & Escalation
+      probability: 0.2
+      price_low: 105.0
+      price_high: 125.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Destruction: bearish
+        Diplomatic Peace Talks: bearish
+    - name: Status Quo Persistence
+      probability: 0.45
+      price_low: 88.0
+      price_high: 102.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: neutral
+        Global Demand Destruction: bullish
+        Diplomatic Peace Talks: neutral
+    rationale: The market is currently in a high-volatility state driven by the Strait
+      of Hormuz closure. My forecast reflects a cautious outlook where the risk premium
+      remains elevated but is gradually challenged by demand-side headwinds and the
+      potential for diplomatic resolution. The scenarios capture the binary nature
+      of the current geopolitical risk.
+    horizon_rationale: Short-term price action remains dominated by the Strait of
+      Hormuz supply shock. The market is currently balancing the extreme risk premium
+      against hopes for diplomatic resolution. The 5-day horizon reflects continued
+      high volatility as traders await concrete news on peace talks.
+    langfuse_trace_id: 5c6a20662bf4160106e070f1004f3aa8
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5c6a20662bf4160106e070f1004f3aa8
+    arima_anchor:
+      point_forecast: 95.231554893832
+      quantiles:
+        '0.05': 87.86344420689024
+        '0.1': 89.55793324743635
+        '0.2': 91.1518619254713
+        '0.3': 93.03488564823783
+        '0.4': 94.21184260820588
+        '0.5': 95.231554893832
+        '0.6': 96.32973249793102
+        '0.7': 97.61549794480585
+        '0.8': 98.95740776385259
+        '0.9': 100.77631650408043
+        '0.95': 102.5838911098056
+    scenario_probability_weighted_price_max_horizon: 92.875
+    scenario_implied_target_percentile: 42.77525561668819
+    scenario_center_shift: -0.6025434169901636
+    historical_delta_percentiles:
+      '10': -4.0
+      '25': -1.8199996948242188
+      '50': 0.2649993896484375
+      '75': 2.0999984741210938
+      '90': 3.8899993896484375
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:45.147458'
+  as_of: '2026-05-11T00:00:00'
+  forecast_date: '2026-06-09T00:00:00'
+  payload:
+    point_forecast: 93.58176422307994
+    quantiles:
+      '0.05': 70.0
+      '0.1': 82.14874915344967
+      '0.2': 86.80545767513249
+      '0.3': 89.59081888377733
+      '0.4': 91.57383798430511
+      '0.5': 93.58176422307994
+      '0.6': 96.20011773443761
+      '0.7': 98.48516997679238
+      '0.8': 101.24478702328412
+      '0.9': 105.43628083907161
+      '0.95': 125.0
+  metadata:
+    factors:
+    - name: Strait of Hormuz Supply Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Demand Destruction
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Diplomatic Peace Talks
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Diplomatic Breakthrough
+      probability: 0.35
+      price_low: 70.0
+      price_high: 85.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: bearish
+        Global Demand Destruction: neutral
+        Diplomatic Peace Talks: bullish
+    - name: Protracted Impasse & Escalation
+      probability: 0.2
+      price_low: 105.0
+      price_high: 125.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Supply Disruption: bullish
+        Global Demand Destruction: bearish
+        Diplomatic Peace Talks: bearish
+    - name: Status Quo Persistence
+      probability: 0.45
+      price_low: 88.0
+      price_high: 102.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Supply Disruption: neutral
+        Global Demand Destruction: bullish
+        Diplomatic Peace Talks: neutral
+    rationale: The market is currently in a high-volatility state driven by the Strait
+      of Hormuz closure. My forecast reflects a cautious outlook where the risk premium
+      remains elevated but is gradually challenged by demand-side headwinds and the
+      potential for diplomatic resolution. The scenarios capture the binary nature
+      of the current geopolitical risk.
+    horizon_rationale: By 21 days, the impact of demand destruction from high prices
+      and the potential for structural supply bypasses to gain traction should exert
+      more downward pressure on the price, assuming the geopolitical impasse does
+      not escalate further.
+    langfuse_trace_id: 5c6a20662bf4160106e070f1004f3aa8
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5c6a20662bf4160106e070f1004f3aa8
+    arima_anchor:
+      point_forecast: 94.94001528521576
+      quantiles:
+        '0.05': 80.29596477112734
+        '0.1': 83.50700021558549
+        '0.2': 88.16370873726831
+        '0.3': 90.94906994591315
+        '0.4': 92.93208904644094
+        '0.5': 94.94001528521576
+        '0.6': 97.55836879657343
+        '0.7': 99.8434210389282
+        '0.8': 102.60303808541994
+        '0.9': 106.79453190120743
+        '0.95': 109.79261288286438
+    scenario_probability_weighted_price_max_horizon: 92.875
+    scenario_implied_target_percentile: 42.77525561668819
+    scenario_center_shift: -1.3582510621358153
+    historical_delta_percentiles:
+      '10': -8.336000823974608
+      '25': -3.9899978637695312
+      '50': 0.7099990844726562
+      '75': 4.6399993896484375
+      '90': 8.243003845214846
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:56.986043'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-01T00:00:00'
+  payload:
+    point_forecast: 97.92883794085509
+    quantiles:
+      '0.05': 82.89168910055888
+      '0.1': 92.0449440876402
+      '0.2': 93.78615373242954
+      '0.3': 95.3139125628558
+      '0.4': 96.62358930457462
+      '0.5': 97.92883794085509
+      '0.6': 98.8807308968198
+      '0.7': 100.20456964179662
+      '0.8': 101.78525184846494
+      '0.9': 103.42484282863482
+      '0.95': 117.08035500518356
+  metadata:
+    factors:
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Economic Cooling
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Diplomatic De-escalation
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Persistent Stalemate
+      probability: 0.5
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Economic Cooling: neutral
+        Diplomatic De-escalation: neutral
+    - name: Diplomatic Breakthrough
+      probability: 0.3
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bearish
+        Global Economic Cooling: bearish
+        Diplomatic De-escalation: bullish
+    - name: Escalation/Supply Collapse
+      probability: 0.2
+      price_low: 110.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Economic Cooling: bearish
+        Diplomatic De-escalation: bearish
+    rationale: The WTI market is currently driven by the severe supply shock from
+      the Strait of Hormuz closure. While this provides a strong bullish floor, the
+      market is increasingly sensitive to demand destruction and the potential for
+      diplomatic resolution. The forecast reflects a cautious outlook where the 'war
+      premium' persists but is balanced against growing economic headwinds.
+    horizon_rationale: Short-term price action remains dominated by the Strait of
+      Hormuz supply disruption. The market is pricing in a persistent 'war premium'
+      while awaiting diplomatic signals. The 5-day horizon reflects high sensitivity
+      to potential de-escalation news.
+    langfuse_trace_id: ce7a03a433a6f31f37cff3dc8e808aa6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ce7a03a433a6f31f37cff3dc8e808aa6
+    arima_anchor:
+      point_forecast: 96.76232035029531
+      quantiles:
+        '0.05': 89.24543370852918
+        '0.1': 90.87842649708043
+        '0.2': 92.61963614186976
+        '0.3': 94.14739497229603
+        '0.4': 95.45707171401484
+        '0.5': 96.76232035029531
+        '0.6': 97.71421330626002
+        '0.7': 99.03805205123685
+        '0.8': 100.61873425790516
+        '0.9': 102.25832523807505
+        '0.95': 103.60226296777113
+    scenario_probability_weighted_price_max_horizon: 101.25
+    scenario_implied_target_percentile: 65.89261815483435
+    scenario_center_shift: 1.166517590559782
+    historical_delta_percentiles:
+      '10': -4.0
+      '25': -1.8299989700317383
+      '50': 0.2649993896484375
+      '75': 2.0999984741210938
+      '90': 3.9000015258789062
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:56.986043'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-08T00:00:00'
+  payload:
+    point_forecast: 98.39802812920422
+    quantiles:
+      '0.05': 79.18020525139018
+      '0.1': 90.72978097535932
+      '0.2': 92.79708664975527
+      '0.3': 94.9947054541019
+      '0.4': 96.63687693841445
+      '0.5': 98.39802812920422
+      '0.6': 100.0499322394055
+      '0.7': 101.73957675796714
+      '0.8': 104.08890441413453
+      '0.9': 106.40956863279729
+      '0.95': 123.503885683715
+  metadata:
+    factors:
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Economic Cooling
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Diplomatic De-escalation
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Persistent Stalemate
+      probability: 0.5
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Economic Cooling: neutral
+        Diplomatic De-escalation: neutral
+    - name: Diplomatic Breakthrough
+      probability: 0.3
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bearish
+        Global Economic Cooling: bearish
+        Diplomatic De-escalation: bullish
+    - name: Escalation/Supply Collapse
+      probability: 0.2
+      price_low: 110.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Economic Cooling: bearish
+        Diplomatic De-escalation: bearish
+    rationale: The WTI market is currently driven by the severe supply shock from
+      the Strait of Hormuz closure. While this provides a strong bullish floor, the
+      market is increasingly sensitive to demand destruction and the potential for
+      diplomatic resolution. The forecast reflects a cautious outlook where the 'war
+      premium' persists but is balanced against growing economic headwinds.
+    horizon_rationale: Over 10 days, the uncertainty regarding the duration of the
+      Strait closure increases. If no diplomatic breakthrough occurs, the market will
+      likely test higher resistance levels as inventory buffers are drawn down.
+    langfuse_trace_id: ce7a03a433a6f31f37cff3dc8e808aa6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ce7a03a433a6f31f37cff3dc8e808aa6
+    arima_anchor:
+      point_forecast: 96.78969594794174
+      quantiles:
+        '0.05': 86.8790532236001
+        '0.1': 89.12144879409682
+        '0.2': 91.18875446849277
+        '0.3': 93.38637327283942
+        '0.4': 95.02854475715195
+        '0.5': 96.78969594794174
+        '0.6': 98.44160005814301
+        '0.7': 100.13124457670466
+        '0.8': 102.48057223287205
+        '0.9': 104.80123645153479
+        '0.95': 107.43202776550241
+    scenario_probability_weighted_price_max_horizon: 101.25
+    scenario_implied_target_percentile: 65.89261815483435
+    scenario_center_shift: 1.6083321812624902
+    historical_delta_percentiles:
+      '10': -5.762001800537108
+      '25': -2.6199951171875
+      '50': 0.5
+      '75': 3.029998779296875
+      '90': 5.55999755859375
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-22T21:05:56.986043'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-23T00:00:00'
+  payload:
+    point_forecast: 99.01753785752595
+    quantiles:
+      '0.05': 75.0
+      '0.1': 88.21340244032538
+      '0.2': 91.76258775041957
+      '0.3': 94.4357498470788
+      '0.4': 96.61767044210657
+      '0.5': 99.01753785752595
+      '0.6': 101.36117317472059
+      '0.7': 103.75370656507916
+      '0.8': 106.68548551699735
+      '0.9': 110.94039669865795
+      '0.95': 130.0
+  metadata:
+    factors:
+    - name: Strait of Hormuz Disruption
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Economic Cooling
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Diplomatic De-escalation
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Persistent Stalemate
+      probability: 0.5
+      price_low: 95.0
+      price_high: 115.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Economic Cooling: neutral
+        Diplomatic De-escalation: neutral
+    - name: Diplomatic Breakthrough
+      probability: 0.3
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Strait of Hormuz Disruption: bearish
+        Global Economic Cooling: bearish
+        Diplomatic De-escalation: bullish
+    - name: Escalation/Supply Collapse
+      probability: 0.2
+      price_low: 110.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Strait of Hormuz Disruption: bullish
+        Global Economic Cooling: bearish
+        Diplomatic De-escalation: bearish
+    rationale: The WTI market is currently driven by the severe supply shock from
+      the Strait of Hormuz closure. While this provides a strong bullish floor, the
+      market is increasingly sensitive to demand destruction and the potential for
+      diplomatic resolution. The forecast reflects a cautious outlook where the 'war
+      premium' persists but is balanced against growing economic headwinds.
+    horizon_rationale: By the 21-day horizon, the impact of demand destruction from
+      high energy prices is expected to exert more downward pressure, potentially
+      offsetting the supply shock if the geopolitical situation remains in a stalemate.
+    langfuse_trace_id: ce7a03a433a6f31f37cff3dc8e808aa6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/ce7a03a433a6f31f37cff3dc8e808aa6
+    arima_anchor:
+      point_forecast: 96.51286392809746
+      quantiles:
+        '0.05': 82.68619498014219
+        '0.1': 85.70872851089689
+        '0.2': 89.25791382099108
+        '0.3': 91.9310759176503
+        '0.4': 94.11299651267808
+        '0.5': 96.51286392809746
+        '0.6': 98.8564992452921
+        '0.7': 101.24903263565066
+        '0.8': 104.18081158756885
+        '0.9': 108.43572276922946
+        '0.95': 112.77880784294244
+    scenario_probability_weighted_price_max_horizon: 101.25
+    scenario_implied_target_percentile: 65.89261815483435
+    scenario_center_shift: 2.504673929428494
+    historical_delta_percentiles:
+      '10': -8.302001190185544
+      '25': -3.9800033569335938
+      '50': 0.720001220703125
+      '75': 4.65999698638916
+      '90': 8.260002136230469
+    mixture_method: arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range
+scores:
+- 1.3415956730142786
+- 5.63090987951509
+- 1.9784582852503694
+- 5.621227864710552
+- 28.364980559868133
+- 19.010429601957114
+- 16.19787925945968
+- 20.164074627457058
+- 11.10784846342964
+- 1.9748781403170306
+- 10.087172398208704
+- 9.358043286984536
+- 1.8198494774160423
+- 2.5310935781104344
+- 5.451839145300346
+- 1.9309941476876529
+- 3.2916546001077713
+- 9.92751283899749
+- 3.6964210243432287
+- 3.071471219663741
+- 10.468521353017447
+- 3.8427953933743346
+- 3.5511577285494305
+- 4.4253101027138975
+- 19.41440290080559
+metric: crps
+mean_score: 8.170420862010383
+ran_at: '2026-08-22T21:05:57.290263'
+skipped_origins: 0
