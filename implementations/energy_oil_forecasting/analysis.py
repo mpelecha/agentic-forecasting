@@ -51,6 +51,7 @@ def score_backtest_results(
     for result in results.values():
         all_scores.extend(result.scores)
         task = result.spec.task
+        offset = pd.tseries.frequencies.to_offset(task.frequency)
         actual_df = data_service.get_series(task.target_series_id, as_of=resolved_as_of)
         actual_by_date = {
             pd.Timestamp(row["timestamp"]).normalize(): float(row["value"]) for _, row in actual_df.iterrows()
@@ -64,8 +65,22 @@ def score_backtest_results(
             actual = actual_by_date.get(fd)
             if actual is None:
                 continue
-            median = pred.payload.point_forecast
-            mae_errors.append(abs(median - actual))
+            # mae_h21 is meant to isolate the mae_horizon-day-ahead forecast, not
+            # pool every horizon in the task together -- match forecast_date back
+            # to its horizon the same way the rest of the codebase does (e.g.
+            # scenario_schema_anchored/arima_anchor.py's horizon_for()) and only
+            # accumulate the one horizon this function is asked to score.
+            as_of_ts = pd.Timestamp(pred.as_of)
+            horizon = next(
+                (h for h in task.horizons if (as_of_ts + offset * h).normalize() == fd),
+                None,
+            )
+            if horizon == mae_horizon:
+                median = pred.payload.point_forecast
+                mae_errors.append(abs(median - actual))
+            # Coverage is intentionally pooled across every horizon in the task
+            # (not just mae_horizon) -- it's a trajectory-wide calibration read,
+            # unlike mae_h21 which is meant to isolate one specific horizon.
             # The 80% central interval is P10..P90. This previously read
             # P20..P80 — a 60% band reported under an "80% coverage" label,
             # which inverts the diagnosis: a model whose intervals are too
