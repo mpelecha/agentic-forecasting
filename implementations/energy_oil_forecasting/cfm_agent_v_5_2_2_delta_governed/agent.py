@@ -15,6 +15,7 @@ Does not modify ``cfm_agent_v_5_2`` in any way — every file in this package
 is new.
 """
 
+from pathlib import Path
 from typing import Any
 
 from aieng.forecasting.data import DataService
@@ -40,6 +41,9 @@ from energy_oil_forecasting.data import (
     DEFAULT_WTI_COVARIATE_SERIES_IDS,
     build_wti_multivariate_service,
 )
+
+
+_LOCAL_SKILLS_ROOT = Path(__file__).resolve().parent / "skills"
 
 
 _CONFIG: dict[
@@ -110,14 +114,14 @@ def build_cfm_agent_config_delta_governed(
         max_output_tokens=24576,
         function_tools=tools,
         skills_dirs=[
-            SKILLS_ROOT / name
-            for name in [
-                "source-selection",
-                "research-planning",
-                "claim-building",
-                "action-proposal",
-                "code-analysis",
-            ]
+            # Shared with cfm_agent_v_5_2 -- none of these reference center_action's
+            # format, so they apply unchanged.
+            *(SKILLS_ROOT / name for name in ["source-selection", "research-planning", "claim-building"]),
+            # Local override: the shared action-proposal skill describes v5.2's
+            # string-category center_action, which contradicts this agent's
+            # integer-rank schema. See skills/action-proposal/SKILL.md here.
+            _LOCAL_SKILLS_ROOT / "action-proposal",
+            SKILLS_ROOT / "code-analysis",
         ],
     )
     _CONFIG[id(config)] = (config, market, research, code_execution, settings)
