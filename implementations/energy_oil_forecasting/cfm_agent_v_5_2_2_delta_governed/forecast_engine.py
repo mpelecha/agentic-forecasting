@@ -107,8 +107,23 @@ class PythonForecastEngineDeltaGoverned(PythonForecastEngine):
         target_width = uncertainty_multiplier * empirical_width
         # Rescale the ensemble's own quantile shape to hit the empirically-anchored
         # target width, instead of multiplying the ensemble's own (possibly
-        # self-referentially narrow) spread directly.
-        scale = target_width / ensemble_width if ensemble_width > 0 else uncertainty_multiplier
+        # self-referentially narrow) spread directly. target_width alone isn't
+        # safe to divide straight into scale, though: if the ensemble's own
+        # width already exceeds a "wider" target (common when the ensemble is
+        # itself reacting to real volatility), naively using scale =
+        # target_width / ensemble_width silently NARROWS the interval despite
+        # the action being "wider" -- and symmetrically a "narrower" action
+        # could silently widen it. Floor/ceiling the effective target against
+        # the ensemble's own width so the action's direction is never inverted;
+        # "unchanged" always means scale == 1.0 exactly, not "rescale toward
+        # the empirical width regardless."
+        if decision.uncertainty_action == "unchanged":
+            effective_target = ensemble_width
+        elif decision.uncertainty_action.endswith("wider"):
+            effective_target = max(target_width, ensemble_width)
+        else:  # *_narrower
+            effective_target = min(target_width, ensemble_width)
+        scale = effective_target / ensemble_width if ensemble_width > 0 else uncertainty_multiplier
 
         neutral = rank == 0 and decision.uncertainty_action == "unchanged"
         pre_floor = dict(q) if neutral else {key: p50 + applied + scale * (value - p50) for key, value in q.items()}
