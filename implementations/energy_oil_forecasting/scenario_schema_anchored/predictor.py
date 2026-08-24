@@ -51,15 +51,12 @@ from aieng.forecasting.evaluation.predictor import Predictor
 from aieng.forecasting.evaluation.task import ForecastingTask
 from aieng.forecasting.methods.agentic import AgentConfig, AgentPredictor
 from energy_oil_forecasting.analyst_agent.agent import WtiScenarioForecastOutput
-from energy_oil_forecasting.price_deltas import compute_horizon_delta_percentiles
+from energy_oil_forecasting.price_deltas import PERCENTILE_LEVELS, compute_horizon_delta_percentiles
 from energy_oil_forecasting.scenario_schema_anchored.arima_anchor import (
     compute_arima_anchor,
     horizon_for,
 )
 from energy_oil_forecasting.scenario_schema_anchored.prompt import AnchoredPromptBuilder
-
-
-_DELTA_PERCENTILE_LEVELS = (10, 25, 50, 75, 90)
 
 
 def _widen_toward_scenarios(
@@ -130,7 +127,7 @@ def _grounded_center_shift(target_percentile: float, delta_percentiles: dict[int
     Returned relative to the historical median (delta_percentiles[50]) so it
     can be added directly to the anchor's own p50 as a shift.
     """
-    levels = list(_DELTA_PERCENTILE_LEVELS)
+    levels = list(PERCENTILE_LEVELS)
     values = [delta_percentiles[level] for level in levels]
     interpolated = float(np.interp(target_percentile, levels, values))
     return interpolated - delta_percentiles[50]
