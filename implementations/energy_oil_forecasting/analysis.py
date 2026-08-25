@@ -96,6 +96,80 @@ def score_backtest_results(
     }
 
 
+def per_horizon_scores(
+    results: dict[str, BacktestResult],
+    data_service: DataService,
+    *,
+    actuals_as_of: datetime | None = None,
+) -> dict[int, dict[str, float]]:
+    """MAE and 80% coverage broken out per horizon, plus the count behind each.
+
+    :func:`score_backtest_results` answers a different question: it isolates
+    MAE at one horizon and pools coverage across all of them. Pooled coverage
+    is a defensible trajectory-wide read, but on a multi-horizon spec it
+    averages away the effect you usually want to see — band width grows with
+    horizon while the miss rate need not, so a model can sit at 70% at h=10
+    and 88% at h=63 and report a reassuring 81% overall.
+
+    Returned per horizon:
+
+    - ``mae``          mean absolute error of the point forecast
+    - ``coverage_80``  percent of actuals inside P10..P90
+    - ``n``            predictions that resolved and matched this horizon
+
+    ``unmatched`` (key ``-1``) counts resolved predictions whose forecast_date
+    matched no declared horizon. It should be zero; a non-zero value means the
+    origin grid and the horizon list disagree, and the other rows are missing
+    those points.
+    """
+    resolved_as_of = actuals_as_of or datetime.now(tz=timezone.utc).replace(tzinfo=None)
+    errors: dict[int, list[float]] = {}
+    hits: dict[int, list[float]] = {}
+    unmatched = 0
+
+    for result in results.values():
+        task = result.spec.task
+        offset = pd.tseries.frequencies.to_offset(task.frequency)
+        actual_df = data_service.get_series(task.target_series_id, as_of=resolved_as_of)
+        actual_by_date = {
+            pd.Timestamp(row["timestamp"]).normalize(): float(row["value"]) for _, row in actual_df.iterrows()
+        }
+        for horizon in task.horizons:
+            errors.setdefault(horizon, [])
+            hits.setdefault(horizon, [])
+
+        for pred in result.predictions:
+            if not isinstance(pred.payload, ContinuousForecast):
+                continue
+            fd = pd.Timestamp(pred.forecast_date).normalize()
+            actual = actual_by_date.get(fd)
+            if actual is None:
+                continue
+            as_of_ts = pd.Timestamp(pred.as_of)
+            horizon = next(
+                (h for h in task.horizons if (as_of_ts + offset * h).normalize() == fd),
+                None,
+            )
+            if horizon is None:
+                unmatched += 1
+                continue
+            errors[horizon].append(abs(pred.payload.point_forecast - actual))
+            lo80, hi80 = _qval(pred.payload.quantiles, 0.1), _qval(pred.payload.quantiles, 0.9)
+            if not (np.isnan(lo80) or np.isnan(hi80)):
+                hits[horizon].append(float(lo80 <= actual <= hi80))
+
+    out: dict[int, dict[str, float]] = {
+        horizon: {
+            "mae": float(np.mean(errors[horizon])) if errors[horizon] else float("nan"),
+            "coverage_80": float(np.mean(hits[horizon]) * 100) if hits[horizon] else float("nan"),
+            "n": float(len(errors[horizon])),
+        }
+        for horizon in sorted(errors)
+    }
+    out[-1] = {"mae": float("nan"), "coverage_80": float("nan"), "n": float(unmatched)}
+    return out
+
+
 def backtest_results_to_frame(results: dict[str, BacktestResult]) -> pd.DataFrame:
     """Flatten multiple :class:`BacktestResult` objects into a leaderboard DataFrame."""
     rows: list[dict[str, Any]] = []
