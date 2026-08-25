@@ -118,6 +118,9 @@ SERIES_ID_GOLD_RETURN = "gold_log_ret_1b_l1b"
 SERIES_ID_DOLLAR_INDEX_RETURN = "dollar_index_log_ret_1b_l1b"
 SERIES_ID_OIL_CURVE_CONTANGO = "oil_curve_contango_l1b"
 SERIES_ID_VIX_LEVEL = "vix_level_l1b"
+SERIES_ID_OVX_LEVEL = "ovx_level_l1b"
+SERIES_ID_CRACK_SPREAD = "crack_spread_321_l1b"
+SERIES_ID_UST10Y_LEVEL = "ust10y_level_l1b"
 
 #: Default covariate panel for :func:`build_wti_multivariate_service`.  Ordered
 #: energy-complex first, then macro/risk.  Any series that cannot be fetched is
@@ -132,6 +135,44 @@ DEFAULT_WTI_COVARIATE_SERIES_IDS: list[str] = [
     SERIES_ID_VIX_LEVEL,
 ]
 
+#: The default panel plus OVX, the 3-2-1 crack spread, and the 10-year yield.
+#:
+#: Deliberately a SEPARATE list rather than three more entries above. Every
+#: cached numerical predictor keys on ``predictor_id``, which carries no record
+#: of its covariate panel, so widening the default in place would leave
+#: ``ecm_regression`` and ``darts_lightgbm_cov`` pointing at cache files
+#: computed from a different set of inputs -- silently reloaded and reported as
+#: the same model.
+EXPANDED_WTI_COVARIATE_SERIES_IDS: list[str] = [
+    *DEFAULT_WTI_COVARIATE_SERIES_IDS,
+    SERIES_ID_OVX_LEVEL,
+    SERIES_ID_CRACK_SPREAD,
+    SERIES_ID_UST10Y_LEVEL,
+]
+
+#: The level-valued members of the expanded panel, for use as an ECM's
+#: ``long_run_only_covariate_series_ids``.
+#:
+#: This is the textbook Engle-Granger split rather than a heuristic: levels are
+#: what can cointegrate with the target, differences are what drive short-run
+#: dynamics. The five here are prices or index levels that mean-revert around a
+#: structural relationship with crude; the remaining five are already log
+#: returns, i.e. already differenced, and belong in the short-run equation.
+#:
+#: Note this is a different rationale from the "level-only macro" variant in the
+#: older local-run cache. There the five long-run-only series were weekly and
+#: monthly releases forward-filled onto a business-day calendar, whose daily
+#: differences are almost all exactly zero; excluding them from the short-run
+#: equation removed a degenerate regressor. Here every series trades daily, so
+#: the argument is about cointegration structure, not forward-fill artifacts.
+LEVEL_VALUED_WTI_COVARIATE_SERIES_IDS: list[str] = [
+    SERIES_ID_OIL_CURVE_CONTANGO,
+    SERIES_ID_VIX_LEVEL,
+    SERIES_ID_OVX_LEVEL,
+    SERIES_ID_CRACK_SPREAD,
+    SERIES_ID_UST10Y_LEVEL,
+]
+
 # Yahoo Finance tickers backing each covariate.
 _BRENT_TICKER = "BZ=F"
 _NATGAS_TICKER = "NG=F"
@@ -141,6 +182,14 @@ _DOLLAR_INDEX_TICKER = "DX-Y.NYB"
 _VIX_TICKER = "^VIX"
 _OIL_FRONT_ETF_TICKER = "USO"  # United States Oil Fund — front-month WTI
 _OIL_12M_ETF_TICKER = "USL"  # United States 12 Month Oil Fund — 12-month strip
+_OVX_TICKER = "^OVX"  # CBOE Crude Oil ETF Volatility Index — oil-specific vol
+_HEATING_OIL_TICKER = "HO=F"  # ULSD/heating oil, the distillate leg of the 3-2-1 crack
+_UST10Y_TICKER = "^TNX"  # CBOE 10-Year Treasury Note Yield Index
+_WTI_FUTURES_TICKER = "CL=F"  # front-month WTI, the crude leg of the crack spread
+
+#: Gallons per barrel — converts the refined-product legs of the crack spread
+#: ($/gal) into the crude leg's units ($/bbl).
+_GALLONS_PER_BARREL = 42.0
 
 
 def _load_yahoo_close_frame(
@@ -259,6 +308,98 @@ def build_wti_multivariate_service(
             )
         except (RuntimeError, ValueError, KeyError) as exc:
             _handle_error(SERIES_ID_OIL_CURVE_CONTANGO, exc)
+
+    # ── OVX level ─────────────────────────────────────────────────────────────
+    # Oil-specific implied volatility. VIX above is equity vol; OVX prices the
+    # crude options market directly, so it carries the risk premium that VIX
+    # only proxies for.
+    if SERIES_ID_OVX_LEVEL in desired:
+        try:
+            ovx_close = _load_yahoo_close_frame(_OVX_TICKER, cache_dir=resolved_cache_dir, start=start)
+            ovx_level = apply_one_business_day_feature_lag(to_level_feature_from_daily(ovx_close))
+            svc.register(
+                SERIES_ID_OVX_LEVEL,
+                StaticFrameAdapter(ovx_level),
+                SeriesMetadata(
+                    series_id=SERIES_ID_OVX_LEVEL,
+                    description="CBOE Crude Oil ETF Volatility Index (OVX) close level, lagged 1 business day",
+                    source=f"Yahoo Finance ({_OVX_TICKER})",
+                    units="index-level",
+                    frequency="B",
+                    table_id="yahoo:^OVX:close-l1b",
+                ),
+            )
+        except (RuntimeError, ValueError, KeyError) as exc:
+            _handle_error(SERIES_ID_OVX_LEVEL, exc)
+
+    # ── 3-2-1 crack spread ────────────────────────────────────────────────────
+    # Refining margin: (2 x gasoline + 1 x distillate - 3 x crude) / 3, the
+    # standard proxy for what a refiner earns per barrel run. It is a *demand*
+    # signal for crude, and a level the market mean-reverts around — which is
+    # the kind of variable a long-run cointegrating relation is for.
+    #
+    # RB and HO quote in $/gallon while CL quotes in $/bbl, so the product legs
+    # are scaled by 42 before differencing. Getting this wrong would make the
+    # spread two orders of magnitude too small and it would simply be dropped
+    # by the L1 penalty, silently.
+    if SERIES_ID_CRACK_SPREAD in desired:
+        try:
+            gasoline = _load_yahoo_close_frame(_GASOLINE_TICKER, cache_dir=resolved_cache_dir, start=start)
+            distillate = _load_yahoo_close_frame(_HEATING_OIL_TICKER, cache_dir=resolved_cache_dir, start=start)
+            crude = _load_yahoo_close_frame(_WTI_FUTURES_TICKER, cache_dir=resolved_cache_dir, start=start)
+            merged = gasoline[["timestamp", "value"]].rename(columns={"value": "rb"})
+            merged = merged.merge(
+                distillate[["timestamp", "value"]].rename(columns={"value": "ho"}), on="timestamp", how="inner"
+            )
+            merged = merged.merge(
+                crude[["timestamp", "value"]].rename(columns={"value": "cl"}), on="timestamp", how="inner"
+            )
+            merged["value"] = (
+                2.0 * merged["rb"] * _GALLONS_PER_BARREL + merged["ho"] * _GALLONS_PER_BARREL - 3.0 * merged["cl"]
+            ) / 3.0
+            crack = apply_one_business_day_feature_lag(
+                to_level_feature_from_daily(merged[["timestamp", "value"]])
+            )
+            svc.register(
+                SERIES_ID_CRACK_SPREAD,
+                StaticFrameAdapter(crack),
+                SeriesMetadata(
+                    series_id=SERIES_ID_CRACK_SPREAD,
+                    description=(
+                        "3-2-1 crack spread (2xRB + HO - 3xCL)/3 in USD/bbl, lagged 1 business day"
+                    ),
+                    source=f"Yahoo Finance ({_GASOLINE_TICKER}, {_HEATING_OIL_TICKER}, {_WTI_FUTURES_TICKER})",
+                    units="USD/bbl",
+                    frequency="B",
+                    table_id="yahoo:RB-HO-CL:crack321-l1b",
+                ),
+            )
+        except (RuntimeError, ValueError, KeyError) as exc:
+            _handle_error(SERIES_ID_CRACK_SPREAD, exc)
+
+    # ── 10-year Treasury yield ────────────────────────────────────────────────
+    # The discount-rate channel: the cost of carrying inventory, and the macro
+    # variable the FRED panel was reaching for. Unlike INDPRO or the stress
+    # index it is a market price, so it is never revised — the value quoted on
+    # a given day is final, and a backtest reading it cannot see the future.
+    if SERIES_ID_UST10Y_LEVEL in desired:
+        try:
+            ust10y_close = _load_yahoo_close_frame(_UST10Y_TICKER, cache_dir=resolved_cache_dir, start=start)
+            ust10y_level = apply_one_business_day_feature_lag(to_level_feature_from_daily(ust10y_close))
+            svc.register(
+                SERIES_ID_UST10Y_LEVEL,
+                StaticFrameAdapter(ust10y_level),
+                SeriesMetadata(
+                    series_id=SERIES_ID_UST10Y_LEVEL,
+                    description="CBOE 10-Year Treasury Note Yield Index close level, lagged 1 business day",
+                    source=f"Yahoo Finance ({_UST10Y_TICKER})",
+                    units="index-level",
+                    frequency="B",
+                    table_id="yahoo:^TNX:close-l1b",
+                ),
+            )
+        except (RuntimeError, ValueError, KeyError) as exc:
+            _handle_error(SERIES_ID_UST10Y_LEVEL, exc)
 
     # ── VIX level ─────────────────────────────────────────────────────────────
     if SERIES_ID_VIX_LEVEL in desired:
