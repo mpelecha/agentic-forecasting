@@ -148,8 +148,11 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
     range.
     """
 
-    def __init__(self, config: AgentConfig, *, arima_num_samples: int = 1_000):
+    def __init__(
+        self, config: AgentConfig, *, arima_num_samples: int = 1_000, anchor_log_returns: bool = True
+    ):
         self.arima_num_samples = arima_num_samples
+        self.anchor_log_returns = anchor_log_returns
         self._prompt_builder = AnchoredPromptBuilder(arima_anchor={})
         self.inner = AgentPredictor(
             agent_config=config,
@@ -184,7 +187,7 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
         # differently from them. The measured gain is a lower bound on the
         # change, not the whole of it.
         arima_anchor = compute_arima_anchor(
-            task, context, num_samples=self.arima_num_samples, log_returns=True
+            task, context, num_samples=self.arima_num_samples, log_returns=self.anchor_log_returns
         )
         # Stashed here so AnchoredPromptBuilder.__call__ can read it when the
         # inner AgentPredictor invokes the prompt builder below.
@@ -238,7 +241,7 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
 
 
 def build_wti_scenario_schema_anchored_predictor(
-    config: AgentConfig, *, arima_num_samples: int = 1_000
+    config: AgentConfig, *, arima_num_samples: int = 1_000, anchor_log_returns: bool = True
 ) -> ScenarioSchemaAnchoredPredictor:
     """Wrap an :class:`AgentConfig` in a :class:`ScenarioSchemaAnchoredPredictor`.
 
@@ -248,6 +251,10 @@ def build_wti_scenario_schema_anchored_predictor(
         Config from :func:`~energy_oil_forecasting.scenario_schema_anchored.agent.build_wti_news_scenario_schema_anchored_config`.
     arima_num_samples : int, default=1_000
         Monte Carlo sample count for the AutoARIMA anchor.
+    anchor_log_returns : bool, default=True
+        Fit the anchor on log returns rather than the price level. Must
+        match the ``log_returns`` passed to the config builder, or the
+        cache name will not describe what actually ran.
 
     Returns
     -------
