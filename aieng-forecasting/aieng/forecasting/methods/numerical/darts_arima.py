@@ -120,10 +120,19 @@ class DartsAutoARIMAPredictor(Predictor):
         series_df = context.get_series(task.target_series_id)
         anchor_price: float | None = None
         if self._log_returns:
-            # y = first difference of log price. The first row becomes NaN and
-            # is dropped, so the fitted series is one observation shorter.
-            series_df = series_df.copy()
-            log_price = np.log(series_df["value"].clip(lower=self._price_floor))
+            # Non-positive prices are DROPPED, not clipped to the floor.
+            # Clipping WTI's April-2020 -$37.63 print up to $1 manufactures a
+            # log return of log(1/25) ~ -3.2 going in and ~ +3.0 coming out.
+            # Against typical daily returns near 0.02 those two points carry
+            # ~19 of squared error versus ~2.3 for the other 5,600 combined, so
+            # a maximum-likelihood fit inflates sigma roughly threefold and the
+            # intervals come out 2-3x too wide. (Percentile-based users of the
+            # same floor are unaffected -- order statistics ignore two extreme
+            # points -- which is why this only bites here.)
+            # Dropping instead leaves one return spanning the gap, which is
+            # large but real, rather than an artifact of the floor.
+            series_df = series_df[series_df["value"] > self._price_floor].copy()
+            log_price = np.log(series_df["value"])
             anchor_price = float(np.exp(log_price.iloc[-1]))
             series_df["value"] = log_price.diff()
             series_df = series_df.iloc[1:]
