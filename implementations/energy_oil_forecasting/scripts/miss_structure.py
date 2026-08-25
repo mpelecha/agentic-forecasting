@@ -30,6 +30,7 @@ Run from the implementations/energy_oil_forecasting directory:
 from __future__ import annotations
 
 import sys
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -97,6 +98,7 @@ def main() -> None:
             rows.append(
                 {
                     "predictor": name,
+                    "origin": str(pred["as_of"])[:10],
                     "horizon": horizon,
                     "actual": actual,
                     "point": float(payload["point_forecast"]),
@@ -116,6 +118,42 @@ def main() -> None:
         return
 
     print(f"{len(df)} scored predictions across {df['predictor'].nunique()} predictors\n")
+
+    # Grid check. cached_multi_backtest keys on spec_id alone, so results
+    # computed on a drifted origin grid land in the same folder and are read as
+    # one experiment. The 10yr-local window contains three such grids sharing
+    # zero origins, which silently invalidated every cross-predictor claim ever
+    # made from it. Cheap to detect, so detect it.
+    # A predictor that skipped an origin (an LLM call that failed, say) differs
+    # from the reference by one or two dates and is still directly comparable.
+    # A predictor computed on a *drifted* grid shares almost nothing with it.
+    # Only the second is a correctness problem, so only it gets the warning.
+    grids = {name: frozenset(sub["origin"]) for name, sub in df.groupby("predictor")}
+    # The most common origin set, not the intersection of all of them: the
+    # intersection drops any origin a single predictor skipped, which then makes
+    # every complete predictor look like it has an extra one.
+    modal = Counter(grids.values()).most_common(1)[0][0]
+    drifted, partial = {}, {}
+    for name, grid in grids.items():
+        overlap = len(grid & modal) / len(grid) if grid else 0.0
+        if overlap < 0.5:
+            drifted[name] = (grid, overlap)
+        elif grid != modal:
+            partial[name] = len(modal - grid)
+    if drifted:
+        print("!! WARNING: predictors here were scored on a DIFFERENT origin grid.")
+        print("   cached_multi_backtest keys on spec_id alone, so a run whose grid")
+        print("   drifted lands in this folder and reads as the same experiment.")
+        print("   Each predictor's own coverage is valid; comparing these against")
+        print("   the rest is not -- they are different experiments.")
+        for name, (grid, overlap) in sorted(drifted.items()):
+            print(f"   {name[:60]:60} {len(grid)} origins from {min(grid)}, "
+                  f"{100 * overlap:.0f}% shared")
+        print()
+    if partial:
+        for name, missing in sorted(partial.items()):
+            print(f"note: {name[:60]} is missing {missing} origin(s) — skipped, not drifted")
+        print()
     print("=" * 108)
     print("COVERAGE AND MISS STRUCTURE (80% band = p10..p90)")
     print("=" * 108)

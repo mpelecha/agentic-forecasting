@@ -176,19 +176,40 @@ def build_numerical_predictors(data_service) -> list:
     use_log_levels=False, covariate_diff_path="zero"), and every one of those
     series is available from build_wti_multivariate_service().
 
-    The four "expanded" ECM variants are deliberately absent. They need nine
-    further series (OVX, EIA crude stocks, refinery utilization, the financial
-    stress index, INDPRO, durable goods, the crack spread, and two Treasury
-    series) that this data.py does not define. Their configs also cannot be
-    fully recovered: ecm_regression_expanded and ecm_regression_expanded_
-    levelonly record byte-identical metadata - same covariates, same flags -
-    so whatever separates them lives in code that was never committed.
-    Reproducing them needs the local machine's data.py plus its data/eia/ and
-    data/fred/ caches.
+    The four "expanded" ECM variants are deliberately absent, but only for
+    want of DATA. They need nine further series (OVX, EIA crude stocks,
+    refinery utilization, the financial stress index, INDPRO, durable goods,
+    the crack spread, and two Treasury series) that this data.py does not
+    define, so reproducing them needs the local machine's data.py plus its
+    data/eia/ and data/fred/ caches.
 
-    That is a smaller loss than it sounds: on the local grid the expanded
-    variants scored 3.83-3.85 against the base ECM's 3.89 overall, a gap well
-    inside the noise. The base is a fair stand-in for the family.
+    An earlier version of this note claimed their configs could not be
+    recovered either - that expanded and expanded_levelonly recorded
+    byte-identical metadata, so whatever separated them was never committed.
+    Both halves of that are wrong. The cached metadata differs: expanded
+    records long_run_only_covariates=None, expanded_levelonly records
+    [crude_stocks_ex_spr_wl, durable_goods_orders_ml, fin_stress_index_wl,
+    indpro_ml, refinery_utilization_wl]. And the mechanism is committed - it
+    is the long_run_only_covariate_series_ids argument on
+    ErrorCorrectionRegressionPredictor. "Level-only macro" means those five
+    weekly/monthly series enter the long-run cointegrating relation but not the
+    short-run differenced equation, which is the right call for series that are
+    forward-filled onto a business-day calendar: their daily differences are
+    almost all exactly zero, with a spike on release day.
+
+    That is a smaller loss than it sounds, though the comparison behind the
+    original claim does not hold. The local-run cache holds THREE origin grids
+    that share no origins at all - base/expanded start 2014-04-24, the
+    levelonly and yields variants start 2014-04-25, and every non-ECM
+    predictor starts 2014-04-21 - so "expanded scored 3.83-3.85 against the
+    base ECM's 3.89" was comparing different experiments sitting in one folder,
+    the ANCHOR_END drift documented in 04b. scripts/miss_structure.py now
+    detects and warns about this.
+
+    What survives is per-predictor and does not need the comparison: every ECM
+    variant over-covers heavily, 92.2-92.8% against a nominal 80%, with a
+    consistent low bias (mean signed error -3.6 to -4.8, misses 10-13 below
+    against 0-2 above). Wide bands and a centre set too high, in all five.
     """
     covariates = [c for c in DEFAULT_WTI_COVARIATE_SERIES_IDS if c in set(data_service.series_ids)]
     missing = sorted(set(DEFAULT_WTI_COVARIATE_SERIES_IDS) - set(covariates))
