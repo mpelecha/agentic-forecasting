@@ -1,0 +1,2435 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2024-07-23T00:00:00'
+  end: '2026-04-27T00:00:00'
+  stride: 63
+  origin_dates: null
+  warmup: 250
+  description: Prospective/out-of-sample evaluation period in 2026 for daily WTI crude
+    oil. Evaluates selected contender models on 18 weekly origins from the early 2026
+    geopolitical price shock through its aftermath, to measure adaptive real-time
+    forecasting performance.
+predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:18.987454'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-07-30T00:00:00'
+  payload:
+    point_forecast: 79.5
+    quantiles:
+      '0.05': 74.66883244808821
+      '0.1': 77.2
+      '0.2': 78.0
+      '0.3': 78.6
+      '0.4': 79.1
+      '0.5': 79.5
+      '0.6': 80.0
+      '0.7': 80.6
+      '0.8': 81.5
+      '0.9': 82.5
+      '0.95': 88.14834840100684
+  metadata:
+    factors:
+    - name: OPEC+ Supply Management
+      category: financial
+      tier: core
+      impact_score: null
+    - name: Global Demand Growth (China)
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Algorithmic/CTA Trading
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Demand-Led Correction
+      probability: 0.5
+      price_low: 70.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): bearish
+        Geopolitical Risk Premium: neutral
+        Algorithmic/CTA Trading: bearish
+    - name: Supply-Tightening Rebound
+      probability: 0.4
+      price_low: 79.0
+      price_high: 88.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: bullish
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    - name: Geopolitical Shock
+      probability: 0.1
+      price_low: 85.0
+      price_high: 100.0
+      is_tail_case: true
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    rationale: The market is currently caught between structural supply discipline
+      from OPEC+ and weakening demand signals from China. The recent price decline
+      has been exacerbated by algorithmic selling, but the downside is likely limited
+      by the floor provided by OPEC+ production cuts. The forecast reflects a cautious
+      outlook with a bias toward consolidation, while acknowledging the potential
+      for a sharp reversal if geopolitical tensions escalate.
+    horizon_rationale: Short-term consolidation expected as the market digests the
+      recent selloff and assesses the strength of US summer demand versus Chinese
+      economic weakness.
+    langfuse_trace_id: 01f3bccfb808b705486fb22d0468939e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/01f3bccfb808b705486fb22d0468939e
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:18.987454'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-06T00:00:00'
+  payload:
+    point_forecast: 79.0
+    quantiles:
+      '0.05': 73.00795231777602
+      '0.1': 76.0
+      '0.2': 77.0
+      '0.3': 77.8
+      '0.4': 78.4
+      '0.5': 79.0
+      '0.6': 79.8
+      '0.7': 80.8
+      '0.8': 82.0
+      '0.9': 83.5
+      '0.95': 90.67534781489437
+  metadata:
+    factors:
+    - name: OPEC+ Supply Management
+      category: financial
+      tier: core
+      impact_score: null
+    - name: Global Demand Growth (China)
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Algorithmic/CTA Trading
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Demand-Led Correction
+      probability: 0.5
+      price_low: 70.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): bearish
+        Geopolitical Risk Premium: neutral
+        Algorithmic/CTA Trading: bearish
+    - name: Supply-Tightening Rebound
+      probability: 0.4
+      price_low: 79.0
+      price_high: 88.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: bullish
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    - name: Geopolitical Shock
+      probability: 0.1
+      price_low: 85.0
+      price_high: 100.0
+      is_tail_case: true
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    rationale: The market is currently caught between structural supply discipline
+      from OPEC+ and weakening demand signals from China. The recent price decline
+      has been exacerbated by algorithmic selling, but the downside is likely limited
+      by the floor provided by OPEC+ production cuts. The forecast reflects a cautious
+      outlook with a bias toward consolidation, while acknowledging the potential
+      for a sharp reversal if geopolitical tensions escalate.
+    horizon_rationale: Continued volatility as technical selling pressures compete
+      with fundamental support from inventory drawdowns.
+    langfuse_trace_id: 01f3bccfb808b705486fb22d0468939e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/01f3bccfb808b705486fb22d0468939e
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:18.987454'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-21T00:00:00'
+  payload:
+    point_forecast: 78.5
+    quantiles:
+      '0.05': 71.26794919243112
+      '0.1': 74.5
+      '0.2': 76.0
+      '0.3': 77.0
+      '0.4': 77.8
+      '0.5': 78.5
+      '0.6': 79.5
+      '0.7': 80.5
+      '0.8': 82.0
+      '0.9': 84.0
+      '0.95': 93.87157890324957
+  metadata:
+    factors:
+    - name: OPEC+ Supply Management
+      category: financial
+      tier: core
+      impact_score: null
+    - name: Global Demand Growth (China)
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Algorithmic/CTA Trading
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Demand-Led Correction
+      probability: 0.5
+      price_low: 70.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): bearish
+        Geopolitical Risk Premium: neutral
+        Algorithmic/CTA Trading: bearish
+    - name: Supply-Tightening Rebound
+      probability: 0.4
+      price_low: 79.0
+      price_high: 88.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: bullish
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    - name: Geopolitical Shock
+      probability: 0.1
+      price_low: 85.0
+      price_high: 100.0
+      is_tail_case: true
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    rationale: The market is currently caught between structural supply discipline
+      from OPEC+ and weakening demand signals from China. The recent price decline
+      has been exacerbated by algorithmic selling, but the downside is likely limited
+      by the floor provided by OPEC+ production cuts. The forecast reflects a cautious
+      outlook with a bias toward consolidation, while acknowledging the potential
+      for a sharp reversal if geopolitical tensions escalate.
+    horizon_rationale: Medium-term outlook remains cautious due to persistent concerns
+      over Chinese demand growth, though OPEC+ supply discipline provides a floor.
+    langfuse_trace_id: 01f3bccfb808b705486fb22d0468939e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/01f3bccfb808b705486fb22d0468939e
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:18.987454'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-10-18T00:00:00'
+  payload:
+    point_forecast: 77.0
+    quantiles:
+      '0.05': 68.0
+      '0.1': 70.0
+      '0.2': 72.5
+      '0.3': 74.5
+      '0.4': 76.0
+      '0.5': 77.0
+      '0.6': 78.5
+      '0.7': 80.5
+      '0.8': 83.0
+      '0.9': 86.0
+      '0.95': 100.0
+  metadata:
+    factors:
+    - name: OPEC+ Supply Management
+      category: financial
+      tier: core
+      impact_score: null
+    - name: Global Demand Growth (China)
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Algorithmic/CTA Trading
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Demand-Led Correction
+      probability: 0.5
+      price_low: 70.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): bearish
+        Geopolitical Risk Premium: neutral
+        Algorithmic/CTA Trading: bearish
+    - name: Supply-Tightening Rebound
+      probability: 0.4
+      price_low: 79.0
+      price_high: 88.0
+      is_tail_case: false
+      stances:
+        OPEC+ Supply Management: bullish
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    - name: Geopolitical Shock
+      probability: 0.1
+      price_low: 85.0
+      price_high: 100.0
+      is_tail_case: true
+      stances:
+        OPEC+ Supply Management: neutral
+        Global Demand Growth (China): neutral
+        Geopolitical Risk Premium: bullish
+        Algorithmic/CTA Trading: bullish
+    rationale: The market is currently caught between structural supply discipline
+      from OPEC+ and weakening demand signals from China. The recent price decline
+      has been exacerbated by algorithmic selling, but the downside is likely limited
+      by the floor provided by OPEC+ production cuts. The forecast reflects a cautious
+      outlook with a bias toward consolidation, while acknowledging the potential
+      for a sharp reversal if geopolitical tensions escalate.
+    horizon_rationale: Longer-term uncertainty increases as the market balances potential
+      seasonal demand shifts against the structural risk of a global economic slowdown.
+    langfuse_trace_id: 01f3bccfb808b705486fb22d0468939e
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/01f3bccfb808b705486fb22d0468939e
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:31.777263'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-10-25T00:00:00'
+  payload:
+    point_forecast: 70.5
+    quantiles:
+      '0.05': 65.02797340563346
+      '0.1': 68.0
+      '0.2': 69.0
+      '0.3': 69.8
+      '0.4': 70.2
+      '0.5': 70.5
+      '0.6': 71.0
+      '0.7': 72.0
+      '0.8': 73.5
+      '0.9': 75.0
+      '0.95': 80.30319414627833
+  metadata:
+    factors:
+    - name: Chinese Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Middle East Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Fundamental Bearishness
+      probability: 0.6
+      price_low: 60.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: bearish
+        Middle East Geopolitical Risk: neutral
+    - name: Geopolitical Escalation
+      probability: 0.25
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Chinese Demand Growth: neutral
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: bullish
+    - name: OPEC+ Intervention
+      probability: 0.15
+      price_low: 68.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: neutral
+    rationale: The market is currently caught between a structural bearish trend (weak
+      Chinese demand, rising non-OPEC supply) and a transitory, high-impact geopolitical
+      risk premium. The baseline forecast assumes the geopolitical premium continues
+      to erode, allowing fundamental supply/demand imbalances to dictate the price
+      trajectory toward the lower end of the recent range.
+    horizon_rationale: Short-term price action is dominated by the cooling of the
+      Middle East war premium and persistent demand concerns. The market is consolidating
+      near $70, with limited immediate catalysts for a breakout.
+    langfuse_trace_id: a3a151a94cee20119de87f9232516cb9
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a3a151a94cee20119de87f9232516cb9
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:31.777263'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-01T00:00:00'
+  payload:
+    point_forecast: 70.0
+    quantiles:
+      '0.05': 63.609542781331214
+      '0.1': 67.0
+      '0.2': 68.0
+      '0.3': 69.0
+      '0.4': 69.5
+      '0.5': 70.0
+      '0.6': 70.8
+      '0.7': 72.0
+      '0.8': 73.5
+      '0.9': 75.5
+      '0.95': 82.48011920555997
+  metadata:
+    factors:
+    - name: Chinese Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Middle East Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Fundamental Bearishness
+      probability: 0.6
+      price_low: 60.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: bearish
+        Middle East Geopolitical Risk: neutral
+    - name: Geopolitical Escalation
+      probability: 0.25
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Chinese Demand Growth: neutral
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: bullish
+    - name: OPEC+ Intervention
+      probability: 0.15
+      price_low: 68.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: neutral
+    rationale: The market is currently caught between a structural bearish trend (weak
+      Chinese demand, rising non-OPEC supply) and a transitory, high-impact geopolitical
+      risk premium. The baseline forecast assumes the geopolitical premium continues
+      to erode, allowing fundamental supply/demand imbalances to dictate the price
+      trajectory toward the lower end of the recent range.
+    horizon_rationale: As the geopolitical risk premium continues to fade, the focus
+      shifts back to the fundamental supply/demand balance, which remains bearish
+      due to Chinese demand weakness.
+    langfuse_trace_id: a3a151a94cee20119de87f9232516cb9
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a3a151a94cee20119de87f9232516cb9
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:31.777263'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-18T00:00:00'
+  payload:
+    point_forecast: 69.0
+    quantiles:
+      '0.05': 61.690598923241495
+      '0.1': 65.0
+      '0.2': 66.5
+      '0.3': 67.5
+      '0.4': 68.5
+      '0.5': 69.0
+      '0.6': 70.0
+      '0.7': 71.5
+      '0.8': 73.5
+      '0.9': 76.0
+      '0.95': 85.1395280956807
+  metadata:
+    factors:
+    - name: Chinese Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Middle East Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Fundamental Bearishness
+      probability: 0.6
+      price_low: 60.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: bearish
+        Middle East Geopolitical Risk: neutral
+    - name: Geopolitical Escalation
+      probability: 0.25
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Chinese Demand Growth: neutral
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: bullish
+    - name: OPEC+ Intervention
+      probability: 0.15
+      price_low: 68.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: neutral
+    rationale: The market is currently caught between a structural bearish trend (weak
+      Chinese demand, rising non-OPEC supply) and a transitory, high-impact geopolitical
+      risk premium. The baseline forecast assumes the geopolitical premium continues
+      to erode, allowing fundamental supply/demand imbalances to dictate the price
+      trajectory toward the lower end of the recent range.
+    horizon_rationale: Over the next month, the market will likely test lower support
+      levels as the lack of a major supply disruption in the Middle East becomes the
+      baseline expectation.
+    langfuse_trace_id: a3a151a94cee20119de87f9232516cb9
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a3a151a94cee20119de87f9232516cb9
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:31.777263'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2025-01-15T00:00:00'
+  payload:
+    point_forecast: 67.5
+    quantiles:
+      '0.05': 60.0
+      '0.1': 62.0
+      '0.2': 64.0
+      '0.3': 65.5
+      '0.4': 66.5
+      '0.5': 67.5
+      '0.6': 69.0
+      '0.7': 71.0
+      '0.8': 74.0
+      '0.9': 78.0
+      '0.95': 90.0
+  metadata:
+    factors:
+    - name: Chinese Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Middle East Geopolitical Risk
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Fundamental Bearishness
+      probability: 0.6
+      price_low: 60.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: bearish
+        Middle East Geopolitical Risk: neutral
+    - name: Geopolitical Escalation
+      probability: 0.25
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Chinese Demand Growth: neutral
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: bullish
+    - name: OPEC+ Intervention
+      probability: 0.15
+      price_low: 68.0
+      price_high: 78.0
+      is_tail_case: false
+      stances:
+        Chinese Demand Growth: bearish
+        Non-OPEC Supply Growth: neutral
+        Middle East Geopolitical Risk: neutral
+    rationale: The market is currently caught between a structural bearish trend (weak
+      Chinese demand, rising non-OPEC supply) and a transitory, high-impact geopolitical
+      risk premium. The baseline forecast assumes the geopolitical premium continues
+      to erode, allowing fundamental supply/demand imbalances to dictate the price
+      trajectory toward the lower end of the recent range.
+    horizon_rationale: Looking toward year-end, the structural oversupply narrative
+      for 2025, driven by non-OPEC production growth and Chinese demand deceleration,
+      exerts downward pressure on the price curve.
+    langfuse_trace_id: a3a151a94cee20119de87f9232516cb9
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/a3a151a94cee20119de87f9232516cb9
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:44.332370'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-22T00:00:00'
+  payload:
+    point_forecast: 77.0
+    quantiles:
+      '0.05': 71.1053962782692
+      '0.1': 74.5
+      '0.2': 75.5
+      '0.3': 76.2
+      '0.4': 76.6
+      '0.5': 77.0
+      '0.6': 77.5
+      '0.7': 78.2
+      '0.8': 79.0
+      '0.9': 80.5
+      '0.95': 83.8946037217308
+  metadata:
+    factors:
+    - name: Geopolitical Risk
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Demand Outlook
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC+ Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Sanctions Impact
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Geopolitical Escalation
+      probability: 0.3
+      price_low: 78.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk: bullish
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: bullish
+    - name: Macro Cooling
+      probability: 0.4
+      price_low: 65.0
+      price_high: 74.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: bearish
+        Non-OPEC+ Supply Growth: bullish
+        Sanctions Impact: neutral
+    - name: Market Equilibrium
+      probability: 0.3
+      price_low: 72.0
+      price_high: 79.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: neutral
+    rationale: The market is currently caught between a significant geopolitical risk
+      premium (driven by new sanctions) and growing concerns over global demand and
+      non-OPEC+ supply. The forecast reflects a high-volatility environment where
+      the initial price surge is likely to face resistance, with a bias toward mean
+      reversion unless geopolitical tensions escalate further.
+    horizon_rationale: Short-term consolidation following the mid-January rally. Market
+      is digesting new sanctions and testing technical resistance near $78.
+    langfuse_trace_id: 8d343a79b2be0ccac0cafecb1becb3cc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d343a79b2be0ccac0cafecb1becb3cc
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:44.332370'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-29T00:00:00'
+  payload:
+    point_forecast: 76.5
+    quantiles:
+      '0.05': 68.60954278133121
+      '0.1': 72.5
+      '0.2': 74.0
+      '0.3': 75.0
+      '0.4': 75.8
+      '0.5': 76.5
+      '0.6': 77.2
+      '0.7': 78.5
+      '0.8': 80.0
+      '0.9': 82.0
+      '0.95': 86.08966198689119
+  metadata:
+    factors:
+    - name: Geopolitical Risk
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Demand Outlook
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC+ Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Sanctions Impact
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Geopolitical Escalation
+      probability: 0.3
+      price_low: 78.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk: bullish
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: bullish
+    - name: Macro Cooling
+      probability: 0.4
+      price_low: 65.0
+      price_high: 74.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: bearish
+        Non-OPEC+ Supply Growth: bullish
+        Sanctions Impact: neutral
+    - name: Market Equilibrium
+      probability: 0.3
+      price_low: 72.0
+      price_high: 79.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: neutral
+    rationale: The market is currently caught between a significant geopolitical risk
+      premium (driven by new sanctions) and growing concerns over global demand and
+      non-OPEC+ supply. The forecast reflects a high-volatility environment where
+      the initial price surge is likely to face resistance, with a bias toward mean
+      reversion unless geopolitical tensions escalate further.
+    horizon_rationale: Increased uncertainty as the market assesses the durability
+      of the geopolitical risk premium versus emerging macro demand concerns.
+    langfuse_trace_id: 8d343a79b2be0ccac0cafecb1becb3cc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d343a79b2be0ccac0cafecb1becb3cc
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:44.332370'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-02-13T00:00:00'
+  payload:
+    point_forecast: 75.0
+    quantiles:
+      '0.05': 66.26794919243112
+      '0.1': 70.0
+      '0.2': 72.0
+      '0.3': 73.5
+      '0.4': 74.2
+      '0.5': 75.0
+      '0.6': 76.0
+      '0.7': 77.5
+      '0.8': 79.5
+      '0.9': 82.5
+      '0.95': 87.88675134594813
+  metadata:
+    factors:
+    - name: Geopolitical Risk
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Demand Outlook
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC+ Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Sanctions Impact
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Geopolitical Escalation
+      probability: 0.3
+      price_low: 78.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk: bullish
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: bullish
+    - name: Macro Cooling
+      probability: 0.4
+      price_low: 65.0
+      price_high: 74.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: bearish
+        Non-OPEC+ Supply Growth: bullish
+        Sanctions Impact: neutral
+    - name: Market Equilibrium
+      probability: 0.3
+      price_low: 72.0
+      price_high: 79.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: neutral
+    rationale: The market is currently caught between a significant geopolitical risk
+      premium (driven by new sanctions) and growing concerns over global demand and
+      non-OPEC+ supply. The forecast reflects a high-volatility environment where
+      the initial price surge is likely to face resistance, with a bias toward mean
+      reversion unless geopolitical tensions escalate further.
+    horizon_rationale: Over a one-month horizon, the potential for a supply surplus
+      or cooling demand may outweigh the initial geopolitical shock, leading to a
+      slight downward drift.
+    langfuse_trace_id: 8d343a79b2be0ccac0cafecb1becb3cc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d343a79b2be0ccac0cafecb1becb3cc
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:44.332370'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-04-14T00:00:00'
+  payload:
+    point_forecast: 73.0
+    quantiles:
+      '0.05': 64.0
+      '0.1': 66.5
+      '0.2': 69.0
+      '0.3': 70.5
+      '0.4': 71.8
+      '0.5': 73.0
+      '0.6': 74.5
+      '0.7': 76.5
+      '0.8': 79.0
+      '0.9': 83.0
+      '0.95': 90.0
+  metadata:
+    factors:
+    - name: Geopolitical Risk
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Global Demand Outlook
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC+ Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Sanctions Impact
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Geopolitical Escalation
+      probability: 0.3
+      price_low: 78.0
+      price_high: 90.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk: bullish
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: bullish
+    - name: Macro Cooling
+      probability: 0.4
+      price_low: 65.0
+      price_high: 74.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: bearish
+        Non-OPEC+ Supply Growth: bullish
+        Sanctions Impact: neutral
+    - name: Market Equilibrium
+      probability: 0.3
+      price_low: 72.0
+      price_high: 79.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk: neutral
+        Global Demand Outlook: neutral
+        Non-OPEC+ Supply Growth: neutral
+        Sanctions Impact: neutral
+    rationale: The market is currently caught between a significant geopolitical risk
+      premium (driven by new sanctions) and growing concerns over global demand and
+      non-OPEC+ supply. The forecast reflects a high-volatility environment where
+      the initial price surge is likely to face resistance, with a bias toward mean
+      reversion unless geopolitical tensions escalate further.
+    horizon_rationale: Longer-term outlook reflects the structural risk of non-OPEC+
+      production growth and potential OPEC+ policy shifts, which could cap prices
+      despite geopolitical volatility.
+    langfuse_trace_id: 8d343a79b2be0ccac0cafecb1becb3cc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/8d343a79b2be0ccac0cafecb1becb3cc
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:55.481997'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-21T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 51.161343089536125
+      '0.1': 58.2
+      '0.2': 59.1
+      '0.3': 59.8
+      '0.4': 60.2
+      '0.5': 60.5
+      '0.6': 60.9
+      '0.7': 61.5
+      '0.8': 62.2
+      '0.9': 63.5
+      '0.95': 66.26493404152943
+  metadata:
+    factors:
+    - name: Global Trade Protectionism
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S. Inventory Levels
+      category: financial
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Bearish Tariff-Driven Contraction
+      probability: 0.6
+      price_low: 48.0
+      price_high: 60.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: bearish
+        U.S. Inventory Levels: bearish
+    - name: OPEC+ Intervention Support
+      probability: 0.3
+      price_low: 58.0
+      price_high: 70.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: neutral
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bullish
+    - name: Global Recession Tail Case
+      probability: 0.1
+      price_low: 35.0
+      price_high: 50.0
+      is_tail_case: true
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bearish
+    rationale: The market is currently in a 'risk-off' environment driven by the sudden
+      implementation of global tariffs. The primary risk is that this leads to a sustained
+      demand slowdown, which, combined with rising non-OPEC supply, creates a structural
+      bearish environment. My forecast reflects a high probability of continued downward
+      pressure, with a tail-case scenario accounting for a potential global recession.
+    horizon_rationale: Short-term price action is dominated by the shock of new U.S.
+      tariffs and bearish inventory data. Expect continued volatility as the market
+      digests the immediate demand-destruction narrative.
+    langfuse_trace_id: 428781ea5de5d9be296db6f78b71245a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/428781ea5de5d9be296db6f78b71245a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:55.481997'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-28T00:00:00'
+  payload:
+    point_forecast: 59.5
+    quantiles:
+      '0.05': 47.031809271104045
+      '0.1': 56.2
+      '0.2': 57.5
+      '0.3': 58.5
+      '0.4': 59.1
+      '0.5': 59.5
+      '0.6': 60.2
+      '0.7': 61.0
+      '0.8': 62.0
+      '0.9': 63.5
+      '0.95': 66.99204768222398
+  metadata:
+    factors:
+    - name: Global Trade Protectionism
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S. Inventory Levels
+      category: financial
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Bearish Tariff-Driven Contraction
+      probability: 0.6
+      price_low: 48.0
+      price_high: 60.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: bearish
+        U.S. Inventory Levels: bearish
+    - name: OPEC+ Intervention Support
+      probability: 0.3
+      price_low: 58.0
+      price_high: 70.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: neutral
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bullish
+    - name: Global Recession Tail Case
+      probability: 0.1
+      price_low: 35.0
+      price_high: 50.0
+      is_tail_case: true
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bearish
+    rationale: The market is currently in a 'risk-off' environment driven by the sudden
+      implementation of global tariffs. The primary risk is that this leads to a sustained
+      demand slowdown, which, combined with rising non-OPEC supply, creates a structural
+      bearish environment. My forecast reflects a high probability of continued downward
+      pressure, with a tail-case scenario accounting for a potential global recession.
+    horizon_rationale: As the initial tariff shock settles, the market will likely
+      focus on the fundamental oversupply, potentially testing the $60 support level.
+    langfuse_trace_id: 428781ea5de5d9be296db6f78b71245a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/428781ea5de5d9be296db6f78b71245a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:55.481997'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-05-13T00:00:00'
+  payload:
+    point_forecast: 58.0
+    quantiles:
+      '0.05': 42.18504542377636
+      '0.1': 53.5
+      '0.2': 55.0
+      '0.3': 56.5
+      '0.4': 57.5
+      '0.5': 58.0
+      '0.6': 59.0
+      '0.7': 60.5
+      '0.8': 62.0
+      '0.9': 64.0
+      '0.95': 68.3094010767585
+  metadata:
+    factors:
+    - name: Global Trade Protectionism
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S. Inventory Levels
+      category: financial
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Bearish Tariff-Driven Contraction
+      probability: 0.6
+      price_low: 48.0
+      price_high: 60.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: bearish
+        U.S. Inventory Levels: bearish
+    - name: OPEC+ Intervention Support
+      probability: 0.3
+      price_low: 58.0
+      price_high: 70.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: neutral
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bullish
+    - name: Global Recession Tail Case
+      probability: 0.1
+      price_low: 35.0
+      price_high: 50.0
+      is_tail_case: true
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bearish
+    rationale: The market is currently in a 'risk-off' environment driven by the sudden
+      implementation of global tariffs. The primary risk is that this leads to a sustained
+      demand slowdown, which, combined with rising non-OPEC supply, creates a structural
+      bearish environment. My forecast reflects a high probability of continued downward
+      pressure, with a tail-case scenario accounting for a potential global recession.
+    horizon_rationale: Over the next month, the persistence of high U.S. inventories
+      and the lack of a clear OPEC+ response to the demand-side tariff shock likely
+      pushes prices lower.
+    langfuse_trace_id: 428781ea5de5d9be296db6f78b71245a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/428781ea5de5d9be296db6f78b71245a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:57:55.481997'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-07-10T00:00:00'
+  payload:
+    point_forecast: 56.0
+    quantiles:
+      '0.05': 35.0
+      '0.1': 50.0
+      '0.2': 52.5
+      '0.3': 54.0
+      '0.4': 55.2
+      '0.5': 56.0
+      '0.6': 57.5
+      '0.7': 59.5
+      '0.8': 62.0
+      '0.9': 65.0
+      '0.95': 70.0
+  metadata:
+    factors:
+    - name: Global Trade Protectionism
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Non-OPEC Supply Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S. Inventory Levels
+      category: financial
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Bearish Tariff-Driven Contraction
+      probability: 0.6
+      price_low: 48.0
+      price_high: 60.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: bearish
+        U.S. Inventory Levels: bearish
+    - name: OPEC+ Intervention Support
+      probability: 0.3
+      price_low: 58.0
+      price_high: 70.0
+      is_tail_case: false
+      stances:
+        Global Trade Protectionism: neutral
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bullish
+    - name: Global Recession Tail Case
+      probability: 0.1
+      price_low: 35.0
+      price_high: 50.0
+      is_tail_case: true
+      stances:
+        Global Trade Protectionism: bearish
+        Non-OPEC Supply Growth: neutral
+        U.S. Inventory Levels: bearish
+    rationale: The market is currently in a 'risk-off' environment driven by the sudden
+      implementation of global tariffs. The primary risk is that this leads to a sustained
+      demand slowdown, which, combined with rising non-OPEC supply, creates a structural
+      bearish environment. My forecast reflects a high probability of continued downward
+      pressure, with a tail-case scenario accounting for a potential global recession.
+    horizon_rationale: Longer-term, the structural imbalance between rising non-OPEC
+      supply and dampened global demand growth due to trade protectionism creates
+      a bearish baseline.
+    langfuse_trace_id: 428781ea5de5d9be296db6f78b71245a
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/428781ea5de5d9be296db6f78b71245a
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:08.822110'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-17T00:00:00'
+  payload:
+    point_forecast: 68.5
+    quantiles:
+      '0.05': 62.54196010845019
+      '0.1': 66.2
+      '0.2': 67.0
+      '0.3': 67.7
+      '0.4': 68.1
+      '0.5': 68.5
+      '0.6': 68.9
+      '0.7': 69.5
+      '0.8': 70.2
+      '0.9': 71.2
+      '0.95': 75.66233510382357
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Demand-Led Bearish
+      probability: 0.5
+      price_low: 55.0
+      price_high: 68.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Production Policy: bearish
+        Geopolitical Risk Premium: neutral
+    - name: Geopolitical Spike
+      probability: 0.2
+      price_low: 70.0
+      price_high: 85.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: bullish
+    - name: Balanced Consolidation
+      probability: 0.3
+      price_low: 64.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: neutral
+    rationale: The market is currently caught between weak demand fundamentals and
+      the potential for sudden geopolitical shocks. The baseline forecast assumes
+      a gradual drift lower as supply increases and demand growth remains lackluster,
+      while acknowledging significant upside risk if Middle East tensions re-escalate.
+    horizon_rationale: Short-term consolidation near $68.50 as the market digests
+      the recent recovery from May lows, balancing weak demand signals against current
+      geopolitical calm.
+    langfuse_trace_id: af5695e937c6b04392ebf02fdad62dc0
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/af5695e937c6b04392ebf02fdad62dc0
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:08.822110'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-24T00:00:00'
+  payload:
+    point_forecast: 69.0
+    quantiles:
+      '0.05': 60.41431417199682
+      '0.1': 65.0
+      '0.2': 66.5
+      '0.3': 67.8
+      '0.4': 68.5
+      '0.5': 69.0
+      '0.6': 69.8
+      '0.7': 70.5
+      '0.8': 71.5
+      '0.9': 72.8
+      '0.95': 78.38250490089277
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Demand-Led Bearish
+      probability: 0.5
+      price_low: 55.0
+      price_high: 68.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Production Policy: bearish
+        Geopolitical Risk Premium: neutral
+    - name: Geopolitical Spike
+      probability: 0.2
+      price_low: 70.0
+      price_high: 85.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: bullish
+    - name: Balanced Consolidation
+      probability: 0.3
+      price_low: 64.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: neutral
+    rationale: The market is currently caught between weak demand fundamentals and
+      the potential for sudden geopolitical shocks. The baseline forecast assumes
+      a gradual drift lower as supply increases and demand growth remains lackluster,
+      while acknowledging significant upside risk if Middle East tensions re-escalate.
+    horizon_rationale: Increased volatility expected as market participants react
+      to upcoming inventory data and potential shifts in OPEC+ rhetoric regarding
+      production levels.
+    langfuse_trace_id: af5695e937c6b04392ebf02fdad62dc0
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/af5695e937c6b04392ebf02fdad62dc0
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:08.822110'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-08-08T00:00:00'
+  payload:
+    point_forecast: 67.5
+    quantiles:
+      '0.05': 57.53589838486224
+      '0.1': 62.5
+      '0.2': 64.0
+      '0.3': 65.5
+      '0.4': 66.8
+      '0.5': 67.5
+      '0.6': 68.5
+      '0.7': 69.5
+      '0.8': 71.0
+      '0.9': 73.0
+      '0.95': 80.77350269189625
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Demand-Led Bearish
+      probability: 0.5
+      price_low: 55.0
+      price_high: 68.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Production Policy: bearish
+        Geopolitical Risk Premium: neutral
+    - name: Geopolitical Spike
+      probability: 0.2
+      price_low: 70.0
+      price_high: 85.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: bullish
+    - name: Balanced Consolidation
+      probability: 0.3
+      price_low: 64.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: neutral
+    rationale: The market is currently caught between weak demand fundamentals and
+      the potential for sudden geopolitical shocks. The baseline forecast assumes
+      a gradual drift lower as supply increases and demand growth remains lackluster,
+      while acknowledging significant upside risk if Middle East tensions re-escalate.
+    horizon_rationale: Medium-term pressure from persistent demand weakness in emerging
+      markets likely outweighs supply-side support, leading to a slight downward drift.
+    langfuse_trace_id: af5695e937c6b04392ebf02fdad62dc0
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/af5695e937c6b04392ebf02fdad62dc0
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:08.822110'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-10-07T00:00:00'
+  payload:
+    point_forecast: 65.0
+    quantiles:
+      '0.05': 55.0
+      '0.1': 57.5
+      '0.2': 60.0
+      '0.3': 62.0
+      '0.4': 63.5
+      '0.5': 65.0
+      '0.6': 67.0
+      '0.7': 69.0
+      '0.8': 72.0
+      '0.9': 75.0
+      '0.95': 85.0
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Demand-Led Bearish
+      probability: 0.5
+      price_low: 55.0
+      price_high: 68.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Production Policy: bearish
+        Geopolitical Risk Premium: neutral
+    - name: Geopolitical Spike
+      probability: 0.2
+      price_low: 70.0
+      price_high: 85.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: bullish
+    - name: Balanced Consolidation
+      probability: 0.3
+      price_low: 64.0
+      price_high: 72.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Production Policy: neutral
+        Geopolitical Risk Premium: neutral
+    rationale: The market is currently caught between weak demand fundamentals and
+      the potential for sudden geopolitical shocks. The baseline forecast assumes
+      a gradual drift lower as supply increases and demand growth remains lackluster,
+      while acknowledging significant upside risk if Middle East tensions re-escalate.
+    horizon_rationale: Longer-term outlook remains bearish as the market adjusts to
+      higher OPEC+ output and structural demand concerns, with significant tail risk
+      from potential geopolitical escalation.
+    langfuse_trace_id: af5695e937c6b04392ebf02fdad62dc0
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/af5695e937c6b04392ebf02fdad62dc0
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:21.054370'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-14T00:00:00'
+  payload:
+    point_forecast: 61.5
+    quantiles:
+      '0.05': 56.66883244808822
+      '0.1': 59.2
+      '0.2': 60.1
+      '0.3': 60.8
+      '0.4': 61.2
+      '0.5': 61.5
+      '0.6': 61.9
+      '0.7': 62.5
+      '0.8': 63.2
+      '0.9': 64.1
+      '0.95': 67.81718084909505
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S.-China Trade Relations
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Targeted Sanctions on Russian Oil
+      category: geopolitical
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Escalating Trade War
+      probability: 0.5
+      price_low: 52.0
+      price_high: 62.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: bearish
+        Targeted Sanctions on Russian Oil: neutral
+    - name: Geopolitical Supply Disruption
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: bullish
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: bullish
+    - name: Market Stabilization
+      probability: 0.2
+      price_low: 58.0
+      price_high: 68.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: neutral
+    rationale: The market is currently caught between bearish macro-economic sentiment
+      driven by trade tensions and potential supply-side support from geopolitical
+      sanctions. The forecast reflects a cautious outlook, with a bias toward the
+      downside as trade risks are expected to persist and potentially intensify over
+      the coming months.
+    horizon_rationale: Short-term price action remains constrained by the tug-of-war
+      between inventory draws and macro-economic demand fears. The 5-day horizon reflects
+      a consolidation phase near current levels.
+    langfuse_trace_id: 5394de584e8a73e03e18717f3a9715ec
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5394de584e8a73e03e18717f3a9715ec
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:21.054370'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-21T00:00:00'
+  payload:
+    point_forecast: 61.0
+    quantiles:
+      '0.05': 55.308747549553615
+      '0.1': 58.5
+      '0.2': 59.5
+      '0.3': 60.2
+      '0.4': 60.6
+      '0.5': 61.0
+      '0.6': 61.5
+      '0.7': 62.2
+      '0.8': 63.0
+      '0.9': 64.5
+      '0.95': 69.58568582800318
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S.-China Trade Relations
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Targeted Sanctions on Russian Oil
+      category: geopolitical
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Escalating Trade War
+      probability: 0.5
+      price_low: 52.0
+      price_high: 62.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: bearish
+        Targeted Sanctions on Russian Oil: neutral
+    - name: Geopolitical Supply Disruption
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: bullish
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: bullish
+    - name: Market Stabilization
+      probability: 0.2
+      price_low: 58.0
+      price_high: 68.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: neutral
+    rationale: The market is currently caught between bearish macro-economic sentiment
+      driven by trade tensions and potential supply-side support from geopolitical
+      sanctions. The forecast reflects a cautious outlook, with a bias toward the
+      downside as trade risks are expected to persist and potentially intensify over
+      the coming months.
+    horizon_rationale: Over 10 days, the market may begin to price in more aggressively
+      the potential for U.S.-China trade friction, leading to a slight downward drift
+      in the median expectation.
+    langfuse_trace_id: 5394de584e8a73e03e18717f3a9715ec
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5394de584e8a73e03e18717f3a9715ec
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:21.054370'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-11-05T00:00:00'
+  payload:
+    point_forecast: 60.5
+    quantiles:
+      '0.05': 53.690598923241495
+      '0.1': 57.2
+      '0.2': 58.5
+      '0.3': 59.5
+      '0.4': 60.0
+      '0.5': 60.5
+      '0.6': 61.2
+      '0.7': 62.0
+      '0.8': 63.5
+      '0.9': 65.5
+      '0.95': 71.8301270189222
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S.-China Trade Relations
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Targeted Sanctions on Russian Oil
+      category: geopolitical
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Escalating Trade War
+      probability: 0.5
+      price_low: 52.0
+      price_high: 62.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: bearish
+        Targeted Sanctions on Russian Oil: neutral
+    - name: Geopolitical Supply Disruption
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: bullish
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: bullish
+    - name: Market Stabilization
+      probability: 0.2
+      price_low: 58.0
+      price_high: 68.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: neutral
+    rationale: The market is currently caught between bearish macro-economic sentiment
+      driven by trade tensions and potential supply-side support from geopolitical
+      sanctions. The forecast reflects a cautious outlook, with a bias toward the
+      downside as trade risks are expected to persist and potentially intensify over
+      the coming months.
+    horizon_rationale: The 21-day horizon incorporates the potential for further escalation
+      in trade tensions, which outweighs the support from targeted sanctions on Russian
+      oil.
+    langfuse_trace_id: 5394de584e8a73e03e18717f3a9715ec
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5394de584e8a73e03e18717f3a9715ec
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:21.054370'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2026-01-02T00:00:00'
+  payload:
+    point_forecast: 59.0
+    quantiles:
+      '0.05': 52.0
+      '0.1': 54.0
+      '0.2': 56.0
+      '0.3': 57.5
+      '0.4': 58.5
+      '0.5': 59.0
+      '0.6': 60.5
+      '0.7': 62.0
+      '0.8': 64.5
+      '0.9': 67.0
+      '0.95': 75.0
+  metadata:
+    factors:
+    - name: Global Demand Growth
+      category: macro
+      tier: core
+      impact_score: null
+    - name: OPEC+ Supply Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: U.S.-China Trade Relations
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: Targeted Sanctions on Russian Oil
+      category: geopolitical
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Escalating Trade War
+      probability: 0.5
+      price_low: 52.0
+      price_high: 62.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: bearish
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: bearish
+        Targeted Sanctions on Russian Oil: neutral
+    - name: Geopolitical Supply Disruption
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: bullish
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: bullish
+    - name: Market Stabilization
+      probability: 0.2
+      price_low: 58.0
+      price_high: 68.0
+      is_tail_case: true
+      stances:
+        Global Demand Growth: neutral
+        OPEC+ Supply Policy: neutral
+        U.S.-China Trade Relations: neutral
+        Targeted Sanctions on Russian Oil: neutral
+    rationale: The market is currently caught between bearish macro-economic sentiment
+      driven by trade tensions and potential supply-side support from geopolitical
+      sanctions. The forecast reflects a cautious outlook, with a bias toward the
+      downside as trade risks are expected to persist and potentially intensify over
+      the coming months.
+    horizon_rationale: Over the 63-day horizon, structural concerns regarding global
+      demand growth and the potential for a sustained trade war dominate, leading
+      to a lower median price forecast.
+    langfuse_trace_id: 5394de584e8a73e03e18717f3a9715ec
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/5394de584e8a73e03e18717f3a9715ec
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:32.379383'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-09T00:00:00'
+  payload:
+    point_forecast: 57.5
+    quantiles:
+      '0.05': 50.41508776881217
+      '0.1': 55.2
+      '0.2': 56.0
+      '0.3': 56.8
+      '0.4': 57.2
+      '0.5': 57.5
+      '0.6': 57.9
+      '0.7': 58.5
+      '0.8': 59.2
+      '0.9': 60.5
+      '0.95': 65.30319414627833
+  metadata:
+    factors:
+    - name: Global Supply Surplus
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Refining Margin Volatility
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Structural Surplus Dominance
+      probability: 0.6
+      price_low: 50.0
+      price_high: 58.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: neutral
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    - name: Geopolitical Supply Shock
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: neutral
+        Geopolitical Risk Premium: bullish
+        OPEC+ Production Policy: neutral
+        Refining Margin Volatility: bullish
+    - name: Market Capitulation
+      probability: 0.1
+      price_low: 40.0
+      price_high: 48.0
+      is_tail_case: true
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: bearish
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    rationale: The market is currently caught between a bearish structural outlook
+      (oversupply) and a persistent geopolitical risk premium. The baseline scenario
+      assumes the surplus continues to weigh on prices, while the tail case reflects
+      a potential breakdown in market confidence if demand data significantly underperforms.
+    horizon_rationale: Short-term price action remains anchored by the recent consolidation
+      near $57.50. Market is balancing weak physical fundamentals against immediate
+      geopolitical risk premiums.
+    langfuse_trace_id: 715b1d206a487a13e86884d1ab6b9b56
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/715b1d206a487a13e86884d1ab6b9b56
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:32.379383'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-16T00:00:00'
+  payload:
+    point_forecast: 57.0
+    quantiles:
+      '0.05': 48.121471257995225
+      '0.1': 54.5
+      '0.2': 55.5
+      '0.3': 56.2
+      '0.4': 56.7
+      '0.5': 57.0
+      '0.6': 57.6
+      '0.7': 58.5
+      '0.8': 59.8
+      '0.9': 61.5
+      '0.95': 67.78091443733757
+  metadata:
+    factors:
+    - name: Global Supply Surplus
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Refining Margin Volatility
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Structural Surplus Dominance
+      probability: 0.6
+      price_low: 50.0
+      price_high: 58.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: neutral
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    - name: Geopolitical Supply Shock
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: neutral
+        Geopolitical Risk Premium: bullish
+        OPEC+ Production Policy: neutral
+        Refining Margin Volatility: bullish
+    - name: Market Capitulation
+      probability: 0.1
+      price_low: 40.0
+      price_high: 48.0
+      is_tail_case: true
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: bearish
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    rationale: The market is currently caught between a bearish structural outlook
+      (oversupply) and a persistent geopolitical risk premium. The baseline scenario
+      assumes the surplus continues to weigh on prices, while the tail case reflects
+      a potential breakdown in market confidence if demand data significantly underperforms.
+    horizon_rationale: Over the next two weeks, the market will likely test the lower
+      bound of the recent range as the reality of the global supply surplus persists.
+    langfuse_trace_id: 715b1d206a487a13e86884d1ab6b9b56
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/715b1d206a487a13e86884d1ab6b9b56
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:32.379383'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-02-02T00:00:00'
+  payload:
+    point_forecast: 56.5
+    quantiles:
+      '0.05': 45.07179676972449
+      '0.1': 53.5
+      '0.2': 54.8
+      '0.3': 55.7
+      '0.4': 56.2
+      '0.5': 56.5
+      '0.6': 57.2
+      '0.7': 58.5
+      '0.8': 60.5
+      '0.9': 63.0
+      '0.95': 70.77350269189625
+  metadata:
+    factors:
+    - name: Global Supply Surplus
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Refining Margin Volatility
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Structural Surplus Dominance
+      probability: 0.6
+      price_low: 50.0
+      price_high: 58.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: neutral
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    - name: Geopolitical Supply Shock
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: neutral
+        Geopolitical Risk Premium: bullish
+        OPEC+ Production Policy: neutral
+        Refining Margin Volatility: bullish
+    - name: Market Capitulation
+      probability: 0.1
+      price_low: 40.0
+      price_high: 48.0
+      is_tail_case: true
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: bearish
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    rationale: The market is currently caught between a bearish structural outlook
+      (oversupply) and a persistent geopolitical risk premium. The baseline scenario
+      assumes the surplus continues to weigh on prices, while the tail case reflects
+      a potential breakdown in market confidence if demand data significantly underperforms.
+    horizon_rationale: By the end of the month, the structural oversupply narrative
+      is expected to exert downward pressure, though geopolitical volatility keeps
+      the right tail fat.
+    langfuse_trace_id: 715b1d206a487a13e86884d1ab6b9b56
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/715b1d206a487a13e86884d1ab6b9b56
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T13:58:32.379383'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-04-01T00:00:00'
+  payload:
+    point_forecast: 55.0
+    quantiles:
+      '0.05': 40.0
+      '0.1': 50.0
+      '0.2': 52.5
+      '0.3': 54.0
+      '0.4': 54.6
+      '0.5': 55.0
+      '0.6': 56.5
+      '0.7': 58.5
+      '0.8': 62.0
+      '0.9': 66.0
+      '0.95': 75.0
+  metadata:
+    factors:
+    - name: Global Supply Surplus
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Geopolitical Risk Premium
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: OPEC+ Production Policy
+      category: macro
+      tier: core
+      impact_score: null
+    - name: Refining Margin Volatility
+      category: financial
+      tier: transitory
+      impact_score: medium
+    scenarios:
+    - name: Structural Surplus Dominance
+      probability: 0.6
+      price_low: 50.0
+      price_high: 58.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: neutral
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    - name: Geopolitical Supply Shock
+      probability: 0.3
+      price_low: 60.0
+      price_high: 75.0
+      is_tail_case: false
+      stances:
+        Global Supply Surplus: neutral
+        Geopolitical Risk Premium: bullish
+        OPEC+ Production Policy: neutral
+        Refining Margin Volatility: bullish
+    - name: Market Capitulation
+      probability: 0.1
+      price_low: 40.0
+      price_high: 48.0
+      is_tail_case: true
+      stances:
+        Global Supply Surplus: bearish
+        Geopolitical Risk Premium: bearish
+        OPEC+ Production Policy: bearish
+        Refining Margin Volatility: bearish
+    rationale: The market is currently caught between a bearish structural outlook
+      (oversupply) and a persistent geopolitical risk premium. The baseline scenario
+      assumes the surplus continues to weigh on prices, while the tail case reflects
+      a potential breakdown in market confidence if demand data significantly underperforms.
+    horizon_rationale: Over the 3-month horizon, the cumulative effect of the projected
+      global surplus is expected to drive prices lower, barring a major geopolitical
+      escalation.
+    langfuse_trace_id: 715b1d206a487a13e86884d1ab6b9b56
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/715b1d206a487a13e86884d1ab6b9b56
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T14:00:10.674988'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-08T00:00:00'
+  payload:
+    point_forecast: 103.5
+    quantiles:
+      '0.05': 89.3656383018099
+      '0.1': 97.5
+      '0.2': 99.5
+      '0.3': 101.0
+      '0.4': 102.5
+      '0.5': 103.5
+      '0.6': 105.0
+      '0.7': 107.0
+      '0.8': 109.5
+      '0.9': 112.0
+      '0.95': 119.22577127364258
+  metadata:
+    factors:
+    - name: Geopolitical Risk (Strait of Hormuz)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: U.S. Shale Capital Discipline
+      category: financial
+      tier: core
+      impact_score: null
+    - name: IEA Emergency Reserve Release
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Crisis Escalation
+      probability: 0.3
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bullish
+        U.S. Shale Capital Discipline: bullish
+        IEA Emergency Reserve Release: bearish
+    - name: Status Quo / Managed Crisis
+      probability: 0.5
+      price_low: 90.0
+      price_high: 105.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): neutral
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: neutral
+    - name: Diplomatic De-escalation
+      probability: 0.2
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bearish
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: bearish
+    rationale: The market is currently in a high-stakes geopolitical crisis. The primary
+      uncertainty is the duration and severity of the Strait of Hormuz closure. While
+      the IEA release provides a temporary buffer, the lack of supply response from
+      U.S. producers keeps the market structurally tight. The forecast reflects a
+      high-risk environment with a significant tail risk of further escalation.
+    horizon_rationale: Short-term volatility remains elevated due to the ongoing Strait
+      of Hormuz closure. The market is pricing in a high risk premium, with price
+      action sensitive to any escalation or de-escalation signals.
+    langfuse_trace_id: e42068b7af50201cc4b1b303757f6816
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/e42068b7af50201cc4b1b303757f6816
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T14:00:10.674988'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-15T00:00:00'
+  payload:
+    point_forecast: 105.0
+    quantiles:
+      '0.05': 85.22703788043843
+      '0.1': 95.0
+      '0.2': 98.0
+      '0.3': 101.0
+      '0.4': 103.0
+      '0.5': 105.0
+      '0.6': 107.5
+      '0.7': 110.0
+      '0.8': 113.0
+      '0.9': 116.0
+      '0.95': 123.38250490089277
+  metadata:
+    factors:
+    - name: Geopolitical Risk (Strait of Hormuz)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: U.S. Shale Capital Discipline
+      category: financial
+      tier: core
+      impact_score: null
+    - name: IEA Emergency Reserve Release
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Crisis Escalation
+      probability: 0.3
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bullish
+        U.S. Shale Capital Discipline: bullish
+        IEA Emergency Reserve Release: bearish
+    - name: Status Quo / Managed Crisis
+      probability: 0.5
+      price_low: 90.0
+      price_high: 105.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): neutral
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: neutral
+    - name: Diplomatic De-escalation
+      probability: 0.2
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bearish
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: bearish
+    rationale: The market is currently in a high-stakes geopolitical crisis. The primary
+      uncertainty is the duration and severity of the Strait of Hormuz closure. While
+      the IEA release provides a temporary buffer, the lack of supply response from
+      U.S. producers keeps the market structurally tight. The forecast reflects a
+      high-risk environment with a significant tail risk of further escalation.
+    horizon_rationale: As the crisis persists, the market may test the recent highs
+      if diplomatic efforts fail to secure a transit corridor, leading to a further
+      tightening of prompt supply.
+    langfuse_trace_id: e42068b7af50201cc4b1b303757f6816
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/e42068b7af50201cc4b1b303757f6816
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T14:00:10.674988'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-30T00:00:00'
+  payload:
+    point_forecast: 102.0
+    quantiles:
+      '0.05': 79.22649730810375
+      '0.1': 89.0
+      '0.2': 93.0
+      '0.3': 97.0
+      '0.4': 99.5
+      '0.5': 102.0
+      '0.6': 105.0
+      '0.7': 108.0
+      '0.8': 112.0
+      '0.9': 116.0
+      '0.95': 125.77350269189625
+  metadata:
+    factors:
+    - name: Geopolitical Risk (Strait of Hormuz)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: U.S. Shale Capital Discipline
+      category: financial
+      tier: core
+      impact_score: null
+    - name: IEA Emergency Reserve Release
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Crisis Escalation
+      probability: 0.3
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bullish
+        U.S. Shale Capital Discipline: bullish
+        IEA Emergency Reserve Release: bearish
+    - name: Status Quo / Managed Crisis
+      probability: 0.5
+      price_low: 90.0
+      price_high: 105.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): neutral
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: neutral
+    - name: Diplomatic De-escalation
+      probability: 0.2
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bearish
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: bearish
+    rationale: The market is currently in a high-stakes geopolitical crisis. The primary
+      uncertainty is the duration and severity of the Strait of Hormuz closure. While
+      the IEA release provides a temporary buffer, the lack of supply response from
+      U.S. producers keeps the market structurally tight. The forecast reflects a
+      high-risk environment with a significant tail risk of further escalation.
+    horizon_rationale: Over the next month, the impact of the IEA's emergency reserve
+      release will be tested against the reality of the supply disruption. A slight
+      cooling is possible if the market perceives the release as effective.
+    langfuse_trace_id: e42068b7af50201cc4b1b303757f6816
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/e42068b7af50201cc4b1b303757f6816
+- predictor_id: agent_predictor_wti_analyst_news_scenario_schema_enhanced_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T14:00:10.674988'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-06-29T00:00:00'
+  payload:
+    point_forecast: 95.0
+    quantiles:
+      '0.05': 75.0
+      '0.1': 80.0
+      '0.2': 85.0
+      '0.3': 89.0
+      '0.4': 92.0
+      '0.5': 95.0
+      '0.6': 98.0
+      '0.7': 102.0
+      '0.8': 107.0
+      '0.9': 113.0
+      '0.95': 130.0
+  metadata:
+    factors:
+    - name: Geopolitical Risk (Strait of Hormuz)
+      category: geopolitical
+      tier: core
+      impact_score: null
+    - name: U.S. Shale Capital Discipline
+      category: financial
+      tier: core
+      impact_score: null
+    - name: IEA Emergency Reserve Release
+      category: macro
+      tier: transitory
+      impact_score: high
+    scenarios:
+    - name: Crisis Escalation
+      probability: 0.3
+      price_low: 105.0
+      price_high: 130.0
+      is_tail_case: true
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bullish
+        U.S. Shale Capital Discipline: bullish
+        IEA Emergency Reserve Release: bearish
+    - name: Status Quo / Managed Crisis
+      probability: 0.5
+      price_low: 90.0
+      price_high: 105.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): neutral
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: neutral
+    - name: Diplomatic De-escalation
+      probability: 0.2
+      price_low: 75.0
+      price_high: 90.0
+      is_tail_case: false
+      stances:
+        Geopolitical Risk (Strait of Hormuz): bearish
+        U.S. Shale Capital Discipline: neutral
+        IEA Emergency Reserve Release: bearish
+    rationale: The market is currently in a high-stakes geopolitical crisis. The primary
+      uncertainty is the duration and severity of the Strait of Hormuz closure. While
+      the IEA release provides a temporary buffer, the lack of supply response from
+      U.S. producers keeps the market structurally tight. The forecast reflects a
+      high-risk environment with a significant tail risk of further escalation.
+    horizon_rationale: Longer-term, the market expects either a resolution to the
+      conflict or a significant demand destruction effect due to high prices and economic
+      slowdown, leading to a gradual normalization of the risk premium.
+    langfuse_trace_id: e42068b7af50201cc4b1b303757f6816
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/e42068b7af50201cc4b1b303757f6816
+scores:
+- 3.5455304431115096
+- 4.325352872901997
+- 4.792839665276165
+- 5.266279992978433
+- 0.9307039707226589
+- 0.9124020406597861
+- 1.1132972682284483
+- 7.821984220142209
+- 1.0835456153320684
+- 2.549090146435897
+- 2.5610638979992686
+- 8.836943369463455
+- 1.612923404489291
+- 1.526530410452744
+- 3.353010038527036
+- 6.554793138740478
+- 0.7464489639782599
+- 1.9277544191986482
+- 2.2758472897699242
+- 2.511157232867784
+- 1.92849812289257
+- 2.250388169345883
+- 0.950740317765988
+- 1.672727411443536
+- 1.0189094845547793
+- 1.4409865094903838
+- 3.2907575117776986
+- 38.78198621765642
+- 6.535287358867805
+- 9.346656003167332
+- 3.1765040934957987
+- 17.81198347107438
+metric: crps
+mean_score: 4.76415384602527
+ran_at: '2026-08-25T14:00:11.024315'
+skipped_origins: 0
