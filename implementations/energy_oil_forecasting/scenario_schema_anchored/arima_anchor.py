@@ -31,6 +31,7 @@ def compute_arima_anchor(
     context: ForecastContext,
     *,
     num_samples: int = 1_000,
+    log_returns: bool = False,
 ) -> dict[int, ContinuousForecast]:
     """Run AutoARIMA once and index its per-horizon forecasts by horizon.
 
@@ -44,6 +45,21 @@ def compute_arima_anchor(
         information cutoff ARIMA and the LLM both see.
     num_samples : int, default=1_000
         Monte Carlo sample count for AutoARIMA's quantile estimation.
+    log_returns : bool, default=False
+        Fit AutoARIMA on ``diff(log(price))`` and rebuild the price path from
+        the last close, instead of on the price level.
+
+        Off by default, and deliberately so: this anchor supplies the band that
+        the whole agent's calibration rests on, and the open question the 10yr
+        grid exists to answer is whether the agent preserves the *level*
+        anchor's calibration. Switching the anchor while measuring that would
+        change two things at once.
+
+        Note the resulting asymmetry if this is turned on. The centre-shift cap
+        in ``predictor.py`` already works in log-return space
+        (``compute_horizon_delta_percentiles`` defaults to ``log_returns=True``)
+        so that a given shift is equally permissive at $30 and at $110. The band
+        is the only part still specified in levels.
 
     Returns
     -------
@@ -51,7 +67,7 @@ def compute_arima_anchor(
         Maps each horizon in ``task.horizons`` to its deterministic ARIMA
         point forecast and quantiles.
     """
-    predictor = DartsAutoARIMAPredictor(num_samples=num_samples)
+    predictor = DartsAutoARIMAPredictor(num_samples=num_samples, log_returns=log_returns)
     predictions = predictor.predict(task, context)
 
     anchor: dict[int, ContinuousForecast] = {}
