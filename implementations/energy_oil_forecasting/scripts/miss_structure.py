@@ -18,6 +18,8 @@ Run from the implementations/energy_oil_forecasting directory:
 
     python scripts/miss_structure.py            # 2026 eval window (default)
     python scripts/miss_structure.py backtest   # 2025 backtest window
+    python scripts/miss_structure.py 10yr       # 2014-2024 quarterly, multi-regime
+    python scripts/miss_structure.py 10yr-local # ditto, numerical-only local run
 """
 
 from __future__ import annotations
@@ -35,16 +37,20 @@ from energy_oil_forecasting.data import WTI_SERIES_ID, build_wti_multivariate_se
 WINDOWS = {
     "eval": Path("data/predictions/energy_oil_eval_biweekly"),
     "backtest": Path("data/predictions/energy_oil_backtest_biweekly"),
+    "10yr": Path("data/predictions/energy_oil_backtest_10yr_quarterly"),
+    "10yr-local": Path("data/predictions/energy_oil_backtest_10yr_quarterly_localrun"),
 }
-HORIZONS = [5, 10, 21]
 
 
 def _horizon_for(as_of: pd.Timestamp, forecast_date: pd.Timestamp) -> int | None:
-    offset = pd.tseries.offsets.BDay()
-    for horizon in HORIZONS:
-        if (as_of + offset * horizon).normalize() == forecast_date.normalize():
-            return horizon
-    return None
+    """Business days between origin and forecast date.
+
+    Derived from the dates rather than matched against a hardcoded list, so
+    this works for any spec's horizon set (the 10yr quarterly window uses
+    [5, 10, 21, 63], the biweekly windows use [5, 10, 21]).
+    """
+    days = int(np.busday_count(as_of.date(), forecast_date.date()))
+    return days if days > 0 else None
 
 
 def main() -> None:
@@ -142,7 +148,7 @@ def main() -> None:
     print("=" * 108)
     print("BY HORIZON (all predictors pooled)")
     print("=" * 108)
-    for horizon in HORIZONS:
+    for horizon in sorted(h for h in df["horizon"].dropna().unique()):
         sub = df[df["horizon"] == horizon]
         if sub.empty:
             continue
