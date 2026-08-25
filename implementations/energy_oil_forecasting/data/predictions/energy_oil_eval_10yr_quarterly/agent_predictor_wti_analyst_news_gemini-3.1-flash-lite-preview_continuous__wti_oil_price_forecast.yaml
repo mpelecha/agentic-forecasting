@@ -1,0 +1,1096 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2024-07-23T00:00:00'
+  end: '2026-04-27T00:00:00'
+  stride: 63
+  origin_dates: null
+  warmup: 250
+  description: Prospective/out-of-sample evaluation period in 2026 for daily WTI crude
+    oil. Evaluates selected contender models on 18 weekly origins from the early 2026
+    geopolitical price shock through its aftermath, to measure adaptive real-time
+    forecasting performance.
+predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+predictions:
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:26.363908'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-07-30T00:00:00'
+  payload:
+    point_forecast: 79.5
+    quantiles:
+      '0.05': 77.2
+      '0.1': 78.0
+      '0.2': 78.6
+      '0.3': 79.0
+      '0.4': 79.2
+      '0.5': 79.5
+      '0.6': 79.8
+      '0.7': 80.2
+      '0.8': 80.8
+      '0.9': 81.5
+      '0.95': 82.2
+  metadata:
+    rationale: The WTI forecast is driven by a combination of prevailing macroeconomic
+      pessimism (specifically concerning Chinese demand) and the ongoing, disciplined
+      approach of OPEC+ to manage supply. Geopolitical risk in the Middle East, while
+      elevated, is treated with a muted risk premium as actual supply flow has remained
+      largely undisturbed. Domestic US policy regarding the SPR provides minimal short-term
+      price support. My forecasts reflect a cautious, slightly bearish outlook for
+      the next quarter, characterized by slow demand growth and moderate supply restoration.
+    horizon_rationale: In the near term (5 days), the market is consolidating after
+      a recent decline to just below $80. While macroeconomic concerns regarding Chinese
+      demand and global growth persist, the price is currently seeking support near
+      the $79-$80 level. Geopolitical risks, while present, have not manifested in
+      supply disruptions.
+    langfuse_trace_id: 71e562d8e5ba9df56e6b6a327cc51bc6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/71e562d8e5ba9df56e6b6a327cc51bc6
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:26.363908'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-06T00:00:00'
+  payload:
+    point_forecast: 79.0
+    quantiles:
+      '0.05': 75.5
+      '0.1': 76.5
+      '0.2': 77.5
+      '0.3': 78.2
+      '0.4': 78.6
+      '0.5': 79.0
+      '0.6': 79.5
+      '0.7': 80.2
+      '0.8': 81.0
+      '0.9': 82.0
+      '0.95': 83.0
+  metadata:
+    rationale: The WTI forecast is driven by a combination of prevailing macroeconomic
+      pessimism (specifically concerning Chinese demand) and the ongoing, disciplined
+      approach of OPEC+ to manage supply. Geopolitical risk in the Middle East, while
+      elevated, is treated with a muted risk premium as actual supply flow has remained
+      largely undisturbed. Domestic US policy regarding the SPR provides minimal short-term
+      price support. My forecasts reflect a cautious, slightly bearish outlook for
+      the next quarter, characterized by slow demand growth and moderate supply restoration.
+    horizon_rationale: Over 10 days, the downward pressure from weaker-than-expected
+      macro data in China and the US is likely to continue weighing on the market,
+      absent any unexpected major supply disruption. The market will likely test lower
+      supports if inventory data does not show significant draws.
+    langfuse_trace_id: 71e562d8e5ba9df56e6b6a327cc51bc6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/71e562d8e5ba9df56e6b6a327cc51bc6
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:26.363908'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-21T00:00:00'
+  payload:
+    point_forecast: 78.0
+    quantiles:
+      '0.05': 72.0
+      '0.1': 73.5
+      '0.2': 75.0
+      '0.3': 76.5
+      '0.4': 77.2
+      '0.5': 78.0
+      '0.6': 78.8
+      '0.7': 80.0
+      '0.8': 81.5
+      '0.9': 83.5
+      '0.95': 85.0
+  metadata:
+    rationale: The WTI forecast is driven by a combination of prevailing macroeconomic
+      pessimism (specifically concerning Chinese demand) and the ongoing, disciplined
+      approach of OPEC+ to manage supply. Geopolitical risk in the Middle East, while
+      elevated, is treated with a muted risk premium as actual supply flow has remained
+      largely undisturbed. Domestic US policy regarding the SPR provides minimal short-term
+      price support. My forecasts reflect a cautious, slightly bearish outlook for
+      the next quarter, characterized by slow demand growth and moderate supply restoration.
+    horizon_rationale: Looking 21 days ahead, the market enters August, traditionally
+      a period of strong demand, but structural headwinds from vehicle electrification
+      in China and slow global growth are expected to cap upside potential. OPEC+'s
+      phased production restoration remains the primary supply-side factor, likely
+      keeping the market in a balanced but range-bound state.
+    langfuse_trace_id: 71e562d8e5ba9df56e6b6a327cc51bc6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/71e562d8e5ba9df56e6b6a327cc51bc6
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:26.363908'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-10-18T00:00:00'
+  payload:
+    point_forecast: 76.5
+    quantiles:
+      '0.05': 68.0
+      '0.1': 70.0
+      '0.2': 72.5
+      '0.3': 74.5
+      '0.4': 75.8
+      '0.5': 76.5
+      '0.6': 77.5
+      '0.7': 79.5
+      '0.8': 82.0
+      '0.9': 85.0
+      '0.95': 87.5
+  metadata:
+    rationale: The WTI forecast is driven by a combination of prevailing macroeconomic
+      pessimism (specifically concerning Chinese demand) and the ongoing, disciplined
+      approach of OPEC+ to manage supply. Geopolitical risk in the Middle East, while
+      elevated, is treated with a muted risk premium as actual supply flow has remained
+      largely undisturbed. Domestic US policy regarding the SPR provides minimal short-term
+      price support. My forecasts reflect a cautious, slightly bearish outlook for
+      the next quarter, characterized by slow demand growth and moderate supply restoration.
+    horizon_rationale: By the 63-day horizon (approx. 3 months), the market will face
+      the reality of late-year demand softening. While OPEC+ maintains flexibility,
+      the structural deceleration in demand growth suggests the price trend may remain
+      under moderate pressure, with risks skewed to the downside if global economic
+      growth forecasts continue to be revised lower.
+    langfuse_trace_id: 71e562d8e5ba9df56e6b6a327cc51bc6
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/71e562d8e5ba9df56e6b6a327cc51bc6
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:41.034429'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-10-25T00:00:00'
+  payload:
+    point_forecast: 70.8
+    quantiles:
+      '0.05': 68.2
+      '0.1': 69.1
+      '0.2': 69.8
+      '0.3': 70.2
+      '0.4': 70.5
+      '0.5': 70.8
+      '0.6': 71.1
+      '0.7': 71.6
+      '0.8': 72.3
+      '0.9': 73.2
+      '0.95': 74.5
+  metadata:
+    rationale: "As of Oct 18, 2024, the WTI crude oil market is trapped between bullish\
+      \ geopolitical risk premiums\u2014specifically regarding Middle Eastern transit\u2014\
+      and bearish demand-side signals, particularly from China. OPEC+ maintains a\
+      \ complex, data-dependent supply policy that likely prevents significant price\
+      \ drops below the $65-$70 support level. The forecast reflects this tug-of-war,\
+      \ projecting continued consolidation around the $70-$75 level in the short term,\
+      \ with modest upside potential on a 3-month horizon if geopolitical risks persist\
+      \ or demand fundamentals stabilize."
+    horizon_rationale: 'Short-term horizon (5 days): The market is currently balancing
+      technical support near $70/bbl against ongoing geopolitical risk premiums in
+      the Middle East. With no immediate large-scale physical supply disruption, prices
+      are expected to remain tightly range-bound in the immediate term.'
+    langfuse_trace_id: 17cc5371fa5b8a06d90aece66817a5d1
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/17cc5371fa5b8a06d90aece66817a5d1
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:41.034429'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-01T00:00:00'
+  payload:
+    point_forecast: 71.2
+    quantiles:
+      '0.05': 67.5
+      '0.1': 68.5
+      '0.2': 69.5
+      '0.3': 70.2
+      '0.4': 70.8
+      '0.5': 71.2
+      '0.6': 71.7
+      '0.7': 72.5
+      '0.8': 73.5
+      '0.9': 74.8
+      '0.95': 76.2
+  metadata:
+    rationale: "As of Oct 18, 2024, the WTI crude oil market is trapped between bullish\
+      \ geopolitical risk premiums\u2014specifically regarding Middle Eastern transit\u2014\
+      and bearish demand-side signals, particularly from China. OPEC+ maintains a\
+      \ complex, data-dependent supply policy that likely prevents significant price\
+      \ drops below the $65-$70 support level. The forecast reflects this tug-of-war,\
+      \ projecting continued consolidation around the $70-$75 level in the short term,\
+      \ with modest upside potential on a 3-month horizon if geopolitical risks persist\
+      \ or demand fundamentals stabilize."
+    horizon_rationale: 'Medium-term horizon (10 days): Increased volatility is expected
+      as the market continues to monitor geopolitical developments. The $70-75 range
+      remains the most probable area until clear signals emerge regarding OPEC+''s
+      commitment to balancing the market versus potential demand weakness.'
+    langfuse_trace_id: 17cc5371fa5b8a06d90aece66817a5d1
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/17cc5371fa5b8a06d90aece66817a5d1
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:41.034429'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-18T00:00:00'
+  payload:
+    point_forecast: 72.0
+    quantiles:
+      '0.05': 66.0
+      '0.1': 67.5
+      '0.2': 69.0
+      '0.3': 70.5
+      '0.4': 71.5
+      '0.5': 72.0
+      '0.6': 72.8
+      '0.7': 73.8
+      '0.8': 75.0
+      '0.9': 77.0
+      '0.95': 79.0
+  metadata:
+    rationale: "As of Oct 18, 2024, the WTI crude oil market is trapped between bullish\
+      \ geopolitical risk premiums\u2014specifically regarding Middle Eastern transit\u2014\
+      and bearish demand-side signals, particularly from China. OPEC+ maintains a\
+      \ complex, data-dependent supply policy that likely prevents significant price\
+      \ drops below the $65-$70 support level. The forecast reflects this tug-of-war,\
+      \ projecting continued consolidation around the $70-$75 level in the short term,\
+      \ with modest upside potential on a 3-month horizon if geopolitical risks persist\
+      \ or demand fundamentals stabilize."
+    horizon_rationale: 'Longer-term horizon (21 days / 1 month): Demand concerns,
+      particularly from China, continue to weigh on the outlook. However, the potential
+      for persistent geopolitical tension provides a fundamental floor. The path of
+      least resistance leans slightly upward as the market tests the sustainability
+      of the current price floor.'
+    langfuse_trace_id: 17cc5371fa5b8a06d90aece66817a5d1
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/17cc5371fa5b8a06d90aece66817a5d1
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:41.034429'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2025-01-15T00:00:00'
+  payload:
+    point_forecast: 73.5
+    quantiles:
+      '0.05': 63.0
+      '0.1': 65.5
+      '0.2': 68.0
+      '0.3': 70.5
+      '0.4': 72.0
+      '0.5': 73.5
+      '0.6': 75.0
+      '0.7': 77.0
+      '0.8': 79.5
+      '0.9': 82.5
+      '0.95': 85.0
+  metadata:
+    rationale: "As of Oct 18, 2024, the WTI crude oil market is trapped between bullish\
+      \ geopolitical risk premiums\u2014specifically regarding Middle Eastern transit\u2014\
+      and bearish demand-side signals, particularly from China. OPEC+ maintains a\
+      \ complex, data-dependent supply policy that likely prevents significant price\
+      \ drops below the $65-$70 support level. The forecast reflects this tug-of-war,\
+      \ projecting continued consolidation around the $70-$75 level in the short term,\
+      \ with modest upside potential on a 3-month horizon if geopolitical risks persist\
+      \ or demand fundamentals stabilize."
+    horizon_rationale: 'Extended horizon (63 days / 3 months): By early 2025, market
+      participants will have more clarity on OPEC+''s production adjustments and global
+      demand trends. The forecast assumes a consolidation period within the $70-$80
+      range, accounting for balanced risks between structural supply tightness and
+      persistent demand headwinds.'
+    langfuse_trace_id: 17cc5371fa5b8a06d90aece66817a5d1
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/17cc5371fa5b8a06d90aece66817a5d1
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:59.890486'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-22T00:00:00'
+  payload:
+    point_forecast: 77.0
+    quantiles:
+      '0.05': 73.5
+      '0.1': 74.5
+      '0.2': 75.5
+      '0.3': 76.2
+      '0.4': 76.6
+      '0.5': 77.0
+      '0.6': 77.4
+      '0.7': 77.8
+      '0.8': 78.5
+      '0.9': 79.5
+      '0.95': 80.5
+  metadata:
+    rationale: The forecast reflects a transition from a weather-and-geopolitics-driven
+      price spike back toward fundamental equilibrium. While supply remains tight
+      due to OPEC+ restraint and geopolitical risks in shipping chokepoints, medium-term
+      pressure is anticipated from supply growth outside the coalition and underwhelming
+      demand indicators.
+    horizon_rationale: Short-term momentum from recent cold-weather-driven demand
+      spikes and geopolitical premiums is expected to moderate slightly as markets
+      consolidate gains following the surge above $77/bbl.
+    langfuse_trace_id: c4633d7981bfdfc47a099c29c414abea
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c4633d7981bfdfc47a099c29c414abea
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:59.890486'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-29T00:00:00'
+  payload:
+    point_forecast: 76.0
+    quantiles:
+      '0.05': 71.0
+      '0.1': 72.5
+      '0.2': 73.8
+      '0.3': 74.8
+      '0.4': 75.4
+      '0.5': 76.0
+      '0.6': 76.6
+      '0.7': 77.2
+      '0.8': 78.5
+      '0.9': 80.0
+      '0.95': 81.5
+  metadata:
+    rationale: The forecast reflects a transition from a weather-and-geopolitics-driven
+      price spike back toward fundamental equilibrium. While supply remains tight
+      due to OPEC+ restraint and geopolitical risks in shipping chokepoints, medium-term
+      pressure is anticipated from supply growth outside the coalition and underwhelming
+      demand indicators.
+    horizon_rationale: Over two weeks, the market will likely reassess the durability
+      of the demand boost. While supply constraints remain, the high price environment
+      may lead to profit-taking.
+    langfuse_trace_id: c4633d7981bfdfc47a099c29c414abea
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c4633d7981bfdfc47a099c29c414abea
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:59.890486'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-02-13T00:00:00'
+  payload:
+    point_forecast: 74.5
+    quantiles:
+      '0.05': 68.0
+      '0.1': 69.5
+      '0.2': 71.2
+      '0.3': 72.5
+      '0.4': 73.5
+      '0.5': 74.5
+      '0.6': 75.5
+      '0.7': 76.8
+      '0.8': 78.5
+      '0.9': 80.5
+      '0.95': 82.5
+  metadata:
+    rationale: The forecast reflects a transition from a weather-and-geopolitics-driven
+      price spike back toward fundamental equilibrium. While supply remains tight
+      due to OPEC+ restraint and geopolitical risks in shipping chokepoints, medium-term
+      pressure is anticipated from supply growth outside the coalition and underwhelming
+      demand indicators.
+    horizon_rationale: Looking one month out, the influence of seasonal weather fades,
+      and the market focus shifts to the broader macro demand concerns and the upcoming
+      April OPEC+ production adjustment timeline.
+    langfuse_trace_id: c4633d7981bfdfc47a099c29c414abea
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c4633d7981bfdfc47a099c29c414abea
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:04:59.890486'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-04-14T00:00:00'
+  payload:
+    point_forecast: 71.0
+    quantiles:
+      '0.05': 64.0
+      '0.1': 65.5
+      '0.2': 67.5
+      '0.3': 69.0
+      '0.4': 70.0
+      '0.5': 71.0
+      '0.6': 72.0
+      '0.7': 73.5
+      '0.8': 75.5
+      '0.9': 78.0
+      '0.95': 81.0
+  metadata:
+    rationale: The forecast reflects a transition from a weather-and-geopolitics-driven
+      price spike back toward fundamental equilibrium. While supply remains tight
+      due to OPEC+ restraint and geopolitical risks in shipping chokepoints, medium-term
+      pressure is anticipated from supply growth outside the coalition and underwhelming
+      demand indicators.
+    horizon_rationale: Over the three-month horizon, rising non-OPEC production and
+      persistent sluggish demand growth expectations in major economies (notably China)
+      create downward pressure, tempering the recent rally toward the EIA's full-year
+      price average.
+    langfuse_trace_id: c4633d7981bfdfc47a099c29c414abea
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c4633d7981bfdfc47a099c29c414abea
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:13.666277'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-21T00:00:00'
+  payload:
+    point_forecast: 61.2
+    quantiles:
+      '0.05': 58.5
+      '0.1': 59.2
+      '0.2': 60.1
+      '0.3': 60.6
+      '0.4': 60.9
+      '0.5': 61.2
+      '0.6': 61.5
+      '0.7': 62.1
+      '0.8': 62.8
+      '0.9': 63.8
+      '0.95': 64.5
+  metadata:
+    rationale: My analysis incorporates the recent OPEC+ policy shift towards a gradual
+      supply increase starting in April 2025, persistent weak economic sentiment,
+      and geopolitical risks in the Middle East. While supply increases act as a structural
+      bearish anchor, geopolitical tensions provide intermittent support and volatility.
+      The forecast reflects a cautious market balancing these conflicting forces with
+      an overall bearish tilt as additional supply enters the market.
+    horizon_rationale: Short-term pressure persists as the market digests the recent
+      OPEC+ decision to begin increasing production. Prices are hovering near key
+      support levels, and while geopolitical risks in the Middle East provide a floor,
+      the current sentiment is dominated by bearish demand expectations.
+    langfuse_trace_id: aff5f33bd297dc20179ca8bf73bd41de
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/aff5f33bd297dc20179ca8bf73bd41de
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:13.666277'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-28T00:00:00'
+  payload:
+    point_forecast: 60.8
+    quantiles:
+      '0.05': 57.5
+      '0.1': 58.4
+      '0.2': 59.2
+      '0.3': 59.9
+      '0.4': 60.4
+      '0.5': 60.8
+      '0.6': 61.3
+      '0.7': 61.9
+      '0.8': 62.7
+      '0.9': 63.9
+      '0.95': 64.8
+  metadata:
+    rationale: My analysis incorporates the recent OPEC+ policy shift towards a gradual
+      supply increase starting in April 2025, persistent weak economic sentiment,
+      and geopolitical risks in the Middle East. While supply increases act as a structural
+      bearish anchor, geopolitical tensions provide intermittent support and volatility.
+      The forecast reflects a cautious market balancing these conflicting forces with
+      an overall bearish tilt as additional supply enters the market.
+    horizon_rationale: Over a two-week horizon, we expect continued consolidation.
+      The market will closely watch inventory data and any signals regarding the pace
+      of the OPEC+ supply increase. Downside risks remain elevated if economic data
+      indicates further demand softening.
+    langfuse_trace_id: aff5f33bd297dc20179ca8bf73bd41de
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/aff5f33bd297dc20179ca8bf73bd41de
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:13.666277'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-05-13T00:00:00'
+  payload:
+    point_forecast: 60.0
+    quantiles:
+      '0.05': 55.5
+      '0.1': 56.8
+      '0.2': 58.1
+      '0.3': 59.0
+      '0.4': 59.6
+      '0.5': 60.0
+      '0.6': 60.6
+      '0.7': 61.4
+      '0.8': 62.5
+      '0.9': 64.0
+      '0.95': 65.5
+  metadata:
+    rationale: My analysis incorporates the recent OPEC+ policy shift towards a gradual
+      supply increase starting in April 2025, persistent weak economic sentiment,
+      and geopolitical risks in the Middle East. While supply increases act as a structural
+      bearish anchor, geopolitical tensions provide intermittent support and volatility.
+      The forecast reflects a cautious market balancing these conflicting forces with
+      an overall bearish tilt as additional supply enters the market.
+    horizon_rationale: Looking one month ahead, the seasonal trend and the realization
+      of actual supply shifts from OPEC+ will become more pronounced. We anticipate
+      prices testing lower ranges, assuming no major geopolitical supply shock occurs.
+    langfuse_trace_id: aff5f33bd297dc20179ca8bf73bd41de
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/aff5f33bd297dc20179ca8bf73bd41de
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:13.666277'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-07-10T00:00:00'
+  payload:
+    point_forecast: 58.5
+    quantiles:
+      '0.05': 52.0
+      '0.1': 54.0
+      '0.2': 56.0
+      '0.3': 57.3
+      '0.4': 58.0
+      '0.5': 58.5
+      '0.6': 59.3
+      '0.7': 60.5
+      '0.8': 62.0
+      '0.9': 64.5
+      '0.95': 66.5
+  metadata:
+    rationale: My analysis incorporates the recent OPEC+ policy shift towards a gradual
+      supply increase starting in April 2025, persistent weak economic sentiment,
+      and geopolitical risks in the Middle East. While supply increases act as a structural
+      bearish anchor, geopolitical tensions provide intermittent support and volatility.
+      The forecast reflects a cautious market balancing these conflicting forces with
+      an overall bearish tilt as additional supply enters the market.
+    horizon_rationale: Over the three-month horizon, the fundamental drag of increased
+      OPEC+ supply and potentially softer global economic growth, despite ongoing
+      geopolitical risks, points to a moderate downward bias. The price path is likely
+      to trade within a lower range as the market adjusts to the higher supply environment.
+    langfuse_trace_id: aff5f33bd297dc20179ca8bf73bd41de
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/aff5f33bd297dc20179ca8bf73bd41de
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:27.398961'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-17T00:00:00'
+  payload:
+    point_forecast: 68.1
+    quantiles:
+      '0.05': 65.5
+      '0.1': 66.2
+      '0.2': 66.8
+      '0.3': 67.4
+      '0.4': 67.8
+      '0.5': 68.1
+      '0.6': 68.4
+      '0.7': 69.1
+      '0.8': 69.8
+      '0.9': 70.8
+      '0.95': 71.5
+  metadata:
+    rationale: The forecast is centered on the fundamental conflict between weak demand
+      growth projections and the strategic, gradual restoration of supply by OPEC+.
+      The market currently trades with a cautious downside bias, despite potential
+      for sharp, short-lived spikes due to regional volatility in the Middle East,
+      which are accounted for in the wider tail distributions of the forecasts.
+    horizon_rationale: Short-term stabilization following the recent rally. Markets
+      are currently balancing fears of OPEC+ production increases for August (548,000
+      bpd) against persistent, albeit currently easing, geopolitical anxiety in the
+      Middle East.
+    langfuse_trace_id: 4ce082aac0e69086ca6a80854f388dc7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/4ce082aac0e69086ca6a80854f388dc7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:27.398961'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-24T00:00:00'
+  payload:
+    point_forecast: 67.5
+    quantiles:
+      '0.05': 63.5
+      '0.1': 64.5
+      '0.2': 65.5
+      '0.3': 66.2
+      '0.4': 66.8
+      '0.5': 67.5
+      '0.6': 68.2
+      '0.7': 69.0
+      '0.8': 70.0
+      '0.9': 71.5
+      '0.95': 72.5
+  metadata:
+    rationale: The forecast is centered on the fundamental conflict between weak demand
+      growth projections and the strategic, gradual restoration of supply by OPEC+.
+      The market currently trades with a cautious downside bias, despite potential
+      for sharp, short-lived spikes due to regional volatility in the Middle East,
+      which are accounted for in the wider tail distributions of the forecasts.
+    horizon_rationale: Over a two-week window, the bearish sentiment regarding sluggish
+      global demand growth (noted by IEA) is expected to re-exert downward pressure
+      as geopolitical tensions temporarily settle.
+    langfuse_trace_id: 4ce082aac0e69086ca6a80854f388dc7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/4ce082aac0e69086ca6a80854f388dc7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:27.398961'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-08-08T00:00:00'
+  payload:
+    point_forecast: 66.5
+    quantiles:
+      '0.05': 60.5
+      '0.1': 61.5
+      '0.2': 63.0
+      '0.3': 64.0
+      '0.4': 65.5
+      '0.5': 66.5
+      '0.6': 67.5
+      '0.7': 68.5
+      '0.8': 69.5
+      '0.9': 71.5
+      '0.95': 73.0
+  metadata:
+    rationale: The forecast is centered on the fundamental conflict between weak demand
+      growth projections and the strategic, gradual restoration of supply by OPEC+.
+      The market currently trades with a cautious downside bias, despite potential
+      for sharp, short-lived spikes due to regional volatility in the Middle East,
+      which are accounted for in the wider tail distributions of the forecasts.
+    horizon_rationale: By early August, the market will fully incorporate the reality
+      of higher supply from the OPEC+ August increment. Ongoing weak data out of China
+      and the US will likely continue to weigh on the demand side.
+    langfuse_trace_id: 4ce082aac0e69086ca6a80854f388dc7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/4ce082aac0e69086ca6a80854f388dc7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:27.398961'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-10-07T00:00:00'
+  payload:
+    point_forecast: 64.0
+    quantiles:
+      '0.05': 55.0
+      '0.1': 57.0
+      '0.2': 59.5
+      '0.3': 61.5
+      '0.4': 63.0
+      '0.5': 64.0
+      '0.6': 65.5
+      '0.7': 67.5
+      '0.8': 69.5
+      '0.9': 72.0
+      '0.95': 74.0
+  metadata:
+    rationale: The forecast is centered on the fundamental conflict between weak demand
+      growth projections and the strategic, gradual restoration of supply by OPEC+.
+      The market currently trades with a cautious downside bias, despite potential
+      for sharp, short-lived spikes due to regional volatility in the Middle East,
+      which are accounted for in the wider tail distributions of the forecasts.
+    horizon_rationale: "Looking three months ahead, the forecast reflects a structural\
+      \ view that supply growth\u2014both from OPEC+ and record U.S. production\u2014\
+      will outpace consumption, leading to inventory builds. Geopolitical risks, while\
+      \ ever-present, cannot be relied upon for sustained upward pressure against\
+      \ these fundamental bearish forces."
+    langfuse_trace_id: 4ce082aac0e69086ca6a80854f388dc7
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/4ce082aac0e69086ca6a80854f388dc7
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:43.187010'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-14T00:00:00'
+  payload:
+    point_forecast: 61.25
+    quantiles:
+      '0.05': 59.1
+      '0.1': 59.85
+      '0.2': 60.3
+      '0.3': 60.75
+      '0.4': 61.05
+      '0.5': 61.25
+      '0.6': 61.5
+      '0.7': 61.8
+      '0.8': 62.3
+      '0.9': 63.1
+      '0.95': 63.8
+  metadata:
+    rationale: The forecast reflects a market burdened by a structural supply surplus,
+      with OPEC+ prioritizing market share via incremental production increases over
+      defending higher price floors. Geopolitical risk in the Persian Gulf remains
+      present but currently lacks the severity to offset fundamentally bearish supply/demand
+      dynamics. Macroeconomic headwinds and weak demand growth in 2025 further support
+      a gradual drift lower.
+    horizon_rationale: Over the very short term, the market is absorbing the recent
+      price action near $61.70. With no immediate catalysts for a major supply shock
+      and OPEC+ maintaining a path of gradual production increases, we expect prices
+      to remain range-bound with a slight bearish bias.
+    langfuse_trace_id: 7ede82d96a8c6f61a9020c764099efdc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/7ede82d96a8c6f61a9020c764099efdc
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:43.187010'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-21T00:00:00'
+  payload:
+    point_forecast: 60.8
+    quantiles:
+      '0.05': 58.2
+      '0.1': 59.0
+      '0.2': 59.7
+      '0.3': 60.2
+      '0.4': 60.55
+      '0.5': 60.8
+      '0.6': 61.1
+      '0.7': 61.6
+      '0.8': 62.2
+      '0.9': 63.0
+      '0.95': 63.7
+  metadata:
+    rationale: The forecast reflects a market burdened by a structural supply surplus,
+      with OPEC+ prioritizing market share via incremental production increases over
+      defending higher price floors. Geopolitical risk in the Persian Gulf remains
+      present but currently lacks the severity to offset fundamentally bearish supply/demand
+      dynamics. Macroeconomic headwinds and weak demand growth in 2025 further support
+      a gradual drift lower.
+    horizon_rationale: "Over two weeks, the continued market focus on the global supply\
+      \ surplus\u2014exacerbated by non-OPEC+ output growth\u2014is likely to exert\
+      \ downward pressure on WTI, as the market looks past moderate geopolitical noise\
+      \ in the Middle East."
+    langfuse_trace_id: 7ede82d96a8c6f61a9020c764099efdc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/7ede82d96a8c6f61a9020c764099efdc
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:43.187010'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-11-05T00:00:00'
+  payload:
+    point_forecast: 60.0
+    quantiles:
+      '0.05': 56.5
+      '0.1': 57.5
+      '0.2': 58.5
+      '0.3': 59.2
+      '0.4': 59.7
+      '0.5': 60.0
+      '0.6': 60.5
+      '0.7': 61.2
+      '0.8': 62.0
+      '0.9': 63.2
+      '0.95': 64.5
+  metadata:
+    rationale: The forecast reflects a market burdened by a structural supply surplus,
+      with OPEC+ prioritizing market share via incremental production increases over
+      defending higher price floors. Geopolitical risk in the Persian Gulf remains
+      present but currently lacks the severity to offset fundamentally bearish supply/demand
+      dynamics. Macroeconomic headwinds and weak demand growth in 2025 further support
+      a gradual drift lower.
+    horizon_rationale: As we move into November, the market will start to fully price
+      in the upcoming OPEC+ production increases. Combined with seasonally softer
+      demand, we anticipate a drift toward the lower end of the recent $57-$62 range.
+    langfuse_trace_id: 7ede82d96a8c6f61a9020c764099efdc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/7ede82d96a8c6f61a9020c764099efdc
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:05:43.187010'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2026-01-02T00:00:00'
+  payload:
+    point_forecast: 58.5
+    quantiles:
+      '0.05': 53.0
+      '0.1': 54.5
+      '0.2': 56.0
+      '0.3': 57.0
+      '0.4': 57.8
+      '0.5': 58.5
+      '0.6': 59.5
+      '0.7': 60.5
+      '0.8': 62.0
+      '0.9': 64.0
+      '0.95': 65.5
+  metadata:
+    rationale: The forecast reflects a market burdened by a structural supply surplus,
+      with OPEC+ prioritizing market share via incremental production increases over
+      defending higher price floors. Geopolitical risk in the Persian Gulf remains
+      present but currently lacks the severity to offset fundamentally bearish supply/demand
+      dynamics. Macroeconomic headwinds and weak demand growth in 2025 further support
+      a gradual drift lower.
+    horizon_rationale: On a three-month horizon, the persistent supply glut becomes
+      the primary narrative. Unless geopolitical tensions in the Middle East escalate
+      significantly and cause measurable, sustained supply outages, fundamentals favor
+      a test of the 52-week lows, as OPEC+ continues its strategic output increases.
+    langfuse_trace_id: 7ede82d96a8c6f61a9020c764099efdc
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/7ede82d96a8c6f61a9020c764099efdc
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:00.252582'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-09T00:00:00'
+  payload:
+    point_forecast: 57.8
+    quantiles:
+      '0.05': 55.5
+      '0.1': 56.0
+      '0.2': 56.8
+      '0.3': 57.2
+      '0.4': 57.5
+      '0.5': 57.8
+      '0.6': 58.1
+      '0.7': 58.5
+      '0.8': 59.0
+      '0.9': 59.8
+      '0.95': 60.5
+  metadata:
+    rationale: The forecast is grounded in the late-2025 market environment characterized
+      by a significant supply surplus and the OPEC+ decision (announced Nov 2025)
+      to suspend planned output increases for Q1 2026. This policy provides a stabilizing
+      floor for WTI. Geopolitical risks in the Persian Gulf remain potential tail-risk
+      catalysts but have been largely discounted by the market given the lack of concrete
+      supply disruptions. U.S. record domestic production remains the primary counterweight
+      to OPEC+ restraint.
+    horizon_rationale: Short-term sentiment is anchored by the OPEC+ decision to pause
+      production increases through Q1 2026, which provides a price floor. WTI closed
+      at $57.42; expect consolidation near current levels as market participants assess
+      winter demand strength.
+    langfuse_trace_id: 0299c6acf1125b609590abc95ae78964
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/0299c6acf1125b609590abc95ae78964
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:00.252582'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-16T00:00:00'
+  payload:
+    point_forecast: 58.2
+    quantiles:
+      '0.05': 55.0
+      '0.1': 55.8
+      '0.2': 56.5
+      '0.3': 57.3
+      '0.4': 57.8
+      '0.5': 58.2
+      '0.6': 58.7
+      '0.7': 59.3
+      '0.8': 60.0
+      '0.9': 61.2
+      '0.95': 62.0
+  metadata:
+    rationale: The forecast is grounded in the late-2025 market environment characterized
+      by a significant supply surplus and the OPEC+ decision (announced Nov 2025)
+      to suspend planned output increases for Q1 2026. This policy provides a stabilizing
+      floor for WTI. Geopolitical risks in the Persian Gulf remain potential tail-risk
+      catalysts but have been largely discounted by the market given the lack of concrete
+      supply disruptions. U.S. record domestic production remains the primary counterweight
+      to OPEC+ restraint.
+    horizon_rationale: Mid-term stability reflects the absence of immediate supply
+      shocks and the market's 'wait-and-see' stance on geopolitical risks in the Middle
+      East. Upside potential is capped by robust U.S. production levels.
+    langfuse_trace_id: 0299c6acf1125b609590abc95ae78964
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/0299c6acf1125b609590abc95ae78964
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:00.252582'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-02-02T00:00:00'
+  payload:
+    point_forecast: 59.0
+    quantiles:
+      '0.05': 54.5
+      '0.1': 55.5
+      '0.2': 56.8
+      '0.3': 57.9
+      '0.4': 58.5
+      '0.5': 59.0
+      '0.6': 59.6
+      '0.7': 60.5
+      '0.8': 61.5
+      '0.9': 63.0
+      '0.95': 64.0
+  metadata:
+    rationale: The forecast is grounded in the late-2025 market environment characterized
+      by a significant supply surplus and the OPEC+ decision (announced Nov 2025)
+      to suspend planned output increases for Q1 2026. This policy provides a stabilizing
+      floor for WTI. Geopolitical risks in the Persian Gulf remain potential tail-risk
+      catalysts but have been largely discounted by the market given the lack of concrete
+      supply disruptions. U.S. record domestic production remains the primary counterweight
+      to OPEC+ restraint.
+    horizon_rationale: One-month outlook remains defined by the structural supply
+      surplus narrative for 2026. While the OPEC+ pause prevents sharp downside, the
+      fundamental imbalance persists, limiting significant appreciation.
+    langfuse_trace_id: 0299c6acf1125b609590abc95ae78964
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/0299c6acf1125b609590abc95ae78964
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:00.252582'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-04-01T00:00:00'
+  payload:
+    point_forecast: 61.5
+    quantiles:
+      '0.05': 53.0
+      '0.1': 55.0
+      '0.2': 57.5
+      '0.3': 59.2
+      '0.4': 60.5
+      '0.5': 61.5
+      '0.6': 62.8
+      '0.7': 64.2
+      '0.8': 66.0
+      '0.9': 68.5
+      '0.95': 70.0
+  metadata:
+    rationale: The forecast is grounded in the late-2025 market environment characterized
+      by a significant supply surplus and the OPEC+ decision (announced Nov 2025)
+      to suspend planned output increases for Q1 2026. This policy provides a stabilizing
+      floor for WTI. Geopolitical risks in the Persian Gulf remain potential tail-risk
+      catalysts but have been largely discounted by the market given the lack of concrete
+      supply disruptions. U.S. record domestic production remains the primary counterweight
+      to OPEC+ restraint.
+    horizon_rationale: Three-month horizon incorporates the potential for gradual
+      price recovery as the market tests the sustainability of the OPEC+ strategy
+      and monitors global demand growth, balancing U.S. record output against potential
+      seasonal shifts.
+    langfuse_trace_id: 0299c6acf1125b609590abc95ae78964
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/0299c6acf1125b609590abc95ae78964
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:17.885202'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-08T00:00:00'
+  payload:
+    point_forecast: 98.5
+    quantiles:
+      '0.05': 91.0
+      '0.1': 93.5
+      '0.2': 95.5
+      '0.3': 97.0
+      '0.4': 97.8
+      '0.5': 98.5
+      '0.6': 99.5
+      '0.7': 101.0
+      '0.8': 103.5
+      '0.9': 106.0
+      '0.95': 108.0
+  metadata:
+    rationale: The forecast reflects a market in crisis mode due to the Strait of
+      Hormuz closure. Prices reached extremes in late March. The central case assumes
+      a steady, if prolonged, supply adjustment by OPEC+ and the successful, coordinated
+      release of SPR stocks (172 million bbl US, 400 million bbl total) to mitigate
+      extreme shortages. Risks remain heavily skewed to the upside if the conflict
+      in the Persian Gulf escalates or if transit disruptions persist longer than
+      market participants currently anticipate.
+    horizon_rationale: Over the 5-day horizon, prices are likely to experience high
+      volatility but show a slight cooling trend from the $101-$103 peak as initial
+      panic subsides following the start of the massive SPR releases. Geopolitical
+      tension remains the dominant factor.
+    langfuse_trace_id: c00ec206d420c9703c27f4c5a626207d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c00ec206d420c9703c27f4c5a626207d
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:17.885202'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-15T00:00:00'
+  payload:
+    point_forecast: 96.0
+    quantiles:
+      '0.05': 88.0
+      '0.1': 90.0
+      '0.2': 92.5
+      '0.3': 94.0
+      '0.4': 95.0
+      '0.5': 96.0
+      '0.6': 97.5
+      '0.7': 99.5
+      '0.8': 102.0
+      '0.9': 105.0
+      '0.95': 107.5
+  metadata:
+    rationale: The forecast reflects a market in crisis mode due to the Strait of
+      Hormuz closure. Prices reached extremes in late March. The central case assumes
+      a steady, if prolonged, supply adjustment by OPEC+ and the successful, coordinated
+      release of SPR stocks (172 million bbl US, 400 million bbl total) to mitigate
+      extreme shortages. Risks remain heavily skewed to the upside if the conflict
+      in the Persian Gulf escalates or if transit disruptions persist longer than
+      market participants currently anticipate.
+    horizon_rationale: By 10 days, the market will have processed the impact of the
+      initial SPR supply inflow. Unless the Strait of Hormuz conflict escalates further,
+      the acute supply panic should moderate, favoring a modest downward correction.
+    langfuse_trace_id: c00ec206d420c9703c27f4c5a626207d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c00ec206d420c9703c27f4c5a626207d
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:17.885202'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-30T00:00:00'
+  payload:
+    point_forecast: 93.0
+    quantiles:
+      '0.05': 82.0
+      '0.1': 85.0
+      '0.2': 88.0
+      '0.3': 90.0
+      '0.4': 91.5
+      '0.5': 93.0
+      '0.6': 95.0
+      '0.7': 97.5
+      '0.8': 100.5
+      '0.9': 104.5
+      '0.95': 107.0
+  metadata:
+    rationale: The forecast reflects a market in crisis mode due to the Strait of
+      Hormuz closure. Prices reached extremes in late March. The central case assumes
+      a steady, if prolonged, supply adjustment by OPEC+ and the successful, coordinated
+      release of SPR stocks (172 million bbl US, 400 million bbl total) to mitigate
+      extreme shortages. Risks remain heavily skewed to the upside if the conflict
+      in the Persian Gulf escalates or if transit disruptions persist longer than
+      market participants currently anticipate.
+    horizon_rationale: Over the 21-day (1 month) horizon, structural impacts of the
+      disruption become clearer. Increased OPEC+ supply adjustment implementation
+      and sustained SPR releases should continue to exert downward pressure on prices,
+      provided no new military escalation occurs.
+    langfuse_trace_id: c00ec206d420c9703c27f4c5a626207d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c00ec206d420c9703c27f4c5a626207d
+- predictor_id: agent_predictor_wti_analyst_news_gemini-3.1-flash-lite-preview_continuous
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-25T16:06:17.885202'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-06-29T00:00:00'
+  payload:
+    point_forecast: 88.0
+    quantiles:
+      '0.05': 70.0
+      '0.1': 75.0
+      '0.2': 80.0
+      '0.3': 83.5
+      '0.4': 86.0
+      '0.5': 88.0
+      '0.6': 91.0
+      '0.7': 95.0
+      '0.8': 99.0
+      '0.9': 105.0
+      '0.95': 109.0
+  metadata:
+    rationale: The forecast reflects a market in crisis mode due to the Strait of
+      Hormuz closure. Prices reached extremes in late March. The central case assumes
+      a steady, if prolonged, supply adjustment by OPEC+ and the successful, coordinated
+      release of SPR stocks (172 million bbl US, 400 million bbl total) to mitigate
+      extreme shortages. Risks remain heavily skewed to the upside if the conflict
+      in the Persian Gulf escalates or if transit disruptions persist longer than
+      market participants currently anticipate.
+    horizon_rationale: In the 3-month horizon, the market is expected to reach a 'new
+      normal'. While geopolitical risk premiums will likely remain higher than pre-conflict
+      levels, the combination of international inventory releases and the normalization
+      of supply chain rerouting should lead to a further, albeit gradual, decline
+      in prices from the extreme crisis highs.
+    langfuse_trace_id: c00ec206d420c9703c27f4c5a626207d
+    langfuse_trace_url: https://us.cloud.langfuse.com/project/cmqqnxnbo0eu0ad0dz56jsohk/traces/c00ec206d420c9703c27f4c5a626207d
+scores:
+- 4.103054494306075
+- 4.7438047046503735
+- 4.14272696755149
+- 4.897684951656119
+- 0.6280986186886637
+- 1.11793524371691
+- 1.805783459371771
+- 3.8395047148397152
+- 0.959667867865444
+- 2.118675938125483
+- 2.0053714846776525
+- 7.20553841078577
+- 1.0938854627372807
+- 0.801239322630828
+- 2.173469909163547
+- 5.289007959287031
+- 0.5287600808892354
+- 1.0045460094105114
+- 1.58347058887324
+- 1.9124794636876121
+- 1.900825683341538
+- 2.1952895613741283
+- 0.5818185979669745
+- 1.110248017114055
+- 0.7862803120258428
+- 0.791734912966894
+- 1.8527268843217335
+- 35.5431432424498
+- 2.796113372046099
+- 3.2452060289619373
+- 7.139917105682628
+- 12.002066115702474
+metric: crps
+mean_score: 3.8093773589646522
+ran_at: '2026-08-25T16:06:18.229990'
+skipped_origins: 0
