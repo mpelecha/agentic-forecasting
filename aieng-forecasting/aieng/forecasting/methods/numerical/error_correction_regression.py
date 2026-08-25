@@ -173,6 +173,16 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         silently dropping or clipping rows.  Note this makes the flag
         unusable with log-return covariates, which are routinely negative.
         Default: ``False``.
+    log_target : bool
+        Log the **target only**, leaving covariates untouched, so the long-run
+        relation is constant-elasticity in the target and forecasts are
+        strictly positive.  Use this instead of ``use_log_levels`` whenever the
+        covariate panel holds log returns or any other routinely-negative
+        series: those cannot be log-levelled, and are already in log space.
+
+        Non-positive targets are dropped rather than clipped or raised on; the
+        count is reported as ``n_nonpositive_target_dropped`` in the prediction
+        metadata.  Mutually exclusive with ``use_log_levels``.
     min_observations : int
         Minimum aligned rows required.  Below this, ``predict`` raises
         ``ValueError`` and the harness skips the origin.  Default:
@@ -227,6 +237,7 @@ class ErrorCorrectionRegressionPredictor(Predictor):
         covariate_series_ids: list[str],
         *,
         use_log_levels: bool = False,
+        log_target: bool = False,
         min_observations: int = DEFAULT_MIN_OBSERVATIONS,
         cv_splits: int = 5,
         l1_ratios: tuple[float, ...] = (0.1, 0.5, 0.7, 0.9, 0.95, 0.99, 1.0),
@@ -243,7 +254,13 @@ class ErrorCorrectionRegressionPredictor(Predictor):
                 "an error-correction model with no covariates has no long-run relation."
             )
         self._covariate_series_ids = list(covariate_series_ids)
+        if use_log_levels and log_target:
+            raise ValueError(
+                "use_log_levels and log_target are alternatives, not layers: "
+                "use_log_levels already logs the target. Set exactly one."
+            )
         self._use_log_levels = use_log_levels
+        self._log_target = log_target
         self._min_observations = min_observations
         self._cv_splits = cv_splits
         self._l1_ratios = tuple(l1_ratios)
@@ -265,7 +282,7 @@ class ErrorCorrectionRegressionPredictor(Predictor):
     @property
     def predictor_id(self) -> str:
         """Return a stable identifier, suffixed ``_log`` under log levels and any variant tag."""
-        suffix = "_log" if self._use_log_levels else ""
+        suffix = "_log" if self._use_log_levels else ("_logtgt" if self._log_target else "")
         tag = f"_{self._variant_tag}" if self._variant_tag else ""
         return f"ecm_regression{suffix}{tag}"
 
@@ -290,10 +307,31 @@ class ErrorCorrectionRegressionPredictor(Predictor):
 
         return merged.sort_values("timestamp").dropna().reset_index(drop=True)
 
-    def _to_model_arrays(self, frame: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
-        """Return ``(y, X)``, log-transformed when ``use_log_levels`` is set."""
+    def _to_model_arrays(self, frame: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, int]:
+        """Return ``(y, X, n_dropped)``, log-transformed per the configured mode."""
         y = frame[_TARGET_COLUMN].to_numpy(dtype=float)
         x = frame[self._covariate_series_ids].to_numpy(dtype=float)
+        n_dropped = 0
+
+        if self._log_target:
+            # Target only. A panel of log-RETURN covariates is routinely
+            # negative and is already in log space, so ``use_log_levels`` --
+            # which logs y and X together -- cannot be used with one. This
+            # gives the constant-elasticity target without touching X.
+            #
+            # Non-positive targets are DROPPED, not clipped. Raising (what
+            # use_log_levels does) would kill every origin after WTI's
+            # April-2020 negative print, i.e. most of a 2014-2024 grid.
+            # Clipping is worse than either: flooring -$37.63 to $1
+            # manufactures a move of log(1/25) into the differenced series and
+            # a comparable one back out, and a least-squares fit inflates its
+            # residual sigma on the strength of those two points alone --
+            # exactly the failure that made AutoARIMA's log-return intervals
+            # come out 2-3x too wide. Dropping leaves one difference spanning
+            # the gap: large, but real rather than manufactured.
+            keep = y > 0
+            n_dropped = int((~keep).sum())
+            y, x = y[keep], x[keep]
 
         if self._use_log_levels:
             if np.any(y <= 0):
@@ -311,7 +349,11 @@ class ErrorCorrectionRegressionPredictor(Predictor):
                 )
             y = np.log(y)
             x = np.log(x)
-        return y, x
+
+        if self._log_target:
+            y = np.log(y)
+
+        return y, x, n_dropped
 
     # ── model steps ──────────────────────────────────────────────────────────
 
@@ -437,7 +479,7 @@ class ErrorCorrectionRegressionPredictor(Predictor):
                 f"only {len(frame)} available at as_of={context.as_of}."
             )
 
-        y, x = self._to_model_arrays(frame)
+        y, x, n_dropped = self._to_model_arrays(frame)
 
         short_run_mask = np.array(
             [sid not in self._long_run_only_covariate_series_ids for sid in self._covariate_series_ids],
@@ -496,6 +538,8 @@ class ErrorCorrectionRegressionPredictor(Predictor):
             "ecm_sign_warning": bool(phi >= 0.0),
             "short_run_residual_std": residual_std,
             "use_log_levels": self._use_log_levels,
+            "log_target": self._log_target,
+            "n_nonpositive_target_dropped": n_dropped,
             "covariate_diff_path": self._covariate_diff_path,
             "long_run_only_covariates": sorted(self._long_run_only_covariate_series_ids),
         }
@@ -510,7 +554,7 @@ class ErrorCorrectionRegressionPredictor(Predictor):
             quantiles = {q: float(centre + norm.ppf(q) * sigma) for q in STANDARD_QUANTILES}
             point = float(centre)
 
-            if self._use_log_levels:
+            if self._use_log_levels or self._log_target:
                 # Quantiles survive monotone transforms exactly; the exponentiated
                 # centre is the lognormal *median*, not its mean.
                 quantiles = {q: float(np.exp(v)) for q, v in quantiles.items()}
