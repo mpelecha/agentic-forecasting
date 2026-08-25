@@ -21,11 +21,13 @@ comparison is meaningless.
 
 Run from the implementations/energy_oil_forecasting directory:
 
-    python scripts/compare_governor_scenario_anchored.py
+    python scripts/compare_governor_scenario_anchored.py            # 2026 eval (default)
+    python scripts/compare_governor_scenario_anchored.py backtest   # 2025 backtest
 """
 
 from __future__ import annotations
 
+import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from math import sqrt
@@ -47,11 +49,11 @@ from energy_oil_forecasting.scenario_schema_anchored.predictor import (
 )
 
 
-CACHE = Path(
-    "data/predictions/energy_oil_eval_biweekly/"
-    "agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_"
-    "continuous__wti_oil_price_forecast.yaml"
-)
+WINDOW_DIRS = {
+    "eval": "data/predictions/energy_oil_eval_biweekly",
+    "backtest": "data/predictions/energy_oil_backtest_biweekly",
+}
+CACHE_STEM = "agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_" "continuous__wti_oil_price_forecast.yaml"
 HORIZONS = [5, 10, 21]
 MAX_HORIZON = max(HORIZONS)
 
@@ -81,7 +83,12 @@ def _score(quantiles: dict[float, float], point: float, actual: float, pred: dic
 
 
 def main() -> None:
-    data = yaml.safe_load(CACHE.read_text())
+    window = sys.argv[1] if len(sys.argv) > 1 else "eval"
+    if window not in WINDOW_DIRS:
+        raise SystemExit(f"usage: {sys.argv[0]} [{'|'.join(WINDOW_DIRS)}]")
+    cache = Path(WINDOW_DIRS[window]) / CACHE_STEM
+    print(f"window: {window}  ({cache})")
+    data = yaml.safe_load(cache.read_text())
     service = build_wti_multivariate_service()
     resolved_as_of = datetime.now(tz=timezone.utc).replace(tzinfo=None)
     actual_df = service.get_series(WTI_SERIES_ID, as_of=resolved_as_of)

@@ -9,18 +9,20 @@ possible causes:
 - misses cluster on one side       -> the forecasts are biased, and widening
   is treating a symptom
 
-Runs across every cached predictor in the eval window, not just the agents.
+Runs across every cached predictor in the chosen window, not just the agents.
 That matters: if AutoARIMA misses the same way, the problem lives in the
 numerical ensemble's uncertainty during the 2026 shock and no amount of
 governor or agent work will fix it.
 
 Run from the implementations/energy_oil_forecasting directory:
 
-    python scripts/miss_structure.py
+    python scripts/miss_structure.py            # 2026 eval window (default)
+    python scripts/miss_structure.py backtest   # 2025 backtest window
 """
 
 from __future__ import annotations
 
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -30,7 +32,10 @@ import yaml
 from energy_oil_forecasting.data import WTI_SERIES_ID, build_wti_multivariate_service
 
 
-EVAL_DIR = Path("data/predictions/energy_oil_eval_biweekly")
+WINDOWS = {
+    "eval": Path("data/predictions/energy_oil_eval_biweekly"),
+    "backtest": Path("data/predictions/energy_oil_backtest_biweekly"),
+}
 HORIZONS = [5, 10, 21]
 
 
@@ -43,13 +48,18 @@ def _horizon_for(as_of: pd.Timestamp, forecast_date: pd.Timestamp) -> int | None
 
 
 def main() -> None:
+    window = sys.argv[1] if len(sys.argv) > 1 else "eval"
+    if window not in WINDOWS:
+        raise SystemExit(f"usage: miss_structure.py [{'|'.join(WINDOWS)}]")
+    eval_dir = WINDOWS[window]
+    print(f"window: {window}  ({eval_dir})\n")
     service = build_wti_multivariate_service()
     resolved_as_of = datetime.now(tz=timezone.utc).replace(tzinfo=None)
     actual_df = service.get_series(WTI_SERIES_ID, as_of=resolved_as_of)
     actuals = {pd.Timestamp(r["timestamp"]).normalize(): float(r["value"]) for _, r in actual_df.iterrows()}
 
     rows = []
-    for path in sorted(EVAL_DIR.glob("*.yaml")):
+    for path in sorted(eval_dir.glob("*.yaml")):
         data = yaml.safe_load(path.read_text())
         name = data.get("predictor_id", path.stem)
         for pred in data.get("predictions", []):
@@ -90,7 +100,7 @@ def main() -> None:
 
     df = pd.DataFrame(rows)
     if df.empty:
-        print(f"no scored predictions found under {EVAL_DIR}")
+        print(f"no scored predictions found under {eval_dir}")
         return
 
     print(f"{len(df)} scored predictions across {df['predictor'].nunique()} predictors\n")

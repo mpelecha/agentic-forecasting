@@ -17,11 +17,13 @@ wrong and the comparison is meaningless -- the script says so and stops.
 
 Run from the implementations/energy_oil_forecasting directory:
 
-    python scripts/compare_governor_log_vs_dollar.py
+    python scripts/compare_governor_log_vs_dollar.py            # 2026 eval (default)
+    python scripts/compare_governor_log_vs_dollar.py backtest   # 2025 backtest
 """
 
 from __future__ import annotations
 
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -42,11 +44,11 @@ from energy_oil_forecasting.data import WTI_SERIES_ID, build_wti_multivariate_se
 from energy_oil_forecasting.price_deltas import compute_horizon_delta_percentiles
 
 
-CACHE = Path(
-    "data/predictions/energy_oil_eval_biweekly/"
-    "agent_predictor_cfm_agent_v_5_2_2_delta_governed_gemini-3.1-flash-lite-preview_"
-    "continuous__wti_oil_price_forecast.yaml"
-)
+WINDOW_DIRS = {
+    "eval": "data/predictions/energy_oil_eval_biweekly",
+    "backtest": "data/predictions/energy_oil_backtest_biweekly",
+}
+CACHE_STEM = "agent_predictor_cfm_agent_v_5_2_2_delta_governed_gemini-3.1-flash-lite-preview_" "continuous__wti_oil_price_forecast.yaml"
 HORIZONS = [5, 10, 21]
 
 
@@ -70,7 +72,12 @@ def _score(quantiles: dict[float, float], point: float, actual: float, template:
 
 
 def main() -> None:
-    data = yaml.safe_load(CACHE.read_text())
+    window = sys.argv[1] if len(sys.argv) > 1 else "eval"
+    if window not in WINDOW_DIRS:
+        raise SystemExit(f"usage: {sys.argv[0]} [{'|'.join(WINDOW_DIRS)}]")
+    cache = Path(WINDOW_DIRS[window]) / CACHE_STEM
+    print(f"window: {window}  ({cache})")
+    data = yaml.safe_load(cache.read_text())
     predictions = data["predictions"]
 
     service = build_wti_multivariate_service()
