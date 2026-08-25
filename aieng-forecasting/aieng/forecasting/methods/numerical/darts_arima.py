@@ -50,23 +50,31 @@ class DartsAutoARIMAPredictor(Predictor):
         Number of Monte Carlo samples used to build the predictive distribution.
         Higher values give smoother quantile estimates at the cost of compute.
         Default: 500.
-    log_transform : bool, default=False
-        Fit on ``log(value)`` and exponentiate the predictive samples back to
-        the original scale.  Because AutoARIMA selects its own differencing
-        order on whatever series it is given, fitting on log levels makes the
-        model one of **log differences** (log returns) rather than of price
-        changes — the innovation variance is then proportional to the level
-        instead of constant in absolute units, which matters for a series that
-        has traded across a wide range of price levels.
+    log_returns : bool, default=False
+        Model the series in **log-return space**: the fitted target ``y`` is
+        ``diff(log(value))``, i.e. the first difference of log price, not the
+        price and not the log price.  Forecast sample paths are cumulated and
+        applied to the last observed price
+        (``last_price * exp(cumsum(predicted returns))``) to return to price
+        space.
+
+        This is deliberately *not* "fit AutoARIMA on log prices and let it
+        choose ``d``".  That alternative is equivalent only when AutoARIMA
+        happens to select ``d=1``, and it anchors the forecast on ARIMA's own
+        fitted level structure rather than on the last observed price — a real
+        difference in behaviour once drift or AR terms are present, and it
+        grows with horizon.  Here ``y`` is the return series itself, so
+        AutoARIMA fits a stationary model directly on it and the price path is
+        reconstructed explicitly from the last close.
 
         Off by default so existing callers are unaffected; the two settings are
         separate predictors with separate ``predictor_id`` values, so their
         cached results never collide and can be compared side by side.
     price_floor : float, default=1.0
-        Lower bound applied to the series before taking logs.  Only used when
-        ``log_transform`` is set.  ``log`` of a non-positive value is undefined
-        and WTI printed negative in April 2020, so one unfloored observation
-        would otherwise produce ``nan`` and poison the fit.
+        Lower bound applied to the price series before taking logs.  Only used
+        when ``log_returns`` is set.  ``log`` of a non-positive value is
+        undefined and WTI printed negative in April 2020, so one unfloored
+        observation would otherwise produce ``nan`` and poison the fit.
 
     Notes
     -----
@@ -78,15 +86,15 @@ class DartsAutoARIMAPredictor(Predictor):
       instead.
     """
 
-    def __init__(self, num_samples: int = 500, *, log_transform: bool = False, price_floor: float = 1.0) -> None:
+    def __init__(self, num_samples: int = 500, *, log_returns: bool = False, price_floor: float = 1.0) -> None:
         self._num_samples = num_samples
-        self._log_transform = log_transform
+        self._log_returns = log_returns
         self._price_floor = price_floor
 
     @property
     def predictor_id(self) -> str:
         """Return a stable string identifier for this predictor."""
-        return "darts_autoarima_log" if self._log_transform else "darts_autoarima"
+        return "darts_autoarima_logret" if self._log_returns else "darts_autoarima"
 
     def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
         """Produce probabilistic AutoARIMA forecasts for every horizon in the task.
@@ -110,9 +118,15 @@ class DartsAutoARIMAPredictor(Predictor):
         from darts.models import AutoARIMA  # noqa: PLC0415  # type: ignore[import-untyped]
 
         series_df = context.get_series(task.target_series_id)
-        if self._log_transform:
+        anchor_price: float | None = None
+        if self._log_returns:
+            # y = first difference of log price. The first row becomes NaN and
+            # is dropped, so the fitted series is one observation shorter.
             series_df = series_df.copy()
-            series_df["value"] = np.log(series_df["value"].clip(lower=self._price_floor))
+            log_price = np.log(series_df["value"].clip(lower=self._price_floor))
+            anchor_price = float(np.exp(log_price.iloc[-1]))
+            series_df["value"] = log_price.diff()
+            series_df = series_df.iloc[1:]
 
         ts = TimeSeries.from_dataframe(
             series_df,
@@ -136,15 +150,21 @@ class DartsAutoARIMAPredictor(Predictor):
         issued_at = datetime.now(tz=timezone.utc).replace(tzinfo=None)
         predictions: list[Prediction] = []
 
+        all_values: np.ndarray = forecast_ts.all_values()
+        if self._log_returns:
+            # Each sample index is a coherent trajectory, so cumulating along
+            # the time axis per sample gives that path's cumulative log return.
+            # Price is then reconstructed from the last observed close. ``exp``
+            # is monotonic, so exponentiating the samples and taking quantiles
+            # equals taking quantiles first — no ordering is disturbed — and
+            # the resulting interval is asymmetric in price space, which is the
+            # point of modelling returns.
+            all_values = np.cumsum(all_values, axis=0)
+
         for h in task.horizons:
-            samples: np.ndarray = forecast_ts.all_values()[h - 1, 0, :]
-            if self._log_transform:
-                # Back to price space. ``exp`` is monotonic, so exponentiating
-                # the samples and then taking quantiles is equivalent to taking
-                # quantiles in log space and exponentiating — no ordering is
-                # disturbed, and the resulting interval is asymmetric in price
-                # terms, which is the point of modelling returns.
-                samples = np.exp(samples)
+            samples: np.ndarray = all_values[h - 1, 0, :]
+            if self._log_returns:
+                samples = anchor_price * np.exp(samples)
             payload = ContinuousForecast(
                 point_forecast=float(np.median(samples)),
                 quantiles={q: float(np.quantile(samples, q)) for q in STANDARD_QUANTILES},
