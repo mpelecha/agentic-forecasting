@@ -146,7 +146,23 @@ def main() -> None:
 
     print()
     print("=" * 108)
-    print("BY HORIZON (all predictors pooled)")
+    print("COVERAGE BY PREDICTOR x HORIZON")
+    print("=" * 108)
+    horizons = sorted(h for h in df["horizon"].dropna().unique())
+    print(f"{'predictor':52} " + " ".join(f"{'h=' + str(h) + 'd':>9}" for h in horizons))
+    for name, sub in sorted(df.groupby("predictor"), key=lambda kv: -kv[1]["inside80"].mean()):
+        cells = []
+        for h in horizons:
+            cell = sub[sub["horizon"] == h]
+            cells.append(f"{100 * cell['inside80'].mean():>8.1f}%" if len(cell) else f"{'-':>9}")
+        print(f"{name[:52]:52} " + " ".join(cells))
+    print()
+    print("Pooling predictors hides this: a badly calibrated model drags every")
+    print("horizon column down and can invent a horizon effect that isn't there.")
+
+    print()
+    print("=" * 108)
+    print("BY HORIZON (all predictors pooled -- read the per-predictor table above instead)")
     print("=" * 108)
     for horizon in sorted(h for h in df["horizon"].dropna().unique()):
         sub = df[df["horizon"] == horizon]
