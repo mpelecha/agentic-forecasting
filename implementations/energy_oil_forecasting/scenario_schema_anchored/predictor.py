@@ -162,7 +162,30 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
         return self.inner.predictor_id
 
     def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
-        arima_anchor = compute_arima_anchor(task, context, num_samples=self.arima_num_samples)
+        # log_returns=True: the paired offline swap (see
+        # scripts/compare_anchor_level_vs_logret.py) put log returns ahead at
+        # h=10 and h=21 in BOTH windows -- CRPS -0.087/-0.059 at h=10 and
+        # -0.035/-0.166 at h=21 (backtest/eval) -- and behind at h=63 by
+        # +0.338/+0.131. The pooled sign flips between windows purely because
+        # those two effects trade places in size, so the pooled figure was
+        # never the signal; the per-horizon pattern is what replicates.
+        #
+        # Adopted globally rather than per horizon: h=63 is not a horizon this
+        # project targets, and a single specification is worth more than
+        # squeezing the quarterly column. It also removes a real mismatch --
+        # the centre-shift cap in this same file already works in log-return
+        # space, so the band was the only part left in levels.
+        #
+        # One caveat on the measured size. AnchoredPromptBuilder shows the
+        # anchor to the LLM (see the assignment below), while that comparison
+        # held the cached scenarios fixed and swapped only the arithmetic
+        # after the call. It therefore measures the numerical effect alone;
+        # the LLM now also reads different anchor numbers and may reason
+        # differently from them. The measured gain is a lower bound on the
+        # change, not the whole of it.
+        arima_anchor = compute_arima_anchor(
+            task, context, num_samples=self.arima_num_samples, log_returns=True
+        )
         # Stashed here so AnchoredPromptBuilder.__call__ can read it when the
         # inner AgentPredictor invokes the prompt builder below.
         self._prompt_builder.arima_anchor = arima_anchor

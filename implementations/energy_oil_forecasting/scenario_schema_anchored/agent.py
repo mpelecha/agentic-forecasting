@@ -178,7 +178,16 @@ def build_wti_news_scenario_schema_anchored_config(
     AgentConfig
     """
     return AgentConfig(
-        name="wti_analyst_news_scenario_schema_anchored",
+        # The "_logret" suffix is load-bearing, not cosmetic. predictor_id is
+        # agent_predictor_{name}_{model}_{modality}, and cached_multi_backtest
+        # keys its cache on that id alone -- it cannot detect that the anchor
+        # specification changed underneath it. Without a rename, the switch to
+        # the log-return anchor would silently reload the old level-anchored
+        # YAMLs and report them under the new configuration.
+        #
+        # Renaming also keeps the level-anchored results on disk as the
+        # comparison baseline instead of overwriting them.
+        name="wti_analyst_news_scenario_schema_anchored_logret",
         model=model,
         instruction=_WTI_ANALYST_INSTRUCTION_SCENARIO_SCHEMA_ANCHORED,
         max_output_tokens=max_output_tokens,
