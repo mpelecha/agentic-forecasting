@@ -14,30 +14,36 @@ That matters: if AutoARIMA misses the same way, the problem lives in the
 numerical ensemble's uncertainty during the 2026 shock and no amount of
 governor or agent work will fix it.
 
+Actuals come from inverting the cached CRPS scores (see
+``scripts/actuals_from_crps.py``), not from the price cache, so this runs
+against a bare checkout of the result YAMLs on any machine.
+
 Run from the implementations/energy_oil_forecasting directory:
 
-    python scripts/miss_structure.py            # 2026 eval window (default)
-    python scripts/miss_structure.py backtest   # 2025 backtest window
-    python scripts/miss_structure.py 10yr       # 2014-2024 quarterly, multi-regime
-    python scripts/miss_structure.py 10yr-local # ditto, numerical-only local run
+    python scripts/miss_structure.py             # 2026 eval window (default)
+    python scripts/miss_structure.py backtest    # 2025 backtest window
+    python scripts/miss_structure.py 10yr        # 2014-2024 quarterly backtest, multi-regime
+    python scripts/miss_structure.py 10yr-eval   # the held-out half of the same grid
+    python scripts/miss_structure.py 10yr-local  # numerical-only local run
 """
 
 from __future__ import annotations
 
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import yaml
-from energy_oil_forecasting.data import WTI_SERIES_ID, build_wti_multivariate_service
+
+from actuals_from_crps import print_recovery_report, recover_actuals
 
 
 WINDOWS = {
     "eval": Path("data/predictions/energy_oil_eval_biweekly"),
     "backtest": Path("data/predictions/energy_oil_backtest_biweekly"),
     "10yr": Path("data/predictions/energy_oil_backtest_10yr_quarterly"),
+    "10yr-eval": Path("data/predictions/energy_oil_eval_10yr_quarterly"),
     "10yr-local": Path("data/predictions/energy_oil_backtest_10yr_quarterly_localrun"),
 }
 
@@ -59,10 +65,10 @@ def main() -> None:
         raise SystemExit(f"usage: miss_structure.py [{'|'.join(WINDOWS)}]")
     eval_dir = WINDOWS[window]
     print(f"window: {window}  ({eval_dir})\n")
-    service = build_wti_multivariate_service()
-    resolved_as_of = datetime.now(tz=timezone.utc).replace(tzinfo=None)
-    actual_df = service.get_series(WTI_SERIES_ID, as_of=resolved_as_of)
-    actuals = {pd.Timestamp(r["timestamp"]).normalize(): float(r["value"]) for _, r in actual_df.iterrows()}
+    recovery = recover_actuals(eval_dir)
+    print_recovery_report(recovery)
+    print()
+    actuals = {pd.Timestamp(k).normalize(): v for k, v in recovery.actuals.items()}
 
     rows = []
     for path in sorted(eval_dir.glob("*.yaml")):
@@ -118,16 +124,24 @@ def main() -> None:
         f"{'above':>6} {'below':>6} {'mean signed err':>16} {'bias/halfwidth':>15}"
     )
     print(header)
+    degenerate = []
     for name, sub in sorted(df.groupby("predictor"), key=lambda kv: -kv[1]["inside80"].mean()):
         above = int((sub["side"] == "above").sum())
         below = int((sub["side"] == "below").sum())
         bias = sub["signed_error"].mean()
         ratio = bias / sub["half_width"].mean() if sub["half_width"].mean() > 0 else np.nan
+        if sub["half_width"].mean() == 0:
+            degenerate.append(name)
         print(
             f"{name[:52]:52} {len(sub):>3} {100 * sub['inside80'].mean():>5.1f}% "
             f"{100 * sub['inside90'].mean():>5.1f}% {above:>6} {below:>6} "
             f"{bias:>+16.2f} {ratio:>+15.2f}"
         )
+    if degenerate:
+        print()
+        print("0.0% coverage below is not miscalibration -- these predictors emit a point")
+        print("mass (every quantile equal), so the band has zero width and can never")
+        print("contain anything: " + ", ".join(n[:40] for n in degenerate))
 
     print()
     print("=" * 108)

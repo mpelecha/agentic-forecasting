@@ -23,6 +23,8 @@ Run from the implementations/energy_oil_forecasting directory:
 
     python scripts/compare_governor_scenario_anchored.py            # 2026 eval (default)
     python scripts/compare_governor_scenario_anchored.py backtest   # 2025 backtest
+    python scripts/compare_governor_scenario_anchored.py 10yr       # 2014-2024 quarterly backtest
+    python scripts/compare_governor_scenario_anchored.py 10yr-eval  # held-out half of the same grid
 """
 
 from __future__ import annotations
@@ -52,19 +54,24 @@ from energy_oil_forecasting.scenario_schema_anchored.predictor import (
 WINDOW_DIRS = {
     "eval": "data/predictions/energy_oil_eval_biweekly",
     "backtest": "data/predictions/energy_oil_backtest_biweekly",
+    "10yr": "data/predictions/energy_oil_backtest_10yr_quarterly",
+    "10yr-eval": "data/predictions/energy_oil_eval_10yr_quarterly",
 }
+# The 10yr quarterly spec adds a fourth horizon; the biweekly specs stop at 21.
+# max_horizon matters here beyond bookkeeping: the implied target percentile is
+# read off the longest horizon's ARIMA anchor, so it must track the spec.
+WINDOW_HORIZONS = {"10yr": [5, 10, 21, 63], "10yr-eval": [5, 10, 21, 63]}
 CACHE_STEM = "agent_predictor_wti_analyst_news_scenario_schema_anchored_gemini-3.1-flash-lite-preview_" "continuous__wti_oil_price_forecast.yaml"
 HORIZONS = [5, 10, 21]
-MAX_HORIZON = max(HORIZONS)
 
 
 def _float_keys(quantiles: dict) -> dict[float, float]:
     return {float(k): float(v) for k, v in quantiles.items()}
 
 
-def _horizon_for(as_of: pd.Timestamp, forecast_date: pd.Timestamp) -> int | None:
+def _horizon_for(as_of: pd.Timestamp, forecast_date: pd.Timestamp, horizons: list[int]) -> int | None:
     offset = pd.tseries.offsets.BDay()
-    for horizon in HORIZONS:
+    for horizon in horizons:
         if (as_of + offset * horizon).normalize() == forecast_date.normalize():
             return horizon
     return None
@@ -86,6 +93,8 @@ def main() -> None:
     window = sys.argv[1] if len(sys.argv) > 1 else "eval"
     if window not in WINDOW_DIRS:
         raise SystemExit(f"usage: {sys.argv[0]} [{'|'.join(WINDOW_DIRS)}]")
+    horizons = WINDOW_HORIZONS.get(window, HORIZONS)
+    max_horizon = max(horizons)
     cache = Path(WINDOW_DIRS[window]) / CACHE_STEM
     print(f"window: {window}  ({cache})")
     data = yaml.safe_load(cache.read_text())
@@ -103,18 +112,18 @@ def main() -> None:
     for origin, preds in sorted(by_origin.items()):
         context = service.context(as_of=pd.Timestamp(origin))
         tables = {
-            "dollar": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, HORIZONS, log_returns=False),
-            "log": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, HORIZONS),
+            "dollar": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, horizons, log_returns=False),
+            "log": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, horizons),
         }
 
         # Anchor grid for this origin, indexed by horizon.
         anchors: dict[int, dict] = {}
         for pred in preds:
-            horizon = _horizon_for(pd.Timestamp(pred["as_of"]), pd.Timestamp(pred["forecast_date"]))
+            horizon = _horizon_for(pd.Timestamp(pred["as_of"]), pd.Timestamp(pred["forecast_date"]), horizons)
             if horizon is not None:
                 anchors[horizon] = pred["metadata"]["arima_anchor"]
-        if MAX_HORIZON not in anchors:
-            print(f"  (skipping {origin}: no h={MAX_HORIZON} anchor cached)")
+        if max_horizon not in anchors:
+            print(f"  (skipping {origin}: no h={max_horizon} anchor cached)")
             continue
 
         scenarios = preds[0]["metadata"].get("scenarios") or []
@@ -125,11 +134,11 @@ def main() -> None:
         scenario_high = max(s["price_high"] for s in scenarios)
         weighted_price = _probability_weighted_scenario_price(scenarios)
         target_percentile = _implied_target_percentile(
-            weighted_price, _float_keys(anchors[MAX_HORIZON]["quantiles"])
+            weighted_price, _float_keys(anchors[max_horizon]["quantiles"])
         )
 
         for pred in preds:
-            horizon = _horizon_for(pd.Timestamp(pred["as_of"]), pd.Timestamp(pred["forecast_date"]))
+            horizon = _horizon_for(pd.Timestamp(pred["as_of"]), pd.Timestamp(pred["forecast_date"]), horizons)
             if horizon is None:
                 continue
             actual = actuals.get(pd.Timestamp(pred["forecast_date"]).normalize())
@@ -138,7 +147,7 @@ def main() -> None:
             anchor = anchors[horizon]
             anchor_quantiles = _float_keys(anchor["quantiles"])
             anchor_point = float(anchor["point_forecast"])
-            scale = sqrt(horizon / MAX_HORIZON)
+            scale = sqrt(horizon / max_horizon)
 
             out = {}
             for label in ("dollar", "log"):
@@ -190,7 +199,7 @@ def main() -> None:
           f"{df['shift_new'].abs().mean() - df['shift_old'].abs().mean():>+12.2f}")
 
     print("\nby horizon:")
-    for horizon in HORIZONS:
+    for horizon in horizons:
         sub = df[df["horizon"] == horizon]
         if sub.empty:
             continue

@@ -19,6 +19,8 @@ Run from the implementations/energy_oil_forecasting directory:
 
     python scripts/compare_governor_log_vs_dollar.py            # 2026 eval (default)
     python scripts/compare_governor_log_vs_dollar.py backtest   # 2025 backtest
+    python scripts/compare_governor_log_vs_dollar.py 10yr       # 2014-2024 quarterly backtest
+    python scripts/compare_governor_log_vs_dollar.py 10yr-eval  # held-out half of the same grid
 """
 
 from __future__ import annotations
@@ -31,7 +33,6 @@ import pandas as pd
 import yaml
 from aieng.forecasting.evaluation.backtest import _crps_for_prediction
 from aieng.forecasting.evaluation.prediction import ContinuousForecast, Prediction
-from aieng.forecasting.evaluation.task import ForecastingTask
 from energy_oil_forecasting.cfm_agent_v_5_2.config import DEFAULT_SETTINGS
 from energy_oil_forecasting.cfm_agent_v_5_2.schemas import ModelHorizonForecast
 from energy_oil_forecasting.cfm_agent_v_5_2_2_delta_governed.forecast_engine import (
@@ -47,7 +48,11 @@ from energy_oil_forecasting.price_deltas import compute_horizon_delta_percentile
 WINDOW_DIRS = {
     "eval": "data/predictions/energy_oil_eval_biweekly",
     "backtest": "data/predictions/energy_oil_backtest_biweekly",
+    "10yr": "data/predictions/energy_oil_backtest_10yr_quarterly",
+    "10yr-eval": "data/predictions/energy_oil_eval_10yr_quarterly",
 }
+# The 10yr quarterly spec adds a fourth horizon; the biweekly specs stop at 21.
+WINDOW_HORIZONS = {"10yr": [5, 10, 21, 63], "10yr-eval": [5, 10, 21, 63]}
 CACHE_STEM = "agent_predictor_cfm_agent_v_5_2_2_delta_governed_gemini-3.1-flash-lite-preview_" "continuous__wti_oil_price_forecast.yaml"
 HORIZONS = [5, 10, 21]
 
@@ -75,7 +80,9 @@ def main() -> None:
     window = sys.argv[1] if len(sys.argv) > 1 else "eval"
     if window not in WINDOW_DIRS:
         raise SystemExit(f"usage: {sys.argv[0]} [{'|'.join(WINDOW_DIRS)}]")
-    cache = Path(WINDOW_DIRS[window]) / CACHE_STEM
+    window_dir = Path(WINDOW_DIRS[window])
+    horizons = WINDOW_HORIZONS.get(window, HORIZONS)
+    cache = window_dir / CACHE_STEM
     print(f"window: {window}  ({cache})")
     data = yaml.safe_load(cache.read_text())
     predictions = data["predictions"]
@@ -86,21 +93,14 @@ def main() -> None:
     actuals = {pd.Timestamp(r["timestamp"]).normalize(): float(r["value"]) for _, r in actual_df.iterrows()}
 
     engine = PythonForecastEngineDeltaGoverned(DEFAULT_SETTINGS)
-    task_template = ForecastingTask(
-        task_id="wti_oil_price_forecast",
-        target_series_id=WTI_SERIES_ID,
-        horizons=HORIZONS,
-        frequency="B",
-        description="WTI price forecast",
-    )
 
     # Percentile tables are per-origin; compute each table once.
     tables: dict[str, dict[str, dict]] = {}
     for origin in sorted({str(p["as_of"])[:10] for p in predictions}):
         context = service.context(as_of=pd.Timestamp(origin))
         tables[origin] = {
-            "dollar": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, HORIZONS, log_returns=False),
-            "log": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, HORIZONS),
+            "dollar": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, horizons, log_returns=False),
+            "log": compute_horizon_delta_percentiles(context, WTI_SERIES_ID, horizons),
         }
 
     rows = []
@@ -188,7 +188,7 @@ def main() -> None:
         print(f"{label:16} {fmt.format(old):>18} {fmt.format(new):>18} {new - old:>+12.4f}")
 
     print("\nby horizon:")
-    for horizon in HORIZONS:
+    for horizon in horizons:
         sub = df[df["horizon"] == horizon]
         print(
             f"  h={horizon:>2}d  CRPS {sub['crps_old'].mean():7.4f} -> {sub['crps_new'].mean():7.4f}"
