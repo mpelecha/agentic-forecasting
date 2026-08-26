@@ -121,6 +121,7 @@ SERIES_ID_VIX_LEVEL = "vix_level_l1b"
 SERIES_ID_OVX_LEVEL = "ovx_level_l1b"
 SERIES_ID_CRACK_SPREAD = "crack_spread_321_l1b"
 SERIES_ID_UST10Y_LEVEL = "ust10y_level_l1b"
+SERIES_ID_BRENT_LEVEL = "brent_level_l1b"
 
 #: Default covariate panel for :func:`build_wti_multivariate_service`.  Ordered
 #: energy-complex first, then macro/risk.  Any series that cannot be fetched is
@@ -148,6 +149,7 @@ EXPANDED_WTI_COVARIATE_SERIES_IDS: list[str] = [
     SERIES_ID_OVX_LEVEL,
     SERIES_ID_CRACK_SPREAD,
     SERIES_ID_UST10Y_LEVEL,
+    SERIES_ID_BRENT_LEVEL,
 ]
 
 #: The level-valued members of the expanded panel, for use as an ECM's
@@ -171,6 +173,7 @@ LEVEL_VALUED_WTI_COVARIATE_SERIES_IDS: list[str] = [
     SERIES_ID_OVX_LEVEL,
     SERIES_ID_CRACK_SPREAD,
     SERIES_ID_UST10Y_LEVEL,
+    SERIES_ID_BRENT_LEVEL,
 ]
 
 # Yahoo Finance tickers backing each covariate.
@@ -400,6 +403,45 @@ def build_wti_multivariate_service(
             )
         except (RuntimeError, ValueError, KeyError) as exc:
             _handle_error(SERIES_ID_UST10Y_LEVEL, exc)
+
+    # ── Brent price level ─────────────────────────────────────────────────────
+    # The cointegration anchor, and the reason this series exists separately
+    # from brent_log_ret_1b_l1b above.
+    #
+    # An error-correction model needs covariates that are I(1) and share a
+    # stochastic trend with the target. A panel of log RETURNS cannot provide
+    # one: returns are stationary, and a stationary series cannot cointegrate
+    # with a non-stationary price. Measured on the 2014-2024 grid, the
+    # seven-series panel produced a zeroed error-correction coefficient on
+    # 90.4% of origins and a median Engle-Granger p of 0.659 -- there was no
+    # long-run relation to correct toward, so "ECM" was a differenced
+    # regression wearing the name.
+    #
+    # WTI and Brent are the textbook cointegrating pair: the same commodity at
+    # different delivery points, with a spread that mean-reverts around
+    # transport and quality differentials. Brent's LEVEL gives the long-run
+    # relation a real anchor; its return, already in the panel, drives the
+    # short-run equation. Keeping both is deliberate and not redundant --
+    # see LEVEL_VALUED_WTI_COVARIATE_SERIES_IDS, which routes the level to the
+    # long-run step only.
+    if SERIES_ID_BRENT_LEVEL in desired:
+        try:
+            brent_close = _load_yahoo_close_frame(_BRENT_TICKER, cache_dir=resolved_cache_dir, start=start)
+            brent_level = apply_one_business_day_feature_lag(to_level_feature_from_daily(brent_close))
+            svc.register(
+                SERIES_ID_BRENT_LEVEL,
+                StaticFrameAdapter(brent_level),
+                SeriesMetadata(
+                    series_id=SERIES_ID_BRENT_LEVEL,
+                    description="Brent crude (BZ=F) close price level, lagged 1 business day",
+                    source=f"Yahoo Finance ({_BRENT_TICKER})",
+                    units="USD/bbl",
+                    frequency="B",
+                    table_id="yahoo:BZ=F:close-l1b",
+                ),
+            )
+        except (RuntimeError, ValueError, KeyError) as exc:
+            _handle_error(SERIES_ID_BRENT_LEVEL, exc)
 
     # ── VIX level ─────────────────────────────────────────────────────────────
     if SERIES_ID_VIX_LEVEL in desired:
