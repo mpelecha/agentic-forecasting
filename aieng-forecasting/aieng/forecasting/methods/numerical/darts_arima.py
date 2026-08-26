@@ -145,7 +145,21 @@ class DartsAutoARIMAPredictor(Predictor):
             freq=task.frequency,
         )
 
-        model = AutoARIMA()
+        if self._log_returns:
+            # d=0, D=0 is the fix for a defect the quarterly grid was too sparse
+            # to reveal. y is ALREADY a first difference, so it is stationary by
+            # construction and any further differencing makes the price I(2):
+            # the forecast returns then trend linearly, cumsum makes the log
+            # price quadratic, and exp turns that into a hyperbola. Measured on
+            # a 128-origin grid, unconstrained AutoARIMA did exactly this --
+            # origin 2016-02-18 forecast $980.45 with a $6,347 band while WTI
+            # traded near $30, and the reverse case collapsed to $3.49. It only
+            # bites at h=63 (mean CRPS 13.83 against the level spec's 7.10,
+            # worst 816.75 against 33.64); at h<=21 the two specs are within
+            # noise of each other.
+            model = AutoARIMA(d=0, D=0)
+        else:
+            model = AutoARIMA()
         model.fit(ts)
 
         # Fit once to max horizon; extract samples at each requested step.
@@ -170,9 +184,38 @@ class DartsAutoARIMAPredictor(Predictor):
             # point of modelling returns.
             all_values = np.cumsum(all_values, axis=0)
 
+        # Belt and braces for the I(2) pathology. ``d=0`` above is the real fix,
+        # but it reaches statsforecast through Darts, and a silently ignored
+        # kwarg would bring the hyperbola back with no signal at all. The bound
+        # is the largest h-step move actually observed in the fitted history,
+        # with room to spare -- data-driven rather than a guessed constant, and
+        # it still catches the failure by a wide margin: the 2016-02-18 blowup
+        # implied a cumulative log return of 3.49 where WTI's worst 63-day move
+        # in that history was around 1.4.
+        cumulative_bounds: dict[int, float] = {}
+        if self._log_returns:
+            returns = series_df["value"].to_numpy(dtype=float)
+            for h in task.horizons:
+                if len(returns) > h:
+                    rolling = np.convolve(returns, np.ones(h), mode="valid")
+                    observed = float(np.max(np.abs(rolling)))
+                else:
+                    observed = float(np.sum(np.abs(returns)))
+                cumulative_bounds[h] = max(1.5 * observed, np.log(2.0))
+
         for h in task.horizons:
             samples: np.ndarray = all_values[h - 1, 0, :]
             if self._log_returns:
+                median_cumulative = float(np.median(samples))
+                if abs(median_cumulative) > cumulative_bounds[h]:
+                    raise ValueError(
+                        f"AutoARIMA(log_returns=True) produced an implausible {h}-step cumulative "
+                        f"log return of {median_cumulative:+.2f} at as_of={context.as_of} "
+                        f"(implied price move {np.exp(median_cumulative):.2f}x). This is the I(2) "
+                        f"pathology d=0 is meant to prevent -- the largest {h}-step move in the "
+                        f"fitted history implies a bound of {cumulative_bounds[h]:.2f}. Check that "
+                        f"the differencing constraint is reaching statsforecast."
+                    )
                 samples = anchor_price * np.exp(samples)
             payload = ContinuousForecast(
                 point_forecast=float(np.median(samples)),
