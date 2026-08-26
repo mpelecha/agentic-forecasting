@@ -259,6 +259,7 @@ def _load_eia_series(series_id: str, *, api_key: str, cache_dir: Path) -> pd.Dat
     on the day it was actually published, not on the day the week ended.
     """
     import json  # noqa: PLC0415
+    import urllib.error  # noqa: PLC0415
     import urllib.request  # noqa: PLC0415
 
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -267,8 +268,22 @@ def _load_eia_series(series_id: str, *, api_key: str, cache_dir: Path) -> pd.Dat
         frame = pd.read_csv(cache_path, parse_dates=["timestamp", "released_at"])
     else:
         url = f"https://api.eia.gov/v2/seriesid/{series_id}?api_key={api_key}"
-        with urllib.request.urlopen(url, timeout=60) as response:  # noqa: S310
-            payload = json.loads(response.read())
+        # An explicit User-Agent is not optional here. EIA answers 403 to the
+        # default Python-urllib agent, which is indistinguishable from a bad key
+        # unless the response body is read -- and urlopen discards the body on
+        # an HTTPError, so the original failure reported a bare "403 Forbidden"
+        # and no way to tell the two apart.
+        request = urllib.request.Request(  # noqa: S310
+            url, headers={"User-Agent": "aieng-forecasting/1.0 (research; contact via repo)"}
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:  # noqa: S310
+                payload = json.loads(response.read())
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")[:400]
+            raise RuntimeError(
+                f"EIA request for {series_id} failed with HTTP {exc.code}. Response body: {body}"
+            ) from exc
         rows = payload.get("response", {}).get("data", [])
         if not rows:
             raise RuntimeError(f"EIA returned no data for {series_id}")
