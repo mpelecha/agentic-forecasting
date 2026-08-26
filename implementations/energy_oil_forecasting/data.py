@@ -30,6 +30,8 @@ context views never include unavailable rows.
 
 from __future__ import annotations
 
+import os
+
 import warnings
 from datetime import datetime, timezone
 from pathlib import Path
@@ -40,6 +42,7 @@ from aieng.forecasting.data.adapters.yfinance import YFinanceDailyAdapter
 from aieng.forecasting.data.features import (
     StaticFrameAdapter,
     apply_one_business_day_feature_lag,
+    business_daily_expand_from_releases,
     log_ratio_level_feature,
     to_level_feature_from_daily,
     to_log_return_feature,
@@ -122,6 +125,11 @@ SERIES_ID_OVX_LEVEL = "ovx_level_l1b"
 SERIES_ID_CRACK_SPREAD = "crack_spread_321_l1b"
 SERIES_ID_UST10Y_LEVEL = "ust10y_level_l1b"
 SERIES_ID_BRENT_LEVEL = "brent_level_l1b"
+SERIES_ID_COPPER_LEVEL = "copper_level_l1b"
+SERIES_ID_SP500_LEVEL = "sp500_level_l1b"
+SERIES_ID_DOLLAR_INDEX_LEVEL = "dollar_index_level_l1b"
+SERIES_ID_CRUDE_STOCKS = "crude_stocks_ex_spr_wl"
+SERIES_ID_REFINERY_UTILIZATION = "refinery_utilization_wl"
 
 #: Default covariate panel for :func:`build_wti_multivariate_service`.  Ordered
 #: energy-complex first, then macro/risk.  Any series that cannot be fetched is
@@ -150,6 +158,11 @@ EXPANDED_WTI_COVARIATE_SERIES_IDS: list[str] = [
     SERIES_ID_CRACK_SPREAD,
     SERIES_ID_UST10Y_LEVEL,
     SERIES_ID_BRENT_LEVEL,
+    SERIES_ID_COPPER_LEVEL,
+    SERIES_ID_SP500_LEVEL,
+    SERIES_ID_DOLLAR_INDEX_LEVEL,
+    SERIES_ID_CRUDE_STOCKS,
+    SERIES_ID_REFINERY_UTILIZATION,
 ]
 
 #: The level-valued members of the expanded panel, for use as an ECM's
@@ -174,6 +187,11 @@ LEVEL_VALUED_WTI_COVARIATE_SERIES_IDS: list[str] = [
     SERIES_ID_CRACK_SPREAD,
     SERIES_ID_UST10Y_LEVEL,
     SERIES_ID_BRENT_LEVEL,
+    SERIES_ID_COPPER_LEVEL,
+    SERIES_ID_SP500_LEVEL,
+    SERIES_ID_DOLLAR_INDEX_LEVEL,
+    SERIES_ID_CRUDE_STOCKS,
+    SERIES_ID_REFINERY_UTILIZATION,
 ]
 
 # Yahoo Finance tickers backing each covariate.
@@ -189,6 +207,8 @@ _OVX_TICKER = "^OVX"  # CBOE Crude Oil ETF Volatility Index — oil-specific vol
 _HEATING_OIL_TICKER = "HO=F"  # ULSD/heating oil, the distillate leg of the 3-2-1 crack
 _UST10Y_TICKER = "^TNX"  # CBOE 10-Year Treasury Note Yield Index
 _WTI_FUTURES_TICKER = "CL=F"  # front-month WTI, the crude leg of the crack spread
+_COPPER_TICKER = "HG=F"  # COMEX copper — the daily proxy for global industrial activity
+_SP500_TICKER = "^GSPC"  # S&P 500 — aggregate demand and risk appetite
 
 #: Gallons per barrel — converts the refined-product legs of the crack spread
 #: ($/gal) into the crude leg's units ($/bbl).
@@ -207,6 +227,62 @@ def _load_yahoo_close_frame(
     frame = raw[["timestamp", "value"]].copy().sort_values("timestamp").reset_index(drop=True)
     frame["value"] = pd.to_numeric(frame["value"], errors="coerce")
     return frame.dropna(subset=["value"]).reset_index(drop=True)
+
+
+#: EIA weekly petroleum series. Keys are the ids used above; values are the
+#: EIA series id and a human description.
+_EIA_SERIES: dict[str, tuple[str, str]] = {
+    SERIES_ID_CRUDE_STOCKS: (
+        "PET.WCESTUS1.W",
+        "U.S. ending stocks of crude oil excluding SPR, weekly (thousand barrels)",
+    ),
+    SERIES_ID_REFINERY_UTILIZATION: (
+        "PET.WPULEUS3.W",
+        "U.S. percent utilization of refinery operable capacity, weekly",
+    ),
+}
+
+#: Calendar days from an EIA weekly period-ending date to the moment the figure
+#: is public. The Weekly Petroleum Status Report covers the week ending Friday
+#: and is released the following Wednesday, so five days is the true lag. Seven
+#: is used instead because the release slips to Thursday whenever Monday is a
+#: federal holiday, and a lag that is one day too long costs nothing while one
+#: that is one day too short leaks a market-moving number into the day it moved.
+_EIA_RELEASE_LAG_DAYS = 7
+
+
+def _load_eia_series(series_id: str, *, api_key: str, cache_dir: Path) -> pd.DataFrame:
+    """Fetch one EIA v2 series as ``(timestamp, value, released_at)``.
+
+    ``released_at`` is the period end plus :data:`_EIA_RELEASE_LAG_DAYS`, which
+    is what makes this leak-safe: the value only becomes visible to a backtest
+    on the day it was actually published, not on the day the week ended.
+    """
+    import json  # noqa: PLC0415
+    import urllib.request  # noqa: PLC0415
+
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = cache_dir / f"eia_{series_id.replace('.', '_')}.csv"
+    if cache_path.exists():
+        frame = pd.read_csv(cache_path, parse_dates=["timestamp", "released_at"])
+    else:
+        url = f"https://api.eia.gov/v2/seriesid/{series_id}?api_key={api_key}"
+        with urllib.request.urlopen(url, timeout=60) as response:  # noqa: S310
+            payload = json.loads(response.read())
+        rows = payload.get("response", {}).get("data", [])
+        if not rows:
+            raise RuntimeError(f"EIA returned no data for {series_id}")
+        value_key = next(k for k in rows[0] if k in {"value", "Value"})
+        frame = pd.DataFrame(
+            {
+                "timestamp": pd.to_datetime([r["period"] for r in rows]),
+                "value": pd.to_numeric([r[value_key] for r in rows], errors="coerce"),
+            }
+        ).dropna(subset=["value"])
+        frame["released_at"] = frame["timestamp"] + pd.Timedelta(days=_EIA_RELEASE_LAG_DAYS)
+        frame = frame.sort_values("timestamp").reset_index(drop=True)
+        frame.to_csv(cache_path, index=False)
+    return frame
 
 
 def build_wti_multivariate_service(
@@ -442,6 +518,88 @@ def build_wti_multivariate_service(
             )
         except (RuntimeError, ValueError, KeyError) as exc:
             _handle_error(SERIES_ID_BRENT_LEVEL, exc)
+
+    # ── Copper, S&P 500 and dollar-index LEVELS ───────────────────────────────
+    # Copper is the daily stand-in for Kilian's (2009) aggregate-demand channel:
+    # his own index of global real activity is monthly shipping rates, and
+    # copper is the highest-frequency proxy for industrial demand that is also
+    # genuinely outside the energy complex -- unlike Brent, which is nearly the
+    # same asset. The S&P 500 carries aggregate demand and risk appetite; the
+    # dollar index level is the cointegration-relevant form of the DXY return
+    # already in the panel (Akram 2009; Chen, Rogoff & Rossi 2010).
+    #
+    # Levels, not returns, on purpose: only an I(1) series can cointegrate with
+    # a price. Returns are stationary, which is exactly why the original panel
+    # had no long-run relation to correct toward.
+    for series_id, ticker, description in (
+        (SERIES_ID_COPPER_LEVEL, _COPPER_TICKER, "COMEX copper (HG=F) close level, lagged 1 business day"),
+        (SERIES_ID_SP500_LEVEL, _SP500_TICKER, "S&P 500 (^GSPC) close level, lagged 1 business day"),
+        (
+            SERIES_ID_DOLLAR_INDEX_LEVEL,
+            _DOLLAR_INDEX_TICKER,
+            "US Dollar Index (DX-Y.NYB) close level, lagged 1 business day",
+        ),
+    ):
+        if series_id not in desired:
+            continue
+        try:
+            close = _load_yahoo_close_frame(ticker, cache_dir=resolved_cache_dir, start=start)
+            feature = apply_one_business_day_feature_lag(to_level_feature_from_daily(close))
+            svc.register(
+                series_id,
+                StaticFrameAdapter(feature),
+                SeriesMetadata(
+                    series_id=series_id,
+                    description=description,
+                    source=f"Yahoo Finance ({ticker})",
+                    units="index-level",
+                    frequency="B",
+                    table_id=f"yahoo:{ticker}:close-l1b",
+                ),
+            )
+        except (RuntimeError, ValueError, KeyError) as exc:
+            _handle_error(series_id, exc)
+
+    # ── EIA weekly fundamentals ───────────────────────────────────────────────
+    # Crude inventories are the single most-cited fundamental in the oil
+    # forecasting literature (Kilian & Murphy 2014): above-ground stocks are the
+    # state variable linking flow supply and demand to price, and the reason a
+    # pure flow model cannot explain the level. Refinery utilization is the
+    # demand-side companion.
+    #
+    # Requires an EIA API key in EIA_API_KEY; without one both series are simply
+    # skipped, exactly as an unavailable Yahoo ticker is, so the panel still
+    # builds on a machine that has no key.
+    #
+    # These are weekly and expanded from their RELEASE dates, so a backtest sees
+    # a figure on the day it was published rather than the day the week ended.
+    # Their daily differences are zero on every day but release day, which makes
+    # them the textbook case for the long-run-only block -- the short-run
+    # equation cannot tell a genuine zero from a forward-filled one.
+    eia_key = os.environ.get("EIA_API_KEY")
+    for series_id, (eia_id, description) in _EIA_SERIES.items():
+        if series_id not in desired:
+            continue
+        if not eia_key:
+            _handle_error(series_id, RuntimeError("EIA_API_KEY is not set; skipping EIA series"))
+            continue
+        try:
+            raw = _load_eia_series(eia_id, api_key=eia_key, cache_dir=resolved_cache_dir)
+            expanded = business_daily_expand_from_releases(raw, start=start, end=None)
+            svc.register(
+                series_id,
+                StaticFrameAdapter(expanded),
+                SeriesMetadata(
+                    series_id=series_id,
+                    description=f"{description}, visible from its release date",
+                    source=f"EIA API v2 ({eia_id})",
+                    units="thousand-barrels" if "STOCKS" in eia_id.upper() or "WCEST" in eia_id else "percent",
+                    frequency="B",
+                    table_id=f"eia:{eia_id}:release-expanded",
+                ),
+            )
+        except (RuntimeError, ValueError, KeyError, OSError) as exc:
+            _handle_error(series_id, exc)
 
     # ── VIX level ─────────────────────────────────────────────────────────────
     if SERIES_ID_VIX_LEVEL in desired:
