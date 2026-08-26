@@ -118,15 +118,46 @@ class PythonForecastEngineDeltaGoverned(PythonForecastEngine):
         # "unchanged" always means scale == 1.0 exactly, not "rescale toward
         # the empirical width regardless."
         if decision.uncertainty_action == "unchanged":
-            effective_target = ensemble_width
+            # "unchanged" is the LLM declining to form a view on width, not an
+            # assertion that the ensemble's own width is right. Treating it as
+            # the latter is what made this governor almost inert: the action is
+            # "unchanged" on 131 of 167 predictions, so the empirical width was
+            # computed and then discarded 78% of the time, and the interval was
+            # whatever the ensemble said.
+            #
+            # Floor it at what real h-day moves justify instead. Never narrower
+            # than history; wider is left alone, since an ensemble that has
+            # widened for genuine current volatility knows something the
+            # unconditional historical distribution does not.
+            #
+            # Scored offline across every cached predictor on the 2014-2024
+            # grid, this floor moved coverage to roughly nominal wherever it
+            # fired (Scenario Schema 60.5% -> 79.0%, News Original 52.1% ->
+            # 77.2%) for at most +0.06 CRPS, and left already-calibrated
+            # predictors untouched to the decimal. It replicated on the
+            # 2024-2026 window, which little else in this project has.
+            effective_target = max(ensemble_width, empirical_width)
         elif decision.uncertainty_action.endswith("wider"):
             effective_target = max(target_width, ensemble_width)
         else:  # *_narrower
+            # Deliberately NOT floored. An explicit narrow request has already
+            # passed evidence-tier gating, so the LLM is claiming to know
+            # something specific; overriding that would make the action
+            # meaningless. Only the "no view" case defers to history.
             effective_target = min(target_width, ensemble_width)
         scale = effective_target / ensemble_width if ensemble_width > 0 else uncertainty_multiplier
 
-        neutral = rank == 0 and decision.uncertainty_action == "unchanged"
-        pre_floor = dict(q) if neutral else {key: p50 + applied + scale * (value - p50) for key, value in q.items()}
+        # The old short-circuit returned the ensemble's quantiles untouched
+        # whenever rank == 0 and the action was "unchanged" -- which is exactly
+        # the case the floor above now needs to act on. Keep the exactness it
+        # was there for, but condition it on nothing actually changing rather
+        # than on the LLM having no opinion.
+        unchanged_exactly = applied == 0.0 and scale == 1.0
+        pre_floor = (
+            dict(q)
+            if unchanged_exactly
+            else {key: p50 + applied + scale * (value - p50) for key, value in q.items()}
+        )
 
         warnings: list[str] = []
         final = dict(pre_floor)
@@ -142,8 +173,13 @@ class PythonForecastEngineDeltaGoverned(PythonForecastEngine):
             raise ValueError("non-finite forecast")
         if values != sorted(values):
             raise ValueError("quantile crossing")
-        if neutral and final != q:
-            raise ValueError("neutral transformation did not exactly reproduce baseline")
+        # Guards the identity case only. This used to key on "the LLM had no
+        # view", which the width floor now makes a *changing* case -- a neutral
+        # decision can legitimately widen the band to what history justifies.
+        # Keyed on nothing having actually changed, the invariant still holds
+        # and still catches an accidental transform, without forbidding the fix.
+        if unchanged_exactly and not floor_applied and final != q:
+            raise ValueError("identity transformation did not exactly reproduce baseline")
 
         return ForecastTransformationDeltaGoverned(
             horizon=ensemble.horizon,
