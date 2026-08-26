@@ -55,6 +55,7 @@ import properscoring as ps
 import yaml
 
 from actuals_from_crps import recover_actuals
+from labels import label
 
 
 WINDOWS = {
@@ -65,37 +66,6 @@ WINDOWS = {
 # source of the per-(origin, horizon) widths every other predictor is rescaled
 # against.
 DELTA_CACHE = "agent_predictor_cfm_agent_v_5_2_2_delta_governed_gemini-3.1-flash-lite-preview_continuous__wti_oil_price_forecast.yaml"
-
-
-# Four predictor_ids share the prefix wti_analyst_news_scenario_schema, so
-# truncating to a fixed column width made three of them render identically and
-# Anchored looked absent from the table. Label explicitly instead.
-_LABELS = {
-    "wti_analyst_news_scenario_schema_anchored": "SS Anchored",
-    "wti_analyst_news_scenario_schema_enhanced": "SS Enhanced",
-    "wti_analyst_news_scenario_schema_temp0": "SS zero-temp",
-    "wti_analyst_news_scenario_schema": "SS base",
-    "wti_analyst_news_scenario": "News Agent Scenario",
-    "wti_analyst_news_factors_v2": "News Agent Factors v2",
-    "wti_analyst_news": "News Agent Original",
-    "cfm_agent_v_5_2_2_delta_governed": "CFM v5.2.2 Delta-Governed",
-    "cfm_agent_v_5_2_arima_only": "CFM v5.2.2 ARIMA-only",
-    "cfm_agent_v_5_2": "CFM v5.2 (full ensemble)",
-    "darts_autoarima_logret": "AutoARIMA (log returns)",
-    "darts_autoarima": "AutoARIMA",
-    "darts_kalman": "Kalman",
-    "last_value_naive": "Naive",
-}
-
-
-def _label(predictor_id: str) -> str:
-    """Human-readable name; longest matching key wins so prefixes don't collide."""
-    stem = predictor_id.replace("agent_predictor_", "").replace(
-        "_gemini-3.1-flash-lite-preview", "").replace("_continuous", "")
-    for key in sorted(_LABELS, key=len, reverse=True):
-        if stem.startswith(key):
-            return _LABELS[key]
-    return stem
 
 
 def _empirical_widths(window_dir: Path) -> dict[tuple[str, int], float]:
@@ -138,7 +108,7 @@ def main() -> None:
     rows = []
     for path in sorted(window_dir.glob("*.yaml")):
         doc = yaml.safe_load(path.read_text())
-        name = _label(doc["predictor_id"])
+        name = label(doc["predictor_id"])
         for pred in doc["predictions"]:
             q = {float(k): float(v) for k, v in (pred.get("payload") or {}).get("quantiles", {}).items()}
             if not q:
