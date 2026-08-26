@@ -1,0 +1,4516 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2024-07-23T00:00:00'
+  end: '2026-04-27T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: Prospective/out-of-sample evaluation period in 2026 for daily WTI crude
+    oil. Evaluates selected contender models on 18 weekly origins from the early 2026
+    geopolitical price shock through its aftermath, to measure adaptive real-time
+    forecasting performance.
+predictor_id: ecm_regression
+predictions:
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:12.523495'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-07-30T00:00:00'
+  payload:
+    point_forecast: 79.76969325068386
+    quantiles:
+      '0.05': 72.12562380325156
+      '0.1': 73.8139844830626
+      '0.2': 75.85845698476243
+      '0.3': 77.33266549834902
+      '0.4': 78.59232231691567
+      '0.5': 79.76969325068386
+      '0.6': 80.94706418445205
+      '0.7': 82.2067210030187
+      '0.8': 83.68092951660529
+      '0.9': 85.72540201830512
+      '0.95': 87.41376269811616
+  metadata:
+    adf_stat: -2.571038851296379
+    adf_pvalue: 0.09913188750136809
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4125
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.078319751875667
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:12.523495'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-06T00:00:00'
+  payload:
+    point_forecast: 79.75938772207084
+    quantiles:
+      '0.05': 68.94904103779027
+      '0.1': 71.3367436093565
+      '0.2': 74.22806434915925
+      '0.3': 76.31291002283928
+      '0.4': 78.09433377959199
+      '0.5': 79.75938772207084
+      '0.6': 81.42444166454969
+      '0.7': 83.2058654213024
+      '0.8': 85.29071109498243
+      '0.9': 88.18203183478518
+      '0.95': 90.56973440635142
+  metadata:
+    adf_stat: -2.571038851296379
+    adf_pvalue: 0.09913188750136809
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4125
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.078319751875667
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:12.523495'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-21T00:00:00'
+  payload:
+    point_forecast: 79.7367155591222
+    quantiles:
+      '0.05': 64.07103490323925
+      '0.1': 67.53114465548042
+      '0.2': 71.72106646893569
+      '0.3': 74.74229488043173
+      '0.4': 77.3238231608033
+      '0.5': 79.7367155591222
+      '0.6': 82.1496079574411
+      '0.7': 84.73113623781268
+      '0.8': 87.75236464930872
+      '0.9': 91.94228646276399
+      '0.95': 95.40239621500515
+  metadata:
+    adf_stat: -2.571038851296379
+    adf_pvalue: 0.09913188750136809
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4125
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.078319751875667
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:12.523495'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-10-18T00:00:00'
+  payload:
+    point_forecast: 79.65014911877286
+    quantiles:
+      '0.05': 52.51639428763464
+      '0.1': 58.5094801782809
+      '0.2': 65.76663763892658
+      '0.3': 70.99955874890833
+      '0.4': 75.4708968916878
+      '0.5': 79.65014911877286
+      '0.6': 83.82940134585792
+      '0.7': 88.30073948863739
+      '0.8': 93.53366059861914
+      '0.9': 100.79081805926481
+      '0.95': 106.78390394991106
+  metadata:
+    adf_stat: -2.571038851296379
+    adf_pvalue: 0.09913188750136809
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4125
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.078319751875667
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:13.560069'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-08-28T00:00:00'
+  payload:
+    point_forecast: 74.02282359602945
+    quantiles:
+      '0.05': 66.38456332735223
+      '0.1': 68.07164092240592
+      '0.2': 70.11455970899316
+      '0.3': 71.58764788467117
+      '0.4': 72.8463474158035
+      '0.5': 74.02282359602945
+      '0.6': 75.1992997762554
+      '0.7': 76.45799930738774
+      '0.8': 77.93108748306575
+      '0.9': 79.97400626965299
+      '0.95': 81.66108386470668
+  metadata:
+    adf_stat: -2.58841866605666
+    adf_pvalue: 0.09541459620336867
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4146
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0767403142434135
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:13.560069'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-09-04T00:00:00'
+  payload:
+    point_forecast: 74.00564627653156
+    quantiles:
+      '0.05': 63.20351501163266
+      '0.1': 65.58940302733339
+      '0.2': 68.47852648215185
+      '0.3': 70.56178775876714
+      '0.4': 72.34185770664715
+      '0.5': 74.00564627653156
+      '0.6': 75.66943484641598
+      '0.7': 77.44950479429599
+      '0.8': 79.53276607091128
+      '0.9': 82.42188952572974
+      '0.95': 84.80777754143047
+  metadata:
+    adf_stat: -2.58841866605666
+    adf_pvalue: 0.09541459620336867
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4146
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0767403142434135
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:13.560069'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-09-19T00:00:00'
+  payload:
+    point_forecast: 73.9678561736362
+    quantiles:
+      '0.05': 58.31408079149202
+      '0.1': 61.77156100246578
+      '0.2': 65.95829864746844
+      '0.3': 68.97723104948642
+      '0.4': 71.55679747441633
+      '0.5': 73.9678561736362
+      '0.6': 76.37891487285609
+      '0.7': 78.958481297786
+      '0.8': 81.97741369980398
+      '0.9': 86.16415134480663
+      '0.95': 89.62163155578038
+  metadata:
+    adf_stat: -2.58841866605666
+    adf_pvalue: 0.09541459620336867
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4146
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0767403142434135
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:13.560069'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-11-18T00:00:00'
+  payload:
+    point_forecast: 73.82356668985393
+    quantiles:
+      '0.05': 46.710432397709276
+      '0.1': 52.698963789279794
+      '0.2': 59.950606108385685
+      '0.3': 65.17955041329677
+      '0.4': 69.64749052277416
+      '0.5': 73.82356668985393
+      '0.6': 77.9996428569337
+      '0.7': 82.4675829664111
+      '0.8': 87.69652727132218
+      '0.9': 94.94816959042808
+      '0.95': 100.93670098199858
+  metadata:
+    adf_stat: -2.58841866605666
+    adf_pvalue: 0.09541459620336867
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4146
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0767403142434135
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:14.378046'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-09-26T00:00:00'
+  payload:
+    point_forecast: 70.88915132703472
+    quantiles:
+      '0.05': 63.25647635685337
+      '0.1': 64.94232031602368
+      '0.2': 66.9837452662104
+      '0.3': 68.45575628074407
+      '0.4': 69.71353541739511
+      '0.5': 70.88915132703472
+      '0.6': 72.06476723667434
+      '0.7': 73.32254637332538
+      '0.8': 74.79455738785904
+      '0.9': 76.83598233804577
+      '0.95': 78.52182629721608
+  metadata:
+    adf_stat: -2.5995096198253074
+    adf_pvalue: 0.09309866141031148
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4166
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0752217466448406
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:14.378046'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-10-03T00:00:00'
+  payload:
+    point_forecast: 70.86829899196007
+    quantiles:
+      '0.05': 60.07406653194395
+      '0.1': 62.45820992304736
+      '0.2': 65.34522077416824
+      '0.3': 67.42695871488432
+      '0.4': 69.20572702840614
+      '0.5': 70.86829899196007
+      '0.6': 72.530870955514
+      '0.7': 74.30963926903583
+      '0.8': 76.39137720975191
+      '0.9': 79.27838806087279
+      '0.95': 81.6625314519762
+  metadata:
+    adf_stat: -2.5995096198253074
+    adf_pvalue: 0.09309866141031148
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4166
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0752217466448406
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:14.378046'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-10-18T00:00:00'
+  payload:
+    point_forecast: 70.82242385479584
+    quantiles:
+      '0.05': 55.18009492839175
+      '0.1': 58.63504693813348
+      '0.2': 62.818723129526454
+      '0.3': 65.83544800810178
+      '0.4': 68.41312818564467
+      '0.5': 70.82242385479584
+      '0.6': 73.23171952394702
+      '0.7': 75.80939970148991
+      '0.8': 78.82612458006523
+      '0.9': 83.0098007714582
+      '0.95': 86.46475278119993
+  metadata:
+    adf_stat: -2.5995096198253074
+    adf_pvalue: 0.09309866141031148
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4166
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0752217466448406
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:14.378046'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-12-17T00:00:00'
+  payload:
+    point_forecast: 70.64726424016878
+    quantiles:
+      '0.05': 43.55395579093256
+      '0.1': 49.53810820951743
+      '0.2': 56.78444793542633
+      '0.3': 62.009568697575844
+      '0.4': 66.47424173074327
+      '0.5': 70.64726424016878
+      '0.6': 74.82028674959429
+      '0.7': 79.28495978276172
+      '0.8': 84.51008054491123
+      '0.9': 91.75642027082013
+      '0.95': 97.74057268940498
+  metadata:
+    adf_stat: -2.5995096198253074
+    adf_pvalue: 0.09309866141031148
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4166
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0752217466448406
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:15.221484'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-10-25T00:00:00'
+  payload:
+    point_forecast: 70.64896376783403
+    quantiles:
+      '0.05': 63.02059986190303
+      '0.1': 64.70549162781836
+      '0.2': 66.7457635465768
+      '0.3': 68.21694314432858
+      '0.4': 69.4740118659951
+      '0.5': 70.64896376783403
+      '0.6': 71.82391566967297
+      '0.7': 73.08098439133948
+      '0.8': 74.55216398909127
+      '0.9': 76.5924359078497
+      '0.95': 78.27732767376503
+  metadata:
+    adf_stat: -2.608659096225441
+    adf_pvalue: 0.09122078238000997
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4187
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0740496262128225
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:15.221484'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-01T00:00:00'
+  payload:
+    point_forecast: 70.62792936672275
+    quantiles:
+      '0.05': 59.83979367223773
+      '0.1': 62.22259045872595
+      '0.2': 65.10797067716311
+      '0.3': 67.18853281699026
+      '0.4': 68.96629645200606
+      '0.5': 70.62792936672275
+      '0.6': 72.28956228143944
+      '0.7': 74.06732591645525
+      '0.8': 76.1478880562824
+      '0.9': 79.03326827471955
+      '0.95': 81.41606506120777
+  metadata:
+    adf_stat: -2.608659096225441
+    adf_pvalue: 0.09122078238000997
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4187
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0740496262128225
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:15.221484'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-18T00:00:00'
+  payload:
+    point_forecast: 70.58165368427794
+    quantiles:
+      '0.05': 54.94815981049828
+      '0.1': 58.401160404759324
+      '0.2': 62.582473584896846
+      '0.3': 65.59749456610618
+      '0.4': 68.17371882617509
+      '0.5': 70.58165368427794
+      '0.6': 72.98958854238079
+      '0.7': 75.5658128024497
+      '0.8': 78.58083378365903
+      '0.9': 82.76214696379655
+      '0.95': 86.21514755805758
+  metadata:
+    adf_stat: -2.608659096225441
+    adf_pvalue: 0.09122078238000997
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4187
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0740496262128225
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:15.221484'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2025-01-15T00:00:00'
+  payload:
+    point_forecast: 70.40496471494319
+    quantiles:
+      '0.05': 43.326959025740045
+      '0.1': 49.30773149356569
+      '0.2': 56.549978363921284
+      '0.3': 61.772147889262015
+      '0.4': 66.23429919939291
+      '0.5': 70.40496471494319
+      '0.6': 74.57563023049347
+      '0.7': 79.03778154062437
+      '0.8': 84.2599510659651
+      '0.9': 91.5021979363207
+      '0.95': 97.48297040414633
+  metadata:
+    adf_stat: -2.608659096225441
+    adf_pvalue: 0.09122078238000997
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4187
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0740496262128225
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.049500'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2024-11-25T00:00:00'
+  payload:
+    point_forecast: 66.99472922907042
+    quantiles:
+      '0.05': 59.37492379162191
+      '0.1': 61.05792523174094
+      '0.2': 63.09590811406539
+      '0.3': 64.56543715550198
+      '0.4': 65.82109553765567
+      '0.5': 66.99472922907042
+      '0.6': 68.16836292048517
+      '0.7': 69.42402130263885
+      '0.8': 70.89355034407545
+      '0.9': 72.93153322639989
+      '0.95': 74.61453466651892
+  metadata:
+    adf_stat: -2.608778428988737
+    adf_pvalue: 0.09119648386873319
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4208
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0717226936521866
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.049500'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2024-12-02T00:00:00'
+  payload:
+    point_forecast: 66.96946181507442
+    quantiles:
+      '0.05': 56.1934296227905
+      '0.1': 58.57355308490028
+      '0.2': 61.45569611696772
+      '0.3': 63.533924017668475
+      '0.4': 65.30969313141769
+      '0.5': 66.96946181507442
+      '0.6': 68.62923049873116
+      '0.7': 70.40499961248037
+      '0.8': 72.48322751318113
+      '0.9': 75.36537054524857
+      '0.95': 77.74549400735835
+  metadata:
+    adf_stat: -2.608778428988737
+    adf_pvalue: 0.09119648386873319
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4208
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0717226936521866
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.049500'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2024-12-17T00:00:00'
+  payload:
+    point_forecast: 66.91387350428325
+    quantiles:
+      '0.05': 51.297919271538035
+      '0.1': 54.7470458507258
+      '0.2': 58.9236679021352
+      '0.3': 61.9353062494849
+      '0.4': 64.50864017364358
+      '0.5': 66.91387350428325
+      '0.6': 69.3191068349229
+      '0.7': 71.89244075908158
+      '0.8': 74.9040791064313
+      '0.9': 79.08070115784069
+      '0.95': 82.52982773702844
+  metadata:
+    adf_stat: -2.608778428988737
+    adf_pvalue: 0.09119648386873319
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4208
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0717226936521866
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.049500'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2025-02-13T00:00:00'
+  payload:
+    point_forecast: 66.70162722671692
+    quantiles:
+      '0.05': 39.654001086931956
+      '0.1': 45.62806356382139
+      '0.2': 52.86218516087503
+      '0.3': 58.07849579250749
+      '0.4': 62.5356408939909
+      '0.5': 66.70162722671692
+      '0.6': 70.86761355944294
+      '0.7': 75.32475866092635
+      '0.8': 80.54106929255882
+      '0.9': 87.77519088961245
+      '0.95': 93.74925336650188
+  metadata:
+    adf_stat: -2.608778428988737
+    adf_pvalue: 0.09119648386873319
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4208
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0717226936521866
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.865267'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2024-12-24T00:00:00'
+  payload:
+    point_forecast: 70.68921602356087
+    quantiles:
+      '0.05': 63.08187635206892
+      '0.1': 64.76212445390007
+      '0.2': 66.7967732592795
+      '0.3': 68.26389819666812
+      '0.4': 69.51750236055578
+      '0.5': 70.68921602356087
+      '0.6': 71.86092968656597
+      '0.7': 73.11453385045363
+      '0.8': 74.58165878784224
+      '0.9': 76.61630759322168
+      '0.95': 78.29655569505283
+  metadata:
+    adf_stat: -2.620043381110208
+    adf_pvalue: 0.08892506074748124
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4228
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.06833341941967
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.865267'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2024-12-31T00:00:00'
+  payload:
+    point_forecast: 70.66843296264909
+    quantiles:
+      '0.05': 59.91003002564628
+      '0.1': 62.28625967940756
+      '0.2': 65.16368761464136
+      '0.3': 67.23851559879212
+      '0.4': 69.01137960920943
+      '0.5': 70.66843296264909
+      '0.6': 72.32548631608876
+      '0.7': 74.09835032650605
+      '0.8': 76.17317831065682
+      '0.9': 79.05060624589063
+      '0.95': 81.42683589965189
+  metadata:
+    adf_stat: -2.620043381110208
+    adf_pvalue: 0.08892506074748124
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4228
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.06833341941967
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.865267'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2025-01-15T00:00:00'
+  payload:
+    point_forecast: 70.62271022864317
+    quantiles:
+      '0.05': 55.03230321390131
+      '0.1': 58.47578712871349
+      '0.2': 62.645576355661795
+      '0.3': 65.65228775584835
+      '0.4': 68.22141178532009
+      '0.5': 70.62271022864317
+      '0.6': 73.02400867196626
+      '0.7': 75.593132701438
+      '0.8': 78.59984410162454
+      '0.9': 82.76963332857285
+      '0.95': 86.21311724338503
+  metadata:
+    adf_stat: -2.620043381110208
+    adf_pvalue: 0.08892506074748124
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4228
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.06833341941967
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:16.865267'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2025-03-14T00:00:00'
+  payload:
+    point_forecast: 70.4481325169842
+    quantiles:
+      '0.05': 43.444755456773066
+      '0.1': 49.409044552273954
+      '0.2': 56.63133135020177
+      '0.3': 61.83910825902144
+      '0.4': 66.28896160901256
+      '0.5': 70.4481325169842
+      '0.6': 74.60730342495584
+      '0.7': 79.05715677494696
+      '0.8': 84.26493368376664
+      '0.9': 91.48722048169445
+      '0.95': 97.45150957719534
+  metadata:
+    adf_stat: -2.620043381110208
+    adf_pvalue: 0.08892506074748124
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4228
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.06833341941967
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:17.695151'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-22T00:00:00'
+  payload:
+    point_forecast: 77.48730271050732
+    quantiles:
+      '0.05': 69.89074970985052
+      '0.1': 71.56861533844156
+      '0.2': 73.60037915539185
+      '0.3': 75.0654238131483
+      '0.4': 76.3172504547933
+      '0.5': 77.48730271050732
+      '0.6': 78.65735496622135
+      '0.7': 79.90918160786634
+      '0.8': 81.3742262656228
+      '0.9': 83.40599008257308
+      '0.95': 85.08385571116412
+  metadata:
+    adf_stat: -2.627894836378902
+    adf_pvalue: 0.08736792365819807
+    adf_stationary: true
+    coint_stat: -2.642143960083453
+    coint_pvalue: 0.408824334634475
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4246
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 2
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0654006685848088
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:17.695151'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-29T00:00:00'
+  payload:
+    point_forecast: 77.47460542101464
+    quantiles:
+      '0.05': 66.73145714019978
+      '0.1': 69.10431746799287
+      '0.2': 71.9776654134629
+      '0.3': 74.04955143794432
+      '0.4': 75.81990165229864
+      '0.5': 77.47460542101464
+      '0.6': 79.12930918973065
+      '0.7': 80.89965940408497
+      '0.8': 82.97154542856639
+      '0.9': 85.84489337403642
+      '0.95': 88.21775370182951
+  metadata:
+    adf_stat: -2.627894836378902
+    adf_pvalue: 0.08736792365819807
+    adf_stationary: true
+    coint_stat: -2.642143960083453
+    coint_pvalue: 0.408824334634475
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4246
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 2
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0654006685848088
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:17.695151'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-02-13T00:00:00'
+  payload:
+    point_forecast: 77.44667138413075
+    quantiles:
+      '0.05': 61.87837046638419
+      '0.1': 65.31697176399783
+      '0.2': 69.48084852406738
+      '0.3': 72.48329661965985
+      '0.4': 75.04877781255044
+      '0.5': 77.44667138413075
+      '0.6': 79.84456495571106
+      '0.7': 82.41004614860165
+      '0.8': 85.41249424419412
+      '0.9': 89.57637100426368
+      '0.95': 93.01497230187731
+  metadata:
+    adf_stat: -2.627894836378902
+    adf_pvalue: 0.08736792365819807
+    adf_stationary: true
+    coint_stat: -2.642143960083453
+    coint_pvalue: 0.408824334634475
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4246
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 2
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0654006685848088
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:17.695151'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-04-14T00:00:00'
+  payload:
+    point_forecast: 77.34001415239226
+    quantiles:
+      '0.05': 50.37492597533402
+      '0.1': 56.330758129773116
+      '0.2': 63.542804234668864
+      '0.3': 68.74319688332346
+      '0.4': 73.18674065527235
+      '0.5': 77.34001415239226
+      '0.6': 81.49328764951217
+      '0.7': 85.93683142146105
+      '0.8': 91.13722407011565
+      '0.9': 98.3492701750114
+      '0.95': 104.30510232945048
+  metadata:
+    adf_stat: -2.627894836378902
+    adf_pvalue: 0.08736792365819807
+    adf_stationary: true
+    coint_stat: -2.642143960083453
+    coint_pvalue: 0.408824334634475
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4246
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 2
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0654006685848088
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:18.508249'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-02-20T00:00:00'
+  payload:
+    point_forecast: 71.3501786011744
+    quantiles:
+      '0.05': 63.76561140046003
+      '0.1': 65.4408297018024
+      '0.2': 67.46938781287028
+      '0.3': 68.93212093114651
+      '0.4': 70.18197244753561
+      '0.5': 71.3501786011744
+      '0.6': 72.5183847548132
+      '0.7': 73.7682362712023
+      '0.8': 75.23096938947853
+      '0.9': 77.25952750054641
+      '0.95': 78.93474580188878
+  metadata:
+    adf_stat: -2.6359170023489935
+    adf_pvalue: 0.08579880953644325
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4266
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.062141890661129
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:18.508249'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-02-27T00:00:00'
+  payload:
+    point_forecast: 71.33035445576678
+    quantiles:
+      '0.05': 60.604156655786376
+      '0.1': 62.97327309748037
+      '0.2': 65.84208749021452
+      '0.3': 67.91070450421304
+      '0.4': 69.6782614696431
+      '0.5': 71.33035445576678
+      '0.6': 72.98244744189046
+      '0.7': 74.75000440732052
+      '0.8': 76.81862142131904
+      '0.9': 79.68743581405319
+      '0.95': 82.05655225574718
+  metadata:
+    adf_stat: -2.6359170023489935
+    adf_pvalue: 0.08579880953644325
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4266
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.062141890661129
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:18.508249'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-03-14T00:00:00'
+  payload:
+    point_forecast: 71.28674133587
+    quantiles:
+      '0.05': 55.74300399850357
+      '0.1': 59.17617988972152
+      '0.2': 63.333486907721635
+      '0.3': 66.33119775706464
+      '0.4': 68.89263114770446
+      '0.5': 71.28674133587
+      '0.6': 73.68085152403555
+      '0.7': 76.24228491467537
+      '0.8': 79.23999576401837
+      '0.9': 83.39730278201849
+      '0.95': 86.83047867323643
+  metadata:
+    adf_stat: -2.6359170023489935
+    adf_pvalue: 0.08579880953644325
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4266
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.062141890661129
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:18.508249'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-05-13T00:00:00'
+  payload:
+    point_forecast: 71.12021851444595
+    quantiles:
+      '0.05': 44.19767570662191
+      '0.1': 50.14411078153195
+      '0.2': 57.34477775937082
+      '0.3': 62.53696525683336
+      '0.4': 66.97349802962496
+      '0.5': 71.12021851444595
+      '0.6': 75.26693899926694
+      '0.7': 79.70347177205853
+      '0.8': 84.89565926952109
+      '0.9': 92.09632624735995
+      '0.95': 98.04276132227
+  metadata:
+    adf_stat: -2.6359170023489935
+    adf_pvalue: 0.08579880953644325
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4266
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.062141890661129
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:19.330154'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-03-21T00:00:00'
+  payload:
+    point_forecast: 66.52464716409439
+    quantiles:
+      '0.05': 58.95285508365646
+      '0.1': 60.62525171901281
+      '0.2': 62.65039301364663
+      '0.3': 64.11066236688211
+      '0.4': 65.35840868688663
+      '0.5': 66.52464716409439
+      '0.6': 67.69088564130215
+      '0.7': 68.93863196130667
+      '0.8': 70.39890131454214
+      '0.9': 72.42404260917597
+      '0.95': 74.09643924453232
+  metadata:
+    adf_stat: -2.636754512246632
+    adf_pvalue: 0.08563626316985684
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4286
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0586685071465367
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:19.330154'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-03-28T00:00:00'
+  payload:
+    point_forecast: 66.49929127643097
+    quantiles:
+      '0.05': 55.79116022480645
+      '0.1': 58.15628622819453
+      '0.2': 61.02026851278749
+      '0.3': 63.08540123685089
+      '0.4': 64.8499810050024
+      '0.5': 66.49929127643097
+      '0.6': 68.14860154785953
+      '0.7': 69.91318131601103
+      '0.8': 71.97831404007444
+      '0.9': 74.8422963246674
+      '0.95': 77.20742232805549
+  metadata:
+    adf_stat: -2.636754512246632
+    adf_pvalue: 0.08563626316985684
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4286
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0586685071465367
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:19.330154'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-04-14T00:00:00'
+  payload:
+    point_forecast: 66.44350832357144
+    quantiles:
+      '0.05': 50.925952191905374
+      '0.1': 54.35334538863598
+      '0.2': 58.50365001668087
+      '0.3': 61.49631165020959
+      '0.4': 64.05343067210832
+      '0.5': 66.44350832357144
+      '0.6': 68.83358597503455
+      '0.7': 71.39070499693328
+      '0.8': 74.383366630462
+      '0.9': 78.5336712585069
+      '0.95': 81.96106445523749
+  metadata:
+    adf_stat: -2.636754512246632
+    adf_pvalue: 0.08563626316985684
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4286
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0586685071465367
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:19.330154'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-06-11T00:00:00'
+  payload:
+    point_forecast: 66.23051886719868
+    quantiles:
+      '0.05': 39.3533232378511
+      '0.1': 45.289742392104415
+      '0.2': 52.47828087476642
+      '0.3': 57.661722873900246
+      '0.4': 62.09078294082967
+      '0.5': 66.23051886719868
+      '0.6': 70.3702547935677
+      '0.7': 74.79931486049712
+      '0.8': 79.98275685963095
+      '0.9': 87.17129534229295
+      '0.95': 93.10771449654625
+  metadata:
+    adf_stat: -2.636754512246632
+    adf_pvalue: 0.08563626316985684
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4286
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0586685071465367
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:20.168707'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-21T00:00:00'
+  payload:
+    point_forecast: 61.46890385650339
+    quantiles:
+      '0.05': 53.90029194329195
+      '0.1': 55.57198616884716
+      '0.2': 57.59627690024499
+      '0.3': 59.05593293754553
+      '0.4': 60.30315520169753
+      '0.5': 61.46890385650339
+      '0.6': 62.63465251130925
+      '0.7': 63.88187477546125
+      '0.8': 65.34153081276179
+      '0.9': 67.36582154415962
+      '0.95': 69.03751576971483
+  metadata:
+    adf_stat: -2.6237338306505245
+    adf_pvalue: 0.08819050540537432
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4307
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0578038624168498
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:20.168707'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-28T00:00:00'
+  payload:
+    point_forecast: 61.43780771300678
+    quantiles:
+      '0.05': 50.734174097004576
+      '0.1': 53.098306742925544
+      '0.2': 55.96108614945451
+      '0.3': 58.0253515138047
+      '0.4': 59.78919015506214
+      '0.5': 61.43780771300678
+      '0.6': 63.086425270951416
+      '0.7': 64.85026391220886
+      '0.8': 66.91452927655904
+      '0.9': 69.77730868308801
+      '0.95': 72.14144132900897
+  metadata:
+    adf_stat: -2.6237338306505245
+    adf_pvalue: 0.08819050540537432
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4307
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0578038624168498
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:20.168707'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-05-13T00:00:00'
+  payload:
+    point_forecast: 61.36939619731423
+    quantiles:
+      '0.05': 45.85835746904765
+      '0.1': 49.2843111540483
+      '0.2': 53.432872646172676
+      '0.3': 56.424277356063534
+      '0.4': 58.98032238305837
+      '0.5': 61.36939619731423
+      '0.6': 63.75847001157009
+      '0.7': 66.31451503856493
+      '0.8': 69.30591974845579
+      '0.9': 73.45448124058017
+      '0.95': 76.88043492558081
+  metadata:
+    adf_stat: -2.6237338306505245
+    adf_pvalue: 0.08819050540537432
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4307
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0578038624168498
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:20.168707'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-07-10T00:00:00'
+  payload:
+    point_forecast: 61.10818859194269
+    quantiles:
+      '0.05': 34.24228143641642
+      '0.1': 40.17620728321536
+      '0.2': 47.36172656589854
+      '0.3': 52.54299150943035
+      '0.4': 56.970191362619175
+      '0.5': 61.10818859194269
+      '0.6': 65.24618582126621
+      '0.7': 69.67338567445503
+      '0.8': 74.85465061798683
+      '0.9': 82.04016990067002
+      '0.95': 87.97409574746897
+  metadata:
+    adf_stat: -2.6237338306505245
+    adf_pvalue: 0.08819050540537432
+    adf_stationary: true
+    coint_stat: null
+    coint_pvalue: null
+    coint_stationary: false
+    coint_basis: all
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4307
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates: []
+    n_selected: 0
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0578038624168498
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.024628'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-05-20T00:00:00'
+  payload:
+    point_forecast: 61.91956849523679
+    quantiles:
+      '0.05': 54.360828948911625
+      '0.1': 56.03034264534134
+      '0.2': 58.051992926810705
+      '0.3': 59.50974501394267
+      '0.4': 60.75534042287714
+      '0.5': 61.91956849523679
+      '0.6': 63.08379656759644
+      '0.7': 64.32939197653091
+      '0.8': 65.78714406366288
+      '0.9': 67.80879434513223
+      '0.95': 69.47830804156195
+  metadata:
+    adf_stat: -2.617051889538018
+    adf_pvalue: 0.08952395248753736
+    adf_stationary: true
+    coint_stat: -2.70047880707528
+    coint_pvalue: 0.5721013309649768
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4327
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055119698538091
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.024628'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-05-27T00:00:00'
+  payload:
+    point_forecast: 61.889136227534124
+    quantiles:
+      '0.05': 51.19946424667523
+      '0.1': 53.56051315873377
+      '0.2': 56.41955840516312
+      '0.3': 58.48113117736283
+      '0.4': 60.24266909790762
+      '0.5': 61.889136227534124
+      '0.6': 63.535603357160625
+      '0.7': 65.2971412777054
+      '0.8': 67.35871404990513
+      '0.9': 70.21775929633448
+      '0.95': 72.57880820839301
+  metadata:
+    adf_stat: -2.617051889538018
+    adf_pvalue: 0.08952395248753736
+    adf_stationary: true
+    coint_stat: -2.70047880707528
+    coint_pvalue: 0.5721013309649768
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4327
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055119698538091
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.024628'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-06-11T00:00:00'
+  payload:
+    point_forecast: 61.82218523858826
+    quantiles:
+      '0.05': 46.33137884180712
+      '0.1': 49.752863771889224
+      '0.2': 53.8960139519302
+      '0.3': 56.88351672509342
+      '0.4': 59.43622769102479
+      '0.5': 61.82218523858826
+      '0.6': 64.20814278615174
+      '0.7': 66.76085375208311
+      '0.8': 69.74835652524632
+      '0.9': 73.8915067052873
+      '0.95': 77.3129916353694
+  metadata:
+    adf_stat: -2.617051889538018
+    adf_pvalue: 0.08952395248753736
+    adf_stationary: true
+    coint_stat: -2.70047880707528
+    coint_pvalue: 0.5721013309649768
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4327
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055119698538091
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.024628'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-08-08T00:00:00'
+  payload:
+    point_forecast: 61.56655418988588
+    quantiles:
+      '0.05': 34.73569046044797
+      '0.1': 40.66187619668142
+      '0.2': 47.83802281190053
+      '0.3': 53.012529402772145
+      '0.4': 57.43395449280351
+      '0.5': 61.56655418988588
+      '0.6': 65.69915388696825
+      '0.7': 70.12057897699961
+      '0.8': 75.29508556787123
+      '0.9': 82.47123218309034
+      '0.95': 88.39741791932377
+  metadata:
+    adf_stat: -2.617051889538018
+    adf_pvalue: 0.08952395248753736
+    adf_stationary: true
+    coint_stat: -2.70047880707528
+    coint_pvalue: 0.5721013309649768
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4327
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055119698538091
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.851825'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-06-18T00:00:00'
+  payload:
+    point_forecast: 64.95319710357148
+    quantiles:
+      '0.05': 57.40852605393106
+      '0.1': 59.074932413779145
+      '0.2': 61.09281995410519
+      '0.3': 62.547858840143334
+      '0.4': 63.791135918782956
+      '0.5': 64.95319710357148
+      '0.6': 66.11525828836001
+      '0.7': 67.35853536699963
+      '0.8': 68.81357425303779
+      '0.9': 70.83146179336383
+      '0.95': 72.4978681532119
+  metadata:
+    adf_stat: -2.631896486397626
+    adf_pvalue: 0.08658245744647708
+    adf_stationary: true
+    coint_stat: -2.7048514428397277
+    coint_pvalue: 0.5697739749899426
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4347
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.051294663360145
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.851825'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-06-25T00:00:00'
+  payload:
+    point_forecast: 64.92639085020937
+    quantiles:
+      '0.05': 54.25661472816423
+      '0.1': 56.61326920268617
+      '0.2': 59.466993129558944
+      '0.3': 61.52472885597433
+      '0.4': 63.28298816237409
+      '0.5': 64.92639085020937
+      '0.6': 66.56979353804465
+      '0.7': 68.32805284444441
+      '0.8': 70.3857885708598
+      '0.9': 73.23951249773258
+      '0.95': 75.59616697225451
+  metadata:
+    adf_stat: -2.631896486397626
+    adf_pvalue: 0.08658245744647708
+    adf_stationary: true
+    coint_stat: -2.7048514428397277
+    coint_pvalue: 0.5697739749899426
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4347
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.051294663360145
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.851825'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-07-10T00:00:00'
+  payload:
+    point_forecast: 64.86741709281273
+    quantiles:
+      '0.05': 49.4054425346075
+      '0.1': 52.82055931969655
+      '0.2': 56.95599817508941
+      '0.3': 59.937940540647325
+      '0.4': 62.485900343300585
+      '0.5': 64.86741709281273
+      '0.6': 67.24893384232487
+      '0.7': 69.79689364497813
+      '0.8': 72.77883601053605
+      '0.9': 76.9142748659289
+      '0.95': 80.32939165101794
+  metadata:
+    adf_stat: -2.631896486397626
+    adf_pvalue: 0.08658245744647708
+    adf_stationary: true
+    coint_stat: -2.7048514428397277
+    coint_pvalue: 0.5697739749899426
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4347
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.051294663360145
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:21.851825'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-09-08T00:00:00'
+  payload:
+    point_forecast: 64.642244564571
+    quantiles:
+      '0.05': 37.8613190444222
+      '0.1': 43.776474829977715
+      '0.2': 50.939265039112634
+      '0.3': 56.10414072150107
+      '0.4': 60.51733655533968
+      '0.5': 64.642244564571
+      '0.6': 68.76715257380232
+      '0.7': 73.18034840764093
+      '0.8': 78.34522409002938
+      '0.9': 85.50801429916429
+      '0.95': 91.42317008471979
+  metadata:
+    adf_stat: -2.631896486397626
+    adf_pvalue: 0.08658245744647708
+    adf_stationary: true
+    coint_stat: -2.7048514428397277
+    coint_pvalue: 0.5697739749899426
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4347
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.051294663360145
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:22.696114'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-17T00:00:00'
+  payload:
+    point_forecast: 68.35720229176177
+    quantiles:
+      '0.05': 60.80638588647063
+      '0.1': 62.47414958312935
+      '0.2': 64.49368075198696
+      '0.3': 65.94990480983465
+      '0.4': 67.19419457408645
+      '0.5': 68.35720229176177
+      '0.6': 69.52021000943708
+      '0.7': 70.76449977368888
+      '0.8': 72.22072383153657
+      '0.9': 74.24025500039417
+      '0.95': 75.9080186970529
+  metadata:
+    adf_stat: -2.639907010983001
+    adf_pvalue: 0.08502655901152217
+    adf_stationary: true
+    coint_stat: -2.7037381394831037
+    coint_pvalue: 0.734437285681398
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4366
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0529655029723455
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:22.696114'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-24T00:00:00'
+  payload:
+    point_forecast: 68.33440733010556
+    quantiles:
+      '0.05': 57.655940362753576
+      '0.1': 60.01451440140183
+      '0.2': 62.870562770035455
+      '0.3': 64.92997458249764
+      '0.4': 66.68966604262457
+      '0.5': 68.33440733010556
+      '0.6': 69.97914861758656
+      '0.7': 71.73884007771349
+      '0.8': 73.79825189017568
+      '0.9': 76.65430025880929
+      '0.95': 79.01287429745754
+  metadata:
+    adf_stat: -2.639907010983001
+    adf_pvalue: 0.08502655901152217
+    adf_stationary: true
+    coint_stat: -2.7037381394831037
+    coint_pvalue: 0.734437285681398
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4366
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0529655029723455
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:22.696114'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-08-08T00:00:00'
+  payload:
+    point_forecast: 68.28425841446192
+    quantiles:
+      '0.05': 52.809689624898255
+      '0.1': 56.2275881226816
+      '0.2': 60.36639541420255
+      '0.3': 63.350766659196786
+      '0.4': 65.90080184977194
+      '0.5': 68.28425841446192
+      '0.6': 70.6677149791519
+      '0.7': 73.21775016972704
+      '0.8': 76.20212141472129
+      '0.9': 80.34092870624224
+      '0.95': 83.75882720402558
+  metadata:
+    adf_stat: -2.639907010983001
+    adf_pvalue: 0.08502655901152217
+    adf_stationary: true
+    coint_stat: -2.7037381394831037
+    coint_pvalue: 0.734437285681398
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4366
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0529655029723455
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:22.696114'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-10-07T00:00:00'
+  payload:
+    point_forecast: 68.09278073654981
+    quantiles:
+      '0.05': 41.29004136780592
+      '0.1': 47.21001522108002
+      '0.2': 54.378639732730846
+      '0.3': 59.54772235770845
+      '0.4': 63.964512868873186
+      '0.5': 68.09278073654981
+      '0.6': 72.22104860422644
+      '0.7': 76.63783911539117
+      '0.8': 81.80692174036878
+      '0.9': 88.9755462520196
+      '0.95': 94.8955201052937
+  metadata:
+    adf_stat: -2.639907010983001
+    adf_pvalue: 0.08502655901152217
+    adf_stationary: true
+    coint_stat: -2.7037381394831037
+    coint_pvalue: 0.734437285681398
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4366
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0529655029723455
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:23.584641'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-08-15T00:00:00'
+  payload:
+    point_forecast: 63.85218529325068
+    quantiles:
+      '0.05': 56.31320482656683
+      '0.1': 57.978354296145255
+      '0.2': 59.99471984083097
+      '0.3': 61.448661260931694
+      '0.4': 62.691000595393014
+      '0.5': 63.85218529325068
+      '0.6': 65.01336999110835
+      '0.7': 66.25570932556967
+      '0.8': 67.70965074567039
+      '0.9': 69.7260162903561
+      '0.95': 71.39116575993452
+  metadata:
+    adf_stat: -2.9301706871809605
+    adf_pvalue: 0.04195036940427132
+    adf_stationary: true
+    coint_stat: -2.7074973183108915
+    coint_pvalue: 0.7327535501141302
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4387
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0497474703316567
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:23.584641'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-08-22T00:00:00'
+  payload:
+    point_forecast: 63.82436951838612
+    quantiles:
+      '0.05': 53.16264109593598
+      '0.1': 55.517518059192156
+      '0.2': 58.3690895591885
+      '0.3': 60.42527323439094
+      '0.4': 62.182206370255706
+      '0.5': 63.82436951838612
+      '0.6': 65.46653266651654
+      '0.7': 67.2234658023813
+      '0.8': 69.27964947758375
+      '0.9': 72.13122097758009
+      '0.95': 74.48609794083626
+  metadata:
+    adf_stat: -2.9301706871809605
+    adf_pvalue: 0.04195036940427132
+    adf_stationary: true
+    coint_stat: -2.7074973183108915
+    coint_pvalue: 0.7327535501141302
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4387
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0497474703316567
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:23.584641'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-09-08T00:00:00'
+  payload:
+    point_forecast: 63.763174813684095
+    quantiles:
+      '0.05': 48.31286248015601
+      '0.1': 51.72540340670277
+      '0.2': 55.85772309921713
+      '0.3': 58.83741632888943
+      '0.4': 61.383454327857464
+      '0.5': 63.763174813684095
+      '0.6': 66.14289529951073
+      '0.7': 68.68893329847876
+      '0.8': 71.66862652815107
+      '0.9': 75.80094622066542
+      '0.95': 79.21348714721218
+  metadata:
+    adf_stat: -2.9301706871809605
+    adf_pvalue: 0.04195036940427132
+    adf_stationary: true
+    coint_stat: -2.7074973183108915
+    coint_pvalue: 0.7327535501141302
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4387
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0497474703316567
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:23.584641'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-11-05T00:00:00'
+  payload:
+    point_forecast: 63.52952230482182
+    quantiles:
+      '0.05': 36.76879635034311
+      '0.1': 42.67949061803027
+      '0.2': 49.83687827858255
+      '0.3': 54.997858343343964
+      '0.4': 59.407725515557594
+      '0.5': 63.52952230482182
+      '0.6': 67.65131909408603
+      '0.7': 72.06118626629967
+      '0.8': 77.22216633106109
+      '0.9': 84.37955399161336
+      '0.95': 90.29024825930051
+  metadata:
+    adf_stat: -2.9301706871809605
+    adf_pvalue: 0.04195036940427132
+    adf_stationary: true
+    coint_stat: -2.7074973183108915
+    coint_pvalue: 0.7327535501141302
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4387
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0497474703316567
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:24.637324'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-09-15T00:00:00'
+  payload:
+    point_forecast: 61.84002843727809
+    quantiles:
+      '0.05': 54.314234980120546
+      '0.1': 55.97647180892279
+      '0.2': 57.989310373831366
+      '0.3': 59.44070859337038
+      '0.4': 60.68087485672337
+      '0.5': 61.84002843727809
+      '0.6': 62.999182017832815
+      '0.7': 64.2393482811858
+      '0.8': 65.69074650072483
+      '0.9': 67.70358506563339
+      '0.95': 69.36582189443564
+  metadata:
+    adf_stat: -2.9313215872934446
+    adf_pvalue: 0.0418250819765011
+    adf_stationary: true
+    coint_stat: -2.7123128242049406
+    coint_pvalue: 0.7305885747613687
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4407
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0461620996655294
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:24.637324'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-09-22T00:00:00'
+  payload:
+    point_forecast: 61.81005794267142
+    quantiles:
+      '0.05': 51.166978767940506
+      '0.1': 53.51773663510869
+      '0.2': 56.36432023246999
+      '0.3': 58.41690727894624
+      '0.4': 60.170767228177596
+      '0.5': 61.81005794267142
+      '0.6': 63.449348657165245
+      '0.7': 65.2032086063966
+      '0.8': 67.25579565287285
+      '0.9': 70.10237925023415
+      '0.95': 72.45313711740232
+  metadata:
+    adf_stat: -2.9313215872934446
+    adf_pvalue: 0.0418250819765011
+    adf_stationary: true
+    coint_stat: -2.7123128242049406
+    coint_pvalue: 0.7305885747613687
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4407
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0461620996655294
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:24.637324'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-10-07T00:00:00'
+  payload:
+    point_forecast: 61.74412285453674
+    quantiles:
+      '0.05': 46.32083584848188
+      '0.1': 49.72740763770217
+      '0.2': 53.852499172590754
+      '0.3': 56.826980392074304
+      '0.4': 59.368564920510735
+      '0.5': 61.74412285453674
+      '0.6': 64.11968078856275
+      '0.7': 66.66126531699918
+      '0.8': 69.63574653648273
+      '0.9': 73.76083807137131
+      '0.95': 77.16740986059159
+  metadata:
+    adf_stat: -2.9313215872934446
+    adf_pvalue: 0.0418250819765011
+    adf_stationary: true
+    coint_stat: -2.7123128242049406
+    coint_pvalue: 0.7305885747613687
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4407
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0461620996655294
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:24.637324'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-12-04T00:00:00'
+  payload:
+    point_forecast: 61.49237069984069
+    quantiles:
+      '0.05': 34.7784539856368
+      '0.1': 40.67880940419715
+      '0.2': 47.823677528496475
+      '0.3': 52.97563012680141
+      '0.4': 57.3777836617843
+      '0.5': 61.49237069984069
+      '0.6': 65.60695773789709
+      '0.7': 70.00911127287996
+      '0.8': 75.16106387118491
+      '0.9': 82.30593199548423
+      '0.95': 88.20628741404457
+  metadata:
+    adf_stat: -2.9313215872934446
+    adf_pvalue: 0.0418250819765011
+    adf_stationary: true
+    coint_stat: -2.7123128242049406
+    coint_pvalue: 0.7305885747613687
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4407
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0461620996655294
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:25.493613'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-14T00:00:00'
+  payload:
+    point_forecast: 61.65996700241195
+    quantiles:
+      '0.05': 54.148166384755314
+      '0.1': 55.807312587527186
+      '0.2': 57.81640864646076
+      '0.3': 59.26510825588597
+      '0.4': 60.50296865639854
+      '0.5': 61.65996700241195
+      '0.6': 62.81696534842537
+      '0.7': 64.05482574893793
+      '0.8': 65.50352535836315
+      '0.9': 67.51262141729673
+      '0.95': 69.1717676200686
+  metadata:
+    adf_stat: -2.934004028677522
+    adf_pvalue: 0.04153428126332519
+    adf_stationary: true
+    coint_stat: -2.714798511687389
+    coint_pvalue: 0.7294675023619458
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4428
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.042357634659087
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:25.493613'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-21T00:00:00'
+  payload:
+    point_forecast: 61.62993537811492
+    quantiles:
+      '0.05': 51.00664506678231
+      '0.1': 53.35303212870211
+      '0.2': 56.19432302335631
+      '0.3': 58.24309365881005
+      '0.4': 59.99369262553951
+      '0.5': 61.62993537811492
+      '0.6': 63.266178130690335
+      '0.7': 65.01677709741979
+      '0.8': 67.06554773287354
+      '0.9': 69.90683862752773
+      '0.95': 72.25322568944753
+  metadata:
+    adf_stat: -2.934004028677522
+    adf_pvalue: 0.04153428126332519
+    adf_stationary: true
+    coint_stat: -2.714798511687389
+    coint_pvalue: 0.7294675023619458
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4428
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.042357634659087
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:25.493613'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-11-05T00:00:00'
+  payload:
+    point_forecast: 61.563865804661454
+    quantiles:
+      '0.05': 46.169255586094955
+      '0.1': 49.569493476761394
+      '0.2': 53.686915156756555
+      '0.3': 56.65586587124556
+      '0.4': 59.19272478708223
+      '0.5': 61.563865804661454
+      '0.6': 63.93500682224068
+      '0.7': 66.47186573807734
+      '0.8': 69.44081645256635
+      '0.9': 73.55823813256151
+      '0.95': 76.95847602322795
+  metadata:
+    adf_stat: -2.934004028677522
+    adf_pvalue: 0.04153428126332519
+    adf_stationary: true
+    coint_stat: -2.714798511687389
+    coint_pvalue: 0.7294675023619458
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4428
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.042357634659087
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:25.493613'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2026-01-02T00:00:00'
+  payload:
+    point_forecast: 61.31160016056639
+    quantiles:
+      '0.05': 34.6473530992902
+      '0.1': 40.536737883745296
+      '0.2': 47.66832142968252
+      '0.3': 52.810694912345404
+      '0.4': 57.2046634462086
+      '0.5': 61.31160016056639
+      '0.6': 65.41853687492419
+      '0.7': 69.81250540878737
+      '0.8': 74.95487889145026
+      '0.9': 82.0864624373875
+      '0.95': 87.97584722184257
+  metadata:
+    adf_stat: -2.934004028677522
+    adf_pvalue: 0.04153428126332519
+    adf_stationary: true
+    coint_stat: -2.714798511687389
+    coint_pvalue: 0.7294675023619458
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4428
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 4
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.042357634659087
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:26.353750'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2025-11-12T00:00:00'
+  payload:
+    point_forecast: 60.52884130426447
+    quantiles:
+      '0.05': 53.02997994554561
+      '0.1': 54.686268228701934
+      '0.2': 56.69190357089653
+      '0.3': 58.138107760072515
+      '0.4': 59.37383591599203
+      '0.5': 60.52884130426447
+      '0.6': 61.6838466925369
+      '0.7': 62.91957484845642
+      '0.8': 64.36577903763241
+      '0.9': 66.371414379827
+      '0.95': 68.02770266298332
+  metadata:
+    adf_stat: -2.940625251275078
+    adf_pvalue: 0.04082369646096851
+    adf_stationary: true
+    coint_stat: -2.7310006644754075
+    coint_pvalue: 0.5558094366966603
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4449
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0388396240483826
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:26.353750'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2025-11-19T00:00:00'
+  payload:
+    point_forecast: 60.49768123523792
+    quantiles:
+      '0.05': 49.892689799382175
+      '0.1': 52.23503515262149
+      '0.2': 55.07143185472789
+      '0.3': 57.11667343302136
+      '0.4': 58.86425695052904
+      '0.5': 60.49768123523792
+      '0.6': 62.1311055199468
+      '0.7': 63.87868903745448
+      '0.8': 65.92393061574795
+      '0.9': 68.76032731785435
+      '0.95': 71.10267267109366
+  metadata:
+    adf_stat: -2.940625251275078
+    adf_pvalue: 0.04082369646096851
+    adf_stationary: true
+    coint_stat: -2.7310006644754075
+    coint_pvalue: 0.5558094366966603
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4449
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0388396240483826
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:26.353750'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2025-12-04T00:00:00'
+  payload:
+    point_forecast: 60.429129083379514
+    quantiles:
+      '0.05': 45.06103645466971
+      '0.1': 48.455417353017424
+      '0.2': 52.56574667420473
+      '0.3': 55.5295832990069
+      '0.4': 58.06207241377037
+      '0.5': 60.429129083379514
+      '0.6': 62.796185752988656
+      '0.7': 65.32867486775213
+      '0.8': 68.2925114925543
+      '0.9': 72.4028408137416
+      '0.95': 75.79722171208931
+  metadata:
+    adf_stat: -2.940625251275078
+    adf_pvalue: 0.04082369646096851
+    adf_stationary: true
+    coint_stat: -2.7310006644754075
+    coint_pvalue: 0.5558094366966603
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4449
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0388396240483826
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:26.353750'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2026-02-02T00:00:00'
+  payload:
+    point_forecast: 60.16738450355651
+    quantiles:
+      '0.05': 33.54906725520639
+      '0.1': 39.42830743138592
+      '0.2': 46.54760665152242
+      '0.3': 51.68112227101325
+      '0.4': 56.06752208739871
+      '0.5': 60.16738450355651
+      '0.6': 64.26724691971432
+      '0.7': 68.65364673609977
+      '0.8': 73.7871623555906
+      '0.9': 80.9064615757271
+      '0.95': 86.78570175190663
+  metadata:
+    adf_stat: -2.940625251275078
+    adf_pvalue: 0.04082369646096851
+    adf_stationary: true
+    coint_stat: -2.7310006644754075
+    coint_pvalue: 0.5558094366966603
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4449
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0388396240483826
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:27.202149'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2025-12-11T00:00:00'
+  payload:
+    point_forecast: 58.917178473306095
+    quantiles:
+      '0.05': 51.43163753411831
+      '0.1': 53.084983709967844
+      '0.2': 55.08705639072541
+      '0.3': 56.53069165035251
+      '0.4': 57.76422475069281
+      '0.5': 58.917178473306095
+      '0.6': 60.07013219591938
+      '0.7': 61.30366529625968
+      '0.8': 62.74730055588679
+      '0.9': 64.74937323664435
+      '0.95': 66.40271941249388
+  metadata:
+    adf_stat: -2.652825455827117
+    adf_pvalue: 0.08256325261131581
+    adf_stationary: true
+    coint_stat: -2.6497961399304995
+    coint_pvalue: 0.21815201821290997
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4469
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0352179809948923
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:27.202149'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2025-12-18T00:00:00'
+  payload:
+    point_forecast: 58.884356183672736
+    quantiles:
+      '0.05': 48.29820266577433
+      '0.1': 50.636387250958435
+      '0.2': 53.46774558894244
+      '0.3': 55.50935415222709
+      '0.4': 57.253833392364484
+      '0.5': 58.884356183672736
+      '0.6': 60.51487897498099
+      '0.7': 62.259358215118375
+      '0.8': 64.30096677840304
+      '0.9': 67.13232511638704
+      '0.95': 69.47050970157113
+  metadata:
+    adf_stat: -2.652825455827117
+    adf_pvalue: 0.08256325261131581
+    adf_stationary: true
+    coint_stat: -2.6497961399304995
+    coint_pvalue: 0.21815201821290997
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4469
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0352179809948923
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:27.202149'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2026-01-02T00:00:00'
+  payload:
+    point_forecast: 58.81214714647935
+    quantiles:
+      '0.05': 43.4713532543929
+      '0.1': 46.85970462699646
+      '0.2': 50.962732664915556
+      '0.3': 53.921304550795995
+      '0.4': 56.44929514026972
+      '0.5': 58.81214714647935
+      '0.6': 61.174999152688976
+      '0.7': 63.70298974216269
+      '0.8': 66.66156162804315
+      '0.9': 70.76458966596223
+      '0.95': 74.15294103856579
+  metadata:
+    adf_stat: -2.652825455827117
+    adf_pvalue: 0.08256325261131581
+    adf_stationary: true
+    coint_stat: -2.6497961399304995
+    coint_pvalue: 0.21815201821290997
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4469
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0352179809948923
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:27.202149'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 58.536439913559136
+    quantiles:
+      '0.05': 31.965405464023107
+      '0.1': 37.83420219526822
+      '0.2': 44.940855221823725
+      '0.3': 50.065252046013526
+      '0.4': 54.44386018803801
+      '0.5': 58.536439913559136
+      '0.6': 62.62901963908026
+      '0.7': 67.00762778110474
+      '0.8': 72.13202460529455
+      '0.9': 79.23867763185005
+      '0.95': 85.10747436309515
+  metadata:
+    adf_stat: -2.652825455827117
+    adf_pvalue: 0.08256325261131581
+    adf_stationary: true
+    coint_stat: -2.6497961399304995
+    coint_pvalue: 0.21815201821290997
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4469
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0352179809948923
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:28.107502'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-09T00:00:00'
+  payload:
+    point_forecast: 57.38560993559301
+    quantiles:
+      '0.05': 49.913213680522
+      '0.1': 51.56365656409196
+      '0.2': 53.5622135853693
+      '0.3': 55.00331380716523
+      '0.4': 56.23468081114947
+      '0.5': 57.38560993559301
+      '0.6': 58.53653906003655
+      '0.7': 59.767906064020785
+      '0.8': 61.20900628581672
+      '0.9': 63.20756330709406
+      '0.95': 64.85800619066401
+  metadata:
+    adf_stat: -2.6491356890881153
+    adf_pvalue: 0.08326107735533239
+    adf_stationary: true
+    coint_stat: -2.650614673751774
+    coint_pvalue: 0.21784094739016163
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4488
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0316441180387894
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:28.107502'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-16T00:00:00'
+  payload:
+    point_forecast: 57.35122170224071
+    quantiles:
+      '0.05': 46.783657574893354
+      '0.1': 49.11773628476015
+      '0.2': 51.944122729426546
+      '0.3': 53.982146207829224
+      '0.4': 55.72356212512246
+      '0.5': 57.35122170224071
+      '0.6': 58.97888127935895
+      '0.7': 60.72029719665219
+      '0.8': 62.75832067505487
+      '0.9': 65.58470711972127
+      '0.95': 67.91878582958806
+  metadata:
+    adf_stat: -2.6491356890881153
+    adf_pvalue: 0.08326107735533239
+    adf_stationary: true
+    coint_stat: -2.650614673751774
+    coint_pvalue: 0.21784094739016163
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4488
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0316441180387894
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:28.107502'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-02-02T00:00:00'
+  payload:
+    point_forecast: 57.27556758886564
+    quantiles:
+      '0.05': 41.96171228297493
+      '0.1': 45.34411367696888
+      '0.2': 49.43993675696725
+      '0.3': 52.393313361278516
+      '0.4': 54.91686477420925
+      '0.5': 57.27556758886564
+      '0.6': 59.63427040352203
+      '0.7': 62.15782181645276
+      '0.8': 65.11119842076404
+      '0.9': 69.20702150076241
+      '0.95': 72.58942289475635
+  metadata:
+    adf_stat: -2.6491356890881153
+    adf_pvalue: 0.08326107735533239
+    adf_stationary: true
+    coint_stat: -2.650614673751774
+    coint_pvalue: 0.21784094739016163
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4488
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0316441180387894
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:28.107502'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-04-01T00:00:00'
+  payload:
+    point_forecast: 56.9867064287063
+    quantiles:
+      '0.05': 30.462330979145353
+      '0.1': 36.320822045134676
+      '0.2': 43.4149957185051
+      '0.3': 48.530394051057456
+      '0.4': 52.90131331376572
+      '0.5': 56.9867064287063
+      '0.6': 61.07209954364688
+      '0.7': 65.44301880635514
+      '0.8': 70.5584171389075
+      '0.9': 77.65259081227792
+      '0.95': 83.51108187826723
+  metadata:
+    adf_stat: -2.6491356890881153
+    adf_pvalue: 0.08326107735533239
+    adf_stationary: true
+    coint_stat: -2.650614673751774
+    coint_pvalue: 0.21784094739016163
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4488
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0316441180387894
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:28.981037'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 65.18440556362194
+    quantiles:
+      '0.05': 57.72161007961811
+      '0.1': 59.369932421966254
+      '0.2': 61.365921633966494
+      '0.3': 62.80517028461415
+      '0.4': 64.03495518932242
+      '0.5': 65.18440556362194
+      '0.6': 66.33385593792146
+      '0.7': 67.56364084262972
+      '0.8': 69.00288949327738
+      '0.9': 70.99887870527762
+      '0.95': 72.64720104762576
+  metadata:
+    adf_stat: -2.6966925570169114
+    adf_pvalue: 0.07461235191097675
+    adf_stationary: true
+    coint_stat: -2.6758952499578275
+    coint_pvalue: 0.208367683594121
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4508
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0290337974131862
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:28.981037'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 65.10250629689963
+    quantiles:
+      '0.05': 49.80832671669707
+      '0.1': 53.18638229439159
+      '0.2': 57.27694293134218
+      '0.3': 60.22652494397425
+      '0.4': 62.746834018227425
+      '0.5': 65.10250629689963
+      '0.6': 67.45817857557184
+      '0.7': 69.97848764982501
+      '0.8': 72.92806966245709
+      '0.9': 77.01863029940768
+      '0.95': 80.39668587710219
+  metadata:
+    adf_stat: -2.6966925570169114
+    adf_pvalue: 0.07461235191097675
+    adf_stationary: true
+    coint_stat: -2.6758952499578275
+    coint_pvalue: 0.208367683594121
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4508
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0290337974131862
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:28.981037'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-04-30T00:00:00'
+  payload:
+    point_forecast: 64.88752072175359
+    quantiles:
+      '0.05': 38.3972246287603
+      '0.1': 44.248188520118646
+      '0.2': 51.33324737475837
+      '0.3': 56.44207328172838
+      '0.4': 60.807376649111774
+      '0.5': 64.88752072175359
+      '0.6': 68.9676647943954
+      '0.7': 73.3329681617788
+      '0.8': 78.4417940687488
+      '0.9': 85.52685292338853
+      '0.95': 91.37781681474686
+  metadata:
+    adf_stat: -2.6966925570169114
+    adf_pvalue: 0.07461235191097675
+    adf_stationary: true
+    coint_stat: -2.6758952499578275
+    coint_pvalue: 0.208367683594121
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4508
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0290337974131862
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:29.869794'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-03-10T00:00:00'
+  payload:
+    point_forecast: 71.21117190627932
+    quantiles:
+      '0.05': 63.75407371717856
+      '0.1': 65.4011376867762
+      '0.2': 67.39560310796794
+      '0.3': 68.83375299823565
+      '0.4': 70.06259905271219
+      '0.5': 71.21117190627932
+      '0.6': 72.35974475984645
+      '0.7': 73.58859081432298
+      '0.8': 75.0267407045907
+      '0.9': 77.02120612578244
+      '0.95': 78.66827009538008
+  metadata:
+    adf_stat: -2.7143636867557914
+    adf_pvalue: 0.07158553380321692
+    adf_stationary: true
+    coint_stat: -2.67917018475626
+    coint_pvalue: 0.20715957885411895
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4528
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0274847794966537
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:29.869794'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-03-17T00:00:00'
+  payload:
+    point_forecast: 71.19234045562504
+    quantiles:
+      '0.05': 60.64641106065089
+      '0.1': 62.97571126455194
+      '0.2': 65.79631131288549
+      '0.3': 67.83016239242745
+      '0.4': 69.56801314873684
+      '0.5': 71.19234045562504
+      '0.6': 72.81666776251325
+      '0.7': 74.55451851882263
+      '0.8': 76.5883695983646
+      '0.9': 79.40896964669815
+      '0.95': 81.73826985059918
+  metadata:
+    adf_stat: -2.7143636867557914
+    adf_pvalue: 0.07158553380321692
+    adf_stationary: true
+    coint_stat: -2.67917018475626
+    coint_pvalue: 0.20715957885411895
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4528
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0274847794966537
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:29.869794'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-04-01T00:00:00'
+  payload:
+    point_forecast: 71.15091126418564
+    quantiles:
+      '0.05': 55.86840766405724
+      '0.1': 59.24388434502783
+      '0.2': 63.33132214009999
+      '0.3': 66.27865236402864
+      '0.4': 68.79703736786162
+      '0.5': 71.15091126418564
+      '0.6': 73.50478516050966
+      '0.7': 76.02317016434262
+      '0.8': 78.97050038827129
+      '0.9': 83.05793818334345
+      '0.95': 86.43341486431403
+  metadata:
+    adf_stat: -2.7143636867557914
+    adf_pvalue: 0.07158553380321692
+    adf_stationary: true
+    coint_stat: -2.67917018475626
+    coint_pvalue: 0.20715957885411895
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4528
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0274847794966537
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:29.869794'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-05-29T00:00:00'
+  payload:
+    point_forecast: 70.99272707868973
+    quantiles:
+      '0.05': 44.522654376413044
+      '0.1': 50.369151487618076
+      '0.2': 57.44880142146037
+      '0.3': 62.55372711598817
+      '0.4': 66.9156978956464
+      '0.5': 70.99272707868973
+      '0.6': 75.06975626173305
+      '0.7': 79.43172704139128
+      '0.8': 84.53665273591909
+      '0.9': 91.61630266976138
+      '0.95': 97.46279978096639
+  metadata:
+    adf_stat: -2.7143636867557914
+    adf_pvalue: 0.07158553380321692
+    adf_stationary: true
+    coint_stat: -2.67917018475626
+    coint_pvalue: 0.20715957885411895
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4528
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - oil_curve_contango_l1b
+    n_selected: 1
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.0274847794966537
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:30.798350'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-08T00:00:00'
+  payload:
+    point_forecast: 101.39439918665691
+    quantiles:
+      '0.05': 93.83368973439461
+      '0.1': 95.50363852782993
+      '0.2': 97.52581567768361
+      '0.3': 98.98394767398875
+      '0.4': 100.22986770130389
+      '0.5': 101.39439918665691
+      '0.6': 102.55893067200994
+      '0.7': 103.80485069932507
+      '0.8': 105.26298269563021
+      '0.9': 107.28515984548389
+      '0.95': 108.95510863891921
+  metadata:
+    adf_stat: -2.987401367116896
+    adf_pvalue: 0.03608782259041696
+    adf_stationary: true
+    coint_stat: -2.65522611227739
+    coint_pvalue: 0.5960268887768575
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4549
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055655289488257
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:30.798350'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-15T00:00:00'
+  payload:
+    point_forecast: 101.40880111989586
+    quantiles:
+      '0.05': 90.71634327134406
+      '0.1': 93.07800750348888
+      '0.2': 95.93779785433291
+      '0.3': 97.99990789923781
+      '0.4': 99.76190489949911
+      '0.5': 101.40880111989586
+      '0.6': 103.0556973402926
+      '0.7': 104.8176943405539
+      '0.8': 106.8798043854588
+      '0.9': 109.73959473630283
+      '0.95': 112.10125896844765
+  metadata:
+    adf_stat: -2.987401367116896
+    adf_pvalue: 0.03608782259041696
+    adf_stationary: true
+    coint_stat: -2.65522611227739
+    coint_pvalue: 0.5960268887768575
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4549
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055655289488257
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:30.798350'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-30T00:00:00'
+  payload:
+    point_forecast: 101.44048537302153
+    quantiles:
+      '0.05': 85.9456418704101
+      '0.1': 89.36801848401117
+      '0.2': 93.51224842293101
+      '0.3': 96.50052977821285
+      '0.4': 99.05390601385707
+      '0.5': 101.44048537302153
+      '0.6': 103.82706473218599
+      '0.7': 106.38044096783021
+      '0.8': 109.36872232311205
+      '0.9': 113.51295226203189
+      '0.95': 116.93532887563295
+  metadata:
+    adf_stat: -2.987401367116896
+    adf_pvalue: 0.03608782259041696
+    adf_stationary: true
+    coint_stat: -2.65522611227739
+    coint_pvalue: 0.5960268887768575
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4549
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055655289488257
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+- predictor_id: ecm_regression
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-08-26T08:57:30.798350'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-06-29T00:00:00'
+  payload:
+    point_forecast: 101.56146161222865
+    quantiles:
+      '0.05': 74.72360541037716
+      '0.1': 80.65133558776972
+      '0.2': 87.82935240022695
+      '0.3': 93.00520753488587
+      '0.4': 97.42778490586065
+      '0.5': 101.56146161222865
+      '0.6': 105.69513831859666
+      '0.7': 110.11771568957143
+      '0.8': 115.29357082423036
+      '0.9': 122.47158763668759
+      '0.95': 128.39931781408015
+  metadata:
+    adf_stat: -2.987401367116896
+    adf_pvalue: 0.03608782259041696
+    adf_stationary: true
+    coint_stat: -2.65522611227739
+    coint_pvalue: 0.5960268887768575
+    coint_stationary: false
+    coint_basis: selected
+    adf_threshold: 0.1
+    cointegration_warning: true
+    n_observations: 4549
+    covariates:
+    - brent_log_ret_1b_l1b
+    - natgas_log_ret_1b_l1b
+    - gasoline_log_ret_1b_l1b
+    - gold_log_ret_1b_l1b
+    - dollar_index_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    selected_covariates:
+    - brent_log_ret_1b_l1b
+    - oil_curve_contango_l1b
+    - vix_level_l1b
+    n_selected: 3
+    ecm_coefficient: 0.0
+    ecm_coefficient_zeroed: true
+    ecm_sign_warning: true
+    short_run_residual_std: 2.055655289488257
+    use_log_levels: false
+    log_target: false
+    n_nonpositive_target_dropped: 0
+    covariate_diff_path: zero
+    long_run_only_covariates: []
+scores:
+- 3.040809689045899
+- 3.9390225602557556
+- 4.665154393220954
+- 6.6750664514898315
+- 1.2463156212392406
+- 2.9543604182069965
+- 2.645001296333698
+- 4.77614045389643
+- 2.0073074074438515
+- 2.1701186825552634
+- 2.6054343758589593
+- 4.311997895834876
+- 1.3023832310148498
+- 1.799884978728826
+- 2.5876111881205945
+- 6.309678252738582
+- 1.5153571593413704
+- 1.7973094418652689
+- 2.8817865573255474
+- 4.747167614827552
+- 1.2498210327123151
+- 1.7873582921325448
+- 5.653715334609223
+- 4.543389783978254
+- 1.5401774397137884
+- 2.9724076405755766
+- 3.908192822545647
+- 9.474402851772437
+- 1.3129521862560423
+- 1.7758201840932462
+- 3.1289835619556166
+- 5.51150474903055
+- 1.457354833798891
+- 2.1641747728668497
+- 3.3456275266456554
+- 4.400943221982529
+- 1.4176019084406917
+- 1.7388024651606482
+- 2.6482598128066237
+- 4.96189139716386
+- 1.2468345915328238
+- 1.771783841740888
+- 3.980462578207519
+- 4.429472449797966
+- 7.582164825997115
+- 1.6784057448757357
+- 2.586179064264473
+- 4.427874143347102
+- 1.2616585393705673
+- 2.0086224181892645
+- 3.2011846287338446
+- 5.199446339784409
+- 1.2811595791090291
+- 1.6915017869011102
+- 2.5662173487543645
+- 4.5653593561756445
+- 1.3708512992084643
+- 1.7490757137738924
+- 2.4265991392960635
+- 4.366439383992769
+- 1.8808792652798323
+- 2.489015549446084
+- 2.599339164494006
+- 4.555831359909218
+- 1.525243753895975
+- 1.7637901505960347
+- 2.485647775407415
+- 4.365064743334893
+- 1.3267058833736693
+- 2.113949318690809
+- 2.5479929102169807
+- 9.61886442754718
+- 1.438791259663042
+- 1.9354800628798396
+- 3.3059152045915075
+- 33.97631896967961
+- 1.2484721011898396
+- 5.685740743810903
+- 31.037266799014965
+- 9.664420252273452
+- 21.376900460230583
+- 23.69313165607679
+- 9.839788731970305
+- 4.4790054970501
+- 6.531757588706346
+- 2.992511498763162
+- 21.546261691430242
+metric: crps
+mean_score: 4.6481226331053005
+ran_at: '2026-08-26T08:57:30.837167'
+skipped_origins: 0
