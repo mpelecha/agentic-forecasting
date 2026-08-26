@@ -165,27 +165,22 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
         return self.inner.predictor_id
 
     def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
-        # log_returns=True: the paired offline swap (see
-        # scripts/compare_anchor_level_vs_logret.py) put log returns ahead at
-        # h=10 and h=21 in BOTH windows -- CRPS -0.087/-0.059 at h=10 and
-        # -0.035/-0.166 at h=21 (backtest/eval) -- and behind at h=63 by
-        # +0.338/+0.131. The pooled sign flips between windows purely because
-        # those two effects trade places in size, so the pooled figure was
-        # never the signal; the per-horizon pattern is what replicates.
+        # log_returns=True is PROVISIONAL and its justification has been
+        # withdrawn. It was adopted on a paired offline swap that put log
+        # returns ahead at h=10 and h=21 in both windows and behind at h=63 by
+        # +0.338 / +0.131. That h=63 penalty is now known to be substantially an
+        # artifact: AutoARIMA(log_returns=True) had an I(2) defect that made the
+        # reconstructed price path quadratic, and at origin 2016-02-18 it
+        # forecast $980 against a WTI price near $30. The comparison ran that
+        # code, so the number it produced measures the bug as much as the
+        # specification.
         #
-        # Adopted globally rather than per horizon: h=63 is not a horizon this
-        # project targets, and a single specification is worth more than
-        # squeezing the quarterly column. It also removes a real mismatch --
-        # the centre-shift cap in this same file already works in log-return
-        # space, so the band was the only part left in levels.
-        #
-        # One caveat on the measured size. AnchoredPromptBuilder shows the
-        # anchor to the LLM (see the assignment below), while that comparison
-        # held the cached scenarios fixed and swapped only the arithmetic
-        # after the call. It therefore measures the numerical effect alone;
-        # the LLM now also reads different anchor numbers and may reason
-        # differently from them. The measured gain is a lower bound on the
-        # change, not the whole of it.
+        # The defect is fixed (d=0, D=0 plus a reconstruction guard, see
+        # darts_arima.py). Re-run scripts/compare_anchor_level_vs_logret.py
+        # before treating this setting as settled -- it needs no LLM calls, only
+        # the price cache. If log returns no longer wins at h<=21, revert to the
+        # level anchor, which is what every calibration figure quoted for this
+        # agent was actually measured on.
         arima_anchor = compute_arima_anchor(
             task, context, num_samples=self.arima_num_samples, log_returns=self.anchor_log_returns
         )
