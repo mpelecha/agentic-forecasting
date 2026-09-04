@@ -40,6 +40,13 @@ numerical = [
     "lightgbm>=4.6.0",
     "statsforecast>=2.0.1",
 ]
+# Separate from `numerical`: pulls in a full PyTorch stack, and the TimesFM
+# 3.0 pretrained weights are non-commercial-licensed (source code is
+# Apache-2.0). See TimesFM3Predictor's docstring for the license and
+# pretraining-leakage caveats before using it on a backtest.
+timesfm = [
+    "timesfm[torch]>=3.0",
+]
 
 [dependency-groups]
 dev = [

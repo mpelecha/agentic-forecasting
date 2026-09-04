@@ -9,6 +9,7 @@ from .darts_arima import DartsAutoARIMAPredictor
 from .darts_classical import DartsExponentialSmoothingPredictor, DartsKalmanForecasterPredictor
 from .darts_regression import DartsLightGBMPredictor, DartsLinearRegressionPredictor
 from .error_correction_regression import ErrorCorrectionRegressionPredictor
+from .timesfm3 import TimesFM3Predictor
 
 
 __all__ = [
@@ -18,4 +19,5 @@ __all__ = [
     "DartsLightGBMPredictor",
     "DartsLinearRegressionPredictor",
     "ErrorCorrectionRegressionPredictor",
+    "TimesFM3Predictor",
 ]
