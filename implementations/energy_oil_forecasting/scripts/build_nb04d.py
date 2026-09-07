@@ -92,7 +92,7 @@ SMOKE_TEST = False
 HORIZONS = [5, 10, 21]
 STRIDE = 5  # weekly, matching NB04/NB04b -- this is a leaderboard notebook, not a dense-grid one
 
-data_service = build_wti_multivariate_service()
+data_service = build_wti_multivariate_service(covariate_series_ids=EXPANDED_WTI_COVARIATE_SERIES_IDS)
 _available = set(data_service.series_ids)
 COVARIATES = [c for c in DEFAULT_WTI_COVARIATE_SERIES_IDS if c in _available]
 COVARIATES_EXPANDED = [c for c in EXPANDED_WTI_COVARIATE_SERIES_IDS if c in _available]
