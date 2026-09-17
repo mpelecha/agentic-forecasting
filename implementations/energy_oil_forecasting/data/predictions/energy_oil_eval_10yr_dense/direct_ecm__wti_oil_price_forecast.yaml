@@ -1,0 +1,2293 @@
+spec:
+  task:
+    task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons:
+    - 5
+    - 10
+    - 21
+    - 63
+    frequency: B
+    description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
+      symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
+    resolution_fn: observed_value_at_resolution_timestamp
+  start: '2024-07-23T00:00:00'
+  end: '2026-04-27T00:00:00'
+  stride: 21
+  origin_dates: null
+  warmup: 250
+  description: Prospective/out-of-sample evaluation period in 2026 for daily WTI crude
+    oil. Evaluates selected contender models on 18 weekly origins from the early 2026
+    geopolitical price shock through its aftermath, to measure adaptive real-time
+    forecasting performance.
+predictor_id: direct_ecm
+predictions:
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.573777'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-07-30T00:00:00'
+  payload:
+    point_forecast: 80.37954113887254
+    quantiles:
+      '0.05': 73.46469316503676
+      '0.1': 75.40705032190859
+      '0.2': 77.48804736560832
+      '0.3': 78.77942117488573
+      '0.4': 79.69127534338106
+      '0.5': 80.57731374967894
+      '0.6': 81.36802451025046
+      '0.7': 82.30253462508345
+      '0.8': 83.54076652086864
+      '0.9': 85.34336048377257
+      '0.95': 87.126927568012
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.007486849180351713
+    ma_order: 0
+    train_rows: 4109
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.573777'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-06T00:00:00'
+  payload:
+    point_forecast: 80.9218670547077
+    quantiles:
+      '0.05': 71.52280842240545
+      '0.1': 73.90431730760594
+      '0.2': 76.71781241077608
+      '0.3': 78.68293576068763
+      '0.4': 80.08802250921646
+      '0.5': 81.37432089572921
+      '0.6': 82.5362724214522
+      '0.7': 83.80124607263453
+      '0.8': 85.4531289989539
+      '0.9': 88.19609006236207
+      '0.95': 90.69520529026501
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.01421125370309286
+    ma_order: 0
+    train_rows: 4104
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.573777'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-08-21T00:00:00'
+  payload:
+    point_forecast: 80.45323937376669
+    quantiles:
+      '0.05': 67.09018841875962
+      '0.1': 70.03069431547802
+      '0.2': 73.97037140307793
+      '0.3': 76.56766828063077
+      '0.4': 79.05447073622888
+      '0.5': 81.10686130182174
+      '0.6': 83.23397337605012
+      '0.7': 85.29163430575139
+      '0.8': 87.87302961698639
+      '0.9': 91.42110716832639
+      '0.95': 94.61494322810744
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.008403307129004618
+    ma_order: 0
+    train_rows: 4093
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.573777'
+  as_of: '2024-07-23T00:00:00'
+  forecast_date: '2024-10-18T00:00:00'
+  payload:
+    point_forecast: 80.23445901080765
+    quantiles:
+      '0.05': 53.2868762668338
+      '0.1': 62.83533960943335
+      '0.2': 70.25518094507883
+      '0.3': 75.5629299517922
+      '0.4': 79.01193916463528
+      '0.5': 82.47588240076185
+      '0.6': 86.0105227687253
+      '0.7': 89.88954576353471
+      '0.8': 94.07838516918076
+      '0.9': 99.93253356560611
+      '0.95': 104.90740358509474
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.005680254893559885
+    ma_order: 0
+    train_rows: 4051
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.954286'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-08-28T00:00:00'
+  payload:
+    point_forecast: 74.2248226897654
+    quantiles:
+      '0.05': 67.88897350835882
+      '0.1': 69.64207050500767
+      '0.2': 71.53472260636437
+      '0.3': 72.72732392119609
+      '0.4': 73.59900856864672
+      '0.5': 74.40267458724787
+      '0.6': 75.1397684215152
+      '0.7': 75.98609451080895
+      '0.8': 77.13554712123718
+      '0.9': 78.81624090114427
+      '0.95': 80.4721732191179
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.0024931317554218665
+    ma_order: 0
+    train_rows: 4130
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.954286'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-09-04T00:00:00'
+  payload:
+    point_forecast: 75.00912898945816
+    quantiles:
+      '0.05': 66.3242217807904
+      '0.1': 68.50546816527678
+      '0.2': 71.11645457432317
+      '0.3': 72.97064568677199
+      '0.4': 74.28791350160466
+      '0.5': 75.48814393520723
+      '0.6': 76.56932745854442
+      '0.7': 77.75585754824658
+      '0.8': 79.34105211324555
+      '0.9': 81.85014076164904
+      '0.95': 84.11280943221854
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.01300432591788736
+    ma_order: 0
+    train_rows: 4125
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.954286'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-09-19T00:00:00'
+  payload:
+    point_forecast: 75.49989772790045
+    quantiles:
+      '0.05': 63.165467762408014
+      '0.1': 66.15187730822254
+      '0.2': 69.63504093452744
+      '0.3': 71.9563908572955
+      '0.4': 74.29040469860318
+      '0.5': 76.22937989574241
+      '0.6': 78.15890389067862
+      '0.7': 80.10649113366016
+      '0.8': 82.48130029206496
+      '0.9': 85.8235268552053
+      '0.95': 88.74844744304708
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.019525801586112532
+    ma_order: 0
+    train_rows: 4114
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:28.954286'
+  as_of: '2024-08-21T00:00:00'
+  forecast_date: '2024-11-18T00:00:00'
+  payload:
+    point_forecast: 75.8146139184045
+    quantiles:
+      '0.05': 50.366413930962416
+      '0.1': 59.40303265679258
+      '0.2': 66.51668296736959
+      '0.3': 71.47079658621197
+      '0.4': 74.63697930496373
+      '0.5': 77.86021298808694
+      '0.6': 81.1073611816095
+      '0.7': 84.8061945667579
+      '0.8': 88.83676428440113
+      '0.9': 94.35765344996685
+      '0.95': 99.03546786001964
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.023685569752323526
+    ma_order: 0
+    train_rows: 4072
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.501344'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-09-26T00:00:00'
+  payload:
+    point_forecast: 71.42439169276477
+    quantiles:
+      '0.05': 65.3380900839949
+      '0.1': 67.0146668907296
+      '0.2': 68.85294380172193
+      '0.3': 69.99552427407826
+      '0.4': 70.83588649957986
+      '0.5': 71.61309402704288
+      '0.6': 72.33128470285651
+      '0.7': 73.16995414639996
+      '0.8': 74.26667351628497
+      '0.9': 75.88681584368452
+      '0.95': 77.45924701383665
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.007227912393065623
+    ma_order: 0
+    train_rows: 4150
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.501344'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-10-03T00:00:00'
+  payload:
+    point_forecast: 71.249684782553
+    quantiles:
+      '0.05': 63.03365689976821
+      '0.1': 65.10348818478666
+      '0.2': 67.5450918396599
+      '0.3': 69.30109110491149
+      '0.4': 70.59315625994216
+      '0.5': 71.72506578355622
+      '0.6': 72.73657657377984
+      '0.7': 73.87065722209394
+      '0.8': 75.34098302292416
+      '0.9': 77.70342213841357
+      '0.95': 79.90460493721625
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.004778876074080235
+    ma_order: 0
+    train_rows: 4145
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.501344'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-10-18T00:00:00'
+  payload:
+    point_forecast: 71.64000888831762
+    quantiles:
+      '0.05': 59.9681142907912
+      '0.1': 62.81392242587376
+      '0.2': 66.07645115047903
+      '0.3': 68.29308100121001
+      '0.4': 70.46741033659855
+      '0.5': 72.25850211365272
+      '0.6': 74.13088876250968
+      '0.7': 75.94659686826917
+      '0.8': 78.18383304595243
+      '0.9': 81.44625731442453
+      '0.95': 84.21294449907691
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.010242182301331181
+    ma_order: 0
+    train_rows: 4134
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.501344'
+  as_of: '2024-09-19T00:00:00'
+  forecast_date: '2024-12-17T00:00:00'
+  payload:
+    point_forecast: 73.04079631586677
+    quantiles:
+      '0.05': 48.28740388913361
+      '0.1': 57.257103963247545
+      '0.2': 64.15061495007856
+      '0.3': 68.89205637755286
+      '0.4': 71.87786230856015
+      '0.5': 74.9663570940869
+      '0.6': 78.00569341045842
+      '0.7': 81.62118829834753
+      '0.8': 85.55707937882684
+      '0.9': 90.96517604317151
+      '0.95': 95.43642139919554
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.029606619729486496
+    ma_order: 0
+    train_rows: 4092
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.876353'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-10-25T00:00:00'
+  payload:
+    point_forecast: 70.63737986852593
+    quantiles:
+      '0.05': 64.55345394880635
+      '0.1': 66.27955809827905
+      '0.2': 68.08921397977153
+      '0.3': 69.23011392447972
+      '0.4': 70.04881749379399
+      '0.5': 70.82115062904835
+      '0.6': 71.5178301919161
+      '0.7': 72.3605856970994
+      '0.8': 73.45000228325024
+      '0.9': 75.03681251859336
+      '0.95': 76.59878792149073
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.0004616645139375163
+    ma_order: 0
+    train_rows: 4171
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.876353'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-01T00:00:00'
+  payload:
+    point_forecast: 70.52937915615296
+    quantiles:
+      '0.05': 62.317781356963344
+      '0.1': 64.36042778631092
+      '0.2': 66.79489217991005
+      '0.3': 68.55524914189701
+      '0.4': 69.82220278646332
+      '0.5': 70.96998432308409
+      '0.6': 71.9943262281488
+      '0.7': 73.09731769765055
+      '0.8': 74.55381043930932
+      '0.9': 76.94665198421929
+      '0.95': 79.0820422729462
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.00199178016142525
+    ma_order: 0
+    train_rows: 4166
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.876353'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2024-11-18T00:00:00'
+  payload:
+    point_forecast: 70.3546236023939
+    quantiles:
+      '0.05': 58.88286779553648
+      '0.1': 61.66453402022554
+      '0.2': 64.7716473449409
+      '0.3': 67.02878768098313
+      '0.4': 69.19478269350958
+      '0.5': 70.97229994138925
+      '0.6': 72.85366520122386
+      '0.7': 74.67962318520658
+      '0.8': 76.87861246190074
+      '0.9': 79.99212801751982
+      '0.95': 82.69632479872767
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.004472624543559913
+    ma_order: 0
+    train_rows: 4155
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:29.876353'
+  as_of: '2024-10-18T00:00:00'
+  forecast_date: '2025-01-15T00:00:00'
+  payload:
+    point_forecast: 71.30204322600017
+    quantiles:
+      '0.05': 47.04120558970503
+      '0.1': 55.956573365755844
+      '0.2': 62.650585186670966
+      '0.3': 67.25544022187098
+      '0.4': 70.15777042253771
+      '0.5': 73.18018031634182
+      '0.6': 76.15047762656603
+      '0.7': 79.71375558359092
+      '0.8': 83.60860272483531
+      '0.9': 88.85937260409113
+      '0.95': 93.19260866559961
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.008903854962965405
+    ma_order: 0
+    train_rows: 4113
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.246002'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2024-11-25T00:00:00'
+  payload:
+    point_forecast: 67.63710092671663
+    quantiles:
+      '0.05': 61.806469633106474
+      '0.1': 63.46688054912575
+      '0.2': 65.15860314713844
+      '0.3': 66.26110302439989
+      '0.4': 67.06444403409105
+      '0.5': 67.80552827412117
+      '0.6': 68.48285294118496
+      '0.7': 69.29949237248114
+      '0.8': 70.34867647837459
+      '0.9': 71.85438878365447
+      '0.95': 73.36245672251569
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.009165630552909003
+    ma_order: 0
+    train_rows: 4192
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.246002'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2024-12-02T00:00:00'
+  payload:
+    point_forecast: 67.76509389991124
+    quantiles:
+      '0.05': 59.90732665307856
+      '0.1': 61.83733615563364
+      '0.2': 64.1378125860345
+      '0.3': 65.84791971509785
+      '0.4': 67.06323152303759
+      '0.5': 68.1640894195288
+      '0.6': 69.14355964238892
+      '0.7': 70.21088945415949
+      '0.8': 71.6125587298352
+      '0.9': 73.91831624020293
+      '0.95': 75.98944491010424
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.011056190916149955
+    ma_order: 0
+    train_rows: 4187
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.246002'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2024-12-17T00:00:00'
+  payload:
+    point_forecast: 68.02657943022965
+    quantiles:
+      '0.05': 57.02074375056984
+      '0.1': 59.68338996310775
+      '0.2': 62.71458932849247
+      '0.3': 64.89576640490719
+      '0.4': 66.96047438822193
+      '0.5': 68.75991379699057
+      '0.6': 70.52907166058182
+      '0.7': 72.2339378785085
+      '0.8': 74.34977936324437
+      '0.9': 77.3580424583213
+      '0.95': 79.97676282798824
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.014907470558112007
+    ma_order: 0
+    train_rows: 4176
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.246002'
+  as_of: '2024-11-18T00:00:00'
+  forecast_date: '2025-02-13T00:00:00'
+  payload:
+    point_forecast: 67.55821885058093
+    quantiles:
+      '0.05': 44.59643384291612
+      '0.1': 53.00528872872266
+      '0.2': 59.33632479209483
+      '0.3': 63.71523534828943
+      '0.4': 66.45089388466714
+      '0.5': 69.34741064996061
+      '0.6': 72.20026005800091
+      '0.7': 75.64811778667665
+      '0.8': 79.35430628018045
+      '0.9': 84.25612164495259
+      '0.95': 88.31562229558128
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.007998695407269047
+    ma_order: 0
+    train_rows: 4134
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.626692'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2024-12-24T00:00:00'
+  payload:
+    point_forecast: 71.28638500706724
+    quantiles:
+      '0.05': 65.2004970076663
+      '0.1': 66.90209510150709
+      '0.2': 68.71181099212774
+      '0.3': 69.84327455226997
+      '0.4': 70.67280657762038
+      '0.5': 71.42123656359321
+      '0.6': 72.15590707046341
+      '0.7': 72.97545883064555
+      '0.8': 74.0878805607688
+      '0.9': 75.71367020150898
+      '0.95': 77.31798726081428
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.008118362900203645
+    ma_order: 0
+    train_rows: 4212
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.626692'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2024-12-31T00:00:00'
+  payload:
+    point_forecast: 71.41662954766761
+    quantiles:
+      '0.05': 63.13564808551497
+      '0.1': 65.18638604827719
+      '0.2': 67.66437042364139
+      '0.3': 69.41989769084883
+      '0.4': 70.69602690355866
+      '0.5': 71.85712859942068
+      '0.6': 72.87575019021959
+      '0.7': 74.00324155389137
+      '0.8': 75.46978455650097
+      '0.9': 77.85726269811393
+      '0.95': 80.11230531201359
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.009943756388519184
+    ma_order: 0
+    train_rows: 4207
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.626692'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2025-01-15T00:00:00'
+  payload:
+    point_forecast: 72.02257742509491
+    quantiles:
+      '0.05': 60.349704821548634
+      '0.1': 63.183505656681824
+      '0.2': 66.35512802533201
+      '0.3': 68.62443624664547
+      '0.4': 70.7766460838673
+      '0.5': 72.62746279575376
+      '0.6': 74.50832404755977
+      '0.7': 76.3326109695394
+      '0.8': 78.56814368376403
+      '0.9': 81.85237414234938
+      '0.95': 84.58163449920852
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.01839265254160878
+    ma_order: 0
+    train_rows: 4196
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:30.626692'
+  as_of: '2024-12-17T00:00:00'
+  forecast_date: '2025-03-14T00:00:00'
+  payload:
+    point_forecast: 71.47957384788423
+    quantiles:
+      '0.05': 47.28581438718066
+      '0.1': 56.232467959075585
+      '0.2': 62.77839856414179
+      '0.3': 67.31692984638903
+      '0.4': 70.29707613161719
+      '0.5': 73.41009404093442
+      '0.6': 76.44159009046561
+      '0.7': 80.06428258417749
+      '0.8': 83.96861022967842
+      '0.9': 89.14060534401555
+      '0.95': 93.37736504404592
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.010824735767844262
+    ma_order: 0
+    train_rows: 4154
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.007845'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-22T00:00:00'
+  payload:
+    point_forecast: 77.85800582830227
+    quantiles:
+      '0.05': 71.25916196623474
+      '0.1': 73.0637599076977
+      '0.2': 75.04402718505821
+      '0.3': 76.31755829430763
+      '0.4': 77.21941736056338
+      '0.5': 78.07434758728365
+      '0.6': 78.83900214551541
+      '0.7': 79.76099055257313
+      '0.8': 80.93323725458352
+      '0.9': 82.66184413804267
+      '0.95': 84.38122471075805
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.004608793220442154
+    ma_order: 0
+    train_rows: 4230
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.007845'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-01-29T00:00:00'
+  payload:
+    point_forecast: 78.14002720626037
+    quantiles:
+      '0.05': 69.14606438685111
+      '0.1': 71.4489023734905
+      '0.2': 74.13082092480136
+      '0.3': 75.97538252967477
+      '0.4': 77.35911746928086
+      '0.5': 78.60202871901238
+      '0.6': 79.71034212149428
+      '0.7': 80.93031972115409
+      '0.8': 82.53151376679266
+      '0.9': 85.172379258559
+      '0.95': 87.6143048151937
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.008224501440846105
+    ma_order: 0
+    train_rows: 4225
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.007845'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-02-13T00:00:00'
+  payload:
+    point_forecast: 79.18864808594238
+    quantiles:
+      '0.05': 66.2215606023584
+      '0.1': 69.29979445136888
+      '0.2': 72.90466345991449
+      '0.3': 75.39648884006809
+      '0.4': 77.78301944169812
+      '0.5': 79.81406367719525
+      '0.6': 81.88475862154588
+      '0.7': 83.89220233348956
+      '0.8': 86.32841316670208
+      '0.9': 89.96583965962836
+      '0.95': 92.93654337947586
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.021555019939828092
+    ma_order: 0
+    train_rows: 4214
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.007845'
+  as_of: '2025-01-15T00:00:00'
+  forecast_date: '2025-04-14T00:00:00'
+  payload:
+    point_forecast: 80.09700354338378
+    quantiles:
+      '0.05': 53.42231606249402
+      '0.1': 63.08434409743082
+      '0.2': 70.33638305276003
+      '0.3': 75.46105896941918
+      '0.4': 78.7903494088868
+      '0.5': 82.25647052322289
+      '0.6': 85.69015896599271
+      '0.7': 89.6963453752452
+      '0.8': 93.9816473182334
+      '0.9': 99.85606066045148
+      '0.95': 104.55632103086144
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.03296050806876036
+    ma_order: 0
+    train_rows: 4172
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.377554'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-02-20T00:00:00'
+  payload:
+    point_forecast: 71.95169577521985
+    quantiles:
+      '0.05': 65.87390378399634
+      '0.1': 67.53417137037484
+      '0.2': 69.37436146884625
+      '0.3': 70.50643365441147
+      '0.4': 71.34887512250938
+      '0.5': 72.13631685490748
+      '0.6': 72.85315030197461
+      '0.7': 73.6998508425429
+      '0.8': 74.81075052758464
+      '0.9': 76.43338155684384
+      '0.95': 78.0328628604556
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.008117350389788721
+    ma_order: 0
+    train_rows: 4250
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.377554'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-02-27T00:00:00'
+  payload:
+    point_forecast: 72.09608414363792
+    quantiles:
+      '0.05': 63.815974215051845
+      '0.1': 65.9208986375628
+      '0.2': 68.4044109457016
+      '0.3': 70.09983486670077
+      '0.4': 71.34852731820556
+      '0.5': 72.4891940863657
+      '0.6': 73.50822093494314
+      '0.7': 74.63187452931734
+      '0.8': 76.14218480857775
+      '0.9': 78.61708718558707
+      '0.95': 80.84280027218887
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.010122079887970028
+    ma_order: 0
+    train_rows: 4245
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.377554'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-03-14T00:00:00'
+  payload:
+    point_forecast: 72.61369137314604
+    quantiles:
+      '0.05': 60.81280809706168
+      '0.1': 63.64884752719842
+      '0.2': 66.96522993370826
+      '0.3': 69.21914529748148
+      '0.4': 71.41038191193833
+      '0.5': 73.21417831023872
+      '0.6': 75.11979379682644
+      '0.7': 77.01904575087013
+      '0.8': 79.24256361653725
+      '0.9': 82.50399517336413
+      '0.95': 85.23564146854186
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.01727583899085946
+    ma_order: 0
+    train_rows: 4234
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.377554'
+  as_of: '2025-02-13T00:00:00'
+  forecast_date: '2025-05-13T00:00:00'
+  payload:
+    point_forecast: 73.80448602745224
+    quantiles:
+      '0.05': 49.346938720703854
+      '0.1': 58.132506131503
+      '0.2': 64.86578331203249
+      '0.3': 69.56377731308451
+      '0.4': 72.62551521866371
+      '0.5': 75.79629688857672
+      '0.6': 78.93727604155656
+      '0.7': 82.542509587194
+      '0.8': 86.58020073480965
+      '0.9': 91.9563914964374
+      '0.95': 96.30841312831865
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.033541864572176235
+    ma_order: 0
+    train_rows: 4192
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.760955'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-03-21T00:00:00'
+  payload:
+    point_forecast: 66.78742475801592
+    quantiles:
+      '0.05': 61.24528139849071
+      '0.1': 62.712949701302925
+      '0.2': 64.39330647290629
+      '0.3': 65.44788967349093
+      '0.4': 66.22068135999753
+      '0.5': 66.92960957682268
+      '0.6': 67.61258666210283
+      '0.7': 68.39205651795524
+      '0.8': 69.44195651188952
+      '0.9': 70.9492015745861
+      '0.95': 72.44492970991789
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.003561219997698163
+    ma_order: 0
+    train_rows: 4270
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.760955'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-03-28T00:00:00'
+  payload:
+    point_forecast: 66.21743179225206
+    quantiles:
+      '0.05': 58.68049203917864
+      '0.1': 60.59665112392996
+      '0.2': 62.85977162123603
+      '0.3': 64.43579799443269
+      '0.4': 65.57727293022907
+      '0.5': 66.64014947945743
+      '0.6': 67.57432526407636
+      '0.7': 68.59817580897047
+      '0.8': 69.99274255971
+      '0.9': 72.23380625022003
+      '0.95': 74.27122854571653
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.0050098422927793325
+    ma_order: 0
+    train_rows: 4265
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.760955'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-04-14T00:00:00'
+  payload:
+    point_forecast: 66.02222962346922
+    quantiles:
+      '0.05': 55.2629457405994
+      '0.1': 57.837282549444616
+      '0.2': 60.80687918492976
+      '0.3': 62.915449744396625
+      '0.4': 64.91148212604274
+      '0.5': 66.58800790668151
+      '0.6': 68.29632361210274
+      '0.7': 69.9989800164286
+      '0.8': 72.03033854286048
+      '0.9': 75.03938445913725
+      '0.95': 77.46649731719783
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.00796209290309351
+    ma_order: 0
+    train_rows: 4254
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:31.760955'
+  as_of: '2025-03-14T00:00:00'
+  forecast_date: '2025-06-11T00:00:00'
+  payload:
+    point_forecast: 68.99805723790394
+    quantiles:
+      '0.05': 46.41585093267128
+      '0.1': 54.42762727964905
+      '0.2': 60.76242312561716
+      '0.3': 65.09834898880409
+      '0.4': 67.93929649190764
+      '0.5': 70.8668560084003
+      '0.6': 73.74101173176297
+      '0.7': 77.06930151929002
+      '0.8': 80.93192404677896
+      '0.9': 85.98034580707619
+      '0.95': 90.00055966005705
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.03612475753072978
+    ma_order: 0
+    train_rows: 4212
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.146301'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-21T00:00:00'
+  payload:
+    point_forecast: 61.58772013133403
+    quantiles:
+      '0.05': 56.337951296328754
+      '0.1': 57.82997519538358
+      '0.2': 59.382776846619755
+      '0.3': 60.35417315005494
+      '0.4': 61.06698053523172
+      '0.5': 61.73870530835806
+      '0.6': 62.35814820126883
+      '0.7': 63.06506362405039
+      '0.8': 64.0168118908551
+      '0.9': 65.41626442482452
+      '0.95': 66.77071168072605
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.001425327337140125
+    ma_order: 0
+    train_rows: 4291
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.146301'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-04-28T00:00:00'
+  payload:
+    point_forecast: 60.353210959926706
+    quantiles:
+      '0.05': 53.452414479882485
+      '0.1': 55.22765660326926
+      '0.2': 57.268124315634616
+      '0.3': 58.71244085026144
+      '0.4': 59.76142677504393
+      '0.5': 60.704854257505716
+      '0.6': 61.56179128189541
+      '0.7': 62.48647264944389
+      '0.8': 63.75036851253371
+      '0.9': 65.73687854358027
+      '0.95': 67.5640245023455
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.01882302305171309
+    ma_order: 0
+    train_rows: 4286
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.146301'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-05-13T00:00:00'
+  payload:
+    point_forecast: 60.217659379177114
+    quantiles:
+      '0.05': 50.35803671403628
+      '0.1': 52.69805962271856
+      '0.2': 55.42750864160086
+      '0.3': 57.30353258199093
+      '0.4': 59.11989591028998
+      '0.5': 60.67412102142002
+      '0.6': 62.2601481005919
+      '0.7': 63.78996862966634
+      '0.8': 65.60040157452643
+      '0.9': 68.3565371970756
+      '0.95': 70.63028815773723
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.02107152034592387
+    ma_order: 0
+    train_rows: 4275
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.146301'
+  as_of: '2025-04-14T00:00:00'
+  forecast_date: '2025-07-10T00:00:00'
+  payload:
+    point_forecast: 69.2648581635222
+    quantiles:
+      '0.05': 46.60606223620047
+      '0.1': 54.71038047037482
+      '0.2': 61.18152243441109
+      '0.3': 65.42973792812329
+      '0.4': 68.2426548990078
+      '0.5': 71.09588051978747
+      '0.6': 73.95166736198226
+      '0.7': 77.33126542194425
+      '0.8': 81.21422201157831
+      '0.9': 86.32954343166331
+      '0.95': 90.4153935150134
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.11890050555864164
+    ma_order: 0
+    train_rows: 4233
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.555673'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-05-20T00:00:00'
+  payload:
+    point_forecast: 61.91332004340393
+    quantiles:
+      '0.05': 56.63265798668006
+      '0.1': 58.12938147696098
+      '0.2': 59.68864279065737
+      '0.3': 60.678718949648626
+      '0.4': 61.39603627319387
+      '0.5': 62.08759530418618
+      '0.6': 62.70731905334848
+      '0.7': 63.421033556322975
+      '0.8': 64.37103902940159
+      '0.9': 65.76462375604982
+      '0.95': 67.1137184714325
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.0005922773645824135
+    ma_order: 0
+    train_rows: 4311
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.555673'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-05-27T00:00:00'
+  payload:
+    point_forecast: 61.72224358599568
+    quantiles:
+      '0.05': 54.67919722539573
+      '0.1': 56.463729687353926
+      '0.2': 58.5308680271485
+      '0.3': 60.027019283165394
+      '0.4': 61.11824738693134
+      '0.5': 62.08523156424706
+      '0.6': 62.9736026439181
+      '0.7': 63.90839781514857
+      '0.8': 65.20149721529818
+      '0.9': 67.23446449871442
+      '0.95': 69.14645667225685
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.0036832425194102143
+    ma_order: 0
+    train_rows: 4306
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.555673'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-06-11T00:00:00'
+  payload:
+    point_forecast: 61.90163921426728
+    quantiles:
+      '0.05': 51.720158336626056
+      '0.1': 54.06110402161368
+      '0.2': 56.97392735801886
+      '0.3': 58.94335425104345
+      '0.4': 60.81894744256279
+      '0.5': 62.429185612620856
+      '0.6': 64.01057632277622
+      '0.7': 65.59992535806829
+      '0.8': 67.44375956943114
+      '0.9': 70.3590120662251
+      '0.95': 72.66355178347759
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: -0.0007809593985037191
+    ma_order: 0
+    train_rows: 4295
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:32.555673'
+  as_of: '2025-05-13T00:00:00'
+  forecast_date: '2025-08-08T00:00:00'
+  payload:
+    point_forecast: 65.35934480477978
+    quantiles:
+      '0.05': 44.04705063987849
+      '0.1': 51.6771703213585
+      '0.2': 57.67299611157376
+      '0.3': 61.78045643561687
+      '0.4': 64.48727550590152
+      '0.5': 67.14688679938403
+      '0.6': 69.85229803972499
+      '0.7': 72.99476928629771
+      '0.8': 76.63586846396142
+      '0.9': 81.46595299213897
+      '0.95': 85.31560442578622
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.0535728057042705
+    ma_order: 0
+    train_rows: 4253
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.100490'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-06-18T00:00:00'
+  payload:
+    point_forecast: 65.14885281179826
+    quantiles:
+      '0.05': 59.58405352238278
+      '0.1': 61.15555220206782
+      '0.2': 62.79819487729647
+      '0.3': 63.82164273312835
+      '0.4': 64.58124426241119
+      '0.5': 65.27682730135314
+      '0.6': 65.95151732011102
+      '0.7': 66.69945256129579
+      '0.8': 67.7201048523029
+      '0.9': 69.2057013729032
+      '0.95': 70.6335736987281
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.0025951130993886306
+    ma_order: 0
+    train_rows: 4331
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.100490'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-06-25T00:00:00'
+  payload:
+    point_forecast: 65.47346362544431
+    quantiles:
+      '0.05': 57.98817529524263
+      '0.1': 59.85884350189271
+      '0.2': 62.01247591299815
+      '0.3': 63.62528177043782
+      '0.4': 64.79700186123583
+      '0.5': 65.83077667854228
+      '0.6': 66.7778575249912
+      '0.7': 67.78404337981223
+      '0.8': 69.1430351758192
+      '0.9': 71.24655260487943
+      '0.95': 73.21327516859071
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.007565343160271081
+    ma_order: 0
+    train_rows: 4326
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.100490'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-07-10T00:00:00'
+  payload:
+    point_forecast: 66.35164632196884
+    quantiles:
+      '0.05': 55.441667236652634
+      '0.1': 58.01823448773322
+      '0.2': 61.074594116830916
+      '0.3': 63.1860065832482
+      '0.4': 65.21490367102206
+      '0.5': 66.88461086458351
+      '0.6': 68.58974274016755
+      '0.7': 70.30208875185943
+      '0.8': 72.25446194117634
+      '0.9': 75.37783147675792
+      '0.95': 77.80055223553234
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.020888991258215542
+    ma_order: 0
+    train_rows: 4315
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.100490'
+  as_of: '2025-06-11T00:00:00'
+  forecast_date: '2025-09-08T00:00:00'
+  payload:
+    point_forecast: 67.14915683243964
+    quantiles:
+      '0.05': 45.058582213928766
+      '0.1': 52.956530127616745
+      '0.2': 59.097152825412
+      '0.3': 63.32465549378156
+      '0.4': 66.11345220052698
+      '0.5': 68.9192217504638
+      '0.6': 71.68987298107888
+      '0.7': 74.99434247528352
+      '0.8': 78.77499565100247
+      '0.9': 83.63314690838412
+      '0.95': 87.65651665339213
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.03283678450949984
+    ma_order: 0
+    train_rows: 4273
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.500936'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-17T00:00:00'
+  payload:
+    point_forecast: 68.81837901584075
+    quantiles:
+      '0.05': 62.923645764282625
+      '0.1': 64.58814464522875
+      '0.2': 66.31772341610115
+      '0.3': 67.41462351984059
+      '0.4': 68.22440824887559
+      '0.5': 68.9725868285517
+      '0.6': 69.6745970282345
+      '0.7': 70.48734586056231
+      '0.8': 71.53069927741005
+      '0.9': 73.09145614557929
+      '0.95': 74.58129072059553
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.006390502078048932
+    ma_order: 0
+    train_rows: 4350
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.500936'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-07-24T00:00:00'
+  payload:
+    point_forecast: 68.97804640697387
+    quantiles:
+      '0.05': 61.0513402467606
+      '0.1': 63.03218921217539
+      '0.2': 65.38765687719852
+      '0.3': 67.04616389550479
+      '0.4': 68.2650369070311
+      '0.5': 69.36725674502696
+      '0.6': 70.37383463286078
+      '0.7': 71.4329597700536
+      '0.8': 72.86100555113781
+      '0.9': 75.11948573922936
+      '0.95': 77.31500753505266
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.008707941911504306
+    ma_order: 0
+    train_rows: 4345
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.500936'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-08-08T00:00:00'
+  payload:
+    point_forecast: 69.90341469822144
+    quantiles:
+      '0.05': 58.399706774886056
+      '0.1': 61.232069390349174
+      '0.2': 64.35210217810875
+      '0.3': 66.53174101752555
+      '0.4': 68.68993357127546
+      '0.5': 70.44667004855009
+      '0.6': 72.26373971984967
+      '0.7': 74.03866798653588
+      '0.8': 76.15483601481297
+      '0.9': 79.4153666865457
+      '0.95': 81.97343641082732
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.02203415519246031
+    ma_order: 0
+    train_rows: 4334
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.500936'
+  as_of: '2025-07-10T00:00:00'
+  forecast_date: '2025-10-07T00:00:00'
+  payload:
+    point_forecast: 70.58592879806024
+    quantiles:
+      '0.05': 47.212091279479374
+      '0.1': 55.563658687589836
+      '0.2': 61.90248554701777
+      '0.3': 66.39703149501791
+      '0.4': 69.37270354881215
+      '0.5': 72.37197982367626
+      '0.6': 75.30369555382788
+      '0.7': 78.79344781141546
+      '0.8': 82.75723380868138
+      '0.9': 87.87746115096847
+      '0.95': 92.12131599953108
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.03175047178050875
+    ma_order: 0
+    train_rows: 4292
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.873853'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-08-15T00:00:00'
+  payload:
+    point_forecast: 64.28407243649153
+    quantiles:
+      '0.05': 58.82987663490761
+      '0.1': 60.35197776678871
+      '0.2': 61.99709357942494
+      '0.3': 62.99395510378597
+      '0.4': 63.744991598105905
+      '0.5': 64.449281012042
+      '0.6': 65.09973515812874
+      '0.7': 65.858766617027
+      '0.8': 66.83443222910554
+      '0.9': 68.2902063234661
+      '0.95': 69.67614302347577
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.006305553438642409
+    ma_order: 0
+    train_rows: 4371
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.873853'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-08-22T00:00:00'
+  payload:
+    point_forecast: 64.78613450845398
+    quantiles:
+      '0.05': 57.377407892619566
+      '0.1': 59.18599377974968
+      '0.2': 61.41313529275949
+      '0.3': 62.99448527495331
+      '0.4': 64.1257200591453
+      '0.5': 65.17760892123259
+      '0.6': 66.11313011320944
+      '0.7': 67.10958090386193
+      '0.8': 68.43971278827487
+      '0.9': 70.55109551117933
+      '0.95': 72.60230020173884
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.014085266760172233
+    ma_order: 0
+    train_rows: 4366
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.873853'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-09-08T00:00:00'
+  payload:
+    point_forecast: 65.19474078272351
+    quantiles:
+      '0.05': 54.51128297208924
+      '0.1': 57.15409442183001
+      '0.2': 60.07703834958764
+      '0.3': 62.09792219834862
+      '0.4': 64.10797242018884
+      '0.5': 65.75738602646894
+      '0.6': 67.42092870032546
+      '0.7': 69.08275563424502
+      '0.8': 71.06406649749847
+      '0.9': 74.1051629735362
+      '0.95': 76.49494022784646
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.02037246277005846
+    ma_order: 0
+    train_rows: 4355
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:33.873853'
+  as_of: '2025-08-08T00:00:00'
+  forecast_date: '2025-11-05T00:00:00'
+  payload:
+    point_forecast: 66.19368136466262
+    quantiles:
+      '0.05': 44.069618195983665
+      '0.1': 52.08777926073044
+      '0.2': 57.93281783547024
+      '0.3': 62.159406893173596
+      '0.4': 64.96959916168909
+      '0.5': 67.80257038895238
+      '0.6': 70.54703722303894
+      '0.7': 73.86356909735542
+      '0.8': 77.49563051111087
+      '0.9': 82.357819982074
+      '0.95': 86.38176613653508
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.035578670656374614
+    ma_order: 0
+    train_rows: 4313
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.257476'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-09-15T00:00:00'
+  payload:
+    point_forecast: 62.44352201874925
+    quantiles:
+      '0.05': 57.22191356381534
+      '0.1': 58.651978363250514
+      '0.2': 60.220059910738954
+      '0.3': 61.19500487949521
+      '0.4': 61.9161291440065
+      '0.5': 62.60944331919463
+      '0.6': 63.236353790364305
+      '0.7': 63.97604560362209
+      '0.8': 64.91195419492557
+      '0.9': 66.33168480310916
+      '0.95': 67.7068417256029
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.009227108227593908
+    ma_order: 0
+    train_rows: 4391
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.257476'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-09-22T00:00:00'
+  payload:
+    point_forecast: 63.10043409847348
+    quantiles:
+      '0.05': 55.886903730699466
+      '0.1': 57.65775015484919
+      '0.2': 59.83670663943641
+      '0.3': 61.34650204576881
+      '0.4': 62.44112761080582
+      '0.5': 63.4722633538278
+      '0.6': 64.39450046321424
+      '0.7': 65.38338486769004
+      '0.8': 66.68906466786859
+      '0.9': 68.77033111461466
+      '0.95': 70.7165303953339
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.019692256776537652
+    ma_order: 0
+    train_rows: 4386
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.257476'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-10-07T00:00:00'
+  payload:
+    point_forecast: 63.516246412834455
+    quantiles:
+      '0.05': 53.17959379850342
+      '0.1': 55.78987253663141
+      '0.2': 58.61973573561443
+      '0.3': 60.61273383110514
+      '0.4': 62.54227780237603
+      '0.5': 64.18135234815773
+      '0.6': 65.76893896468259
+      '0.7': 67.35853048282883
+      '0.8': 69.24698911631232
+      '0.9': 72.20965657344576
+      '0.95': 74.60287669183106
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.026260329916848065
+    ma_order: 0
+    train_rows: 4375
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.257476'
+  as_of: '2025-09-08T00:00:00'
+  forecast_date: '2025-12-04T00:00:00'
+  payload:
+    point_forecast: 63.911135158746234
+    quantiles:
+      '0.05': 42.34655440871192
+      '0.1': 50.29516385397596
+      '0.2': 56.023531872091276
+      '0.3': 60.05929180185285
+      '0.4': 62.753244297875014
+      '0.5': 65.48121946246924
+      '0.6': 68.1254032889199
+      '0.7': 71.32636945179695
+      '0.8': 74.81835103006378
+      '0.9': 79.52400405111658
+      '0.95': 83.30087434689848
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.032458213058404906
+    ma_order: 0
+    train_rows: 4333
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.639835'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-14T00:00:00'
+  payload:
+    point_forecast: 62.05830990739364
+    quantiles:
+      '0.05': 56.761649600609445
+      '0.1': 58.244909952109815
+      '0.2': 59.82696524627667
+      '0.3': 60.77717835178221
+      '0.4': 61.50858687113905
+      '0.5': 62.184629085655835
+      '0.6': 62.8160451339413
+      '0.7': 63.538559470870084
+      '0.8': 64.4934165223705
+      '0.9': 65.91687502233022
+      '0.95': 67.2556619715898
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.005952604485563877
+    ma_order: 0
+    train_rows: 4412
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.639835'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-10-21T00:00:00'
+  payload:
+    point_forecast: 62.130952103852785
+    quantiles:
+      '0.05': 55.020078696320226
+      '0.1': 56.76265330485772
+      '0.2': 58.879950679869715
+      '0.3': 60.36808574901763
+      '0.4': 61.453120226699376
+      '0.5': 62.44535615469755
+      '0.6': 63.35482759638649
+      '0.7': 64.3118699636475
+      '0.8': 65.61688632462739
+      '0.9': 67.64886858030535
+      '0.95': 69.59603196559348
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.007122467379785378
+    ma_order: 0
+    train_rows: 4407
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.639835'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2025-11-05T00:00:00'
+  payload:
+    point_forecast: 62.74393734894814
+    quantiles:
+      '0.05': 52.55481119716044
+      '0.1': 55.138374892607885
+      '0.2': 57.878944001069
+      '0.3': 59.82782446269478
+      '0.4': 61.73467108377226
+      '0.5': 63.360964732133105
+      '0.6': 64.94528151609593
+      '0.7': 66.5382879744703
+      '0.8': 68.39854874341505
+      '0.9': 71.32780383632513
+      '0.95': 73.63629114875243
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.016940136430868
+    ma_order: 0
+    train_rows: 4396
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:34.639835'
+  as_of: '2025-10-07T00:00:00'
+  forecast_date: '2026-01-02T00:00:00'
+  payload:
+    point_forecast: 63.74924264673579
+    quantiles:
+      '0.05': 42.27629350296912
+      '0.1': 50.226600227779755
+      '0.2': 55.95901976121778
+      '0.3': 60.01936049408025
+      '0.4': 62.69496282563018
+      '0.5': 65.3667194030603
+      '0.6': 67.94966172030205
+      '0.7': 71.16871570324123
+      '0.8': 74.75218268080611
+      '0.9': 79.33305211535024
+      '0.95': 83.20758664475007
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.03283548295637806
+    ma_order: 0
+    train_rows: 4354
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.017340'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2025-11-12T00:00:00'
+  payload:
+    point_forecast: 60.79855463284899
+    quantiles:
+      '0.05': 55.63716499486647
+      '0.1': 57.071186976264975
+      '0.2': 58.613784732325996
+      '0.3': 59.56428544042992
+      '0.4': 60.27385997612113
+      '0.5': 60.93039425484601
+      '0.6': 61.55229956858671
+      '0.7': 62.255587607519494
+      '0.8': 63.20652768489865
+      '0.9': 64.5860372387344
+      '0.95': 65.88071682327805
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.003931384397785761
+    ma_order: 0
+    train_rows: 4433
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.017340'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2025-11-19T00:00:00'
+  payload:
+    point_forecast: 61.30998245599696
+    quantiles:
+      '0.05': 54.298076416688794
+      '0.1': 56.00432043136006
+      '0.2': 58.06116052731233
+      '0.3': 59.52843884281386
+      '0.4': 60.641393127519365
+      '0.5': 61.640909189495545
+      '0.6': 62.547890526134815
+      '0.7': 63.4622476813759
+      '0.8': 64.73935500301816
+      '0.9': 66.73265288586082
+      '0.95': 68.62302003106404
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.01230804381643633
+    ma_order: 0
+    train_rows: 4428
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.017340'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2025-12-04T00:00:00'
+  payload:
+    point_forecast: 62.1448914979815
+    quantiles:
+      '0.05': 52.17103153883816
+      '0.1': 54.61334148250018
+      '0.2': 57.348367286887
+      '0.3': 59.248978801741416
+      '0.4': 61.10568732952074
+      '0.5': 62.72379827123913
+      '0.6': 64.28423885931718
+      '0.7': 65.89055605385514
+      '0.8': 67.74405148934777
+      '0.9': 70.62982910378891
+      '0.95': 72.9518334349663
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.025833986440933612
+    ma_order: 0
+    train_rows: 4417
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.017340'
+  as_of: '2025-11-05T00:00:00'
+  forecast_date: '2026-02-02T00:00:00'
+  payload:
+    point_forecast: 63.11452926260147
+    quantiles:
+      '0.05': 41.884983224850984
+      '0.1': 49.778009464083446
+      '0.2': 55.52374231606074
+      '0.3': 59.52051436406511
+      '0.4': 62.10049497867168
+      '0.5': 64.697491699904
+      '0.6': 67.23754574991125
+      '0.7': 70.48409483927067
+      '0.8': 74.11073187382117
+      '0.9': 78.65938631868343
+      '0.95': 82.50032742742049
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.0413163689636367
+    ma_order: 0
+    train_rows: 4375
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.386874'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2025-12-11T00:00:00'
+  payload:
+    point_forecast: 59.373709175896984
+    quantiles:
+      '0.05': 54.3349271437849
+      '0.1': 55.73583584284315
+      '0.2': 57.25000009803618
+      '0.3': 58.176624710242976
+      '0.4': 58.86077528009159
+      '0.5': 59.50004519771163
+      '0.6': 60.1086916241702
+      '0.7': 60.795378671761746
+      '0.8': 61.70226467400706
+      '0.9': 63.06165214421729
+      '0.95': 64.30967848018457
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.007161881997539464
+    ma_order: 0
+    train_rows: 4453
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.386874'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2025-12-18T00:00:00'
+  payload:
+    point_forecast: 59.84613369920793
+    quantiles:
+      '0.05': 53.00789962460679
+      '0.1': 54.67015623229826
+      '0.2': 56.708038781322635
+      '0.3': 58.11795826502329
+      '0.4': 59.17144436829374
+      '0.5': 60.13367714015818
+      '0.6': 60.98828250755394
+      '0.7': 61.892331383219414
+      '0.8': 63.14726825254532
+      '0.9': 65.08132079635917
+      '0.95': 66.94228311698853
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.015087190145647278
+    ma_order: 0
+    train_rows: 4448
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.386874'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2026-01-02T00:00:00'
+  payload:
+    point_forecast: 60.162672931333816
+    quantiles:
+      '0.05': 50.52942483461077
+      '0.1': 52.98214880781474
+      '0.2': 55.60613166968347
+      '0.3': 57.405486075442084
+      '0.4': 59.20473881135419
+      '0.5': 60.75589664221784
+      '0.6': 62.26340676414738
+      '0.7': 63.85570300479505
+      '0.8': 65.62603082513385
+      '0.9': 68.41254338505765
+      '0.95': 70.63935433489861
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.020362469103624305
+    ma_order: 0
+    train_rows: 4437
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.386874'
+  as_of: '2025-12-04T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 61.26906649016453
+    quantiles:
+      '0.05': 40.793935606499154
+      '0.1': 48.36675424934866
+      '0.2': 53.94333571917878
+      '0.3': 57.80676362664573
+      '0.4': 60.311200553251865
+      '0.5': 62.83577284812618
+      '0.6': 65.28790994115712
+      '0.7': 68.45252143002743
+      '0.8': 72.02417976860724
+      '0.9': 76.42302048802573
+      '0.95': 80.21148511122597
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.03858545069408452
+    ma_order: 0
+    train_rows: 4395
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.768075'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-09T00:00:00'
+  payload:
+    point_forecast: 57.98712004819198
+    quantiles:
+      '0.05': 53.0705812987858
+      '0.1': 54.43561741015892
+      '0.2': 55.89717707199803
+      '0.3': 56.78360483061219
+      '0.4': 57.46612623488968
+      '0.5': 58.10317974648891
+      '0.6': 58.69415399501506
+      '0.7': 59.35806919095684
+      '0.8': 60.25512069191819
+      '0.9': 61.58656932537524
+      '0.95': 62.83341045593945
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.009828274946898431
+    ma_order: 0
+    train_rows: 4472
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.768075'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-01-16T00:00:00'
+  payload:
+    point_forecast: 58.25297818555148
+    quantiles:
+      '0.05': 51.604639784683144
+      '0.1': 53.23245981422216
+      '0.2': 55.24787985705004
+      '0.3': 56.603515626888544
+      '0.4': 57.608711403201674
+      '0.5': 58.52883900482056
+      '0.6': 59.38030941467001
+      '0.7': 60.271147228277194
+      '0.8': 61.502586063413254
+      '0.9': 63.3757813650336
+      '0.95': 65.19292713320738
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.014402575983667957
+    ma_order: 0
+    train_rows: 4467
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.768075'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-02-02T00:00:00'
+  payload:
+    point_forecast: 59.34401498333651
+    quantiles:
+      '0.05': 49.84873824264851
+      '0.1': 52.25566942904505
+      '0.2': 54.857628901208045
+      '0.3': 56.60201424542091
+      '0.4': 58.35106768902582
+      '0.5': 59.8764540831945
+      '0.6': 61.33265393183512
+      '0.7': 62.91177505843
+      '0.8': 64.6694210669625
+      '0.9': 67.42052936574672
+      '0.95': 69.62793712570253
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.032958630425835675
+    ma_order: 0
+    train_rows: 4456
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:35.768075'
+  as_of: '2026-01-02T00:00:00'
+  forecast_date: '2026-04-01T00:00:00'
+  payload:
+    point_forecast: 59.29300596607945
+    quantiles:
+      '0.05': 39.73675185749715
+      '0.1': 47.004341972444216
+      '0.2': 52.27042900224415
+      '0.3': 55.900329261563165
+      '0.4': 58.33048943701693
+      '0.5': 60.7761624706855
+      '0.6': 63.12213542395467
+      '0.7': 66.20407920636342
+      '0.8': 69.66593572915198
+      '0.9': 73.98945440510505
+      '0.95': 77.63749977257943
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.032098713007274356
+    ma_order: 0
+    train_rows: 4414
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:36.140603'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-02-09T00:00:00'
+  payload:
+    point_forecast: 66.9145704930496
+    quantiles:
+      '0.05': 61.335759967258525
+      '0.1': 62.835737996160006
+      '0.2': 64.53701218361824
+      '0.3': 65.58432730480642
+      '0.4': 66.34623019605222
+      '0.5': 67.07615062468973
+      '0.6': 67.75334738198721
+      '0.7': 68.52783233712368
+      '0.8': 69.54434671152009
+      '0.9': 71.07452600279383
+      '0.95': 72.53669488746112
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.025803921167685307
+    ma_order: 0
+    train_rows: 4492
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:36.140603'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-03-03T00:00:00'
+  payload:
+    point_forecast: 68.0780633224541
+    quantiles:
+      '0.05': 57.14616820157197
+      '0.1': 59.94436261892281
+      '0.2': 62.90966176863596
+      '0.3': 64.89818723543668
+      '0.4': 66.84565844148429
+      '0.5': 68.64261046028189
+      '0.6': 70.33111572617571
+      '0.7': 72.10365710227396
+      '0.8': 74.1365293360324
+      '0.9': 77.32580267005463
+      '0.95': 79.92346727658543
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.043042219410071976
+    ma_order: 0
+    train_rows: 4476
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:36.140603'
+  as_of: '2026-02-02T00:00:00'
+  forecast_date: '2026-04-30T00:00:00'
+  payload:
+    point_forecast: 66.55457616623673
+    quantiles:
+      '0.05': 44.917504522324286
+      '0.1': 52.870134191369004
+      '0.2': 58.71637457335524
+      '0.3': 62.70258084230889
+      '0.4': 65.40976819260189
+      '0.5': 68.15831923990719
+      '0.6': 70.78237052857536
+      '0.7': 74.27099708346057
+      '0.8': 78.10623907212104
+      '0.9': 83.01106409673993
+      '0.95': 87.08931601081491
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.02040948794013261
+    ma_order: 0
+    train_rows: 4434
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:36.531430'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-03-10T00:00:00'
+  payload:
+    point_forecast: 71.27956009422547
+    quantiles:
+      '0.05': 65.34218115368567
+      '0.1': 66.95047408102663
+      '0.2': 68.77305267787929
+      '0.3': 69.869373346531
+      '0.4': 70.68716036589369
+      '0.5': 71.4663332296911
+      '0.6': 72.19404369502196
+      '0.7': 73.00304211686448
+      '0.8': 74.09858667625184
+      '0.9': 75.71950599280602
+      '0.95': 77.27921199202812
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.0006954865075618462
+    ma_order: 0
+    train_rows: 4512
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:36.531430'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-03-17T00:00:00'
+  payload:
+    point_forecast: 71.35692596294167
+    quantiles:
+      '0.05': 63.23423083914146
+      '0.1': 65.27952629420605
+      '0.2': 67.6741486999743
+      '0.3': 69.36050340330785
+      '0.4': 70.62675362734765
+      '0.5': 71.75113571279896
+      '0.6': 72.7707073418358
+      '0.7': 73.81823820426783
+      '0.8': 75.29969968637447
+      '0.9': 77.55305423795755
+      '0.95': 79.87206299789474
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.0017802843519524074
+    ma_order: 0
+    train_rows: 4507
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:36.531430'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-04-01T00:00:00'
+  payload:
+    point_forecast: 73.1730620205215
+    quantiles:
+      '0.05': 61.380403012283004
+      '0.1': 64.37941227580174
+      '0.2': 67.59553459659024
+      '0.3': 69.76753548976585
+      '0.4': 71.94116251204376
+      '0.5': 73.8150875340151
+      '0.6': 75.64584562091127
+      '0.7': 77.54350972078555
+      '0.8': 79.69667826383713
+      '0.9': 83.106277745321
+      '0.95': 85.88202937082372
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.02691322293426006
+    ma_order: 0
+    train_rows: 4496
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:36.531430'
+  as_of: '2026-03-03T00:00:00'
+  forecast_date: '2026-05-29T00:00:00'
+  payload:
+    point_forecast: 76.00987740701122
+    quantiles:
+      '0.05': 51.62939452296884
+      '0.1': 60.51977517270536
+      '0.2': 67.04794397206281
+      '0.3': 71.508528883613
+      '0.4': 74.5960536877108
+      '0.5': 77.76077063893804
+      '0.6': 80.74599676640206
+      '0.7': 84.67194859055444
+      '0.8': 89.03037541995099
+      '0.9': 94.75966395501618
+      '0.95': 99.42720684306808
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.06494917260487607
+    ma_order: 0
+    train_rows: 4454
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:37.091385'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-08T00:00:00'
+  payload:
+    point_forecast: 103.80521663615693
+    quantiles:
+      '0.05': 95.21943386243471
+      '0.1': 97.45203951175743
+      '0.2': 100.07909613430499
+      '0.3': 101.67556586826294
+      '0.4': 102.8988724875467
+      '0.5': 104.04034389580829
+      '0.6': 105.08548048121546
+      '0.7': 106.2647750035735
+      '0.8': 107.90038338609247
+      '0.9': 110.2959979065258
+      '0.95': 112.6281688493533
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.023640420127090514
+    ma_order: 0
+    train_rows: 4533
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:37.091385'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-15T00:00:00'
+  payload:
+    point_forecast: 103.77268158168641
+    quantiles:
+      '0.05': 91.9496640461127
+      '0.1': 94.91173287539898
+      '0.2': 98.39742530021336
+      '0.3': 100.80909179153363
+      '0.4': 102.62413931276923
+      '0.5': 104.25931164940361
+      '0.6': 105.7328797213078
+      '0.7': 107.350275519232
+      '0.8': 109.52880768321444
+      '0.9': 112.9809211182913
+      '0.95': 116.34204379684039
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.023326946920007637
+    ma_order: 0
+    train_rows: 4528
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:37.091385'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-04-30T00:00:00'
+  payload:
+    point_forecast: 107.72645247619228
+    quantiles:
+      '0.05': 90.2825256911805
+      '0.1': 94.5560467485219
+      '0.2': 99.31457084313524
+      '0.3': 102.56600861036144
+      '0.4': 105.75546912962022
+      '0.5': 108.5203146385609
+      '0.6': 111.28782298110873
+      '0.7': 114.02456167606626
+      '0.8': 117.24559335560134
+      '0.9': 122.24891644847676
+      '0.95': 126.39331358715005
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.06071936064457104
+    ma_order: 0
+    train_rows: 4517
+    n_regressors: 18
+- predictor_id: direct_ecm
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-09-17T17:03:37.091385'
+  as_of: '2026-04-01T00:00:00'
+  forecast_date: '2026-06-29T00:00:00'
+  payload:
+    point_forecast: 119.19625643108175
+    quantiles:
+      '0.05': 81.73782982035414
+      '0.1': 95.20325375950368
+      '0.2': 104.88543390045163
+      '0.3': 111.71378319731267
+      '0.4': 116.6805761854036
+      '0.5': 121.55768345437367
+      '0.6': 126.33048922555248
+      '0.7': 132.1707543173987
+      '0.8': 139.33584211300175
+      '0.9': 148.47647564403667
+      '0.95': 155.69483168710926
+  metadata:
+    band_source: residual_bootstrap
+    log_return_forecast: 0.16189554240631038
+    ma_order: 0
+    train_rows: 4475
+    n_regressors: 18
+scores:
+- 3.7323544525236474
+- 5.112004026331452
+- 5.491679755634721
+- 8.007086009865082
+- 0.8766827181044887
+- 3.794999362231107
+- 2.8049526339018485
+- 5.650807906662622
+- 2.4107092664818772
+- 1.5551860578908183
+- 2.380918773769125
+- 4.0732462616090634
+- 0.9633925125418873
+- 1.3904915291229076
+- 2.0373326730723056
+- 4.619813199180228
+- 0.9854528007817712
+- 1.154277114684424
+- 1.91868984196671
+- 3.2578889272043923
+- 1.0565384714194446
+- 1.2167411208879833
+- 4.512596582509389
+- 4.424944339795626
+- 1.6320149441781004
+- 3.59179241527896
+- 5.080115060156459
+- 13.08726483530184
+- 0.8818301082706568
+- 1.5740873347858975
+- 3.5922685793142937
+- 7.36399393611435
+- 1.023349731916329
+- 1.8119052724995197
+- 3.0618685507101504
+- 3.3470072156637265
+- 0.9745638658284733
+- 1.2083402460542825
+- 2.1136431487966805
+- 3.8025225308980644
+- 0.768537045818224
+- 1.174954270407129
+- 3.497043508732431
+- 3.3184333635918963
+- 8.112014661119243
+- 1.1735423086066057
+- 1.7684616922117447
+- 4.515227236783156
+- 1.0628811614886
+- 2.048060825481134
+- 3.8729455536321047
+- 6.429329603184495
+- 1.109859326245034
+- 1.3064875152072561
+- 2.360406108658276
+- 5.187842172504146
+- 0.8043730637375814
+- 1.135723956340406
+- 2.0240862108949895
+- 4.050853056013768
+- 2.136775931232867
+- 2.775417527042261
+- 2.408777908817309
+- 5.071927960087342
+- 1.4755666092327115
+- 1.4643176179889899
+- 2.157716140191352
+- 3.0686393242609737
+- 1.199168833332591
+- 2.3636381966324733
+- 2.2340493094914065
+- 7.077736555286207
+- 0.8482025042680357
+- 1.0598802053829777
+- 1.8842639656294622
+- 33.499561385827526
+- 1.6415430116715475
+- 3.5896348018635336
+- 30.33789256551527
+- 10.092667791118526
+- 21.895293554018647
+- 22.233725473434774
+- 5.93520512604346
+- 6.684582603915368
+- 8.760423939689177
+- 3.238672377091822
+- 38.32496308074151
+metric: crps
+mean_score: 4.675363920165598
+ran_at: '2026-09-17T17:03:37.261307'
+skipped_origins: 0
