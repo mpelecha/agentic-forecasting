@@ -28,7 +28,11 @@ from aieng.forecasting.data.adapters.base import BaseAdapter
 from aieng.forecasting.evaluation.prediction import STANDARD_QUANTILES, Prediction
 from aieng.forecasting.evaluation.task import ForecastingTask
 from aieng.forecasting.methods.numerical import DirectRegressionPredictor, ResidualCalibration
-from aieng.forecasting.methods.numerical.direct_regression import _build_design
+from aieng.forecasting.methods.numerical.direct_regression import (
+    MAX_MA_ORDER,
+    _bootstrap_offsets,
+    _build_design,
+)
 
 
 AS_OF = datetime(2021, 6, 1)
@@ -258,9 +262,22 @@ def test_calibration_file_overrides_bootstrap(svc: DataService, tmp_path: Path) 
 
 def test_ma_order_is_capped_not_searched(svc: DataService) -> None:
     """Default MA order tracks ``h - 1`` up to the cap, and is never selected."""
-    preds = DirectRegressionPredictor().predict(_task([2, 63]), svc.context(AS_OF))
-    assert preds[0].metadata["ma_order"] == 1
-    assert preds[1].metadata["ma_order"] == 5
+    preds = DirectRegressionPredictor().predict(_task([1, 63]), svc.context(AS_OF))
+    assert preds[0].metadata["ma_order"] == 0
+    assert preds[1].metadata["ma_order"] == MAX_MA_ORDER
+
+
+def test_bootstrap_matches_empirical_quantiles_at_scale() -> None:
+    """The pooled-sample cap must not move the quantiles it exists to speed up.
+
+    Guards the MAX_POOLED_SAMPLES optimisation: if capping the pool ever shifts
+    a quantile materially, the speedup stopped being free.
+    """
+    rng = np.random.default_rng(0)
+    residuals = rng.normal(0.0, 0.08, 2500)
+    offsets = _bootstrap_offsets(residuals, block=21, draws=4000, rng=rng)
+    for level in (0.05, 0.5, 0.95):
+        assert offsets[level] == pytest.approx(float(np.quantile(residuals, level)), abs=2e-3)
 
 
 def test_short_history_refuses_rather_than_fits() -> None:

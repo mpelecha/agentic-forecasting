@@ -85,16 +85,32 @@ from aieng.forecasting.evaluation.task import ForecastingTask
 DEFAULT_AR_LAGS = 10
 """Lagged daily log returns used as regressors."""
 
-MAX_MA_ORDER = 5
+MAX_MA_ORDER = 1
 """Cap on the moving-average order.
 
 The overlap-induced structure is MA(``h-1``), which at ``h = 63`` would mean 62
-extra parameters.  The low-order terms carry nearly all of the correction, so
-the order is capped.
+extra parameters.  The first term carries most of the correction, and the cost
+of the rest is not second-order: on ~2500 rows a SARIMAX fit takes ~0.6s at
+MA(1) against 1.7-4.8s at MA(2)-MA(5), and a dense-grid backtest pays that
+516 times per predictor.  That is 16 minutes versus 45-125.  The extra terms
+buy efficiency in the point estimate only -- the band is bootstrapped, not
+model-implied -- which does not justify the multiple.  Raise it via
+``ma_order`` when studying one origin rather than sweeping a grid.
 """
 
 DEFAULT_BOOTSTRAP_DRAWS = 4000
 """Resamples drawn when building the predictive band."""
+
+MAX_POOLED_SAMPLES = 200_000
+"""Ceiling on the pooled bootstrap sample used to read quantiles off.
+
+Drawing ``draws`` full-length resamples from ``n`` residuals materializes a
+``draws x n`` array: at 4000 x 2500 that is 80 MB and ~1.8s, to extract eleven
+numbers.  The quantiles of 200k pooled samples and of 10M agree to well inside
+their own sampling error, so the array is capped.  The cap binds only when the
+residual sample is already large, which is exactly where the bootstrap adds
+least over the plain empirical quantiles.
+"""
 
 MIN_TRAIN_ROWS = 120
 """Fewest training rows accepted before refusing to fit a horizon.
@@ -343,10 +359,12 @@ def _bootstrap_offsets(
         raise ValueError("no finite residuals to bootstrap.")
 
     block = max(1, min(block, len(finite)))
-    n_blocks = int(np.ceil(len(finite) / block))
-    starts = rng.integers(0, len(finite) - block + 1, size=(draws, n_blocks))
-    offsets = np.arange(block)
-    pooled = finite[(starts[:, :, None] + offsets[None, None, :]).reshape(draws, -1)[:, : len(finite)]]
+    # Cap total pooled samples rather than always drawing `draws` full-length
+    # resamples; see MAX_POOLED_SAMPLES.
+    target = min(draws * len(finite), MAX_POOLED_SAMPLES)
+    n_blocks = max(1, int(np.ceil(target / block)))
+    starts = rng.integers(0, len(finite) - block + 1, size=n_blocks)
+    pooled = finite[(starts[:, None] + np.arange(block)[None, :]).ravel()]
     return {level: float(np.quantile(pooled, level)) for level in STANDARD_QUANTILES}
 
 
