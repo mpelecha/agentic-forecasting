@@ -42,7 +42,8 @@ consequences, both handled deliberately:
 
 - The overlap induces an MA(:math:`h-1`) error structure *by construction*,
   even under a white-noise price process.  Order selection would dutifully
-  "discover" it, so the moving-average order is **fixed**, never searched.
+  "discover" it, so the moving-average order is **fixed**, never searched --
+  and defaults to zero on cost grounds (see :data:`DEFAULT_MA_ORDER`).
 - Standard errors and model-implied intervals are invalid under that
   dependence.  Neither is used: the band comes from the residual bootstrap.
 
@@ -85,17 +86,28 @@ from aieng.forecasting.evaluation.task import ForecastingTask
 DEFAULT_AR_LAGS = 10
 """Lagged daily log returns used as regressors."""
 
-MAX_MA_ORDER = 1
-"""Cap on the moving-average order.
+DEFAULT_MA_ORDER = 0
+"""Moving-average order for the regression errors when none is given.
 
-The overlap-induced structure is MA(``h-1``), which at ``h = 63`` would mean 62
-extra parameters.  The first term carries most of the correction, and the cost
-of the rest is not second-order: on ~2500 rows a SARIMAX fit takes ~0.6s at
-MA(1) against 1.7-4.8s at MA(2)-MA(5), and a dense-grid backtest pays that
-516 times per predictor.  That is 16 minutes versus 45-125.  The extra terms
-buy efficiency in the point estimate only -- the band is bootstrapped, not
-model-implied -- which does not justify the multiple.  Raise it via
-``ma_order`` when studying one origin rather than sweeping a grid.
+Zero, i.e. plain OLS, on measured cost.  The overlap induces an MA(``h-1``)
+error structure, and modelling it with SARIMAX is the textbook-efficient choice
+-- but on this data it costs **29.1s per origin against 0.1s**, a factor of
+290, which over a 129-origin dense grid is 62 minutes per predictor instead of
+20 seconds.  (An earlier estimate of ~0.6s per fit was measured on synthetic
+iid residuals, which converge in a couple of iterations; real overlapping
+targets are autocorrelated by construction, which is precisely why the MLE
+needs many more.)
+
+What that buys is efficiency in the point estimate only.  OLS remains
+*consistent* under correlated errors, and the band is bootstrapped from
+residuals rather than model-implied, so nothing here depends on the error
+covariance being right.  A 290x bill for a second-order gain on the centre is
+not worth paying across a grid sweep.
+
+Pass ``ma_order=1`` (or higher) to turn it back on when studying a single
+origin, where the cost is seconds rather than hours.  Every prediction records
+the order actually used in ``metadata["ma_order"]``, so a run is never
+ambiguous about which it was.
 """
 
 DEFAULT_BOOTSTRAP_DRAWS = 4000
@@ -384,9 +396,11 @@ class DirectRegressionPredictor(Predictor):
         becomes ``direct_ecm``.  These should be *levels*; a panel of log
         returns carries no long-run relation to a price level.
     ma_order : int or None
-        Fixed MA order for the regression errors.  ``None`` (default) uses
-        ``min(h - 1, MAX_MA_ORDER)``.  ``0`` gives plain OLS.  Never selected
-        from the data — the overlap makes that selection meaningless.
+        Fixed MA order for the regression errors.  ``None`` (default) means
+        :data:`DEFAULT_MA_ORDER`, i.e. plain OLS — see that constant for why.
+        A supplied order is clipped to ``h - 1``, the most the overlap can
+        induce.  Never selected from the data: the overlap guarantees an
+        MA structure, so selection would be fitting an artifact.
     bootstrap_draws : int
         Resamples used to build the band.
     calibration : ResidualCalibration or None
@@ -442,8 +456,8 @@ class DirectRegressionPredictor(Predictor):
     def _resolve_ma_order(self, horizon: int) -> int:
         """Return the fixed MA order used at ``horizon``."""
         if self._ma_order is not None:
-            return self._ma_order
-        return min(horizon - 1, MAX_MA_ORDER)
+            return min(self._ma_order, horizon - 1)
+        return DEFAULT_MA_ORDER
 
     def _prepare(self, task: ForecastingTask, context: ForecastContext) -> tuple[pd.Series, pd.DataFrame]:
         """Return cutoff-scoped log prices and the extra regressor columns."""

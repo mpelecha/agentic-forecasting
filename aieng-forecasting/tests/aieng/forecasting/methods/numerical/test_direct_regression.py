@@ -29,7 +29,7 @@ from aieng.forecasting.evaluation.prediction import STANDARD_QUANTILES, Predicti
 from aieng.forecasting.evaluation.task import ForecastingTask
 from aieng.forecasting.methods.numerical import DirectRegressionPredictor, ResidualCalibration
 from aieng.forecasting.methods.numerical.direct_regression import (
-    MAX_MA_ORDER,
+    DEFAULT_MA_ORDER,
     _bootstrap_offsets,
     _build_design,
 )
@@ -260,11 +260,14 @@ def test_calibration_file_overrides_bootstrap(svc: DataService, tmp_path: Path) 
         assert float(np.log(ratio)) == pytest.approx(offset, abs=1e-9)
 
 
-def test_ma_order_is_capped_not_searched(svc: DataService) -> None:
-    """Default MA order tracks ``h - 1`` up to the cap, and is never selected."""
-    preds = DirectRegressionPredictor().predict(_task([1, 63]), svc.context(AS_OF))
-    assert preds[0].metadata["ma_order"] == 0
-    assert preds[1].metadata["ma_order"] == MAX_MA_ORDER
+def test_ma_order_defaults_to_ols_and_is_never_searched(svc: DataService) -> None:
+    """The default is OLS, and a supplied order is clipped to ``h - 1``."""
+    preds = DirectRegressionPredictor().predict(_task([5, 63]), svc.context(AS_OF))
+    assert [p.metadata["ma_order"] for p in preds] == [DEFAULT_MA_ORDER, DEFAULT_MA_ORDER]
+
+    # Explicit order is honoured, but cannot exceed what the overlap can induce.
+    clipped = DirectRegressionPredictor(ma_order=5).predict(_task([3]), svc.context(AS_OF))[0]
+    assert clipped.metadata["ma_order"] == 2
 
 
 def test_bootstrap_matches_empirical_quantiles_at_scale() -> None:
