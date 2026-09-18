@@ -70,6 +70,15 @@ class AgentTarget:
     #: unmodified. A different prompt is a different agent (R6), so this is an
     #: identity field, not a cosmetic label.
     prompt_version: str
+    #: The package's config/predictor builder pair. Defaults to the names every
+    #: package ships, so a target that uses them says nothing.
+    #:
+    #: ``v5.2 ARIMA-only`` is why these are fields. It is not a separate package:
+    #: it is ``cfm_agent_v_5_2`` built through a different entry point, which swaps
+    #: the three-model ensemble for ARIMA alone. Same module, same settings class,
+    #: same manifest -- a different *agent*, because what it forecasts with differs.
+    config_builder: str = "build_cfm_agent_config"
+    predictor_builder: str = "build_cfm_agent_predictor"
 
     # -- identity -------------------------------------------------------------
 
@@ -114,10 +123,10 @@ class AgentTarget:
         return importlib.import_module(f"{self.module}.{suffix}")
 
     def build_config(self, **kwargs: Any) -> Any:
-        return self._module("agent").build_cfm_agent_config(**kwargs)
+        return getattr(self._module("agent"), self.config_builder)(**kwargs)
 
     def build_predictor(self, config: Any) -> Any:
-        return self._module("agent").build_cfm_agent_predictor(config)
+        return getattr(self._module("agent"), self.predictor_builder)(config)
 
     def engine(self, settings: Any) -> Any:
         """Build this package's ``PythonForecastEngine``.
@@ -160,7 +169,33 @@ V52 = AgentTarget(
     prompt_version="cfm_v5_2_builtin",
 )
 
-TARGETS: dict[str, AgentTarget] = {target.agent_id: target for target in (V50, V52)}
+#: v5.2 with ARIMA alone in the ensemble -- no Kalman, no LightGBM. Shares every
+#: file with :data:`V52`, so the two differ only in which builder runs.
+#:
+#: **The fingerprint prefix has to differ, and the manifest cannot express why.**
+#: ``agent_package_fingerprint`` hashes ``MANIFEST.sha256``, which is the same file
+#: for both targets -- so without a distinct prefix these two would fingerprint
+#: identically, and a corpus holding both would satisfy
+#: ``ComparisonPolicy.single_package_fingerprint`` while actually spanning a
+#: three-model ensemble and a one-model one. That is precisely the pooling the
+#: condition exists to refuse, so the prefix carries the distinction the hash
+#: cannot see.
+#:
+#: ``agent_id`` matches the ``AgentConfig.name`` that
+#: ``build_cfm_agent_config_arima_only`` stamps on the config, so a record's agent
+#: id and the config that produced it agree.
+V52_ARIMA_ONLY = AgentTarget(
+    agent_id="cfm_agent_v_5_2_arima_only",
+    module="energy_oil_forecasting.cfm_agent_v_5_2",
+    settings_cls=CfmV52Settings,
+    package_root=V52_ROOT,
+    fingerprint_prefix="cfm_v5_2_arima_only_package",
+    prompt_version="cfm_v5_2_builtin",
+    config_builder="build_cfm_agent_config_arima_only",
+    predictor_builder="build_cfm_agent_predictor_arima_only",
+)
+
+TARGETS: dict[str, AgentTarget] = {target.agent_id: target for target in (V50, V52, V52_ARIMA_ONLY)}
 
 #: The coach's original target. Every entry point still defaults to it, so nothing
 #: that predates v5.2 changes behaviour by being recompiled against this module.
@@ -173,4 +208,12 @@ def target_for(agent_id: str) -> AgentTarget:
     return TARGETS[agent_id]
 
 
-__all__ = ["DEFAULT_TARGET", "TARGETS", "V50", "V52", "AgentTarget", "target_for"]
+__all__ = [
+    "DEFAULT_TARGET",
+    "TARGETS",
+    "V50",
+    "V52",
+    "V52_ARIMA_ONLY",
+    "AgentTarget",
+    "target_for",
+]

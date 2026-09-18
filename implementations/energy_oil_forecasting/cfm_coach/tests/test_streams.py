@@ -25,18 +25,24 @@ from energy_oil_forecasting.cfm_coach.streams import (
     V50_LITE,
     V52_ADVANCED,
     V52_LITE,
+    V522_ARIMA_LITE,
     stream_for,
 )
-from energy_oil_forecasting.cfm_coach.targets import V50, V52, target_for
+from energy_oil_forecasting.cfm_coach.targets import V50, V52, V52_ARIMA_ONLY, target_for
 
 
 # -- the streams are what was asked for ---------------------------------------
 
 
-def test_the_three_streams_are_wired_as_specified():
+def test_the_four_streams_are_wired_as_specified():
     assert (V50_LITE.target, V50_LITE.model, V50_LITE.runs_per_day) == (V50, LITE_MODEL, 3)
     assert (V52_ADVANCED.target, V52_ADVANCED.model, V52_ADVANCED.runs_per_day) == (V52, ADVANCED_MODEL, 3)
     assert (V52_LITE.target, V52_LITE.model, V52_LITE.runs_per_day) == (V52, LITE_MODEL, 10)
+    assert (V522_ARIMA_LITE.target, V522_ARIMA_LITE.model, V522_ARIMA_LITE.runs_per_day) == (
+        V52_ARIMA_ONLY,
+        LITE_MODEL,
+        10,
+    )
 
 
 def test_stream_lookup_rejects_an_unknown_id():
@@ -50,7 +56,7 @@ def test_stream_lookup_rejects_an_unknown_id():
 
 def test_v52_streams_bind_every_llm_call_to_one_model():
     """Five knobs, not one. Missing any leaves that call on the package default."""
-    for stream in (V52_ADVANCED, V52_LITE):
+    for stream in (V52_ADVANCED, V52_LITE, V522_ARIMA_LITE):
         models = stream.models_in_use(stream.base_settings)
         assert set(models) == {
             "agent",
@@ -82,7 +88,7 @@ def test_v52_streams_do_not_get_the_code_execution_tool():
     silently break. Diagnostics-only and never once used in 11 lite runs, so removing
     it cannot change a forecast.
     """
-    for stream in (V52_ADVANCED, V52_LITE):
+    for stream in (V52_ADVANCED, V52_LITE, V522_ARIMA_LITE):
         assert stream.base_settings.code_execution_enabled is False
         names = {t.func.__name__ for t in stream.build_config(settings=stream.base_settings).function_tools}
         assert "run_code" not in names, f"{stream.stream_id} still exposes run_code"
@@ -180,9 +186,55 @@ def test_package_fingerprints_distinguish_the_two_agents():
     assert "unavailable" not in v50 and "unavailable" not in v52
 
 
+def test_arima_only_fingerprints_apart_from_the_full_ensemble():
+    """The one identity the manifest cannot express.
+
+    `V52_ARIMA_ONLY` shares every source file with `V52`, so both hash the same
+    ``MANIFEST.sha256``. Only the prefix distinguishes them -- and without it a
+    corpus holding a three-model ensemble and a one-model one would satisfy
+    ``single_package_fingerprint``, which exists to refuse exactly that pooling.
+    """
+    ensemble = agent_package_fingerprint(V52)
+    arima_only = agent_package_fingerprint(V52_ARIMA_ONLY)
+    assert ensemble.endswith(arima_only.split(":sha256:")[1]), "the two should hash the same manifest"
+    assert arima_only.startswith("cfm_v5_2_arima_only_package:sha256:")
+    assert arima_only != ensemble
+
+
+def test_arima_only_is_built_through_its_own_entry_point():
+    """A shared module means the builder name is the only thing selecting the ensemble."""
+    assert V52_ARIMA_ONLY.module == V52.module
+    assert V52_ARIMA_ONLY.config_builder == "build_cfm_agent_config_arima_only"
+    assert V52_ARIMA_ONLY.predictor_builder == "build_cfm_agent_predictor_arima_only"
+    assert V52.config_builder == "build_cfm_agent_config", "the default target must keep the shipped builder"
+
+
+def test_arima_only_stream_is_registered_but_not_scheduled():
+    """Registered so it can be run by hand and read; unscheduled so it costs nothing yet.
+
+    Ten runs a day matches `v52_lite`, and that spend should start on a decision
+    rather than on the merge that added the stream.
+    """
+    assert V522_ARIMA_LITE in STREAMS
+    assert V522_ARIMA_LITE not in SCHEDULED_STREAMS
+    assert stream_for("v522_arima_lite") is V522_ARIMA_LITE
+
+
+def test_arima_only_stream_differs_from_v52_lite_in_the_ensemble_alone():
+    """Anything else that differed would confound the comparison it exists to make."""
+    assert V522_ARIMA_LITE.model == V52_LITE.model
+    assert V522_ARIMA_LITE.runs_per_day == V52_LITE.runs_per_day
+    assert V522_ARIMA_LITE.code_execution_enabled == V52_LITE.code_execution_enabled
+    assert V522_ARIMA_LITE.bind_every_llm_call == V52_LITE.bind_every_llm_call
+    assert V522_ARIMA_LITE.window == V52_LITE.window
+    assert V522_ARIMA_LITE.base_settings == V52_LITE.base_settings, "settings must match; only the builder differs"
+    assert V522_ARIMA_LITE.target is not V52_LITE.target
+
+
 def test_target_lookup_is_by_agent_id():
     assert target_for("cfm_agent_v_5_0") is V50
     assert target_for("cfm_agent_v_5_2") is V52
+    assert target_for("cfm_agent_v_5_2_arima_only") is V52_ARIMA_ONLY
     with pytest.raises(KeyError):
         target_for("cfm_agent_v_5_1")
 

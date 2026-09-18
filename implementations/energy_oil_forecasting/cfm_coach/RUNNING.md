@@ -147,7 +147,7 @@ What happens, in order:
 Takes about 4 minutes and needs `GEMINI_API_KEY` in the repo-root `.env`. Without the key you get
 `No API key was provided.`
 
-### The three streams
+### The four streams
 
 A *stream* is one (agent package, LLM, cadence) triple with its own corpus and its own calibration
 ledger. They are defined in `cfm_coach/streams.py` and are the only place a model or a run count is
@@ -158,6 +158,7 @@ chosen.
 | `v50_lite` | `cfm_agent_v_5_0` | `gemini-3.1-flash-lite-preview` | **retired 2026-09-08** — 0 | `runs/` |
 | `v52_advanced` | `cfm_agent_v_5_2` | `gemini-3.5-flash` | 3 | `runs_v52_advanced/` |
 | `v52_lite` | `cfm_agent_v_5_2` | `gemini-3.1-flash-lite-preview` | 10 | `runs_v52_lite/` |
+| `v522_arima_lite` | `cfm_agent_v_5_2` **ARIMA-only** | `gemini-3.1-flash-lite-preview` | **not scheduled** — 0 | `runs_v522_arima_lite/` |
 
 **`v50_lite` is retired from the schedule, not deleted.** Its last cutoff is 2026-09-08 (a full 3/3, 54
 records total). The corpus is still read, fitted, scored and published on the corpus page; it simply
@@ -165,6 +166,27 @@ stops growing. Two names keep those halves apart: `STREAMS` is every stream that
 `SCHEDULED_STREAMS` is what the weekday job walks. Run it by hand any time with
 `--stream=v50_lite`. Note this is deliberately *not* done by closing its `window` — outside a window a
 stream falls back to `OFF_WINDOW_RUNS_PER_DAY`, which is one run a day, not none.
+
+**`v522_arima_lite` is registered but not yet scheduled, and has no corpus.** It is `v52_lite`'s twin
+in every respect but one: ARIMA alone in the ensemble, no Kalman and no LightGBM, built through
+`build_cfm_agent_config_arima_only` rather than `build_cfm_agent_config`. Model, cadence, tool set and
+settings are held identical on purpose — that is what makes the pair a controlled comparison of the
+ensemble itself. Start it by adding `V522_ARIMA_LITE` to `SCHEDULED_STREAMS`; until then it runs by hand
+with `--stream=v522_arima_lite`, at the usual ~4 minutes and five LLM calls per run.
+
+Two things to know before reading anything it produces:
+
+- **Two numeric levers go inert.** `settings_overlay.ensemble_weights` has nothing to reweight when one
+  model produces the forecast, and `model_disagreement_std` is identically zero. Both stay live on the
+  three ensemble streams, which is why this is a fourth stream rather than a change to an existing one.
+- **`history_v52_ensemble/` is not its history.** Those dates were re-run with all three models, so they
+  are the look-ahead-free base for fitting the *ensemble* streams' range and anchor, not this one's. An
+  ARIMA-only backfill is its own job, and nothing stops a fit from using the wrong one but this note.
+
+**It shares a package with `v52_lite`, so its fingerprint prefix does the work the manifest cannot.**
+Both targets hash the same `MANIFEST.sha256` — same files, different entry point — so `V52_ARIMA_ONLY`
+carries `cfm_v5_2_arima_only_package` to keep `single_package_fingerprint` able to tell a three-model
+corpus from a one-model one.
 
 **The corpora are separate on purpose and must stay separate.** `ComparisonPolicy` requires the fitting
 corpus to span exactly one package fingerprint *and* one model; a mixed directory does not produce a

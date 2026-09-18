@@ -1,18 +1,34 @@
 """The daily run streams -- what gets run, how many times, and where it lands.
 
 A *stream* is one (agent package, LLM, cadence) triple with its own corpus on
-disk. Three exist:
+disk. Four exist:
 
-================  =====  =============================  ====  ======================
-stream_id         agent  model                          /day  runs dir
-================  =====  =============================  ====  ======================
-``v50_lite``      v5.0   gemini-3.1-flash-lite-preview     3  ``runs/``
-                         *agent and search only*
-``v52_advanced``  v5.2   gemini-3.5-flash                  3  ``runs_v52_advanced/``
-                         *every LLM call*
-``v52_lite``      v5.2   gemini-3.1-flash-lite-preview    10  ``runs_v52_lite/``
-                         *every LLM call*
-================  =====  =============================  ====  ======================
+===================  ==============  =============================  ====  =========================
+stream_id            agent           model                          /day  runs dir
+===================  ==============  =============================  ====  =========================
+``v50_lite``         v5.0            gemini-3.1-flash-lite-preview     3  ``runs/``
+                                     *agent and search only*
+``v52_advanced``     v5.2            gemini-3.5-flash                  3  ``runs_v52_advanced/``
+                                     *every LLM call*
+``v52_lite``         v5.2            gemini-3.1-flash-lite-preview    10  ``runs_v52_lite/``
+                                     *every LLM call*
+``v522_arima_lite``  v5.2 ARIMA      gemini-3.1-flash-lite-preview    10  ``runs_v522_arima_lite/``
+                     *only*          *every LLM call*
+===================  ==============  =============================  ====  =========================
+
+``v522_arima_lite`` is registered but **not scheduled** -- it has no corpus yet. It
+is ``v52_lite``'s twin in every respect but one: ARIMA alone in the ensemble, no
+Kalman and no LightGBM. Holding model, cadence, tool set and settings fixed is what
+makes the pair a controlled comparison of the ensemble itself, which is the question
+it was added to answer. Add it to `SCHEDULED_STREAMS` to start recording.
+
+**What ARIMA-only costs the coach.** Two of its numeric levers assume an ensemble:
+``ensemble_weights`` has nothing to reweight when one model produces the forecast,
+and ``model_disagreement_std`` is identically zero. Both stay live on the three
+ensemble streams, which is the other half of why this is a fourth stream rather
+than a change to an existing one. Note also that ``history_v52_ensemble/`` was
+re-run with all three models, so it is not the look-ahead-free history for fitting
+this stream's range and anchor -- those need their own backfill.
 
 ``v50_lite`` is the one exception to "one stream, one model": v5.0 ships its search
 and claim-support verifiers on ``gemini-3.5-flash``, and every record already in
@@ -53,7 +69,7 @@ from typing import Any
 
 from aieng.forecasting.models import ADVANCED_MODEL, LITE_MODEL
 from energy_oil_forecasting.cfm_coach.config import PACKAGE_ROOT, CoachSettings
-from energy_oil_forecasting.cfm_coach.targets import V50, V52, AgentTarget
+from energy_oil_forecasting.cfm_coach.targets import V50, V52, V52_ARIMA_ONLY, AgentTarget
 
 
 #: Audit-only controls stay on: their findings are exactly the trust-bearing signals
@@ -258,11 +274,29 @@ V52_LITE = RunStream(
     code_execution_enabled=False,
 )
 
+V522_ARIMA_LITE = RunStream(
+    stream_id="v522_arima_lite",
+    target=V52_ARIMA_ONLY,
+    model=LITE_MODEL,
+    runs_per_day=10,
+    runs_dirname="runs_v522_arima_lite",
+    calibration_dirname="calibration_v522_arima_lite",
+    run_id_prefix=f"{V52_ARIMA_ONLY.agent_id}__lite",
+    description=(
+        "v5.2 with ARIMA alone in the ensemble (no Kalman, no LightGBM), every LLM call on the lite model, "
+        "no code execution; ten draws a day to match v52_lite."
+    ),
+    # Matched to `V52_LITE` on every axis except the ensemble, because that is the
+    # comparison this stream exists to support: same model, same cadence, same tool
+    # set, same settings. Anything else that differed would confound it.
+    code_execution_enabled=False,
+)
+
 #: Every stream that exists, in run order. This is the *registry*: what
 #: `stream_for` resolves, what the corpus page reads, what the invariant tests
 #: walk. A stream stays here for as long as its corpus is worth reading, which
 #: outlasts the last day it was run.
-STREAMS: tuple[RunStream, ...] = (V50_LITE, V52_ADVANCED, V52_LITE)
+STREAMS: tuple[RunStream, ...] = (V50_LITE, V52_ADVANCED, V52_LITE, V522_ARIMA_LITE)
 
 #: What the scheduled weekday job actually runs -- a subset of `STREAMS`.
 #:
@@ -278,6 +312,12 @@ STREAMS: tuple[RunStream, ...] = (V50_LITE, V52_ADVANCED, V52_LITE)
 #: The stream remains fully runnable by hand for a backfill or a replay::
 #:
 #:     uv run python -m energy_oil_forecasting.cfm_coach.run_daily_all --stream=v50_lite
+#:
+#: **`v522_arima_lite` is registered but not scheduled**, for the opposite reason:
+#: it has not started rather than stopped. Ten runs a day is what it costs to match
+#: `v52_lite`, and that spend should begin on a decision, not on the merge that
+#: added the stream. Same escape hatch -- it runs by hand today, and joins the
+#: weekday job by being added to this tuple.
 SCHEDULED_STREAMS: tuple[RunStream, ...] = (V52_ADVANCED, V52_LITE)
 
 STREAMS_BY_ID: dict[str, RunStream] = {stream.stream_id: stream for stream in STREAMS}
@@ -306,6 +346,7 @@ __all__ = [
     "V50_LITE",
     "V52_ADVANCED",
     "V52_LITE",
+    "V522_ARIMA_LITE",
     "RunStream",
     "stream_for",
 ]
