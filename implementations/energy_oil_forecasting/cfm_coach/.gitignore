@@ -1,0 +1,16 @@
+# Operational data — held out of git pending a decision on whether the
+# coach's live record belongs in the repository. See RUNNING.md.
+runs/
+runs_v52_lite/
+runs_v52_advanced/
+history_v52_ensemble/
+review/weeks/
+review/hindsight/
+review/annotations/
+review/cards/
+review/candidates/
+review/coached/
+review/data/
+review/calibration/
+data/
+corpus_page.html

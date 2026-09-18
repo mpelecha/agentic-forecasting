@@ -1,0 +1,144 @@
+# The review agent's error taxonomy. Static and human-edited: automatic growth
+# over ~18 cutoffs is noise. Triage may only emit codes listed here; anything
+# else lands in `new_pattern_notes` for a human to promote. `aliases` keep old
+# annotations valid when a code is renamed or merged.
+#
+# track: numeric | policy | llm | data     (which proposal track a tag feeds)
+# outcome_dependent: whether the tag can only be judged once the price is known
+#   (support counted in independent windows) or is a property of the run itself
+#   (support counted in distinct cutoffs plus same-cutoff replication).
+version: 1
+codes:
+  # -- numerical base ----------------------------------------------------------
+  - code: BASE.LGBM_LEVEL_BIAS
+    track: numeric
+    outcome_dependent: false
+    description: LightGBM's median sits below the last close (it regresses to the training level); the ensemble inherits the bias.
+    pointer_kind: table_cell
+  - code: BASE.ENSEMBLE_LOSES_TO_RW
+    track: numeric
+    outcome_dependent: true
+    description: The unadjusted ensemble scored worse than the random walk on this horizon; the loss is in the base, not the overlay.
+    pointer_kind: table_cell
+  - code: BASE.WIDTH_REGIME_BLIND
+    track: numeric
+    outcome_dependent: true
+    description: The interval was far narrower than the realized move required (omega_needed well above 1) in a regime where that was predictable.
+    pointer_kind: table_cell
+  - code: BASE.COMPONENT_FAILURE
+    track: numeric
+    outcome_dependent: false
+    description: A component model failed and the ensemble silently renormalised over the rest.
+    pointer_kind: table_cell
+  - code: BASE.NONDETERMINISM
+    track: numeric
+    outcome_dependent: false
+    description: Component or ensemble medians differ across runs at a fixed cutoff.
+    pointer_kind: table_cell
+  # -- overlay / policy ----------------------------------------------------------
+  - code: OVERLAY.TOO_SMALL_FOR_ERROR
+    track: policy
+    outcome_dependent: true
+    description: The overlay's maximum possible size (width fraction x interval) was an order of magnitude below the realized error.
+    pointer_kind: table_cell
+  - code: POLICY.ZEROED_ON_CITATION
+    track: policy
+    outcome_dependent: false
+    description: The LLM proposed a centre move and the evidence policy zeroed it on citation bookkeeping rather than on market judgment.
+    pointer_kind: policy_field
+  - code: POLICY.WIDEN_BLOCKED
+    track: policy
+    outcome_dependent: false
+    description: The LLM asked for a wider interval and the policy refused it because widening is gated with the centre move.
+    pointer_kind: policy_field
+  - code: POLICY.NOVELTY_UNGATED
+    track: policy
+    outcome_dependent: false
+    description: incremental_novelty flipped across runs at one cutoff and halved or doubled the overlay without passing the policy.
+    pointer_kind: policy_field
+  - code: POLICY.RIGHT_ACTION_WRONG_SIZE
+    track: policy
+    outcome_dependent: true
+    description: Direction of the granted action matched the move but the size was capped well below what the evidence supported.
+    pointer_kind: policy_field
+  # -- judgment ----------------------------------------------------------------
+  - code: JUDGMENT.DIRECTION_WRONG
+    track: llm
+    outcome_dependent: true
+    description: The proposed centre direction was opposite to the realized move, with the driver visible in the packet.
+    pointer_kind: claim_id
+  - code: JUDGMENT.PERSISTENCE_MISJUDGED
+    track: llm
+    outcome_dependent: true
+    description: The move's persistence (temporary vs decaying vs persistent) was called wrong across horizons.
+    pointer_kind: claim_id
+  - code: JUDGMENT.IN_PACKET_IGNORED
+    track: llm
+    outcome_dependent: true
+    description: The eventual driver was in the run's own verified summaries and the actions did not reflect it.
+    pointer_kind: summary_id
+  - code: JUDGMENT.OVERCONFIDENT_NARROWING
+    track: llm
+    outcome_dependent: true
+    description: The LLM asked to narrow the interval before a stated uncertainty had resolved.
+    pointer_kind: claim_id
+  - code: JUDGMENT.STALE_CLAIM
+    track: llm
+    outcome_dependent: false
+    description: A material claim restates a fact weeks old as if new (novelty misread).
+    pointer_kind: claim_id
+  - code: JUDGMENT.RIGHT_FOR_WRONG_REASON
+    track: llm
+    outcome_dependent: true
+    description: The action scored well but the cited claim does not support it.
+    pointer_kind: claim_id
+  # -- evidence / research --------------------------------------------------------
+  - code: EVIDENCE.QUERY_TOO_GENERIC
+    track: llm
+    outcome_dependent: false
+    description: The four queries could not have surfaced a specific driver (month-level phrasing, no entities).
+    pointer_kind: query_index
+  - code: EVIDENCE.EMPTY_ACCEPTED_SUMMARY
+    track: data
+    outcome_dependent: false
+    description: A verified summary was accepted with empty text; the packet is thinner than its status suggests.
+    pointer_kind: summary_id
+  - code: EVIDENCE.LOW_QUALITY_SOURCES
+    track: llm
+    outcome_dependent: false
+    description: Material claims rest on unclassified or social sources only.
+    pointer_kind: claim_id
+  - code: EVIDENCE.KNOWABLE_MISSED
+    track: llm
+    outcome_dependent: true
+    description: Hindsight search found the driver or its precursors were reported before the cutoff and the packet lacked them.
+    pointer_kind: query_index
+  # -- regime (no-fault) ------------------------------------------------------------
+  - code: REGIME.UNFORESEEABLE_SHOCK
+    track: none
+    outcome_dependent: true
+    description: The move was driven by an event with no pre-cutoff precursor; no-fault.
+    pointer_kind: table_cell
+  - code: REGIME.CONTINUATION
+    track: none
+    outcome_dependent: true
+    description: The move continued an episode already under way; the miss is the base model's trend blindness, not new information.
+    pointer_kind: table_cell
+  # -- went right -------------------------------------------------------------------
+  - code: RIGHT.DIRECTION_AND_SIZE
+    track: none
+    outcome_dependent: true
+    description: The granted action matched direction and the magnitude was proportionate.
+    pointer_kind: policy_field
+  - code: RIGHT.HELD_NEUTRAL_CORRECTLY
+    track: none
+    outcome_dependent: true
+    description: Neutral was the right call; the evidence did not support a move.
+    pointer_kind: policy_field
+  # -- data ---------------------------------------------------------------------------
+  - code: DATA.TRANSCRIPTS_MISSING
+    track: data
+    outcome_dependent: false
+    description: A reasoning error could not be located because only the final rationale is stored.
+    pointer_kind: none
+aliases: {}

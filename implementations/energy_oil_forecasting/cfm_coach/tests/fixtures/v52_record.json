@@ -1,0 +1,1053 @@
+{
+ "agent_id": "cfm_agent_v_5_2",
+ "agent_model": "gemini-3.5-flash",
+ "assessment": {
+  "confidence": 0.9,
+  "evidence_claims": [
+   {
+    "claim_id": "claim_001",
+    "claim_type": "market_reaction",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "On Monday, September 7, 2026, WTI crude oil prices rose by $1.14 (or 1.25%) to settle at $92.62 per barrel, hitting near seven-week highs.",
+    "supporting_source_ids": [
+     "source_002"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:99d1f245717cf079e0296311c030ca0b181c7e59b6f874605d305c16c02ba579"
+    ]
+   },
+   {
+    "claim_id": "claim_002",
+    "claim_type": "physical_supply",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "Over the weekend of September 5-6, 2026, U.S. Central Command struck three Iranian oil tankers near Kharg Island, and Iran's IRGC responded by targeting three commercial tankers.",
+    "supporting_source_ids": [
+     "source_002"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:99d1f245717cf079e0296311c030ca0b181c7e59b6f874605d305c16c02ba579"
+    ]
+   },
+   {
+    "claim_id": "claim_003",
+    "claim_type": "production_policy",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "On September 6, 2026, seven OPEC+ countries decided to keep October oil production quotas unchanged, pausing a series of planned output increases.",
+    "supporting_source_ids": [
+     "source_006",
+     "source_007",
+     "source_008"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:c4af6c009c6e59614eed6485a96d273852ea11e70a224276fd7d24a214d13292"
+    ]
+   },
+   {
+    "claim_id": "claim_004",
+    "claim_type": "physical_supply",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "Conflict in the Strait of Hormuz involving Iran has restricted physical crude exports and tanker flows, keeping OPEC+ actual oil production significantly below official targets.",
+    "supporting_source_ids": [
+     "source_008"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:c4af6c009c6e59614eed6485a96d273852ea11e70a224276fd7d24a214d13292"
+    ]
+   },
+   {
+    "claim_id": "claim_005",
+    "claim_type": "physical_supply",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "The IEA reported that approximately 8.3 million barrels per day of Gulf output remained shut in as of August 2026 due to transit disruptions.",
+    "supporting_source_ids": [
+     "source_010"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:c4af6c009c6e59614eed6485a96d273852ea11e70a224276fd7d24a214d13292"
+    ]
+   },
+   {
+    "claim_id": "claim_006",
+    "claim_type": "inventory",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "Global observed oil inventories plunged by 69 million barrels in July 2026, primarily driven by lower volumes of oil on water due to export disruptions in the Gulf and Caspian Sea.",
+    "supporting_source_ids": [
+     "source_010"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:c4af6c009c6e59614eed6485a96d273852ea11e70a224276fd7d24a214d13292"
+    ]
+   },
+   {
+    "claim_id": "claim_007",
+    "claim_type": "inventory",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "OECD commercial oil inventories fell by 26.4 million barrels month-on-month to 2,729 million barrels in June 2026, which is 66.5 million barrels below the five-year average.",
+    "supporting_source_ids": [
+     "source_006"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:c4af6c009c6e59614eed6485a96d273852ea11e70a224276fd7d24a214d13292"
+    ]
+   },
+   {
+    "claim_id": "claim_008",
+    "claim_type": "inventory",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "The EIA estimated in August 2026 that global oil inventories fell by an average of 4.2 million barrels per day in Q2 2026 and projected an additional decline of 3.8 million barrels per day in Q3 2026.",
+    "supporting_source_ids": [
+     "source_006"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:c4af6c009c6e59614eed6485a96d273852ea11e70a224276fd7d24a214d13292"
+    ]
+   },
+   {
+    "claim_id": "claim_009",
+    "claim_type": "inventory",
+    "contradicting_source_ids": [],
+    "contradicting_summary_ids": [],
+    "material_to_forecast": true,
+    "statement": "U.S. commercial crude inventories are projected to remain below their five-year low through the end of 2026, despite record projected U.S. crude output of 13.83 million barrels per day.",
+    "supporting_source_ids": [
+     "source_003",
+     "source_005"
+    ],
+    "supporting_summary_ids": [
+     "verified_summary:sha256:c8b68ffe2e96853e9c57610c46d1b7858f50162d55911bb7d814204533d5ee18"
+    ]
+   }
+  ],
+  "horizon_actions": [
+   {
+    "center_action": "moderate_up",
+    "cited_claim_ids": [
+     "claim_001",
+     "claim_002",
+     "claim_003",
+     "claim_004",
+     "claim_005"
+    ],
+    "horizon": 5,
+    "narrowing_uncertainty_resolved": "",
+    "persistence_profile": "decaying",
+    "rationale": "A weekend military escalation involving direct CENTCOM strikes on Iranian tankers and IRGC retaliation in the Strait of Hormuz has restricted exports and shut in 8.3 million bpd of Gulf output. This physical disruption caused WTI to climb by $1.14 (1.25%) on Monday, September 7, to settle at $92.62, higher than the latest model target observation on September 4 ($91.48) and the model point forecast of $90.89. This supports a moderate upward center shift and wider uncertainty.",
+    "uncertainty_action": "moderately_wider"
+   },
+   {
+    "center_action": "small_up",
+    "cited_claim_ids": [
+     "claim_001",
+     "claim_002",
+     "claim_003",
+     "claim_004",
+     "claim_005"
+    ],
+    "horizon": 10,
+    "narrowing_uncertainty_resolved": "",
+    "persistence_profile": "decaying",
+    "rationale": "As military risks decay slightly over a 10-day period, the physical supply tightens due to ongoing restrictions in the Strait of Hormuz and the OPEC+ quota freeze through October. A small upward adjustment to the point forecast and slightly wider uncertainty is proposed.",
+    "uncertainty_action": "small_wider"
+   },
+   {
+    "center_action": "small_up",
+    "cited_claim_ids": [
+     "claim_003",
+     "claim_006",
+     "claim_007",
+     "claim_008",
+     "claim_009"
+    ],
+    "horizon": 21,
+    "narrowing_uncertainty_resolved": "",
+    "persistence_profile": "decaying",
+    "rationale": "Over a 3-week horizon (October 7), the OPEC+ quota freeze through October will prevent planned supply increases. Massive global and OECD inventory draws, which are below 5-year averages, underpin structurally tight market balances, keeping prices elevated compared to the model's base forecast.",
+    "uncertainty_action": "small_wider"
+   }
+  ],
+  "incremental_novelty": "likely_new_relative_to_model_data",
+  "material_evidence_conflict": false,
+  "overall_rationale": "The forecasting models are based on data ending September 4, 2026, and project a declining or steady WTI path (ensemble point forecasts of $90.89, $89.71, and $89.75 across horizons 5, 10, and 21). However, the major weekend escalation in the Strait of Hormuz and the OPEC+ quota freeze are highly novel, positive catalysts that occurred after the model cutoff and are not reflected in the training data. Actual WTI on Monday settled at $92.62, above all baseline forecasts. While military premiums tend to decay, the combination of physical disruptions, shut-in production, structural global inventory draws, and the OPEC+ output pause warrants a moderate-to-small upward adjustment in point forecasts and wider uncertainty profiles across all horizons.",
+  "physical_status": "confirmed_disruption",
+  "research_packet_id": "research_packet:sha256:666bedd6e47dd4ca7b0dfcf5e24d55fc29562235151e163cf2edf451a3c9cd8b",
+  "research_summary": "WTI crude oil markets experienced a major supply shock during the first week of September 2026. Over the weekend of September 5\u20136, military conflict escalated with U.S. CENTCOM strikes on Iranian oil tankers near Kharg Island and subsequent IRGC retaliatory strikes in the Strait of Hormuz, restricting shipping flows and leaving 8.3 million bpd of Gulf output shut in. This physical disruption caused WTI to surge to a near 7-week high of $92.62 per barrel on Monday, September 7. Additionally, on September 6, seven OPEC+ countries decided to extend their production quota freeze through October 2026, pausing planned output increases. Structurally, the market was already facing substantial inventory draws, with OECD stocks 66.5 million barrels below their five-year average and global observed oil stocks plunging by 69 million barrels in July due to supply transit issues.",
+  "warnings": []
+ },
+ "audit_signals": {
+  "audit_switch": true,
+  "failed_models": [],
+  "model_disagreement_std": {
+   "10": 1.9644052015016131,
+   "21": 2.2853807371638406,
+   "5": 0.7742078284413749
+  },
+  "successful_models": [
+   "arima",
+   "kalman",
+   "lightgbm"
+  ]
+ },
+ "calibration_version": "v001",
+ "cutoff": "2026-09-08",
+ "diagnostics": {
+  "calendar_gap_days": 4,
+  "covariate_latest_values": {
+   "brent_log_ret_1b_l1b": 0.007924985735678862,
+   "dollar_index_log_ret_1b_l1b": 0.0016148939637159953,
+   "gasoline_log_ret_1b_l1b": 0.025105654631247216,
+   "gold_log_ret_1b_l1b": -0.01387690051222583,
+   "natgas_log_ret_1b_l1b": 0.021060492296826452,
+   "oil_curve_contango_l1b": -0.9762376313981594,
+   "vix_level_l1b": 15.300000190734863
+  },
+  "drawdown_63b": -0.007701475926567114,
+  "jump_zscore_63b": 0.0410106502149375,
+  "latest_observation_date": "2026-09-04",
+  "latest_value": 91.4800033569336,
+  "realized_volatility_21b": 0.32847712685979585,
+  "return_1b": 0.0019715257301113898,
+  "return_21b": 0.18359428481460305,
+  "return_5b": 0.09688251418733462
+ },
+ "forecasts": [
+  {
+   "component_quantiles": {
+    "arima": {
+     "0.05": 84.67462965573729,
+     "0.1": 86.06482563529444,
+     "0.2": 87.63192972262655,
+     "0.3": 89.24536853442451,
+     "0.4": 90.33577570207825,
+     "0.5": 91.44722385266506,
+     "0.6": 92.5643423606677,
+     "0.7": 93.600471390248,
+     "0.8": 95.03079122162437,
+     "0.9": 96.90137156187531,
+     "0.95": 98.53851050137516
+    },
+    "kalman": {
+     "0.05": 88.13030113503827,
+     "0.1": 88.77142802893198,
+     "0.2": 89.72309864026518,
+     "0.3": 90.3930113323146,
+     "0.4": 90.94893564195525,
+     "0.5": 91.43617739613137,
+     "0.6": 91.946168233028,
+     "0.7": 92.38144625258475,
+     "0.8": 92.9001021850816,
+     "0.9": 93.92235542492678,
+     "0.95": 94.52777808618478
+    },
+    "lightgbm": {
+     "0.05": 80.97318570061306,
+     "0.1": 83.18626921530317,
+     "0.2": 85.65744633410287,
+     "0.3": 87.63544458196988,
+     "0.4": 87.8575978899122,
+     "0.5": 89.79938567009191,
+     "0.6": 90.21714719310194,
+     "0.7": 90.60067755081587,
+     "0.8": 91.35978382293222,
+     "0.9": 94.44139100467653,
+     "0.95": 95.97735455182983
+    }
+   },
+   "ensemble_point_forecast": 90.89426230629611,
+   "ensemble_quantiles": {
+    "0.05": 84.59270549712954,
+    "0.1": 86.00750762650986,
+    "0.2": 87.6708248989982,
+    "0.3": 89.09127481623632,
+    "0.4": 89.71410307798189,
+    "0.5": 90.89426230629611,
+    "0.6": 91.57588592893254,
+    "0.7": 92.19419839788287,
+    "0.8": 93.09689240987939,
+    "0.9": 95.0883726638262,
+    "0.95": 96.34788104646326
+   },
+   "final_point_forecast": 90.89426230629611,
+   "final_quantiles": {
+    "0.05": 84.59270549712954,
+    "0.1": 86.00750762650986,
+    "0.2": 87.6708248989982,
+    "0.3": 89.09127481623632,
+    "0.4": 89.71410307798189,
+    "0.5": 90.89426230629611,
+    "0.6": 91.57588592893254,
+    "0.7": 92.19419839788287,
+    "0.8": 93.09689240987939,
+    "0.9": 95.0883726638262,
+    "0.95": 96.34788104646326
+   },
+   "forecast_date": "2026-09-15T00:00:00",
+   "forecast_transformation": {
+    "action_fraction": 0.0,
+    "applied_center_adjustment": 0.0,
+    "center_action": "no_change",
+    "emergency_cap": 91.4800033569336,
+    "engine_id": "python_forecast_engine_v52",
+    "final_point_forecast": 90.89426230629611,
+    "final_quantiles": {
+     "0.05": 84.59270549712954,
+     "0.1": 86.00750762650986,
+     "0.2": 87.6708248989982,
+     "0.3": 89.09127481623632,
+     "0.4": 89.71410307798189,
+     "0.5": 90.89426230629611,
+     "0.6": 91.57588592893254,
+     "0.7": 92.19419839788287,
+     "0.8": 93.09689240987939,
+     "0.9": 95.0883726638262,
+     "0.95": 96.34788104646326
+    },
+    "floor_applied": false,
+    "horizon": 5,
+    "novelty_adjusted_amount": 0.0,
+    "novelty_multiplier": 1.0,
+    "original_point_forecast": 90.89426230629611,
+    "original_quantiles": {
+     "0.05": 84.59270549712954,
+     "0.1": 86.00750762650986,
+     "0.2": 87.6708248989982,
+     "0.3": 89.09127481623632,
+     "0.4": 89.71410307798189,
+     "0.5": 90.89426230629611,
+     "0.6": 91.57588592893254,
+     "0.7": 92.19419839788287,
+     "0.8": 93.09689240987939,
+     "0.9": 95.0883726638262,
+     "0.95": 96.34788104646326
+    },
+    "p10_p90_width": 9.080865037316343,
+    "pre_floor_quantiles": {
+     "0.05": 84.59270549712954,
+     "0.1": 86.00750762650986,
+     "0.2": 87.6708248989982,
+     "0.3": 89.09127481623632,
+     "0.4": 89.71410307798189,
+     "0.5": 90.89426230629611,
+     "0.6": 91.57588592893254,
+     "0.7": 92.19419839788287,
+     "0.8": 93.09689240987939,
+     "0.9": 95.0883726638262,
+     "0.95": 96.34788104646326
+    },
+    "raw_center_adjustment": 0.0,
+    "uncertainty_action": "unchanged",
+    "uncertainty_multiplier": 1.0,
+    "warnings": []
+   },
+   "horizon": 5,
+   "policy_decision": {
+    "center_action": "no_change",
+    "eligibility_reasons": [
+     "Every cited material claim must link to an accepted verified summary and cite at least one mechanically resolved source associated with that summary."
+    ],
+    "eligible": false,
+    "evidence_tier": "none",
+    "evidence_tier_level": 0,
+    "horizon": 5,
+    "policy_id": "graduated_evidence_policy_v52",
+    "qualifying_claim_ids": [
+     "claim_001",
+     "claim_002",
+     "claim_003",
+     "claim_004"
+    ],
+    "resolved_publishers": [
+     "astanatimes.com",
+     "egyptoil-gas.com",
+     "unn.ua"
+    ],
+    "resolved_source_ids": [
+     "source_002",
+     "source_007",
+     "source_008"
+    ],
+    "uncertainty_action": "unchanged"
+   }
+  },
+  {
+   "component_quantiles": {
+    "arima": {
+     "0.05": 80.71020698146226,
+     "0.1": 82.78598051321366,
+     "0.2": 85.85372589336814,
+     "0.3": 87.84791386883225,
+     "0.4": 89.50351984733283,
+     "0.5": 90.89666606157773,
+     "0.6": 92.75009642996197,
+     "0.7": 94.18626209104025,
+     "0.8": 96.20833759730107,
+     "0.9": 98.87513807718915,
+     "0.95": 100.91433157884636
+    },
+    "kalman": {
+     "0.05": 88.19012206053293,
+     "0.1": 88.80458097327926,
+     "0.2": 89.65919863960765,
+     "0.3": 90.32583841564026,
+     "0.4": 90.7695148820765,
+     "0.5": 91.29538370701427,
+     "0.6": 91.78502065323356,
+     "0.7": 92.35636268113653,
+     "0.8": 92.85287694659687,
+     "0.9": 93.52988400560443,
+     "0.95": 94.08307566200405
+    },
+    "lightgbm": {
+     "0.05": 76.07384334946109,
+     "0.1": 82.84704522996527,
+     "0.2": 83.63424113453704,
+     "0.3": 84.16820086610721,
+     "0.4": 86.32426101052539,
+     "0.5": 86.94322302771738,
+     "0.6": 87.20289387709535,
+     "0.7": 89.05888408028137,
+     "0.8": 92.95460959265094,
+     "0.9": 96.52656691276646,
+     "0.95": 97.05365473191154
+    }
+   },
+   "ensemble_point_forecast": 89.7117575987698,
+   "ensemble_quantiles": {
+    "0.05": 81.65805746381875,
+    "0.1": 84.81253557215273,
+    "0.2": 86.38238855583761,
+    "0.3": 87.4473177168599,
+    "0.4": 88.86576524664491,
+    "0.5": 89.7117575987698,
+    "0.6": 90.57933698676362,
+    "0.7": 91.86716961748604,
+    "0.8": 94.00527471218295,
+    "0.9": 96.31052966518666,
+    "0.95": 97.35035399092064
+   },
+   "final_point_forecast": 89.7117575987698,
+   "final_quantiles": {
+    "0.05": 81.65805746381875,
+    "0.1": 84.81253557215273,
+    "0.2": 86.38238855583761,
+    "0.3": 87.4473177168599,
+    "0.4": 88.86576524664491,
+    "0.5": 89.7117575987698,
+    "0.6": 90.57933698676362,
+    "0.7": 91.86716961748604,
+    "0.8": 94.00527471218295,
+    "0.9": 96.31052966518666,
+    "0.95": 97.35035399092064
+   },
+   "forecast_date": "2026-09-22T00:00:00",
+   "forecast_transformation": {
+    "action_fraction": 0.0,
+    "applied_center_adjustment": 0.0,
+    "center_action": "no_change",
+    "emergency_cap": 91.4800033569336,
+    "engine_id": "python_forecast_engine_v52",
+    "final_point_forecast": 89.7117575987698,
+    "final_quantiles": {
+     "0.05": 81.65805746381875,
+     "0.1": 84.81253557215273,
+     "0.2": 86.38238855583761,
+     "0.3": 87.4473177168599,
+     "0.4": 88.86576524664491,
+     "0.5": 89.7117575987698,
+     "0.6": 90.57933698676362,
+     "0.7": 91.86716961748604,
+     "0.8": 94.00527471218295,
+     "0.9": 96.31052966518666,
+     "0.95": 97.35035399092064
+    },
+    "floor_applied": false,
+    "horizon": 10,
+    "novelty_adjusted_amount": 0.0,
+    "novelty_multiplier": 1.0,
+    "original_point_forecast": 89.7117575987698,
+    "original_quantiles": {
+     "0.05": 81.65805746381875,
+     "0.1": 84.81253557215273,
+     "0.2": 86.38238855583761,
+     "0.3": 87.4473177168599,
+     "0.4": 88.86576524664491,
+     "0.5": 89.7117575987698,
+     "0.6": 90.57933698676362,
+     "0.7": 91.86716961748604,
+     "0.8": 94.00527471218295,
+     "0.9": 96.31052966518666,
+     "0.95": 97.35035399092064
+    },
+    "p10_p90_width": 11.497994093033938,
+    "pre_floor_quantiles": {
+     "0.05": 81.65805746381875,
+     "0.1": 84.81253557215273,
+     "0.2": 86.38238855583761,
+     "0.3": 87.4473177168599,
+     "0.4": 88.86576524664491,
+     "0.5": 89.7117575987698,
+     "0.6": 90.57933698676362,
+     "0.7": 91.86716961748604,
+     "0.8": 94.00527471218295,
+     "0.9": 96.31052966518666,
+     "0.95": 97.35035399092064
+    },
+    "raw_center_adjustment": 0.0,
+    "uncertainty_action": "unchanged",
+    "uncertainty_multiplier": 1.0,
+    "warnings": []
+   },
+   "horizon": 10,
+   "policy_decision": {
+    "center_action": "no_change",
+    "eligibility_reasons": [
+     "Every cited material claim must link to an accepted verified summary and cite at least one mechanically resolved source associated with that summary."
+    ],
+    "eligible": false,
+    "evidence_tier": "none",
+    "evidence_tier_level": 0,
+    "horizon": 10,
+    "policy_id": "graduated_evidence_policy_v52",
+    "qualifying_claim_ids": [
+     "claim_001",
+     "claim_002",
+     "claim_003",
+     "claim_004"
+    ],
+    "resolved_publishers": [
+     "astanatimes.com",
+     "egyptoil-gas.com",
+     "unn.ua"
+    ],
+    "resolved_source_ids": [
+     "source_002",
+     "source_007",
+     "source_008"
+    ],
+    "uncertainty_action": "unchanged"
+   }
+  },
+  {
+   "component_quantiles": {
+    "arima": {
+     "0.05": 75.84257012021992,
+     "0.1": 79.31673064398457,
+     "0.2": 83.275354678823,
+     "0.3": 86.64184017671025,
+     "0.4": 89.26374948780945,
+     "0.5": 91.57549058856156,
+     "0.6": 93.75567071552645,
+     "0.7": 96.38893515204603,
+     "0.8": 99.4411805715474,
+     "0.9": 103.0381151819609,
+     "0.95": 106.08640278287434
+    },
+    "kalman": {
+     "0.05": 88.12281866014415,
+     "0.1": 88.8528450048831,
+     "0.2": 89.6854012530902,
+     "0.3": 90.18949523211144,
+     "0.4": 90.68005072676151,
+     "0.5": 91.14657953201439,
+     "0.6": 91.71731618339467,
+     "0.7": 92.18617512580938,
+     "0.8": 92.7351111508631,
+     "0.9": 93.59373069325484,
+     "0.95": 94.24898864586159
+    },
+    "lightgbm": {
+     "0.05": 76.92134589778327,
+     "0.1": 81.52320100812753,
+     "0.2": 83.48745402365664,
+     "0.3": 84.40086548118859,
+     "0.4": 86.20983522830463,
+     "0.5": 86.52726122494187,
+     "0.6": 87.18615431830231,
+     "0.7": 88.01337279673602,
+     "0.8": 93.20351821261377,
+     "0.9": 96.35173601085037,
+     "0.95": 99.4049893291681
+    }
+   },
+   "ensemble_point_forecast": 89.7497771151726,
+   "ensemble_quantiles": {
+    "0.05": 80.2955782260491,
+    "0.1": 83.23092555233173,
+    "0.2": 85.48273665185661,
+    "0.3": 87.07740029667008,
+    "0.4": 88.71787848095852,
+    "0.5": 89.7497771151726,
+    "0.6": 90.88638040574114,
+    "0.7": 92.19616102486381,
+    "0.8": 95.12660331167476,
+    "0.9": 97.66119396202203,
+    "0.95": 99.91346025263468
+   },
+   "final_point_forecast": 89.7497771151726,
+   "final_quantiles": {
+    "0.05": 80.2955782260491,
+    "0.1": 83.23092555233173,
+    "0.2": 85.48273665185661,
+    "0.3": 87.07740029667008,
+    "0.4": 88.71787848095852,
+    "0.5": 89.7497771151726,
+    "0.6": 90.88638040574114,
+    "0.7": 92.19616102486381,
+    "0.8": 95.12660331167476,
+    "0.9": 97.66119396202203,
+    "0.95": 99.91346025263468
+   },
+   "forecast_date": "2026-10-07T00:00:00",
+   "forecast_transformation": {
+    "action_fraction": 0.0,
+    "applied_center_adjustment": 0.0,
+    "center_action": "no_change",
+    "emergency_cap": 91.4800033569336,
+    "engine_id": "python_forecast_engine_v52",
+    "final_point_forecast": 89.7497771151726,
+    "final_quantiles": {
+     "0.05": 80.2955782260491,
+     "0.1": 83.23092555233173,
+     "0.2": 85.48273665185661,
+     "0.3": 87.07740029667008,
+     "0.4": 88.71787848095852,
+     "0.5": 89.7497771151726,
+     "0.6": 90.88638040574114,
+     "0.7": 92.19616102486381,
+     "0.8": 95.12660331167476,
+     "0.9": 97.66119396202203,
+     "0.95": 99.91346025263468
+    },
+    "floor_applied": false,
+    "horizon": 21,
+    "novelty_adjusted_amount": 0.0,
+    "novelty_multiplier": 1.0,
+    "original_point_forecast": 89.7497771151726,
+    "original_quantiles": {
+     "0.05": 80.2955782260491,
+     "0.1": 83.23092555233173,
+     "0.2": 85.48273665185661,
+     "0.3": 87.07740029667008,
+     "0.4": 88.71787848095852,
+     "0.5": 89.7497771151726,
+     "0.6": 90.88638040574114,
+     "0.7": 92.19616102486381,
+     "0.8": 95.12660331167476,
+     "0.9": 97.66119396202203,
+     "0.95": 99.91346025263468
+    },
+    "p10_p90_width": 14.4302684096903,
+    "pre_floor_quantiles": {
+     "0.05": 80.2955782260491,
+     "0.1": 83.23092555233173,
+     "0.2": 85.48273665185661,
+     "0.3": 87.07740029667008,
+     "0.4": 88.71787848095852,
+     "0.5": 89.7497771151726,
+     "0.6": 90.88638040574114,
+     "0.7": 92.19616102486381,
+     "0.8": 95.12660331167476,
+     "0.9": 97.66119396202203,
+     "0.95": 99.91346025263468
+    },
+    "raw_center_adjustment": 0.0,
+    "uncertainty_action": "unchanged",
+    "uncertainty_multiplier": 1.0,
+    "warnings": []
+   },
+   "horizon": 21,
+   "policy_decision": {
+    "center_action": "no_change",
+    "eligibility_reasons": [
+     "Every cited material claim must link to an accepted verified summary and cite at least one mechanically resolved source associated with that summary."
+    ],
+    "eligible": false,
+    "evidence_tier": "none",
+    "evidence_tier_level": 0,
+    "horizon": 21,
+    "policy_id": "graduated_evidence_policy_v52",
+    "qualifying_claim_ids": [
+     "claim_003",
+     "claim_009"
+    ],
+    "resolved_publishers": [
+     "astanatimes.com",
+     "egyptoil-gas.com",
+     "threadproducts.com",
+     "ubp.com"
+    ],
+    "resolved_source_ids": [
+     "source_003",
+     "source_005",
+     "source_007",
+     "source_008"
+    ],
+    "uncertainty_action": "unchanged"
+   }
+  }
+ ],
+ "horizons": [
+  5,
+  10,
+  21
+ ],
+ "issued_at": "2026-09-09T02:20:12.723367",
+ "package_fingerprint": "cfm_v5_2_package:sha256:73bf9d8588789a911618f96b4d6ed9380ed35bc7c3f24532b243203a57e59614",
+ "predictor_id": "agent_predictor_cfm_agent_v_5_2_gemini-3.5-flash_continuous",
+ "prompt_version": "cfm_v5_2_builtin",
+ "provenance": "live_forward",
+ "research_packet": {
+  "active_evidence_type": "main_verifier_cleaned_summaries",
+  "cutoff_date": "2026-09-08",
+  "destination_page_content_included": false,
+  "packet_id": "research_packet:sha256:666bedd6e47dd4ca7b0dfcf5e24d55fc29562235151e163cf2edf451a3c9cd8b",
+  "queries": [
+   {
+    "area": "underlying_event",
+    "query": "WTI oil price market events and developments August September 2026"
+   },
+   {
+    "area": "physical_flows",
+    "query": "crude oil production physical flows exports outages September 2026"
+   },
+   {
+    "area": "supply_response",
+    "query": "OPEC crude oil supply response production decisions inventory September 2026"
+   },
+   {
+    "area": "market_reaction",
+    "query": "WTI crude oil price market reaction and financial analyst commentary September 2026"
+   }
+  ],
+  "sources": [
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFGtsJSsMxv2Pjp5jeADKgLHIPTw-_EgTq0pechQkivNO3vpRdt25mDtJC3uL0EE3vDDQDn0a93AwngqvXNdZhdKwxwb59QVwczPhA4kYH6x36lUy2NShMa_i21m6L_jRJULPM3GwarABOjjB7eDrLZQwSDxWoWMatme_Mb9_ZkhCGnEDHoh6g25Abk53fRThCOVyz3o8WdDbKs_B3XTbJwu0hkQuABrYdeqHiWSSbMbUjGlsEfgZlEzXlDj4lDOrauFM9V8kndtDg=",
+    "is_primary_or_official": false,
+    "provider_title": "facebook.com",
+    "publisher": "facebook.com",
+    "rank": 1,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "facebook.com",
+    "resolved_url": "https://www.facebook.com/DuncanOilCompany/posts/crude-oil-prices-climbed-significantly-in-early-morning-trading-on-monday-septem/1496744215813261/",
+    "source_id": "source_001",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGdHZvxLss7JpHL518x3vmE6moJs58y-QZOEtPKs-UOUM9DCYfnLYdMkSyyzYIzmQVkwmvjaynzN91FkUqnjNRxXSDhbYZbrVr_vtPy3Rni-GeTUFqD9L-5UaaBzKBdb1mGbWLnK086_HU1eYzOAA9Gy1Xp_GbsBYLi5gcQIe4vhfLVUIBEeZbVPx18hobTyZKuzDFut6SqR8wcHBOJ",
+    "is_primary_or_official": false,
+    "provider_title": "unn.ua",
+    "publisher": "unn.ua",
+    "rank": 2,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "unn.ua",
+    "resolved_url": "https://unn.ua/en/news/oil-prices-rose-by-more-than-dollar1-amid-the-escalation-of-the-us-iran-conflict",
+    "source_id": "source_002",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHyJx3ZUxlSjhtMiwiukl3vAYPUrWuq-xxQNXvAR-sHa2sI6nVDfNGxMZGI-tcR2d9dUz1uwK53qjc4semDwZjXlXYoCHHlirB8lcn60vY_RJpJlCEnQhCsde8kHD5rwe4sz2tLAhvJNoGRB_z6zVsK7sE1QB_VuyntwOMSpsnU-Bh9LCXv9A==",
+    "is_primary_or_official": false,
+    "provider_title": "threadproducts.com",
+    "publisher": "threadproducts.com",
+    "rank": 1,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "threadproducts.com",
+    "resolved_url": "https://threadproducts.com/resources-on-global-oil-and-gas-demand-september-2026/",
+    "source_id": "source_003",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGfooXc3i-qKJH2wvyNAQPxrklrHrEYMJ6IiE8BS628HEEOFxcOGBm7KWgX5PCfqVVzzvZxQR_aooO2GR98mNT3PtWUsYGrSKp90LyOSrR2C53rcNb5RWM=",
+    "is_primary_or_official": false,
+    "provider_title": "eia.gov",
+    "publisher": null,
+    "rank": 2,
+    "resolution_status": "unresolved",
+    "resolution_warning": "resolution_failed: TimeoutError: The read operation timed out",
+    "resolved_domain": null,
+    "resolved_url": null,
+    "source_id": "source_004",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGloH5RnLZ-CK2KRsFdFIp71VHzEcBW0rzNgsKT4GGmBj4YjYG78YaSoTzGYsmrpfgoIDobKUzOQeVkraex8JKA8owPlVlG4y5wSDBEyKoh5lpLsuYpxEfiS24Ciby6dIoM7MtSxc-iGB7mzwZXVSob1V-gW_5Dip6DyGNx1KfXYA==",
+    "is_primary_or_official": false,
+    "provider_title": "ubp.com",
+    "publisher": "ubp.com",
+    "rank": 3,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "ubp.com",
+    "resolved_url": "https://www.ubp.com/en/news-insights/newsroom/ubp-house-view-september-2026",
+    "source_id": "source_005",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEk_vbYAxJBLnixTJ7KZES49Q2yWafQoxHNWoYS1b-ECv8xi76TJ7F2Fz9pr8viXY2UBNL5ZUa9zKgo96EMaJyHORdfB7M6vIuFZS72bOVhtdE7mqBJVBRAMkuy1NbuaWA6HTUATE_diRaNvde9dhiGKA==",
+    "is_primary_or_official": false,
+    "provider_title": "opec.org",
+    "publisher": null,
+    "rank": 1,
+    "resolution_status": "unresolved",
+    "resolution_warning": "resolution_failed: URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>",
+    "resolved_domain": null,
+    "resolved_url": null,
+    "source_id": "source_006",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHkJmrosjjRBmM51WPtEPEUaBErGMX3OFC4kdNkUT6Gbjvs4o_udk_Z-6ZrYqchMqqsqDo5Xq0kdGmFCKm3jTODhGG12IXTUzSG_y4cpUQ3Uv1vq1o1_KWKgVJGH_9sukuRYNcx9mhGVFWBfqMBjae4ulWy3TxGaiyVojTqeW5RDZYaazUoavkqGCgvUgJYbxykaWbEFBubm5d0H9w=",
+    "is_primary_or_official": false,
+    "provider_title": "astanatimes.com",
+    "publisher": "astanatimes.com",
+    "rank": 2,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "astanatimes.com",
+    "resolved_url": "https://astanatimes.com/2026/09/opec-keeps-october-oil-output-quotas-unchanged-as-focus-shifts-to-2027/",
+    "source_id": "source_007",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEp580FNOhF4csNY8f4MTHSO_ZvRUpinboVxoEY_yun_fmSL9gmxeOjiXp25dn7sKfplgYv6iqHKj3oWAEJChUjrTeFAgEWTthe8sIzXFHx4TOxTblG7ujwdWaO8a3yK9Q4hbNCds3mNCTws92ARWfxVqjmsZmbr22-TlK8unOVgDneM8ODAg84WGELNiDFh3vL3SK6MpRIIzwPzpY=",
+    "is_primary_or_official": false,
+    "provider_title": "egyptoil-gas.com",
+    "publisher": "egyptoil-gas.com",
+    "rank": 3,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "egyptoil-gas.com",
+    "resolved_url": "https://egyptoil-gas.com/news/opec-keeps-october-oil-output-policy-unchanged-as-iran-war-limits-supply/",
+    "source_id": "source_008",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEEAlsYbDG7VQMlRjJANK57DSxwcXz0KP_zgTplyUJe_7E3B3pJ8HT-dMCa6T3Bx_Uhukp0C8NEPgFiLFnij5XDPln1fgCcwH28dNsDD0YlIIKodlRpKN9XX1S4kja5adeA8Eh9kSRHekXfUfr1Lu4paZfVKhEhq6VtdsC_xh6RCZWEtNsIzZqbokmK0IXpDhapC4IeaZcnrsCUcA==",
+    "is_primary_or_official": false,
+    "provider_title": "vantagemarkets.com",
+    "publisher": null,
+    "rank": 4,
+    "resolution_status": "unresolved",
+    "resolution_warning": "resolution_failed: HTTPError: HTTP Error 403: Forbidden",
+    "resolved_domain": null,
+    "resolved_url": null,
+    "source_id": "source_009",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEiVIZSBTZe1d8hs1U-eJxZSmOwB23HRz1080uRoG4xMuKzjtxdEa9rPcH2xacDaf5bYBuFQKtfkyKcBxSSkkwEx1JZqv_ESXlSTTkKov55DmftU1BEtSn1e6cE2sx3-Gqqmpcafkef4KCoeytZiw==",
+    "is_primary_or_official": false,
+    "provider_title": "iea.org",
+    "publisher": null,
+    "rank": 5,
+    "resolution_status": "unresolved",
+    "resolution_warning": "resolution_failed: HTTPError: HTTP Error 403: Forbidden",
+    "resolved_domain": null,
+    "resolved_url": null,
+    "source_id": "source_010",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFe11bxBblQxCgnNbDBg4Fwv1kpmOVomaZPgqVure6iAn-NgyO9_tKqG3NRZb9D7goomMXdRNaCgobm-DnsI9_ezk2eBMAPmi46K2fmlMfOKBcPJi5n_XOnc6riPUql9ZqtBUXbd-Xmnwv_932B7kJ9ufxJ_f0=",
+    "is_primary_or_official": false,
+    "provider_title": "investing.com",
+    "publisher": "investing.com",
+    "rank": 1,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "investing.com",
+    "resolved_url": "https://www.investing.com/commodities/crude-oil-historical-data",
+    "source_id": "source_011",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE3DCYKIZu8sEvM1gCu5mp2vEvylJZ6YnHY0-VwImFFlwYSlrxQNrUt4jpmLb07Ha8yt4-_gmiYzBBg9cw6pxXCDkL_Ew1BCkA18x6CtV-lJxrPSNQPRkQrXTkXD-LYCsmtxvPR6E2roicTtkvpewK9hOTA4UctcR0lC2QMMJ7207Ht4FwYX0twBDjvZ0-FMN7HZUouxkx-FagTY9cZinfJmgkfyZymdrShbBRRlleXsKq4LoT9nwxSUaOo4ZQ02N4DIZXXTi3dSKc=",
+    "is_primary_or_official": false,
+    "provider_title": "facebook.com",
+    "publisher": "facebook.com",
+    "rank": 2,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "facebook.com",
+    "resolved_url": "https://www.facebook.com/DuncanOilCompany/posts/crude-oil-prices-climbed-significantly-in-early-morning-trading-on-monday-septem/1496744215813261/",
+    "source_id": "source_012",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE5LPZj17JSX0FMZu5Q7GsOMeKx_BpYH6eTzGI6I58YCF98E3nIFYhjVNZhD8bJzPLqZozhS7RUnYaEETJutmzrhikesSiwYrWlxd_KNdL744sfPa1wPp7Y-38EG45AGmoK5WnqBtVpWAUBx6xKxE9SlQYLHfZQk8i_g2NBE-R_F8IwuMxhjhScXh02PxxMU_pxDbVB2Szzc-9-YzmujHR4",
+    "is_primary_or_official": false,
+    "provider_title": "dailyforex.com",
+    "publisher": "dailyforex.com",
+    "rank": 3,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "dailyforex.com",
+    "resolved_url": "https://www.dailyforex.com/forex-technical-analysis/2026/09/wti-crude-oil-forecast-6-september-2026/249389",
+    "source_id": "source_013",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG9CLzNnD28wlD0OQ8xAkVcPKjTWYryotK2clIYsSMYH5o1iP6SjPIVCZlnhQSLp74Bc7Il24MbCDUIDDqfeZQmmw_A9osODyR6Bq7ykdOlySvhzt01vLH9-u4QqCNBieNr",
+    "is_primary_or_official": false,
+    "provider_title": "barchart.com",
+    "publisher": "barchart.com",
+    "rank": 4,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "barchart.com",
+    "resolved_url": "https://www.barchart.com/stocks/quotes/CLU6",
+    "source_id": "source_014",
+    "source_quality": "unclassified"
+   },
+   {
+    "grounding_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG72sWh5kNXyamIiGhJmjKr3QSVL6krNsEXdg1JMPz0qvRO1ueFw285WeSXw_8cHVIQukbrZkLJdMc0M6mt1eU0WMN4cjjYyjq17JObeDEM-rdHxf1nSrkwybhDN6FX5LotSgq2N5p7r5Rax5HnqC9Vkgl3_AfQ0y1VaZRLK1jcAuo=",
+    "is_primary_or_official": false,
+    "provider_title": "ubp.com",
+    "publisher": "ubp.com",
+    "rank": 5,
+    "resolution_status": "resolved",
+    "resolution_warning": null,
+    "resolved_domain": "ubp.com",
+    "resolved_url": "https://www.ubp.com/en/news-insights/newsroom/ubp-house-view-september-2026",
+    "source_id": "source_015",
+    "source_quality": "unclassified"
+   }
+  ],
+  "verified_summaries": [
+   {
+    "associated_source_ids": [
+     "source_001",
+     "source_002"
+    ],
+    "cleaned_summary": "WTI crude oil prices climbed significantly in early morning trading on Monday, September 7, 2026, hitting near seven-week highs. WTI rose by $1.14 (or 1.25%) to settle at $92.62 per barrel.\n    *   This surge was driven by a massive military escalation over the weekend of September 5\u20136, 2026. On Saturday, September 5, U.S. Central Command (CENTCOM) struck three Iranian oil tankers, including one near the crucial Kharg Island export hub. In response, Iran's Islamic Revolutionary Guard Corps targeted three commercial tankers and three",
+    "cutoff_date": "2026-09-08",
+    "query": "WTI oil price market events and developments August September 2026",
+    "query_area": "underlying_event",
+    "status": "accepted",
+    "verified_summary_id": "verified_summary:sha256:99d1f245717cf079e0296311c030ca0b181c7e59b6f874605d305c16c02ba579",
+    "verifier_attempt_count": 1,
+    "verifier_confidence": 10
+   },
+   {
+    "associated_source_ids": [
+     "source_003",
+     "source_004",
+     "source_005"
+    ],
+    "cleaned_summary": "S. Energy Information Administration (EIA) projected U.S. crude output to reach a record average of 13.83 million b/d for 2026.\n*   **Inventory Draws & SPR:** U.S. commercial crude inventories are forecast to remain below the five-year low through the end of 2026, driven by strong export demand, lower imports, and high refinery runs.",
+    "cutoff_date": "2026-09-08",
+    "query": "crude oil production physical flows exports outages September 2026",
+    "query_area": "physical_flows",
+    "status": "accepted",
+    "verified_summary_id": "verified_summary:sha256:c8b68ffe2e96853e9c57610c46d1b7858f50162d55911bb7d814204533d5ee18",
+    "verifier_attempt_count": 1,
+    "verifier_confidence": 9
+   },
+   {
+    "associated_source_ids": [
+     "source_006",
+     "source_007",
+     "source_008",
+     "source_009",
+     "source_010"
+    ],
+    "cleaned_summary": "Based on reports and data published strictly before September 8, 2026, the following details outline the OPEC+ crude oil supply decisions, production responses, and inventory levels:\n\n### OPEC+ Production Decisions (September 2026)\n* **October Quota Freeze:** On September 6, 2026, seven core OPEC+ countries\u2014Saudi Arabia, Russia, Iraq, Kuwait, Kazakhstan, Algeria, and Oman\u2014held a virtual meeting and decided to maintain their September required production levels through October 2026, keeping output quotas unchanged. \n* **September Increase Completed:** This decision paused a series of planned output increases. In September 2026, OPEC+ had implemented a scheduled 188,000 barrels per day (bpd) production increase, which completed the phased rollback of a 1.65 million bpd voluntary supply cut first introduced in 2023.\n* **Remaining Cuts:** A separate layer of production cuts totaling approximately 2 million bpd remains in place for the broader OPEC+ group through the end of 2026.\n* **Focus on 2027:** The pause in production increases allows the alliance to review members' production capacities and negotiate production baselines and quotas for 2027. The next monthly meeting is scheduled for October 4, 2026.\n\n### Supply Response and Geopolitical Context\n* **Strait of Hormuz Disruptions:** The decision to pause production increases comes amid severe geopolitical disruptions, particularly the ongoing conflict involving Iran and the Strait of Hormuz, which has restricted tanker flows and physical crude exports.\n* **Actual Production vs. Targets:** Due to these disruptions, actual physical oil production by OPEC+ members has remained significantly below their official targets. The International Energy Agency (IEA) reported in August 2026 that approximately 8.3 million bpd of Gulf output remained shut in.\n\n### Global and OECD Oil Inventories\n* **Global Inventory Plunge:** According to the IEA's August 2026 Oil Market Report, global observed oil inventories plunged by 69 million barrels in July 2026. This decline was primarily driven by lower volumes of oil on water due to export disruptions in the Gulf and Caspian Sea, rather than onshore stock draws (which fell by only 6 million barrels).\n* **OECD Commercial Stocks:** OPEC's August 2026 Monthly Oil Market Report (MOMR) indicated that preliminary June 2026 data showed OECD commercial oil inventories dropped by 26.4 million barrels month-on-month to 2,729 million barrels. This level was 59.6 million barrels lower year-on-year and 66.5 million barrels below the latest five-year average.\n* **EIA Projections:** The U.S. Energy Information Administration (EIA) estimated in its August 2026 Short-Term Energy Outlook (STEO) that global oil inventories fell by an average of 4.2 million bpd in Q2 2026 and projected an additional decline of 3.8 million bpd on average in Q3 2026.\n\n***\n\n**Sources:**\n* OPEC September 6, 2026 Press Release: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEk_vbYAxJBLnixTJ7KZES49Q2yWafQoxHNWoYS1b-ECv8xi76TJ7F2Fz9pr8viXY2UBNL5ZUa9zKgo96EMaJyHORdfB7M6vIuFZS72bOVhtdE7mqBJVBRAMkuy1NbuaWA6HTUATE_diRaNvde9dhiGKA==\n* The Astana Times (September 7, 2026): https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHkJmrosjjRBmM51WPtEPEUaBErGMX3OFC4kdNkUT6Gbjvs4o_udk_Z-6ZrYqchMqqsqDo5Xq0kdGmFCKm3jTODhGG12IXTUzSG_y4cpUQ3Uv1vq1o1_KWKgVJGH_9sukuRYNcx9mhGVFWBfqMBjae4ulWy3TxGaiyVojTqeW5RDZYaazUoavkqGCgvUgJYbxykaWbEFBubm5d0H9w=\n* Egypt Oil & Gas (September 6, 2026): https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEp580FNOhF4csNY8f4MTHSO_ZvRUpinboVxoEY_yun_fmSL9gmxeOjiXp25dn7sKfplg",
+    "cutoff_date": "2026-09-08",
+    "query": "OPEC crude oil supply response production decisions inventory September 2026",
+    "query_area": "supply_response",
+    "status": "accepted",
+    "verified_summary_id": "verified_summary:sha256:c4af6c009c6e59614eed6485a96d273852ea11e70a224276fd7d24a214d13292",
+    "verifier_attempt_count": 1,
+    "verifier_confidence": 10
+   },
+   {
+    "associated_source_ids": [
+     "source_011",
+     "source_012",
+     "source_013",
+     "source_014",
+     "source_015"
+    ],
+    "cleaned_summary": "Based on market data and financial analyst commentary published strictly before September 8, 2026, the WTI crude oil market experienced significant upward pressure and heightened volatility during the first week of September 2026.",
+    "cutoff_date": "2026-09-08",
+    "query": "WTI crude oil price market reaction and financial analyst commentary September 2026",
+    "query_area": "market_reaction",
+    "status": "accepted",
+    "verified_summary_id": "verified_summary:sha256:41410c911c6c400cfb858d4aceef478e5487e9792c8ddbe27a0263e0dec25d94",
+    "verifier_attempt_count": 1,
+    "verifier_confidence": 10
+   }
+  ],
+  "warnings": []
+ },
+ "run_id": "cfm_agent_v_5_2__advanced__2026-09-08__20260909T022012Z",
+ "schema_version": 1,
+ "settings": {
+  "audit_enabled": true,
+  "claim_support_verifier_model": "gemini-3.5-flash",
+  "claim_support_verifier_timeout_seconds": 60.0,
+  "code_execution_enabled": false,
+  "emergency_center_cap_price_fraction": 1.0,
+  "emergency_center_cap_usd": 100.0,
+  "ensemble_weights": {
+   "arima": 0.3333333333333333,
+   "kalman": 0.3333333333333333,
+   "lightgbm": 0.3333333333333333
+  },
+  "kalman_dim_x": 2,
+  "large_action_width_fraction": 0.3,
+  "lightgbm_covariate_lags": 21,
+  "lightgbm_lags": 21,
+  "max_data_rows_per_series": 520,
+  "max_pre_execution_attempts": 2,
+  "model_num_samples": 1000,
+  "moderate_action_width_fraction": 0.2,
+  "moderately_narrower_multiplier": 0.8,
+  "moderately_wider_multiplier": 1.2,
+  "nonnegative_price_floor": 0.0,
+  "partly_reflected_multiplier": 0.5,
+  "policy_mode": "constrained_actions",
+  "research_max_passages_per_source": 5,
+  "research_max_results_per_query": 5,
+  "research_passage_chars": 900,
+  "search_verifier_confidence_threshold": 8,
+  "search_verifier_max_attempts": 3,
+  "search_verifier_model": "gemini-3.5-flash",
+  "small_action_width_fraction": 0.1,
+  "small_narrower_multiplier": 0.9,
+  "small_wider_multiplier": 1.1,
+  "source_resolution_max_redirects": 5,
+  "source_resolution_timeout_seconds": 8.0,
+  "structured_output_retry_model": "gemini-3.5-flash",
+  "structured_output_retry_timeout_seconds": 60.0,
+  "substantially_narrower_multiplier": 0.7,
+  "substantially_wider_multiplier": 1.3,
+  "tier_1_min_confidence": 0.4,
+  "tier_1_min_publishers": 1,
+  "tier_2_min_confidence": 0.6,
+  "tier_2_min_publishers": 2,
+  "tier_3_min_confidence": 0.8,
+  "tier_3_min_publishers": 3,
+  "tier_3_min_publishers_per_claim": 2
+ },
+ "settings_source": "recorded",
+ "task_id": "cfm_coach_daily_wti_crude_oil_price_2026-09-08"
+}

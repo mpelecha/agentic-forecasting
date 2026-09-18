@@ -1,0 +1,145 @@
+# IMPROVEMENTS.md items loaded as *unverified* hypotheses on the first review.
+# Never shown to triage. Numeric/policy seeds get code-computed evidence from
+# the strata frame (`evidence_stat`); LLM seeds wait for annotations.
+version: 1
+seeds:
+  - id: S-A1
+    seed_source: IMPROVEMENTS:A1
+    track: numeric
+    statement: LightGBM forecasts price levels it cannot extrapolate, dragging the ensemble median below the last close on every run.
+    mechanism: A tree model on levels regresses toward its training window mean; in a rally that is a persistent negative bias.
+    lever: {kind: code, file_line: "cfm_agent_v_5_2/models/lightgbm.py:6-19", proxy: "layer.rw_anchor / ensemble_weights"}
+    codes: [BASE.LGBM_LEVEL_BIAS, BASE.ENSEMBLE_LOSES_TO_RW]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: On future cutoffs the lightgbm median sits below the last close in >80% of runs and the ensemble loses to the random walk on pinball.
+    evidence_stat: lgbm_below_rate
+  - id: S-A2
+    seed_source: IMPROVEMENTS:A2
+    track: numeric
+    statement: The numerical suite is not deterministic at a fixed cutoff; LightGBM medians vary across same-cutoff runs.
+    mechanism: Multithreaded LightGBM training is not bit-deterministic and the RNG seed includes weights.
+    lever: {kind: code, file_line: "cfm_agent_v_5_2/models/lightgbm.py:18"}
+    codes: [BASE.NONDETERMINISM]
+    scope: {streams: [v52_lite], horizons: [5, 10, 21]}
+    prediction: lightgbm_p50_spread across the ten lite runs at one cutoff exceeds 0.05 on most cutoffs.
+    evidence_stat: lgbm_spread_mean
+  - id: S-A3
+    seed_source: IMPROVEMENTS:A3
+    track: numeric
+    statement: A dead component model silently renormalises the ensemble weights instead of failing the run.
+    mechanism: CfmEnsemblePredictor tolerates failures and renormalises over survivors.
+    lever: {kind: code, file_line: "cfm_agent_v_5_2/models/ensemble.py:79-103"}
+    codes: [BASE.COMPONENT_FAILURE]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: Records with failed_models non-empty exist and their forecasts differ materially from siblings.
+    evidence_stat: failed_models_rate
+  - id: S-A4
+    seed_source: IMPROVEMENTS:A4
+    track: numeric
+    statement: Interval width is regime-blind; the width the outcome required rises steeply with volatility while the published width is roughly constant.
+    mechanism: The ensemble's spread is a Monte-Carlo width with no regime input; the multipliers only fire on LLM request.
+    lever: {kind: layer, field: width_scale, note: "per-regime later (C15)"}
+    codes: [BASE.WIDTH_REGIME_BLIND]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: omega_needed exceeds 1.5 in the high-volatility tercile far more often than in the low tercile.
+    evidence_stat: omega_needed_by_vol
+  - id: S-A6
+    seed_source: IMPROVEMENTS:A6
+    track: policy
+    statement: The policy cannot widen an interval without also justifying a centre move, so most widening requests are refused.
+    mechanism: Uncertainty actions are downgraded with the tier that gates the centre.
+    lever: {kind: code, file_line: "cfm_agent_v_5_2/policy/evidence_policy.py:185-202"}
+    codes: [POLICY.WIDEN_BLOCKED]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: More than half of proposed widenings are granted 'unchanged'.
+    evidence_stat: widen_blocked_rate
+  - id: S-A7
+    seed_source: IMPROVEMENTS:A7
+    track: llm
+    statement: v5.2 zeroes about half of its own proposed moves on citation bookkeeping, not on market judgment.
+    mechanism: A claim must link an accepted summary and a resolved source associated with it; the LLM wires citations inconsistently across draws.
+    lever: {kind: skill_text, file: "cfm_agent_v_5_2/skills/claim-building/SKILL.md"}
+    codes: [POLICY.ZEROED_ON_CITATION]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: The zeroed rate stays above 40% and varies across same-cutoff draws.
+    evidence_stat: zeroed_rate
+  - id: S-A8
+    seed_source: IMPROVEMENTS:A8
+    track: policy
+    statement: incremental_novelty is an ungated 2x multiplier that flips across draws at one cutoff.
+    mechanism: partly_reflected halves the overlay outside the policy's view.
+    lever: {kind: settings_overlay, field: partly_reflected_multiplier}
+    codes: [POLICY.NOVELTY_UNGATED]
+    scope: {streams: [v52_lite], horizons: [5, 10, 21]}
+    prediction: Cutoffs where the ten lite runs split on novelty are the majority.
+    evidence_stat: novelty_split_rate
+  - id: S-A11
+    seed_source: IMPROVEMENTS:A11
+    track: numeric
+    statement: Equal 1/3 ensemble weights were never measured; fitted weights beat them out of sample.
+    mechanism: Components differ in bias and calibration; a pinball-optimal pool moves weight off the biased member.
+    lever: {kind: settings_overlay, field: ensemble_weights}
+    codes: [BASE.ENSEMBLE_LOSES_TO_RW]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: Weights fitted on history through 2021 beat equal weights on 2022+ origins and on live rows.
+    evidence_stat: none
+  - id: S-A12
+    seed_source: IMPROVEMENTS:A12
+    track: numeric
+    statement: The ensemble has no random-walk member and so cannot express 'today's price is the best centre'.
+    mechanism: All three components regress the level; a random-walk member anchors the pool.
+    lever: {kind: code, file_line: "cfm_agent_v_5_2/models/ensemble.py", proxy: "layer.rw_anchor"}
+    codes: [BASE.ENSEMBLE_LOSES_TO_RW]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: A random-walk anchor fitted on history reduces live pinball toward the random walk's.
+    evidence_stat: base_share_mean
+  - id: S-A13
+    seed_source: IMPROVEMENTS:A13
+    track: llm
+    statement: There is no explicit directional output, so direction is unscoreable on half the horizons.
+    mechanism: A neutral centre action is 'no call', not a call of flat.
+    lever: {kind: code, file_line: "cfm_agent_v_5_2/outputs.py:27-39"}
+    codes: [RIGHT.HELD_NEUTRAL_CORRECTLY]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: More than 40% of horizons publish no directional call.
+    evidence_stat: no_call_rate
+  - id: S-A15
+    seed_source: IMPROVEMENTS:A15
+    track: llm
+    statement: Decision-LLM draw-to-draw variance is the size of the signal.
+    mechanism: Temperature and seed are unpinned; the published overlay depends on which draw ran.
+    lever: {kind: code, file_line: "cfm_agent_v_5_2/agent.py:60-77"}
+    codes: [POLICY.ZEROED_ON_CITATION, POLICY.NOVELTY_UNGATED]
+    scope: {streams: [v52_lite], horizons: [5, 10, 21]}
+    prediction: Published p50 spread across the ten lite runs exceeds the mean absolute overlay.
+    evidence_stat: p50_spread_mean
+  - id: S-A16
+    seed_source: IMPROVEMENTS:A16
+    track: llm
+    statement: Four verifiers check provenance and form; none checks whether the conclusion follows from the claims.
+    mechanism: An adversarial 'does the action follow' verifier is missing.
+    lever: {kind: skill_text, file: "cfm_agent_v_5_2/skills/action-proposal/SKILL.md"}
+    codes: [JUDGMENT.RIGHT_FOR_WRONG_REASON, JUDGMENT.DIRECTION_WRONG]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: Triage tags JUDGMENT.* with pointers on at least a third of acted horizons.
+    evidence_stat: none
+  - id: S-A18
+    seed_source: IMPROVEMENTS:A18
+    track: numeric
+    statement: Intervals are never verified; empirical coverage is far below the nominal 80%.
+    mechanism: MC-sampled widths with 0.7-1.3 multipliers and no calibration.
+    lever: {kind: layer, field: width_scale}
+    codes: [BASE.WIDTH_REGIME_BLIND]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: Coverage stays below 50% until a width scale is applied.
+    evidence_stat: coverage_agent
+  - id: S-TRANSCRIPTS
+    seed_source: data
+    track: data
+    statement: Reasoning errors cannot be located because only final rationales are stored.
+    mechanism: The recorder keeps the structured assessment, not the agent turn.
+    lever: {kind: data, note: "capture decision transcripts (out of scope for the coach; proposal only)"}
+    codes: [DATA.TRANSCRIPTS_MISSING]
+    scope: {streams: [v52_lite, v52_advanced], horizons: [5, 10, 21]}
+    prediction: Deep dives return 'undetermined' on reasoning questions more often than not.
+    evidence_stat: none

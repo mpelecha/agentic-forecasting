@@ -1,0 +1,27 @@
+{
+  "fingerprint_v52": "cfm_v5_2_package:sha256:73bf9d8588789a911618f96b4d6ed9380ed35bc7c3f24532b243203a57e59614",
+  "streams": {
+    "v50_lite": {
+      "model": "gemini-3.1-flash-lite-preview",
+      "agent": "cfm_agent_v_5_0"
+    },
+    "v52_advanced": {
+      "model": "gemini-3.5-flash",
+      "agent": "cfm_agent_v_5_2"
+    },
+    "v52_lite": {
+      "model": "gemini-3.1-flash-lite-preview",
+      "agent": "cfm_agent_v_5_2"
+    }
+  },
+  "coach_ledgers": {
+    "v50_lite": [],
+    "v52_advanced": [
+      "v001"
+    ],
+    "v52_lite": [
+      "v001"
+    ]
+  },
+  "at": "2026-09-13"
+}

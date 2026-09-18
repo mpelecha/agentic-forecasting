@@ -1,0 +1,383 @@
+{
+  "keys": {
+    "v52_advanced|2026-08-19|10": {
+      "annotation_id": "3192d3a5854e7484",
+      "card_hash": "f0ad0b15f358e6d1",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-19|5": {
+      "annotation_id": "88e8e930daf5c95f",
+      "card_hash": "f0ad0b15f358e6d1",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-20|10": {
+      "annotation_id": "eb469809dbe830a2",
+      "card_hash": "405af2648686db58",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-20|5": {
+      "annotation_id": "fae63354847d396b",
+      "card_hash": "405af2648686db58",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-21|10": {
+      "annotation_id": "30a6da576452aa6c",
+      "card_hash": "caec4e3937c91fe8",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-21|5": {
+      "annotation_id": "bc499a91fcfdc08b",
+      "card_hash": "caec4e3937c91fe8",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-24|10": {
+      "annotation_id": "35b45821060363a9",
+      "card_hash": "daf37d8a1057b122",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-24|5": {
+      "annotation_id": "a729bbb56c1a22a7",
+      "card_hash": "daf37d8a1057b122",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-25|10": {
+      "annotation_id": "d22b39c30208dc40",
+      "card_hash": "dc98ae682af80bed",
+      "card_version": 1,
+      "notes": {},
+      "status": "deep_dived",
+      "updated_at": "2026-09-13T03:50:00",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-25|5": {
+      "annotation_id": "6540b1f9f334773a",
+      "card_hash": "dc98ae682af80bed",
+      "card_version": 1,
+      "notes": {},
+      "status": "deep_dived",
+      "updated_at": "2026-09-13T03:50:00",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-26|10": {
+      "annotation_id": "027a8870327919b4",
+      "card_hash": "19f245eb2eafcae6",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-26|5": {
+      "annotation_id": "a8ffed675f673e4d",
+      "card_hash": "19f245eb2eafcae6",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-27|10": {
+      "annotation_id": "be8c009548d1574d",
+      "card_hash": "1ac10f63805750bd",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-27|5": {
+      "annotation_id": "ea7c05e61c87bc98",
+      "card_hash": "1ac10f63805750bd",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:07",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-28|10": {
+      "annotation_id": "0c3796d2f5588583",
+      "card_hash": "64caaf736620b25e",
+      "card_version": 1,
+      "notes": {},
+      "status": "deep_dived",
+      "updated_at": "2026-09-13T03:48:37",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-28|5": {
+      "annotation_id": "a5576da5bf08df8a",
+      "card_hash": "64caaf736620b25e",
+      "card_version": 1,
+      "notes": {},
+      "status": "deep_dived",
+      "updated_at": "2026-09-13T03:48:37",
+      "verdict": null
+    },
+    "v52_advanced|2026-08-31|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:28",
+      "verdict": null
+    },
+    "v52_advanced|2026-09-01|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:28",
+      "verdict": null
+    },
+    "v52_advanced|2026-09-02|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:28",
+      "verdict": null
+    },
+    "v52_advanced|2026-09-03|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:28",
+      "verdict": null
+    },
+    "v52_advanced|2026-09-04|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:28",
+      "verdict": null
+    },
+    "v52_lite|2026-08-19|10": {
+      "annotation_id": "7fe63522bdeba699",
+      "card_hash": "a0833bf94fe5f115",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-19|5": {
+      "annotation_id": "44ff8bb488e56c9f",
+      "card_hash": "a0833bf94fe5f115",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-20|10": {
+      "annotation_id": "eef5e3c0d8340426",
+      "card_hash": "2be2ba4bd4d1dac0",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-20|5": {
+      "annotation_id": "a12bd0fe9232bc86",
+      "card_hash": "2be2ba4bd4d1dac0",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-21|10": {
+      "annotation_id": "e10a83cc1bb506d9",
+      "card_hash": "5af4c8644b77dfef",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-21|5": {
+      "annotation_id": "1e6aeec0f96e324b",
+      "card_hash": "5af4c8644b77dfef",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-24|10": {
+      "annotation_id": "e2c9093d836d87e4",
+      "card_hash": "afe608a6c3cb1593",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-24|5": {
+      "annotation_id": "6e8a6b257d9bde16",
+      "card_hash": "afe608a6c3cb1593",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-25|10": {
+      "annotation_id": "b15ae531a0acd653",
+      "card_hash": "010940e7ed71c9c5",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-25|5": {
+      "annotation_id": "1e2bd4f26db5ca0a",
+      "card_hash": "010940e7ed71c9c5",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-26|10": {
+      "annotation_id": "0677a2ca70788282",
+      "card_hash": "5ef507b72a74d8ef",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-26|5": {
+      "annotation_id": "546843d70ee0a84c",
+      "card_hash": "5ef507b72a74d8ef",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-27|10": {
+      "annotation_id": "270a47120cad9bc1",
+      "card_hash": "08887a28965a384c",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-27|5": {
+      "annotation_id": "b8aac3b38a63ad9c",
+      "card_hash": "08887a28965a384c",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-28|10": {
+      "annotation_id": "643a8cca491903c4",
+      "card_hash": "c1d0b8342f28a148",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-28|5": {
+      "annotation_id": "e58fce6ab8c9963c",
+      "card_hash": "c1d0b8342f28a148",
+      "card_version": 1,
+      "notes": {},
+      "status": "triaged",
+      "updated_at": "2026-09-13T03:12:15",
+      "verdict": null
+    },
+    "v52_lite|2026-08-31|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:37",
+      "verdict": null
+    },
+    "v52_lite|2026-09-01|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:37",
+      "verdict": null
+    },
+    "v52_lite|2026-09-02|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:37",
+      "verdict": null
+    },
+    "v52_lite|2026-09-03|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:37",
+      "verdict": null
+    },
+    "v52_lite|2026-09-04|5": {
+      "annotation_id": null,
+      "card_hash": null,
+      "card_version": null,
+      "notes": {},
+      "status": "resolved",
+      "updated_at": "2026-09-13T02:32:37",
+      "verdict": null
+    }
+  },
+  "meta": {}
+}

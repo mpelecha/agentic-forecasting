@@ -1,0 +1,12 @@
+{
+  "version": "v001",
+  "effective_from": "2004-01-01",
+  "parent_version": null,
+  "settings_overlay": {},
+  "layer": {
+    "centre_gain": {},
+    "width_scale": {}
+  },
+  "source_proposal_id": null,
+  "notes": "Baseline for the v52_lite stream (cfm_agent_v_5_2, every LLM call on gemini-3.1-flash-lite-preview). Deliberately empty: an empty settings_overlay plus an identity layer means the agent runs exactly as shipped, so v001 is a true no-op and every later version is a measurable delta from it. This stream shares an agent package with v52_advanced but not a model, and a different LLM is a different agent -- so it keeps a separate ledger and a separate corpus, and ComparisonPolicy.single_agent_model will refuse any fit that pooled the two. Note the overlay may never name an LLM field (CalibrationLedger.to_agent_settings rejects it): which model answered is an identity fact about the run stream, not something a fit is allowed to change. Drift in cfm_agent_v_5_2's own defaults is caught by RunRecord.package_fingerprint, which hashes MANIFEST.sha256, rather than by pinning values here. effective_from predates all available data on purpose: these are the constants v5.2 ships with, so v001 was in force for any cutoff a replay might ask about."
+}
