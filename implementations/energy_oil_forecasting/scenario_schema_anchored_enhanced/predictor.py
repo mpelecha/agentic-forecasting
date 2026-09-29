@@ -26,8 +26,8 @@ from aieng.forecasting.data.context import ForecastContext
 from aieng.forecasting.evaluation.prediction import Prediction
 from aieng.forecasting.evaluation.task import ForecastingTask
 from aieng.forecasting.methods.agentic import AgentConfig, AgentPredictor
-from energy_oil_forecasting.analyst_agent.agent import WtiScenarioForecastOutput
 from energy_oil_forecasting.scenario_schema_anchored.predictor import ScenarioSchemaAnchoredPredictor
+from energy_oil_forecasting.scenario_schema_core import WtiScenarioForecastOutput
 from energy_oil_forecasting.scenario_schema_anchored_enhanced.memory import (
     append_framework,
     read_prior_frameworks,

@@ -18,9 +18,9 @@ from aieng.forecasting.methods.agentic.agent_factory import (
     ContextRetrievalConfig,
 )
 from aieng.forecasting.models import ADVANCED_MODEL, LITE_MODEL
-from energy_oil_forecasting.analyst_agent.agent import (
+from energy_oil_forecasting.scenario_schema_core import (
+    WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION,
     WtiScenarioForecastOutput,
-    _WTI_FACTORS_V2_CONTEXT_RETRIEVAL_INSTRUCTION,
 )
 
 
@@ -28,7 +28,7 @@ def _build_wti_analyst_instruction_scenario_schema_anchored() -> str:
     """Scenario Schema instruction, aware of a Python-computed ARIMA anchor.
 
     Same factor-tier / scenario-decomposition structure as the base Scenario
-    Schema (see :func:`energy_oil_forecasting.analyst_agent.agent._build_wti_analyst_instruction_scenario_schema`),
+    Schema (see :mod:`energy_oil_forecasting.scenario_schema_core.agent`),
     plus a description of the `arima_anchor` field in the payload — a
     deterministic statistical baseline the LLM should reason from rather
     than inventing price levels with no numerical grounding.
@@ -199,7 +199,7 @@ def build_wti_news_scenario_schema_anchored_config(
         temperature=0.0,  # 2026.08.21 — reduce sampling-driven variance, same rationale as scenario_schema_enhanced
         context_retrieval=ContextRetrievalConfig(
             enabled=True,
-            instruction=_WTI_FACTORS_V2_CONTEXT_RETRIEVAL_INSTRUCTION,
+            instruction=WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION,
             search_model=search_model,
             verifier_model=verifier_model,
             verifier_max_attempts=verifier_max_attempts,

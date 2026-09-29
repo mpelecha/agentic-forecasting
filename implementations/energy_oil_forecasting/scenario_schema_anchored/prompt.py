@@ -7,7 +7,7 @@ import json
 from aieng.forecasting.data.context import ForecastContext
 from aieng.forecasting.evaluation.prediction import ContinuousForecast
 from aieng.forecasting.evaluation.task import ForecastingTask
-from energy_oil_forecasting.analyst_agent.agent import WtiPriceForecastPromptBuilder
+from energy_oil_forecasting.scenario_schema_core import WtiPriceForecastPromptBuilder
 from pydantic import BaseModel
 
 

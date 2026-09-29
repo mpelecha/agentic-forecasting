@@ -8,8 +8,10 @@ holds", ...) persist across origins instead of the LLM re-inventing a fresh
 naming scheme from a blank slate every single time it runs.
 
 Storage is a JSONL file per (predictor_id, task_id) under
-``data/scenario_memory/`` (see :data:`~energy_oil_forecasting.paths.DATA_DIR`
-— gitignored, generated output, same convention as ``data/predictions/``).
+``data/scenario_memory/`` (repo-root ``data/``, resolved locally by
+:func:`_repo_data_dir` below rather than importing
+``energy_oil_forecasting.paths`` — gitignored, generated output, same
+convention as ``data/predictions/``).
 Writes are append-only: no read-modify-write, so an interrupted or re-run
 backtest cannot corrupt earlier entries, the same resumability discipline
 ``cached_multi_backtest`` uses for its own prediction cache. A predictor
@@ -35,7 +37,25 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from energy_oil_forecasting.paths import DATA_DIR
+
+def _repo_data_dir() -> Path:
+    """Return ``data/`` at the repository root (walk up from this file if needed).
+
+    Inlined rather than imported from ``energy_oil_forecasting.paths`` so
+    this package has no dependency on anything outside itself and
+    ``aieng.forecasting`` — same reasoning as ``scenario_schema_core``.
+    """
+    root = Path(__file__).resolve()
+    while not (root / "pyproject.toml").exists():
+        if root.parent == root:
+            return Path.cwd() / "data"
+        root = root.parent
+    data_dir = root / "data"
+    data_dir.mkdir(exist_ok=True)
+    return data_dir
+
+
+DATA_DIR = _repo_data_dir()
 
 MEMORY_DIR = DATA_DIR / "scenario_memory"
 

@@ -50,11 +50,14 @@ from aieng.forecasting.evaluation.prediction import ContinuousForecast, Predicti
 from aieng.forecasting.evaluation.predictor import Predictor
 from aieng.forecasting.evaluation.task import ForecastingTask
 from aieng.forecasting.methods.agentic import AgentConfig, AgentPredictor
-from energy_oil_forecasting.analyst_agent.agent import WtiScenarioForecastOutput
-from energy_oil_forecasting.price_deltas import PERCENTILE_LEVELS, compute_horizon_delta_percentiles
 from energy_oil_forecasting.scenario_schema_anchored.arima_anchor import (
     compute_arima_anchor,
     horizon_for,
+)
+from energy_oil_forecasting.scenario_schema_core import (
+    PERCENTILE_LEVELS,
+    WtiScenarioForecastOutput,
+    compute_horizon_delta_percentiles,
 )
 from energy_oil_forecasting.scenario_schema_anchored.prompt import AnchoredPromptBuilder
 
@@ -122,7 +125,7 @@ def _grounded_center_shift(target_percentile: float, delta_percentiles: dict[int
     """Interpolate the REAL historical h-day price-delta value at ``target_percentile``.
 
     ``delta_percentiles`` is one horizon's entry from
-    :func:`~energy_oil_forecasting.price_deltas.compute_horizon_delta_percentiles`
+    :func:`~energy_oil_forecasting.scenario_schema_core.compute_horizon_delta_percentiles`
     — actual historical price moves, never an LLM-invented dollar figure.
     Returned relative to the historical median (delta_percentiles[50]) so it
     can be added directly to the anchor's own p50 as a shift.

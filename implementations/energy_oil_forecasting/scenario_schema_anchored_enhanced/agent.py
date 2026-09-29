@@ -1,7 +1,7 @@
 """ARIMA-anchored, memory-enhanced WTI Scenario Schema agent.
 
 Combines the two independent extensions of the base Scenario Schema agent
-(see ``analyst_agent.agent``) this module's siblings ship separately:
+(see ``scenario_schema_core.agent``) this module's siblings ship separately:
 
 1. From :mod:`energy_oil_forecasting.scenario_schema_anchored`: a
    deterministic AutoARIMA forecast, computed in Python and fed into the
@@ -24,9 +24,9 @@ from aieng.forecasting.methods.agentic.agent_factory import (
     ContextRetrievalConfig,
 )
 from aieng.forecasting.models import ADVANCED_MODEL, LITE_MODEL
-from energy_oil_forecasting.analyst_agent.agent import (
+from energy_oil_forecasting.scenario_schema_core import (
+    WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION,
     WtiScenarioForecastOutput,
-    _WTI_FACTORS_V2_CONTEXT_RETRIEVAL_INSTRUCTION,
 )
 
 
@@ -231,7 +231,7 @@ def build_wti_news_scenario_schema_anchored_enhanced_config(
         temperature=0.0,  # pin determinism, same rationale as the anchored and enhanced configs
         context_retrieval=ContextRetrievalConfig(
             enabled=True,
-            instruction=_WTI_FACTORS_V2_CONTEXT_RETRIEVAL_INSTRUCTION,
+            instruction=WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION,
             search_model=search_model,
             verifier_model=verifier_model,
             verifier_max_attempts=verifier_max_attempts,
