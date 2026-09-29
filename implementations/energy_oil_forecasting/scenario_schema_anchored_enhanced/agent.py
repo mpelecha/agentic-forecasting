@@ -24,10 +24,8 @@ from aieng.forecasting.methods.agentic.agent_factory import (
     ContextRetrievalConfig,
 )
 from aieng.forecasting.models import ADVANCED_MODEL, LITE_MODEL
-from energy_oil_forecasting.scenario_schema_core import (
-    WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION,
-    WtiScenarioForecastOutput,
-)
+from energy_oil_forecasting.scenario_schema_anchored_enhanced.schema import WtiMemoryScenarioForecastOutput
+from energy_oil_forecasting.scenario_schema_core import WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION
 
 
 def _build_wti_analyst_instruction_scenario_schema_anchored_enhanced() -> str:
@@ -44,7 +42,7 @@ def _build_wti_analyst_instruction_scenario_schema_anchored_enhanced() -> str:
       new ones, signal explicitly when something changes rather than
       silently renaming it).
     """
-    schema = WtiScenarioForecastOutput.prompt_schema_json()
+    schema = WtiMemoryScenarioForecastOutput.prompt_schema_json()
     return (
         "## Role\n\n"
         "You are an expert WTI crude oil market analyst. You produce calibrated "
@@ -65,13 +63,20 @@ def _build_wti_analyst_instruction_scenario_schema_anchored_enhanced() -> str:
         "transitory) or a prior one drops out, rather than silently reshuffling "
         "the set.\n"
         "3. Explain any large probability weight shifts across scenarios relative "
-        "to the prior framework.\n\n"
+        "to the prior framework.\n"
+        "4. For EVERY scenario, set `continues_prior_scenario` to true and "
+        "`continued_from` to the EXACT scenario name from `prior_frameworks` it "
+        "continues — or set `continues_prior_scenario` to false (and omit "
+        "`continued_from`) for a genuinely new scenario with no prior counterpart. "
+        "This is a required declaration, not an optional note: every scenario, on "
+        "every origin including the first (when `prior_frameworks` is empty, every "
+        "scenario is necessarily new), must set this explicitly.\n\n"
         "If `prior_frameworks` is empty (no memory yet, e.g. the first origin), "
         "proceed with standard analysis. Memory is a consistency aid, not a "
         "constraint — your forecast must reflect current market facts, not "
         "historical continuity for its own sake; a genuine regime change should "
-        "produce genuinely new scenarios, explicitly flagged as such rather than "
-        "forced to fit the old names.\n\n"
+        "produce genuinely new scenarios (`continues_prior_scenario: false`), "
+        "explicitly flagged as such rather than forced to fit the old names.\n\n"
         "## Forecasting contract\n\n"
         "You will receive a JSON payload containing:\n"
         "- `task`: the task identifier\n"

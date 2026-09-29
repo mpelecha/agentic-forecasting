@@ -18,6 +18,15 @@ Combines two independent extensions of the base Scenario Schema agent:
    from a blank slate every call. After the call, this origin's own
    factors/scenarios are appended to the same store for future origins to
    read.
+
+Whether a scenario is a continuation of a prior one or genuinely new is not
+inferred here from string-matching names — the LLM must declare it directly
+via :class:`~energy_oil_forecasting.scenario_schema_anchored_enhanced.schema.WtiMemoryScenarioCard`'s
+``continues_prior_scenario``/``continued_from`` fields, and that claim is
+then cross-checked here against what was actually shown in
+``prior_frameworks``; an unverifiable claim is surfaced in
+``Prediction.metadata["unverified_continuations"]`` rather than trusted
+silently.
 """
 
 from __future__ import annotations
@@ -27,12 +36,12 @@ from aieng.forecasting.evaluation.prediction import Prediction
 from aieng.forecasting.evaluation.task import ForecastingTask
 from aieng.forecasting.methods.agentic import AgentConfig, AgentPredictor
 from energy_oil_forecasting.scenario_schema_anchored.predictor import ScenarioSchemaAnchoredPredictor
-from energy_oil_forecasting.scenario_schema_core import WtiScenarioForecastOutput
 from energy_oil_forecasting.scenario_schema_anchored_enhanced.memory import (
     append_framework,
     read_prior_frameworks,
 )
 from energy_oil_forecasting.scenario_schema_anchored_enhanced.prompt import AnchoredMemoryPromptBuilder
+from energy_oil_forecasting.scenario_schema_anchored_enhanced.schema import WtiMemoryScenarioForecastOutput
 
 
 class ScenarioSchemaAnchoredEnhancedPredictor(ScenarioSchemaAnchoredPredictor):
@@ -72,7 +81,7 @@ class ScenarioSchemaAnchoredEnhancedPredictor(ScenarioSchemaAnchoredPredictor):
         self.inner = AgentPredictor(
             agent_config=config,
             prompt_builder=self._prompt_builder,
-            output_schema=WtiScenarioForecastOutput,
+            output_schema=WtiMemoryScenarioForecastOutput,
         )
 
     def predict(self, task: ForecastingTask, context: ForecastContext) -> list[Prediction]:
@@ -95,8 +104,28 @@ class ScenarioSchemaAnchoredEnhancedPredictor(ScenarioSchemaAnchoredPredictor):
             self.predictor_id, task.task_id, as_of=as_of, factors=factors, scenarios=scenarios
         )
 
+        # Cross-check every declared continuation against what the LLM was
+        # actually shown. continues_prior_scenario/continued_from are the
+        # LLM's own claim (validated only for internal consistency by
+        # WtiMemoryScenarioCard -- e.g. continued_from is set iff the flag is
+        # true), not verified against reality. A name that doesn't match
+        # anything in prior_frameworks is either a hallucinated prior
+        # scenario or a paraphrase that defeats the point of asking for an
+        # exact name -- flagged here rather than trusted silently, and
+        # non-fatal (worth surfacing, not worth burning a retry over).
+        known_prior_names = {
+            scenario["name"] for framework in prior_frameworks for scenario in framework.get("scenarios", [])
+        }
+        unverified = [
+            scenario["continued_from"]
+            for scenario in scenarios
+            if scenario.get("continues_prior_scenario") and scenario.get("continued_from") not in known_prior_names
+        ]
+
         for pred in predictions:
             pred.metadata["prior_frameworks_used"] = len(prior_frameworks)
+            if unverified:
+                pred.metadata["unverified_continuations"] = unverified
 
         return predictions
 
