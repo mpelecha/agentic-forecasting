@@ -9,12 +9,14 @@ framework. See ``agent.py`` and ``price_deltas.py`` docstrings for why.
 
 from energy_oil_forecasting.scenario_schema_core.agent import (
     SCENARIO_CONSISTENCY_TOLERANCE,
+    SCENARIO_PROBABILITY_SUM_TOLERANCE,
     WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION,
     WtiFactor,
     WtiPriceForecastPromptBuilder,
     WtiScenarioCard,
     WtiScenarioForecastOutput,
     compress_history,
+    probability_weighted_scenario_quantile,
 )
 from energy_oil_forecasting.scenario_schema_core.price_deltas import (
     DEFAULT_PRICE_FLOOR,
@@ -27,6 +29,7 @@ __all__ = [
     "DEFAULT_PRICE_FLOOR",
     "PERCENTILE_LEVELS",
     "SCENARIO_CONSISTENCY_TOLERANCE",
+    "SCENARIO_PROBABILITY_SUM_TOLERANCE",
     "WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION",
     "WtiFactor",
     "WtiPriceForecastPromptBuilder",
@@ -34,4 +37,5 @@ __all__ = [
     "WtiScenarioForecastOutput",
     "compress_history",
     "compute_horizon_delta_percentiles",
+    "probability_weighted_scenario_quantile",
 ]

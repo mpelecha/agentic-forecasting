@@ -33,11 +33,16 @@ suited for (reading live news, weighing competing scenarios), while Python
 still owns all the arithmetic, but now uses the scenario information as
 intended rather than discarding the direction and magnitude it encodes.
 
-The tail-widening step (step 4) still uses each scenario's raw
-price_low/price_high, unweighted by probability, same as before — so a
-low-probability tail scenario can still stretch the interval as much as a
-high-probability one. That's a known, separate gap from the center-shift
-fix here and is not addressed by this change.
+The tail-widening step (step 4) used to take the raw min/max of every
+scenario's price_low/price_high, unweighted by probability -- so a
+low-probability tail scenario could stretch the interval as much as a
+high-probability one just by having a more extreme price range. It now
+widens toward :func:`~energy_oil_forecasting.scenario_schema_core.probability_weighted_scenario_quantile`
+instead: each scenario is treated as a uniform distribution over its own
+price range, weighted by its probability, and the widening target is the
+resulting mixture's own outermost-quantile price. A low-probability tail
+scenario now only pulls the interval out as far as its probability mass
+actually justifies.
 """
 
 from __future__ import annotations
@@ -54,12 +59,13 @@ from energy_oil_forecasting.scenario_schema_anchored.arima_anchor import (
     compute_arima_anchor,
     horizon_for,
 )
+from energy_oil_forecasting.scenario_schema_anchored.prompt import AnchoredPromptBuilder
 from energy_oil_forecasting.scenario_schema_core import (
     PERCENTILE_LEVELS,
     WtiScenarioForecastOutput,
     compute_horizon_delta_percentiles,
+    probability_weighted_scenario_quantile,
 )
-from energy_oil_forecasting.scenario_schema_anchored.prompt import AnchoredPromptBuilder
 
 
 def _widen_toward_scenarios(
@@ -199,8 +205,6 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
         if not scenarios:
             raise RuntimeError("Scenario Schema Anchored: no scenarios in LLM output metadata.")
 
-        scenario_low = min(scenario["price_low"] for scenario in scenarios)
-        scenario_high = max(scenario["price_high"] for scenario in scenarios)
         max_horizon = max(task.horizons)
 
         # The LLM's probability-weighted scenario view, re-expressed as a
@@ -209,6 +213,15 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
         weighted_price = _probability_weighted_scenario_price(scenarios)
         target_percentile = _implied_target_percentile(weighted_price, arima_anchor[max_horizon].quantiles)
         delta_percentiles = compute_horizon_delta_percentiles(context, task.target_series_id, task.horizons)
+
+        # Widening targets: the probability-weighted scenario mixture's own
+        # outermost-quantile prices, not the raw min/max of every scenario's
+        # price_low/price_high — see probability_weighted_scenario_quantile.
+        # Same quantile levels every horizon, so computed once here.
+        anchor_quantile_levels = arima_anchor[max_horizon].quantiles
+        lowest_q, highest_q = min(anchor_quantile_levels), max(anchor_quantile_levels)
+        scenario_low = probability_weighted_scenario_quantile(scenarios, lowest_q)
+        scenario_high = probability_weighted_scenario_quantile(scenarios, highest_q)
 
         for pred in llm_predictions:
             horizon = horizon_for(pred.as_of, pred.forecast_date, task.horizons)
@@ -233,7 +246,11 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
             pred.metadata["scenario_implied_target_percentile"] = target_percentile
             pred.metadata["scenario_center_shift"] = center_shift
             pred.metadata["historical_delta_percentiles"] = delta_percentiles[horizon]
-            pred.metadata["mixture_method"] = "arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_scenario_range"
+            pred.metadata["scenario_widen_target_low"] = scenario_low
+            pred.metadata["scenario_widen_target_high"] = scenario_high
+            pred.metadata["mixture_method"] = (
+                "arima_anchor_shifted_by_grounded_scenario_percentile_widened_by_prob_weighted_scenario_quantile"
+            )
 
         return llm_predictions
 

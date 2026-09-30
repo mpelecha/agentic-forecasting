@@ -234,8 +234,10 @@ class WtiScenarioCard(BaseModel):
     name : str
         Short scenario label, e.g. ``"Escalation continues"``.
     probability : float
-        Approximate probability in ``[0, 1]``. Illustrative, not a rigorous
-        elicitation — scenarios need not sum to exactly 1.0.
+        This scenario's probability in ``[0, 1]``. Across all scenarios in a
+        forecast, probabilities must sum to ~1.0 — a complete, mutually
+        exclusive partition of the outcome space, enforced by
+        :meth:`WtiScenarioForecastOutput._scenario_probabilities_sum_to_one`.
     price_low : float
         Lower end of this scenario's implied WTI price range at the
         forecast's longest horizon.
@@ -256,7 +258,15 @@ class WtiScenarioCard(BaseModel):
     model_config = {"extra": "ignore"}
 
     name: str = Field(min_length=1, description="Short scenario name.")
-    probability: float = Field(ge=0.0, le=1.0, description="Approximate probability; illustrative, not rigorous.")
+    probability: float = Field(
+        ge=0.0,
+        le=1.0,
+        description=(
+            "This scenario's probability. Together with every other scenario's "
+            "probability in the same forecast, must sum to ~1.0 -- enforced by "
+            "WtiScenarioForecastOutput._scenario_probabilities_sum_to_one."
+        ),
+    )
     price_low: float = Field(description="Lower end of this scenario's implied price range at the longest horizon.")
     price_high: float = Field(description="Upper end of this scenario's implied price range.")
     is_tail_case: bool = Field(
@@ -289,6 +299,83 @@ class WtiScenarioCard(BaseModel):
 # scenarios cluster tightly together.
 SCENARIO_CONSISTENCY_TOLERANCE = 0.15
 
+# Tolerance for the scenario-probability sum-to-1 check. An LLM asked for a
+# complete probability distribution won't land on exactly 1.0, so this
+# allows a small elicitation slop while still rejecting outputs where the
+# probabilities plainly don't describe a partition of the outcome space
+# (e.g. three "20% probability" scenarios with nothing else, or probabilities
+# copied from a different scenario count).
+SCENARIO_PROBABILITY_SUM_TOLERANCE = 0.03
+
+
+def probability_weighted_scenario_quantile(
+    scenarios: "list[WtiScenarioCard] | list[dict[str, Any]]", quantile: float
+) -> float:
+    """Quantile of the probability-weighted mixture of scenario price ranges.
+
+    Each scenario is treated as a uniform distribution over
+    ``[price_low, price_high]``, weighted by its own probability (normalized
+    by the total). Returns the price below which ``quantile`` of the
+    mixture's probability mass lies.
+
+    This replaces taking the raw ``min``/``max`` of ``price_low``/``price_high``
+    across scenarios for interval-widening: a low-probability tail scenario
+    then only pulls the result out as far as its own probability mass
+    justifies, rather than as far as a high-probability scenario would, no
+    matter how much lower/higher its price range happens to be.
+
+    Parameters
+    ----------
+    scenarios : list[WtiScenarioCard] or list[dict]
+        Must be non-empty; probabilities need not already sum to 1.0. Plain
+        dicts are accepted (e.g. from ``Prediction.metadata["scenarios"]``,
+        which is ``model_dump()``-ed) so callers outside this module don't
+        need to round-trip through the pydantic model.
+    quantile : float
+        Target quantile in ``[0, 1]`` of the mixture distribution.
+
+    Returns
+    -------
+    float
+        The mixture's ``quantile``-th percentile price.
+    """
+
+    def _field(scenario: Any, name: str) -> float:
+        return scenario[name] if isinstance(scenario, dict) else getattr(scenario, name)
+
+    probabilities = [_field(scenario, "probability") for scenario in scenarios]
+    total_probability = sum(probabilities)
+    if total_probability <= 0:
+        raise ValueError("Scenario probabilities must sum to a positive value.")
+    weights = [probability / total_probability for probability in probabilities]
+    lows = [_field(scenario, "price_low") for scenario in scenarios]
+    highs = [_field(scenario, "price_high") for scenario in scenarios]
+
+    lo_bound, hi_bound = min(lows), max(highs)
+    if lo_bound == hi_bound:
+        return lo_bound
+
+    def mixture_cdf(price: float) -> float:
+        total = 0.0
+        for weight, low, high in zip(weights, lows, highs):
+            if high > low:
+                total += weight * min(1.0, max(0.0, (price - low) / (high - low)))
+            else:
+                total += weight if price >= low else 0.0
+        return total
+
+    # mixture_cdf is monotonic non-decreasing and piecewise-linear (a sum of
+    # weighted uniform CDFs); bisection converges to it exactly enough for
+    # USD price granularity well within 60 iterations.
+    left, right = lo_bound, hi_bound
+    for _ in range(60):
+        mid = (left + right) / 2
+        if mixture_cdf(mid) < quantile:
+            left = mid
+        else:
+            right = mid
+    return (left + right) / 2
+
 
 class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
     """Continuous WTI forecast output with a required, structured scenario decomposition.
@@ -297,9 +384,10 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
     with ``factors`` (the shared core/transitory factor set, identified once)
     and ``scenarios`` (2-3 named scenarios tagging that same set), and
     overrides :meth:`to_predictions` to widen each horizon's outermost
-    quantiles to at least span the model's own stated scenario price range
-    when they don't already — a code-enforced consistency check, not a
-    prompt request the model can silently ignore.
+    quantiles toward the probability-weighted range implied by the model's
+    own stated scenarios (see :func:`probability_weighted_scenario_quantile`)
+    when they don't already reach it — a code-enforced consistency check, not
+    a prompt request the model can silently ignore.
 
     Attributes
     ----------
@@ -341,6 +429,29 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
         return self
 
     @model_validator(mode="after")
+    def _scenario_probabilities_sum_to_one(self) -> "WtiScenarioForecastOutput":
+        """Require the scenarios' probabilities to sum to ~1.0.
+
+        Scenarios are meant to be a complete, mutually exclusive partition of
+        the outcome space, not independent confidence scores — every
+        downstream computation that treats ``probability`` as a mixture
+        weight (the point-forecast consistency check below, the anchored
+        predictor's center-shift, and the probability-weighted interval
+        widening in ``to_predictions``) assumes this. Runs before those
+        checks so a violation here reports the actual cause rather than a
+        secondary symptom.
+        """
+        total_probability = sum(scenario.probability for scenario in self.scenarios)
+        if abs(total_probability - 1.0) > SCENARIO_PROBABILITY_SUM_TOLERANCE:
+            raise ValueError(
+                f"Scenario probabilities must sum to ~1.0 (a complete probability "
+                f"distribution over outcomes), got {total_probability:.3f} across "
+                f"{len(self.scenarios)} scenario(s): "
+                f"{[round(s.probability, 3) for s in self.scenarios]}."
+            )
+        return self
+
+    @model_validator(mode="after")
     def _scenario_stances_cover_every_factor(self) -> "WtiScenarioForecastOutput":
         """Require each scenario's stances to cover exactly the shared factor names."""
         expected = {factor.name for factor in self.factors}
@@ -378,14 +489,18 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
         ``WtiScenarioCard``), so only that horizon's ``point_forecast`` is checked.
         Deliberately a model validator, not a check inside ``to_predictions`` — a
         violation now raises during ``model_validate_json()``, the same as the
-        other four scenario-consistency checks on this class, so the calling
+        other scenario-consistency checks on this class, so the calling
         harness's retry wrapper gets a chance to re-run the origin instead of
         this failure being caught locally by ``AgentPredictor.predict()`` and
         silently returning zero predictions with no further attempt.
+
+        ``total_probability`` is guaranteed close to 1.0 here —
+        ``_scenario_probabilities_sum_to_one`` above already rejected anything
+        outside tolerance — but the weighted average still divides by it
+        rather than assuming exactly 1.0, so it stays exact within that
+        tolerance band.
         """
         total_probability = sum(scenario.probability for scenario in self.scenarios)
-        if total_probability <= 0:
-            raise ValueError("Scenario probabilities must sum to a positive value.")
         weighted_price = (
             sum(
                 scenario.probability * (scenario.price_low + scenario.price_high) / 2
@@ -447,7 +562,7 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
             "scenarios": [
                 {
                     "name": "<string>",
-                    "probability": "<float in [0, 1]>",
+                    "probability": "<float in [0, 1] -- across ALL scenarios, probabilities must sum to 1.0>",
                     "price_low": "<float>",
                     "price_high": "<float — upper end; must exceed price_low by a meaningful margin, reflecting genuine uncertainty within this scenario, not a point estimate>",
                     "is_tail_case": "<true for exactly one low-probability/high-impact scenario>",
@@ -469,7 +584,11 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
         """Widen outermost quantiles toward the scenario range, scaled per horizon.
 
         Widens (never narrows) each horizon's outermost quantiles toward the
-        scenario price range, scaled by ``sqrt(horizon / max_horizon)`` so
+        probability-weighted mixture quantile implied by the scenarios (see
+        :func:`probability_weighted_scenario_quantile` — a low-probability
+        tail scenario pulls the target out only as far as its own probability
+        mass justifies, not as far as the raw min/max of every scenario's
+        price range would), scaled by ``sqrt(horizon / max_horizon)`` so
         shorter horizons don't inherit the full longest-horizon spread. This
         can only ever increase each interval — moving the outermost quantiles
         further from their own current value cannot violate the non-decreasing
@@ -483,10 +602,10 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
         so downstream analysis can inspect the full decomposition alongside
         the forecast.
         """
-        scenario_low = min(scenario.price_low for scenario in self.scenarios)
-        scenario_high = max(scenario.price_high for scenario in self.scenarios)
         lowest_quantile = min(STANDARD_QUANTILES)
         highest_quantile = max(STANDARD_QUANTILES)
+        scenario_low = probability_weighted_scenario_quantile(self.scenarios, lowest_quantile)
+        scenario_high = probability_weighted_scenario_quantile(self.scenarios, highest_quantile)
         max_horizon = max(forecast.horizon for forecast in self.forecasts)
 
         for forecast in self.forecasts:
@@ -511,10 +630,12 @@ class WtiScenarioForecastOutput(ContinuousAgentForecastOutput):
 
 __all__ = [
     "SCENARIO_CONSISTENCY_TOLERANCE",
+    "SCENARIO_PROBABILITY_SUM_TOLERANCE",
     "WTI_FACTORS_CONTEXT_RETRIEVAL_INSTRUCTION",
     "WtiFactor",
     "WtiPriceForecastPromptBuilder",
     "WtiScenarioCard",
     "WtiScenarioForecastOutput",
     "compress_history",
+    "probability_weighted_scenario_quantile",
 ]
