@@ -91,6 +91,7 @@ implementations/energy_oil_forecasting/
 ├── analyst_agent/          # stateless AgentConfig factories (agent identity only)
 ├── adaptive_agent/         # the learning agent: strategy state, mutation tools, curriculum, seed/trained skills
 ├── starter_agent/          # fresh, hackable agent template (toggleable search/code-exec + skills)
+├── wti_scenario_memory_agent/  # self-contained ARIMA-anchored scenario agent with cross-origin memory (see its README)
 ├── specs/                  # YAML backtest + eval specs
 └── 01–06 notebooks (+ 05_forecast_tool_demo side demo, 99_starter_agent build-your-own)
 ```
@@ -111,6 +112,7 @@ notebook 05).
 | Stateless identity | `analyst_agent/agent.py` | Instructions, capability presets, skills — fixed at config time |
 | Role per task | `tasks.py` | Prompt builders, `build_wti_news_predictor(task)` |
 | Learning agent | `adaptive_agent/` | Persistent, mutable strategy state updated via self-directed study (notebooks 05–06) |
+| Scenario memory agent | `wti_scenario_memory_agent/` | Single-folder, drop-in agent: AutoARIMA anchor shifted/widened toward probability-weighted news scenarios, plus a JSONL memory of prior scenario frameworks so names stay stable across origins |
 
 ---
 
