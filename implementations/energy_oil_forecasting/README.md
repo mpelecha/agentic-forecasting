@@ -91,6 +91,8 @@ implementations/energy_oil_forecasting/
 ├── analyst_agent/          # stateless AgentConfig factories (agent identity only)
 ├── adaptive_agent/         # the learning agent: strategy state, mutation tools, curriculum, seed/trained skills
 ├── starter_agent/          # fresh, hackable agent template (toggleable search/code-exec + skills)
+├── cfm_agent_v_6_0/        # CFM Agent v6.0: return-path ensemble + evidence-gated LLM transforms (see its README)
+├── wti_scenario_memory_agent/ # ARIMA-anchored scenario agent that remembers its prior scenarios (see its README)
 ├── specs/                  # YAML backtest + eval specs
 └── 01–06 notebooks (+ 05_forecast_tool_demo side demo, 99_starter_agent build-your-own)
 ```
