@@ -1,0 +1,38 @@
+# CFM Agent v6.0 protected scope (specification Section 9).
+# Files outside the package whose SHA-256 must be unchanged at release.
+# One pattern per line. A plain line includes; a line beginning with "!" excludes.
+# Patterns match repository-relative POSIX paths; "**" spans directories, "*" one segment.
+# Read by release.py (snapshot-protected, verify-protected) and hashed in MANIFEST.sha256.
+aieng-forecasting/**
+implementations/energy_oil_forecasting/*.py
+implementations/energy_oil_forecasting/specs/**
+implementations/pyproject.toml
+pyproject.toml
+uv.lock
+Makefile
+.pre-commit-config.yaml
+implementations/energy_oil_forecasting/cfm_agent_v_5_0/**
+implementations/energy_oil_forecasting/cfm_agent_v_5_2/**
+implementations/energy_oil_forecasting/cfm_coach/**/*.py
+implementations/energy_oil_forecasting/cfm_coach/**/*.md
+!**/.venv/**
+!**/__pycache__/**
+!**/*.pyc
+!**/.DS_Store
+!**/.git/**
+!implementations/energy_oil_forecasting/cfm_coach/runs/**
+!implementations/energy_oil_forecasting/cfm_coach/runs_*/**
+!implementations/energy_oil_forecasting/cfm_coach/calibration/**
+!implementations/energy_oil_forecasting/cfm_coach/calibration_*/**
+!implementations/energy_oil_forecasting/cfm_coach/history_*/**
+!implementations/energy_oil_forecasting/cfm_coach/proposals/**
+!implementations/energy_oil_forecasting/cfm_coach/data/**
+!implementations/energy_oil_forecasting/cfm_coach/review/challengers/**
+!implementations/energy_oil_forecasting/cfm_coach/review/annotations/**
+!implementations/energy_oil_forecasting/cfm_coach/review/calibration/**
+!implementations/energy_oil_forecasting/cfm_coach/review/candidates/**
+!implementations/energy_oil_forecasting/cfm_coach/review/cards/**
+!implementations/energy_oil_forecasting/cfm_coach/review/coached/**
+!implementations/energy_oil_forecasting/cfm_coach/review/data/**
+!implementations/energy_oil_forecasting/cfm_coach/review/hindsight/**
+!implementations/energy_oil_forecasting/cfm_coach/review/weeks/**

@@ -1,0 +1,169 @@
+# CFM Agent v6.0 - settings.toml
+# Single source of every tunable value. Key names equal CfmV60Settings field names; tables only
+# group keys for reading. Python holds structural constants only (Section 7.1).
+# [identity] marks a value bound into the model-suite ID: changing it changes every suite ID.
+# Units: prices in USD per barrel; windows and lengths in WTI observations (trading days);
+# percentiles and coverages in percent; timeouts in seconds.
+
+[numerical]
+model_num_paths = 1000                 # [identity] return paths per component; locked at 1000
+simulation_length_business_days = 21   # [identity] steps per path; horizons 5/10/21 use the same paths
+block_length_business_days = 5         # [identity] block size for bootstrap and residual sampling
+history_window_business_days = 0       # [identity] 0 = entire cutoff-safe history; else trailing rows
+input_price_floor = 1.0                # [identity] applied to prices before returns, diagnostics, fits
+simulated_price_floor = 1.0            # [identity] applied to every simulated price before quantiles
+final_price_floor = 1.0                # applied after transformation; must not exceed the simulated floor
+require_all_components = false         # true = any component failure fails the whole suite
+min_training_rows_margin = 50          # [identity] rows required beyond max lag + block before any fit
+max_pre_execution_attempts = 2         # suite pre-execution attempts before the workflow fails
+max_data_rows_per_series = 520         # rows shown to the LLM per series; models use the full window
+
+[numerical.ensemble_weights]           # [identity] configured weights; renormalised over survivors
+bootstrap = 0.50
+sparse_ar = 0.25
+lightgbm = 0.25
+
+[numerical.sparse_ar]
+return_lags = [1, 5, 10, 21, 63, 126, 252]   # [identity] lagged daily returns (AR and LightGBM features)
+ar_ridge_penalty = 1e-5                      # [identity] ridge penalty on the seven coefficients
+ar_fit_intercept = true                      # [identity] unpenalised intercept
+
+[numerical.lightgbm]
+lightgbm_n_estimators = 250            # [identity]
+lightgbm_learning_rate = 0.03          # [identity]
+lightgbm_num_leaves = 7                # [identity]
+lightgbm_max_depth = 3                 # [identity]
+covariate_forward_fill_limit = 5       # [identity] max consecutive gap rows forward-filled per covariate
+covariate_series_ids = [               # [identity] shared-data-layer covariates, in feature order
+  "brent_log_ret_1b_l1b", "natgas_log_ret_1b_l1b", "gasoline_log_ret_1b_l1b",
+  "gold_log_ret_1b_l1b", "dollar_index_log_ret_1b_l1b", "oil_curve_contango_l1b",
+  "vix_level_l1b",
+]
+
+[diagnostics]
+diagnostic_return_windows = [1, 5, 10, 21, 63, 126, 252]
+diagnostic_volatility_windows = [5, 10, 21, 63, 126, 252]   # volatility, z-score, and drawdown windows
+diagnostic_jump_windows = [10, 21, 63, 126, 252]
+trading_days_per_year = 252            # annualisation factor for realised volatility
+curve_flat_threshold = 0.001           # abs(log USL/USO) below this labels the curve "flat"
+
+[transformation]
+emergency_center_cap_usd = 100.0             # absolute cap on the centre adjustment
+emergency_center_cap_price_fraction = 1.0    # cap = min(cap_usd, fraction x latest WTI)
+uncertainty_anchor_coverage = 80             # the ensemble P10-P90 band is equated to this coverage
+min_historical_returns = 500                 # fewer eligible h-step returns forces a neutral transform
+historical_conditioning = "none"             # "none" or "volatility_quintile" (ships off, DD-23)
+conditioning_volatility_window = 21          # used only when conditioning is on
+conditioning_quantile_bins = 5               # used only when conditioning is on
+
+[transformation.center_percentiles]    # historical h-step return percentile selected per centre action
+large_down = 10
+moderate_down = 25
+small_down = 40
+small_up = 60
+moderate_up = 75
+large_up = 90
+
+[transformation.novelty_multipliers]   # scales the centre adjustment before the emergency cap
+likely_new_relative_to_model_data = 1.00
+possibly_partly_reflected = 0.75
+likely_reflected_in_model_data = 0.50
+indeterminate = 0.50
+
+[transformation.uncertainty_coverage]  # nominal historical coverage (percent) per uncertainty action
+substantially_narrower = 65
+moderately_narrower = 70
+small_narrower = 75
+unchanged = 80
+small_wider = 85
+moderately_wider = 90
+substantially_wider = 95
+
+[evidence]
+tier_1_min_publishers = 1
+tier_1_min_confidence = 0.40
+tier_2_min_publishers = 2
+tier_2_min_confidence = 0.60
+tier_3_min_publishers = 2
+tier_3_min_confidence = 0.80
+policy_mode = "constrained_actions"
+
+[research]                             # every other v5.2 research field is carried over here verbatim
+research_max_results_per_query = 5
+source_resolution_timeout_seconds = 8.0
+source_resolution_max_redirects = 5
+search_verifier_max_attempts = 3
+search_verifier_confidence_threshold = 8     # of 10
+research_max_passages_per_source = 5         # audit-only source validator: passages kept per source
+research_passage_chars = 900                 # audit-only source validator: longest passage kept
+passage_min_chars = 40                       # shortest passage before merging (Section 4.1 step 5)
+passage_abbreviations = [
+  "U.S.", "U.K.", "U.N.", "E.U.", "Mr.", "Mrs.", "Ms.", "Dr.", "Inc.", "Ltd.", "Co.", "Corp.",
+  "vs.", "e.g.", "i.e.", "St.", "No.", "Jan.", "Feb.", "Mar.", "Apr.", "Jun.", "Jul.", "Aug.",
+  "Sep.", "Sept.", "Oct.", "Nov.", "Dec.", "bbl.", "approx.", "est.", "Gov.", "Sen.", "Rep.",
+]
+
+[llm.common]                           # forwarded with every role
+llm_top_p = 1.0
+llm_candidate_count = 1
+llm_frequency_penalty = 0.0
+llm_presence_penalty = 0.0
+llm_parallel_tool_calls = false
+
+[llm.main]                             # role 1: main assessment (ADK agent)
+main_model = "gemini-3.1-flash-lite-preview"
+main_temperature = 0.1
+main_max_tokens = 24576
+main_timeout_seconds = 180
+
+[llm.search]                           # role 2: grounded research search
+search_model = "gemini-3.1-flash-lite-preview"
+search_temperature = 0.1
+search_max_tokens = 4096
+search_timeout_seconds = 60
+
+[llm.cutoff_verifier]                  # role 3: strict-before-cutoff verification
+cutoff_verifier_model = "gemini-3.5-flash"
+cutoff_verifier_temperature = 0.0
+cutoff_verifier_max_tokens = 4096
+cutoff_verifier_timeout_seconds = 60
+
+[llm.structured_output_correction]     # role 4: one correction-only resubmission
+structured_output_correction_model = "gemini-3.5-flash"
+structured_output_correction_temperature = 0.0
+structured_output_correction_max_tokens = 8192
+structured_output_correction_timeout_seconds = 60
+
+[llm.claim_support_verifier]           # role 5: audit-only claim-support verification
+claim_support_verifier_model = "gemini-3.5-flash"
+claim_support_verifier_temperature = 0.0
+claim_support_verifier_max_tokens = 4096
+claim_support_verifier_timeout_seconds = 60
+
+[code_execution]
+code_execution_enabled = true
+code_execution_max_accepted = 1
+code_execution_max_rejected = 3
+code_execution_timeout_seconds = 60
+code_execution_sandbox_timeout_seconds = 90
+code_execution_max_code_chars = 10000
+code_execution_max_output_chars = 50000
+code_execution_allow_internet = false
+code_execution_prohibited_modules = [
+  "os", "sys", "subprocess", "pathlib", "shutil", "importlib", "pkgutil", "site", "inspect",
+  "socket", "http", "urllib", "requests", "ctypes", "multiprocessing", "signal", "glob",
+  "tempfile", "builtins", "code", "runpy",
+]
+code_execution_prohibited_calls = [
+  "open", "exec", "eval", "compile", "__import__", "globals", "locals", "vars", "breakpoint", "input",
+]
+code_execution_prohibited_names = [
+  "environ", "getenv", "__builtins__", "__loader__", "__spec__", "__file__",
+]
+
+[audit]
+audit_enabled = false
+
+[validation]                           # read by release.py and the validation scripts only
+live_spend_ceiling_usd = 3.0
+sensitivity_excluded_dates = ["2020-04-20", "2020-04-21"]

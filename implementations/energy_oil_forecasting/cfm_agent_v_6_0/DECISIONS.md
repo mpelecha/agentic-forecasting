@@ -1,0 +1,41 @@
+# CFM Agent v6.0 design-decision register
+
+Mirror of Section 12 of `SPECIFICATION.pdf` (final, 2026-09-16). Each entry records what was
+decided, what was considered instead, and why. Entries marked "deviates" change something the
+original v6.0 planning documents asked for.
+
+**Rule for changes.** A later change to any decision is appended below under "Dated entries" as a
+new entry that names the decision it supersedes. Existing entries are never edited in place.
+
+## Register (DD-01 to DD-24)
+
+| ID | Decision | Considered instead | Reason and consequence |
+|---|---|---|---|
+| DD-01 | v6.0 is a new isolated sibling package; v5.2 and IMPROVEMENTS.md are committed first as the git baseline | Modify v5.2 in place | The coach runs v5.2 daily; byte-for-byte protection needs a committed baseline. Consequence: two packages coexist |
+| DD-02 | One release, directly from v5.2 (deviates) | Staged v5.8, v5.9, v6.0 | Every exit criterion is testable in one package; staging triples packaging work and changes no requirement |
+| DD-03 | Three return-path models replace the Darts price-level models | Keep Darts models and fix calibration | Measured: the v5.2 base sat about $2.60 below the last price at h=21 because price-level LightGBM cannot extrapolate, and the suite was not deterministic. Return paths are extrapolation-free and fully seeded |
+| DD-04 | Weights 0.50/0.25/0.25; 1,000 paths; five-step blocks; lags 1 to 252 | Equal weights; longer blocks | Values from the planning documents; the bootstrap is the least model-dependent component and carries the most weight. All are settings |
+| DD-05 | Eleven quantile levels are produced (deviates: the planning documents listed five) | Five levels | The shared library, the coach, and v5.2 output use eleven levels; the five are a subset. The transformation arithmetic uses only P10 and P50 |
+| DD-06 | $1.00 input, simulated, and final floors; no return clipping; the April 2020 observations stay in every fit; a sensitivity report is produced at release (deviates: planning documents said $0.01) | $0.01 floor; excluding or winsorising April 2020 | Owner decision to keep the literal rule. Consequence, measured: AR residual sd 12.5% versus 2.6% and intercept +0.224% versus +0.055% per day; 2 of 1,000 bootstrap paths above twice the price. Recorded, informational, not corrected |
+| DD-07 | Full cutoff-safe history by default with one optional window setting; the LLM snapshot stays 520 rows | 520-row window for everything | The 520 limit in v5.2 only clamps the LLM snapshot; models always trained on full history. Full-history bands cover 78 to 86% of the last three years of moves against an 80% target |
+| DD-08 | Sampled returns keep the history's drift | Demean the returns | Owner decision to keep the literal rule. Consequence: the ensemble P50 sits about $1.50 to $2.00 above the last price at h=21 |
+| DD-09 | Centre adjustment = P50 × historical percentile of h-step returns, with a directional guard | Width-fraction steps (v5.2); no guard | Derived from data rather than hand-set. The guard is needed: a trailing-window P40 was positive in 22% of 520-day windows, which would have moved a small-down action up |
+| DD-10 | Coverage-shaped uncertainty ladder anchored at the historical 80% band, applied as a shape ratio to the ensemble's own distances (deviates) | Literal dollar targets from absolute-deviation percentiles P10 to P90 | Measured: the literal targets made small and moderate widening no-ops (factors 0.60 and 0.83) and cut widths by 62 to 90% on narrowing. The ladder keeps the ensemble's shape and moves coverage by a known amount; ADR 0001 |
+| DD-11 | Novelty multipliers 1.0/0.75/0.5/0.5 apply to all four classes; no eligibility gate; no tier cap; novelty never qualifies evidence (deviates) | Keep the v5.2 gate that only two classes may act | The multiplier table is meaningless under the gate. Owner decision not to cap by tier |
+| DD-12 | Tier 3 = two publishers and 0.80 confidence; shared cap ladder; conflict forces Tier 0; narrowing needs a resolved uncertainty | Keep v5.2's Tier 3 (three publishers, primary source, physical claim, likely-new novelty) | v5.2's Tier 3 was never reached in 40 live runs; the cap ladder is shown in code and kept |
+| DD-13 | Passages are sentence-level slices of verifier-cleaned summaries, produced by a defined deterministic algorithm | Destination-page excerpts; LLM-chosen quotes | Destination text must stay outside the active path (v5.2 contract tests). A defined algorithm makes passage ids stable across runs and machines |
+| DD-14 | Five LLM roles, each with model, temperature, max tokens, and timeout; temperatures 0.1/0.1/0.0/0.0/0.0; seed unset; forwarding via a package-built LiteLlm passed as AgentConfig.model | One shared model alias; modifying the shared factory | Verification and correction roles must be exact, so 0.0; the two generative roles use 0.1 to avoid degenerate repetition in long structured output. The shared factory accepts a model object, so shared main stays untouched. Seeds are unset because the proxy does not honour them |
+| DD-15 | E2B: Python-defined payload, static prohibited-operation screen, one accepted and three rejected requests, 60 s, 10k chars in, 50k out, internet off | Unlimited LLM-authored execution (v5.2); removing E2B | Owner decision to keep the LLM as author and Python as enforcer. Rejected requests never launch a sandbox |
+| DD-16 | Every tunable value lives in settings.toml; key = field name; Python keeps structural constants only; a literal-scan test enforces it | Python defaults in config.py (v5.2); YAML; pydantic-settings with environment variables | Owner requirement: one readable place for model settings and calibration inputs. TOML needs no dependency and carries comments. The file is hashed into the audit and the manifest, so a run is tied to an exact configuration |
+| DD-17 | One canonical JSON encoder for every identity payload; failure codes, not error text, enter the suite identity | v5.2's encoder with str() fallback | Readiness-assessment finding: str() fallbacks and error messages can differ across processes. Consequence: identity payloads with unsupported types fail loudly |
+| DD-18 | Fixed order of operations for quantiles, the guard, P50, and the floors; the guard is defensive and may not change anything; final floor at or below the simulated floor | Leave the order to the implementation | Readiness-assessment finding. The floor ordering makes exact neutral and the final floor provably compatible |
+| DD-19 | A step is one WTI observation; forecast dates use pandas business days | An exchange calendar | The shared library and its cutoff enforcer already use pandas business days; an exchange calendar would change the shared data layer, which is out of scope. The holiday mismatch is at most one day per horizon |
+| DD-20 | Release validation runs on a frozen, hashed copy of the yfinance cache; the determinism gate is conditional on an equal data fingerprint | Run on the live cache; commit market data | The coach's daily job shares the cache directory and could rewrite it between runs; market data does not belong in git |
+| DD-21 | All seven v5.2 test files are preserved and mapped; the protected scope is a machine-readable file; release tooling lives in the package | Five named files; scope in prose; a repository-level tool | Two v5.2 files (v51 improvements and regressions) test behaviour v6.0 keeps. No packaging tooling exists in the repository |
+| DD-22 | Live validation under a $3 ceiling with defined cost accounting and a model preflight | No live validation; unbounded spend | Owner decision on the ceiling; the accounting rule makes the stop condition mechanical |
+| DD-23 | Volatility-regime conditioning of the historical profile ships as a setting, off | On by default; absent | Measured two-fold width variation across volatility regimes, but turning it on is a change that needs scored evidence first |
+| DD-24 | No coach registration, streams, replay support, or scheduled runs in this release; coach-facing module layout preserved | Register v6.0 in the coach now | Owner decision; the preserved layout makes later registration a coach-side task only |
+
+## Dated entries
+
+None. The register above is the state at the start of implementation (2026-09-16).
