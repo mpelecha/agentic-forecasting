@@ -9,19 +9,23 @@ spec:
     frequency: B
     description: 'WTI Crude Oil continuous front-month futures Close price (yfinance
       symbol: CL=F), projected 5, 10, and 21 trading days ahead.'
+    payload_type: continuous
+    categories: null
     resolution_fn: observed_value_at_resolution_timestamp
   start: '2026-02-02T00:00:00'
-  end: '2026-03-23T00:00:00'
+  end: '2026-06-01T00:00:00'
   stride: 5
+  origin_dates: null
   warmup: 250
   description: Prospective/out-of-sample evaluation period in 2026 for daily WTI crude
-    oil. Evaluates selected contender models on 8 weekly origins during the early
-    2026 geopolitical price shock to measure adaptive real-time forecasting performance.
+    oil. Evaluates selected contender models on 18 weekly origins from the early 2026
+    geopolitical price shock through its aftermath, to measure adaptive real-time
+    forecasting performance.
 predictor_id: last_value_naive
 predictions:
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.829767'
+  issued_at: '2026-10-17T13:30:13.627779'
   as_of: '2026-02-02T00:00:00'
   forecast_date: '2026-02-09T00:00:00'
   payload:
@@ -41,7 +45,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.829767'
+  issued_at: '2026-10-17T13:30:13.627779'
   as_of: '2026-02-02T00:00:00'
   forecast_date: '2026-03-03T00:00:00'
   payload:
@@ -61,7 +65,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.843882'
+  issued_at: '2026-10-17T13:30:13.645191'
   as_of: '2026-02-09T00:00:00'
   forecast_date: '2026-02-23T00:00:00'
   payload:
@@ -81,7 +85,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.843882'
+  issued_at: '2026-10-17T13:30:13.645191'
   as_of: '2026-02-09T00:00:00'
   forecast_date: '2026-03-10T00:00:00'
   payload:
@@ -101,7 +105,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.856020'
+  issued_at: '2026-10-17T13:30:13.660399'
   as_of: '2026-02-16T00:00:00'
   forecast_date: '2026-02-23T00:00:00'
   payload:
@@ -121,7 +125,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.856020'
+  issued_at: '2026-10-17T13:30:13.660399'
   as_of: '2026-02-16T00:00:00'
   forecast_date: '2026-03-02T00:00:00'
   payload:
@@ -141,7 +145,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.856020'
+  issued_at: '2026-10-17T13:30:13.660399'
   as_of: '2026-02-16T00:00:00'
   forecast_date: '2026-03-17T00:00:00'
   payload:
@@ -161,7 +165,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.866895'
+  issued_at: '2026-10-17T13:30:13.675554'
   as_of: '2026-02-23T00:00:00'
   forecast_date: '2026-03-02T00:00:00'
   payload:
@@ -181,7 +185,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.866895'
+  issued_at: '2026-10-17T13:30:13.675554'
   as_of: '2026-02-23T00:00:00'
   forecast_date: '2026-03-09T00:00:00'
   payload:
@@ -201,7 +205,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.866895'
+  issued_at: '2026-10-17T13:30:13.675554'
   as_of: '2026-02-23T00:00:00'
   forecast_date: '2026-03-24T00:00:00'
   payload:
@@ -221,7 +225,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.877381'
+  issued_at: '2026-10-17T13:30:13.690621'
   as_of: '2026-03-02T00:00:00'
   forecast_date: '2026-03-09T00:00:00'
   payload:
@@ -241,7 +245,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.877381'
+  issued_at: '2026-10-17T13:30:13.690621'
   as_of: '2026-03-02T00:00:00'
   forecast_date: '2026-03-16T00:00:00'
   payload:
@@ -261,7 +265,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.877381'
+  issued_at: '2026-10-17T13:30:13.690621'
   as_of: '2026-03-02T00:00:00'
   forecast_date: '2026-03-31T00:00:00'
   payload:
@@ -281,7 +285,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.886868'
+  issued_at: '2026-10-17T13:30:13.705946'
   as_of: '2026-03-09T00:00:00'
   forecast_date: '2026-03-16T00:00:00'
   payload:
@@ -301,7 +305,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.886868'
+  issued_at: '2026-10-17T13:30:13.705946'
   as_of: '2026-03-09T00:00:00'
   forecast_date: '2026-03-23T00:00:00'
   payload:
@@ -321,7 +325,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.886868'
+  issued_at: '2026-10-17T13:30:13.705946'
   as_of: '2026-03-09T00:00:00'
   forecast_date: '2026-04-07T00:00:00'
   payload:
@@ -341,7 +345,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.896337'
+  issued_at: '2026-10-17T13:30:13.721010'
   as_of: '2026-03-16T00:00:00'
   forecast_date: '2026-03-23T00:00:00'
   payload:
@@ -361,7 +365,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.896337'
+  issued_at: '2026-10-17T13:30:13.721010'
   as_of: '2026-03-16T00:00:00'
   forecast_date: '2026-03-30T00:00:00'
   payload:
@@ -381,7 +385,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.896337'
+  issued_at: '2026-10-17T13:30:13.721010'
   as_of: '2026-03-16T00:00:00'
   forecast_date: '2026-04-14T00:00:00'
   payload:
@@ -401,7 +405,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.905918'
+  issued_at: '2026-10-17T13:30:13.736210'
   as_of: '2026-03-23T00:00:00'
   forecast_date: '2026-03-30T00:00:00'
   payload:
@@ -421,7 +425,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.905918'
+  issued_at: '2026-10-17T13:30:13.736210'
   as_of: '2026-03-23T00:00:00'
   forecast_date: '2026-04-06T00:00:00'
   payload:
@@ -441,7 +445,7 @@ predictions:
   metadata: {}
 - predictor_id: last_value_naive
   task_id: wti_oil_price_forecast
-  issued_at: '2026-05-22T15:59:38.905918'
+  issued_at: '2026-10-17T13:30:13.736210'
   as_of: '2026-03-23T00:00:00'
   forecast_date: '2026-04-21T00:00:00'
   payload:
@@ -458,6 +462,566 @@ predictions:
       '0.8': 98.31999969482422
       '0.9': 98.31999969482422
       '0.95': 98.31999969482422
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.751257'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-06T00:00:00'
+  payload:
+    point_forecast: 99.63999938964844
+    quantiles:
+      '0.05': 99.63999938964844
+      '0.1': 99.63999938964844
+      '0.2': 99.63999938964844
+      '0.3': 99.63999938964844
+      '0.4': 99.63999938964844
+      '0.5': 99.63999938964844
+      '0.6': 99.63999938964844
+      '0.7': 99.63999938964844
+      '0.8': 99.63999938964844
+      '0.9': 99.63999938964844
+      '0.95': 99.63999938964844
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.751257'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-13T00:00:00'
+  payload:
+    point_forecast: 99.63999938964844
+    quantiles:
+      '0.05': 99.63999938964844
+      '0.1': 99.63999938964844
+      '0.2': 99.63999938964844
+      '0.3': 99.63999938964844
+      '0.4': 99.63999938964844
+      '0.5': 99.63999938964844
+      '0.6': 99.63999938964844
+      '0.7': 99.63999938964844
+      '0.8': 99.63999938964844
+      '0.9': 99.63999938964844
+      '0.95': 99.63999938964844
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.751257'
+  as_of: '2026-03-30T00:00:00'
+  forecast_date: '2026-04-28T00:00:00'
+  payload:
+    point_forecast: 99.63999938964844
+    quantiles:
+      '0.05': 99.63999938964844
+      '0.1': 99.63999938964844
+      '0.2': 99.63999938964844
+      '0.3': 99.63999938964844
+      '0.4': 99.63999938964844
+      '0.5': 99.63999938964844
+      '0.6': 99.63999938964844
+      '0.7': 99.63999938964844
+      '0.8': 99.63999938964844
+      '0.9': 99.63999938964844
+      '0.95': 99.63999938964844
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.766370'
+  as_of: '2026-04-06T00:00:00'
+  forecast_date: '2026-04-13T00:00:00'
+  payload:
+    point_forecast: 111.54000091552734
+    quantiles:
+      '0.05': 111.54000091552734
+      '0.1': 111.54000091552734
+      '0.2': 111.54000091552734
+      '0.3': 111.54000091552734
+      '0.4': 111.54000091552734
+      '0.5': 111.54000091552734
+      '0.6': 111.54000091552734
+      '0.7': 111.54000091552734
+      '0.8': 111.54000091552734
+      '0.9': 111.54000091552734
+      '0.95': 111.54000091552734
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.766370'
+  as_of: '2026-04-06T00:00:00'
+  forecast_date: '2026-04-20T00:00:00'
+  payload:
+    point_forecast: 111.54000091552734
+    quantiles:
+      '0.05': 111.54000091552734
+      '0.1': 111.54000091552734
+      '0.2': 111.54000091552734
+      '0.3': 111.54000091552734
+      '0.4': 111.54000091552734
+      '0.5': 111.54000091552734
+      '0.6': 111.54000091552734
+      '0.7': 111.54000091552734
+      '0.8': 111.54000091552734
+      '0.9': 111.54000091552734
+      '0.95': 111.54000091552734
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.766370'
+  as_of: '2026-04-06T00:00:00'
+  forecast_date: '2026-05-05T00:00:00'
+  payload:
+    point_forecast: 111.54000091552734
+    quantiles:
+      '0.05': 111.54000091552734
+      '0.1': 111.54000091552734
+      '0.2': 111.54000091552734
+      '0.3': 111.54000091552734
+      '0.4': 111.54000091552734
+      '0.5': 111.54000091552734
+      '0.6': 111.54000091552734
+      '0.7': 111.54000091552734
+      '0.8': 111.54000091552734
+      '0.9': 111.54000091552734
+      '0.95': 111.54000091552734
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.781405'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-04-20T00:00:00'
+  payload:
+    point_forecast: 96.56999969482422
+    quantiles:
+      '0.05': 96.56999969482422
+      '0.1': 96.56999969482422
+      '0.2': 96.56999969482422
+      '0.3': 96.56999969482422
+      '0.4': 96.56999969482422
+      '0.5': 96.56999969482422
+      '0.6': 96.56999969482422
+      '0.7': 96.56999969482422
+      '0.8': 96.56999969482422
+      '0.9': 96.56999969482422
+      '0.95': 96.56999969482422
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.781405'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-04-27T00:00:00'
+  payload:
+    point_forecast: 96.56999969482422
+    quantiles:
+      '0.05': 96.56999969482422
+      '0.1': 96.56999969482422
+      '0.2': 96.56999969482422
+      '0.3': 96.56999969482422
+      '0.4': 96.56999969482422
+      '0.5': 96.56999969482422
+      '0.6': 96.56999969482422
+      '0.7': 96.56999969482422
+      '0.8': 96.56999969482422
+      '0.9': 96.56999969482422
+      '0.95': 96.56999969482422
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.781405'
+  as_of: '2026-04-13T00:00:00'
+  forecast_date: '2026-05-12T00:00:00'
+  payload:
+    point_forecast: 96.56999969482422
+    quantiles:
+      '0.05': 96.56999969482422
+      '0.1': 96.56999969482422
+      '0.2': 96.56999969482422
+      '0.3': 96.56999969482422
+      '0.4': 96.56999969482422
+      '0.5': 96.56999969482422
+      '0.6': 96.56999969482422
+      '0.7': 96.56999969482422
+      '0.8': 96.56999969482422
+      '0.9': 96.56999969482422
+      '0.95': 96.56999969482422
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.796416'
+  as_of: '2026-04-20T00:00:00'
+  forecast_date: '2026-04-27T00:00:00'
+  payload:
+    point_forecast: 83.8499984741211
+    quantiles:
+      '0.05': 83.8499984741211
+      '0.1': 83.8499984741211
+      '0.2': 83.8499984741211
+      '0.3': 83.8499984741211
+      '0.4': 83.8499984741211
+      '0.5': 83.8499984741211
+      '0.6': 83.8499984741211
+      '0.7': 83.8499984741211
+      '0.8': 83.8499984741211
+      '0.9': 83.8499984741211
+      '0.95': 83.8499984741211
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.796416'
+  as_of: '2026-04-20T00:00:00'
+  forecast_date: '2026-05-04T00:00:00'
+  payload:
+    point_forecast: 83.8499984741211
+    quantiles:
+      '0.05': 83.8499984741211
+      '0.1': 83.8499984741211
+      '0.2': 83.8499984741211
+      '0.3': 83.8499984741211
+      '0.4': 83.8499984741211
+      '0.5': 83.8499984741211
+      '0.6': 83.8499984741211
+      '0.7': 83.8499984741211
+      '0.8': 83.8499984741211
+      '0.9': 83.8499984741211
+      '0.95': 83.8499984741211
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.796416'
+  as_of: '2026-04-20T00:00:00'
+  forecast_date: '2026-05-19T00:00:00'
+  payload:
+    point_forecast: 83.8499984741211
+    quantiles:
+      '0.05': 83.8499984741211
+      '0.1': 83.8499984741211
+      '0.2': 83.8499984741211
+      '0.3': 83.8499984741211
+      '0.4': 83.8499984741211
+      '0.5': 83.8499984741211
+      '0.6': 83.8499984741211
+      '0.7': 83.8499984741211
+      '0.8': 83.8499984741211
+      '0.9': 83.8499984741211
+      '0.95': 83.8499984741211
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.811446'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-04T00:00:00'
+  payload:
+    point_forecast: 94.4000015258789
+    quantiles:
+      '0.05': 94.4000015258789
+      '0.1': 94.4000015258789
+      '0.2': 94.4000015258789
+      '0.3': 94.4000015258789
+      '0.4': 94.4000015258789
+      '0.5': 94.4000015258789
+      '0.6': 94.4000015258789
+      '0.7': 94.4000015258789
+      '0.8': 94.4000015258789
+      '0.9': 94.4000015258789
+      '0.95': 94.4000015258789
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.811446'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-11T00:00:00'
+  payload:
+    point_forecast: 94.4000015258789
+    quantiles:
+      '0.05': 94.4000015258789
+      '0.1': 94.4000015258789
+      '0.2': 94.4000015258789
+      '0.3': 94.4000015258789
+      '0.4': 94.4000015258789
+      '0.5': 94.4000015258789
+      '0.6': 94.4000015258789
+      '0.7': 94.4000015258789
+      '0.8': 94.4000015258789
+      '0.9': 94.4000015258789
+      '0.95': 94.4000015258789
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.811446'
+  as_of: '2026-04-27T00:00:00'
+  forecast_date: '2026-05-26T00:00:00'
+  payload:
+    point_forecast: 94.4000015258789
+    quantiles:
+      '0.05': 94.4000015258789
+      '0.1': 94.4000015258789
+      '0.2': 94.4000015258789
+      '0.3': 94.4000015258789
+      '0.4': 94.4000015258789
+      '0.5': 94.4000015258789
+      '0.6': 94.4000015258789
+      '0.7': 94.4000015258789
+      '0.8': 94.4000015258789
+      '0.9': 94.4000015258789
+      '0.95': 94.4000015258789
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.826482'
+  as_of: '2026-05-04T00:00:00'
+  forecast_date: '2026-05-11T00:00:00'
+  payload:
+    point_forecast: 101.94000244140625
+    quantiles:
+      '0.05': 101.94000244140625
+      '0.1': 101.94000244140625
+      '0.2': 101.94000244140625
+      '0.3': 101.94000244140625
+      '0.4': 101.94000244140625
+      '0.5': 101.94000244140625
+      '0.6': 101.94000244140625
+      '0.7': 101.94000244140625
+      '0.8': 101.94000244140625
+      '0.9': 101.94000244140625
+      '0.95': 101.94000244140625
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.826482'
+  as_of: '2026-05-04T00:00:00'
+  forecast_date: '2026-05-18T00:00:00'
+  payload:
+    point_forecast: 101.94000244140625
+    quantiles:
+      '0.05': 101.94000244140625
+      '0.1': 101.94000244140625
+      '0.2': 101.94000244140625
+      '0.3': 101.94000244140625
+      '0.4': 101.94000244140625
+      '0.5': 101.94000244140625
+      '0.6': 101.94000244140625
+      '0.7': 101.94000244140625
+      '0.8': 101.94000244140625
+      '0.9': 101.94000244140625
+      '0.95': 101.94000244140625
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.826482'
+  as_of: '2026-05-04T00:00:00'
+  forecast_date: '2026-06-02T00:00:00'
+  payload:
+    point_forecast: 101.94000244140625
+    quantiles:
+      '0.05': 101.94000244140625
+      '0.1': 101.94000244140625
+      '0.2': 101.94000244140625
+      '0.3': 101.94000244140625
+      '0.4': 101.94000244140625
+      '0.5': 101.94000244140625
+      '0.6': 101.94000244140625
+      '0.7': 101.94000244140625
+      '0.8': 101.94000244140625
+      '0.9': 101.94000244140625
+      '0.95': 101.94000244140625
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.841503'
+  as_of: '2026-05-11T00:00:00'
+  forecast_date: '2026-05-18T00:00:00'
+  payload:
+    point_forecast: 95.41999816894531
+    quantiles:
+      '0.05': 95.41999816894531
+      '0.1': 95.41999816894531
+      '0.2': 95.41999816894531
+      '0.3': 95.41999816894531
+      '0.4': 95.41999816894531
+      '0.5': 95.41999816894531
+      '0.6': 95.41999816894531
+      '0.7': 95.41999816894531
+      '0.8': 95.41999816894531
+      '0.9': 95.41999816894531
+      '0.95': 95.41999816894531
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.841503'
+  as_of: '2026-05-11T00:00:00'
+  forecast_date: '2026-06-09T00:00:00'
+  payload:
+    point_forecast: 95.41999816894531
+    quantiles:
+      '0.05': 95.41999816894531
+      '0.1': 95.41999816894531
+      '0.2': 95.41999816894531
+      '0.3': 95.41999816894531
+      '0.4': 95.41999816894531
+      '0.5': 95.41999816894531
+      '0.6': 95.41999816894531
+      '0.7': 95.41999816894531
+      '0.8': 95.41999816894531
+      '0.9': 95.41999816894531
+      '0.95': 95.41999816894531
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.856571'
+  as_of: '2026-05-18T00:00:00'
+  forecast_date: '2026-06-01T00:00:00'
+  payload:
+    point_forecast: 105.41999816894531
+    quantiles:
+      '0.05': 105.41999816894531
+      '0.1': 105.41999816894531
+      '0.2': 105.41999816894531
+      '0.3': 105.41999816894531
+      '0.4': 105.41999816894531
+      '0.5': 105.41999816894531
+      '0.6': 105.41999816894531
+      '0.7': 105.41999816894531
+      '0.8': 105.41999816894531
+      '0.9': 105.41999816894531
+      '0.95': 105.41999816894531
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.856571'
+  as_of: '2026-05-18T00:00:00'
+  forecast_date: '2026-06-16T00:00:00'
+  payload:
+    point_forecast: 105.41999816894531
+    quantiles:
+      '0.05': 105.41999816894531
+      '0.1': 105.41999816894531
+      '0.2': 105.41999816894531
+      '0.3': 105.41999816894531
+      '0.4': 105.41999816894531
+      '0.5': 105.41999816894531
+      '0.6': 105.41999816894531
+      '0.7': 105.41999816894531
+      '0.8': 105.41999816894531
+      '0.9': 105.41999816894531
+      '0.95': 105.41999816894531
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.871562'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-01T00:00:00'
+  payload:
+    point_forecast: 96.5999984741211
+    quantiles:
+      '0.05': 96.5999984741211
+      '0.1': 96.5999984741211
+      '0.2': 96.5999984741211
+      '0.3': 96.5999984741211
+      '0.4': 96.5999984741211
+      '0.5': 96.5999984741211
+      '0.6': 96.5999984741211
+      '0.7': 96.5999984741211
+      '0.8': 96.5999984741211
+      '0.9': 96.5999984741211
+      '0.95': 96.5999984741211
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.871562'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-08T00:00:00'
+  payload:
+    point_forecast: 96.5999984741211
+    quantiles:
+      '0.05': 96.5999984741211
+      '0.1': 96.5999984741211
+      '0.2': 96.5999984741211
+      '0.3': 96.5999984741211
+      '0.4': 96.5999984741211
+      '0.5': 96.5999984741211
+      '0.6': 96.5999984741211
+      '0.7': 96.5999984741211
+      '0.8': 96.5999984741211
+      '0.9': 96.5999984741211
+      '0.95': 96.5999984741211
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.871562'
+  as_of: '2026-05-25T00:00:00'
+  forecast_date: '2026-06-23T00:00:00'
+  payload:
+    point_forecast: 96.5999984741211
+    quantiles:
+      '0.05': 96.5999984741211
+      '0.1': 96.5999984741211
+      '0.2': 96.5999984741211
+      '0.3': 96.5999984741211
+      '0.4': 96.5999984741211
+      '0.5': 96.5999984741211
+      '0.6': 96.5999984741211
+      '0.7': 96.5999984741211
+      '0.8': 96.5999984741211
+      '0.9': 96.5999984741211
+      '0.95': 96.5999984741211
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.886673'
+  as_of: '2026-06-01T00:00:00'
+  forecast_date: '2026-06-08T00:00:00'
+  payload:
+    point_forecast: 87.36000061035156
+    quantiles:
+      '0.05': 87.36000061035156
+      '0.1': 87.36000061035156
+      '0.2': 87.36000061035156
+      '0.3': 87.36000061035156
+      '0.4': 87.36000061035156
+      '0.5': 87.36000061035156
+      '0.6': 87.36000061035156
+      '0.7': 87.36000061035156
+      '0.8': 87.36000061035156
+      '0.9': 87.36000061035156
+      '0.95': 87.36000061035156
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.886673'
+  as_of: '2026-06-01T00:00:00'
+  forecast_date: '2026-06-15T00:00:00'
+  payload:
+    point_forecast: 87.36000061035156
+    quantiles:
+      '0.05': 87.36000061035156
+      '0.1': 87.36000061035156
+      '0.2': 87.36000061035156
+      '0.3': 87.36000061035156
+      '0.4': 87.36000061035156
+      '0.5': 87.36000061035156
+      '0.6': 87.36000061035156
+      '0.7': 87.36000061035156
+      '0.8': 87.36000061035156
+      '0.9': 87.36000061035156
+      '0.95': 87.36000061035156
+  metadata: {}
+- predictor_id: last_value_naive
+  task_id: wti_oil_price_forecast
+  issued_at: '2026-10-17T13:30:13.886673'
+  as_of: '2026-06-01T00:00:00'
+  forecast_date: '2026-06-30T00:00:00'
+  payload:
+    point_forecast: 87.36000061035156
+    quantiles:
+      '0.05': 87.36000061035156
+      '0.1': 87.36000061035156
+      '0.2': 87.36000061035156
+      '0.3': 87.36000061035156
+      '0.4': 87.36000061035156
+      '0.5': 87.36000061035156
+      '0.6': 87.36000061035156
+      '0.7': 87.36000061035156
+      '0.8': 87.36000061035156
+      '0.9': 87.36000061035156
+      '0.95': 87.36000061035156
   metadata: {}
 scores:
 - 0.8499984741210938
@@ -482,6 +1046,35 @@ scores:
 - 4.55999755859375
 - 14.090003967285156
 - 6.19000244140625
-mean_crps: 13.643181887539951
-ran_at: '2026-05-22T15:59:38.912927'
+- 12.770004272460938
+- 0.55999755859375
+- 0.29000091552734375
+- 12.459999084472656
+- 21.93000030517578
+- 9.270004272460938
+- 6.959999084472656
+- 0.1999969482421875
+- 5.6100006103515625
+- 12.520004272460938
+- 22.56999969482422
+- 23.919998168945312
+- 12.019996643066406
+- 3.6699981689453125
+- 0.5100021362304688
+- 3.8700027465820312
+- 6.720001220703125
+- 8.180000305175781
+- 13.240005493164062
+- 7.220001220703125
+- 13.259994506835938
+- 29.3699951171875
+- 4.439994812011719
+- 5.299995422363281
+- 23.389999389648438
+- 3.94000244140625
+- 6.6100006103515625
+- 17.860000610351562
+metric: crps
+mean_score: 11.776199951171876
+ran_at: '2026-10-17T13:30:13.897881'
 skipped_origins: 0
