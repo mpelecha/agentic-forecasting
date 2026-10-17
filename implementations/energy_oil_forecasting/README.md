@@ -93,6 +93,7 @@ implementations/energy_oil_forecasting/
 ├── starter_agent/          # fresh, hackable agent template (toggleable search/code-exec + skills)
 ├── cfm_agent_v_6_0/        # CFM Agent v6.0: return-path ensemble + evidence-gated LLM transforms (see its README)
 ├── wti_scenario_memory_agent/ # ARIMA-anchored scenario agent that remembers its prior scenarios (see its README)
+├── scripts/run_eval_v6_memory.py # scores both agents on the 2026 eval window next to the NB04 baselines
 ├── specs/                  # YAML backtest + eval specs
 └── 01–06 notebooks (+ 05_forecast_tool_demo side demo, 99_starter_agent build-your-own)
 ```
