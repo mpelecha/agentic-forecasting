@@ -48,6 +48,7 @@ Usage (repo root, on the branch with cfm_agent_v_5_2; keys in the environment)::
     uv run python $S                                     # run every missing origin, then analyse
     uv run python $S --analyze-only                      # analyse what is on disk
     uv run python $S --audit-dates                       # check source publication dates (fetches pages)
+    uv run python $S --direction                         # did the agent move the right way vs AutoARIMA?
 
 The analysis prints and saves (to ``results/``) a summary per period (Jun 2025-Jan 2026,
 Feb-Jun 2026, all) and horizon — 5-day is the primary result — plus a per-origin CSV.
@@ -635,12 +636,142 @@ def gate_report(origins: list[pd.Timestamp], variant: str) -> None:
     print(f"Wrote {path}")
 
 
+# ── direction relative to AutoARIMA ──────────────────────────────────────────
+
+CALL_EPS = 0.05  # gaps under 5 cents count as "same as AutoARIMA", as on cfm_coach's corpus page
+CALL_ROWS = ["Above AutoARIMA", "Same as AutoARIMA", "Below AutoARIMA"]
+
+
+def _p50s(raws: list[dict[str, Any] | None], keep: set[pd.Timestamp]) -> dict[tuple, dict[str, Any]]:
+    """Return median forecasts keyed by (origin, forecast date); the first cache listed wins."""
+    out: dict[tuple, dict[str, Any]] = {}
+    for raw in raws:
+        for pred in (raw or {}).get("predictions", []):
+            origin = pd.Timestamp(pred["as_of"]).normalize()
+            fdate = pd.Timestamp(pred["forecast_date"]).normalize()
+            if origin not in keep or (origin, fdate) in out:
+                continue
+            meta = pred.get("metadata") or {}
+            calls = {
+                int(a["horizon"]): a.get("center_action")
+                for a in (meta.get("llm_context_assessment") or {}).get("horizon_actions", [])
+            }
+            horizon = _horizon(origin, fdate)
+            out[(origin, fdate)] = {
+                "horizon": horizon,
+                "p50": float(pred["payload"]["point_forecast"]),
+                "llm_center_action": calls.get(horizon),
+            }
+    return out
+
+
+def _binom_p(k: int, n: int) -> float:
+    """Two-sided exact binomial p-value against a fair coin."""
+    if n == 0:
+        return float("nan")
+    from math import comb  # noqa: PLC0415
+
+    probs = [comb(n, i) / 2**n for i in range(n + 1)]
+    return min(1.0, sum(pr for pr in probs if pr <= probs[k] + 1e-12))
+
+
+def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
+    """Grid of the agent's call (above/below AutoARIMA's median) against where the price ended up."""
+    from datetime import datetime as _dt  # noqa: PLC0415
+
+    from energy_oil_forecasting.data import WTI_SERIES_ID, build_wti_multivariate_service  # noqa: PLC0415
+
+    keep = set(origins)
+    agent = _p50s(_agent_raws(origins, variant), keep)
+    arima_raws = [_load(_new_path(o, ARIMA_ID)) for o in origins]
+    if variant == "v52":
+        arima_raws.append(_load(STORE / WEEKLY_SPEC_ID / f"{ARIMA_ID}__{TASK_ID}.yaml"))
+    arima = _p50s(arima_raws, keep)
+    prices = build_wti_multivariate_service().get_series(WTI_SERIES_ID, as_of=_dt.now())
+    actual = {pd.Timestamp(t).normalize(): float(v) for t, v in zip(prices["timestamp"], prices["value"], strict=True)}
+
+    rows = []
+    for key in sorted(set(agent) & set(arima)):
+        origin, fdate = key
+        if fdate not in actual:
+            continue
+        gap = agent[key]["p50"] - arima[key]["p50"]
+        moved = actual[fdate] - arima[key]["p50"]
+        call = 0 if abs(gap) < CALL_EPS else (1 if gap > 0 else -1)
+        outcome = 0 if abs(moved) < CALL_EPS else (1 if moved > 0 else -1)
+        rows.append(
+            {
+                "origin": origin,
+                "forecast_date": fdate,
+                "period": period_of(origin),
+                "horizon": agent[key]["horizon"],
+                "agent_p50": agent[key]["p50"],
+                "autoarima_p50": arima[key]["p50"],
+                "actual": actual[fdate],
+                "agent_minus_autoarima": gap,
+                "actual_minus_autoarima": moved,
+                "call": CALL_ROWS[1 - call],
+                "outcome": {1: "Ended above", -1: "Ended below", 0: "Ended at"}[outcome],
+                "right": None if call == 0 or outcome == 0 else call == outcome,
+                "llm_center_action": agent[key]["llm_center_action"],
+            }
+        )
+    df = pd.DataFrame(rows)
+    if df.empty:
+        raise SystemExit("No paired agent/AutoARIMA forecasts with a realised price yet.")
+
+    summary = []
+    pd.set_option("display.width", 200)
+    print(f"Agent ({variant}) median vs AutoARIMA median; right = price ended on the side the agent moved to.")
+    for period in [*PERIODS, "All dates"]:
+        sub_p = df if period == "All dates" else df[df["period"] == period]
+        for h in HORIZONS:
+            sub = sub_p[sub_p["horizon"] == h]
+            scored = sub.dropna(subset=["right"])
+            k, n = int(scored["right"].sum()), len(scored)
+            above = int((sub["outcome"] == "Ended above").sum())
+            below = int((sub["outcome"] == "Ended below").sum())
+            summary.append(
+                {
+                    "period": period,
+                    "horizon": f"{h}-day",
+                    "forecasts": len(sub),
+                    "called_above": int((sub["call"] == CALL_ROWS[0]).sum()),
+                    "called_same": int((sub["call"] == CALL_ROWS[1]).sum()),
+                    "called_below": int((sub["call"] == CALL_ROWS[2]).sum()),
+                    "calls_right": k,
+                    "calls_scored": n,
+                    "calls_right_pct": 100 * k / n if n else np.nan,
+                    "p_value_vs_coin": _binom_p(k, n),
+                    "ended_above": above,
+                    "ended_below": below,
+                }
+            )
+            if period == "All dates":
+                grid = pd.crosstab(sub["call"], sub["outcome"]).reindex(index=CALL_ROWS).fillna(0).astype(int)
+                print(f"\n--- {h}-day, all dates ({len(sub)} forecasts) ---")
+                print(grid.to_string())
+                print(
+                    f"Calls right: {k}/{n} = {100 * k / n if n else float('nan'):.0f}%  (p = {_binom_p(k, n):.2f} vs a coin flip)"
+                )
+    table = pd.DataFrame(summary)
+    print("\nBy period (5-day is the main result):")
+    print(table.round({"calls_right_pct": 0, "p_value_vs_coin": 2}).to_string(index=False))
+
+    RESULTS_DIR.mkdir(exist_ok=True)
+    base = RESULTS_DIR / f"v52_weekly_extended__{variant}__direction_vs_autoarima"
+    table.to_csv(f"{base}.csv", index=False, float_format="%.4f")
+    df.to_csv(f"{base}__by_forecast.csv", index=False, float_format="%.4f", date_format="%Y-%m-%d")
+    print(f"\nWrote {base}.csv\nWrote {base}__by_forecast.csv")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--plan", action="store_true", help="print the plan and stop")
     parser.add_argument("--analyze-only", action="store_true", help="skip running; analyse what is on disk")
     parser.add_argument("--audit-dates", action="store_true", help="check source publication dates and stop")
     parser.add_argument("--gate-report", action="store_true", help="show how the date gate treated each origin")
+    parser.add_argument("--direction", action="store_true", help="agent's up/down call vs AutoARIMA, and if right")
     parser.add_argument("--variant", choices=sorted(AGENT_IDS), default="dategated", help="agent to run/analyse")
     parser.add_argument("--origins", help="comma-separated origin dates: run the agent only on these (pilot)")
     args = parser.parse_args()
@@ -669,6 +800,9 @@ def main() -> None:
         return
     if args.gate_report:
         gate_report(origins, args.variant)
+        return
+    if args.direction:
+        direction_vs_arima(origins, args.variant)
         return
 
     protected = {sid: _hash_dir(STORE / sid) for sid in PROTECTED_SPEC_IDS}
