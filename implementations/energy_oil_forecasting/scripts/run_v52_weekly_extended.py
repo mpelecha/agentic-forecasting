@@ -26,13 +26,18 @@ Origins                     v5.2 ARIMA-only lite                   AutoARIMA
 New runs are saved one origin at a time under
 ``data/predictions/energy_oil_eval_weekly_extended/<origin>/``, so an interrupted run
 resumes from the next missing origin. Settings are the weekly lite run's defaults
-(``build_cfm_agent_config_arima_only()`` or its date-gated twin). AutoARIMA does not
-search, so its cached Feb-Jun results are reused for both variants.
+(``build_cfm_agent_config_arima_only()`` or its date-gated twin).
+
+AutoARIMA draws 500 Monte Carlo samples without a fixed seed, so its quantiles and
+CRPS differ slightly between runs. With ``dategated`` the agent runs fresh on every
+origin, so AutoARIMA does too (saved under the new spec folder; the cached Feb-Jun
+results are left as they are): both sides then share one run and one data snapshot.
+With ``v52`` the cached Feb-Jun pair is reused as it was produced.
 
 Before running, a one-token request to the proxy records which model actually serves
-``gemini-3.1-flash-lite-preview`` (the predictions do not record it). A fresh
-AutoARIMA run on the 18 cached Feb-Jun origins (not saved) checks that the price data
-reproduces the cached forecasts before old and new results are combined.
+``gemini-3.1-flash-lite-preview`` (the predictions do not record it), and the price
+data is checked against the cache: each cached v5.2 forecast records the last price
+date and value it saw at its origin, and the run stops if today's data disagree.
 
 Usage (repo root, on the branch with cfm_agent_v_5_2; keys in the environment)::
 
@@ -189,8 +194,8 @@ def plan(origins: list[pd.Timestamp], variant: str) -> dict[str, list[pd.Timesta
     agent_id = AGENT_IDS[variant]
     new = [o for o in origins if period_of(o) == "Jun 2025-Jan 2026"]
     weekly = [o for o in origins if period_of(o) == "Feb-Jun 2026"]
-    reused_ids = (agent_id, ARIMA_ID) if variant == "v52" else (ARIMA_ID,)
-    for pid in reused_ids:
+    arima_fresh = new if variant == "v52" else list(origins)
+    for pid in (agent_id, ARIMA_ID) if variant == "v52" else ():
         have = _origins_in(_load(STORE / WEEKLY_SPEC_ID / f"{pid}__{TASK_ID}.yaml"))
         if not set(weekly) <= have:
             raise SystemExit(f"{WEEKLY_SPEC_ID} is missing {pid} origins: {sorted(set(weekly) - have)}")
@@ -204,9 +209,9 @@ def plan(origins: list[pd.Timestamp], variant: str) -> dict[str, list[pd.Timesta
         "reuse_agent": reuse_agent,
         "run_agent": [o for o in candidates if not _new_path(o, agent_id).exists()],
         "done_agent": [o for o in candidates if _new_path(o, agent_id).exists()],
-        "run_arima": [o for o in new if not _new_path(o, ARIMA_ID).exists()],
-        "done_arima": [o for o in new if _new_path(o, ARIMA_ID).exists()],
-        "reuse_weekly_arima": weekly,
+        "run_arima": [o for o in arima_fresh if not _new_path(o, ARIMA_ID).exists()],
+        "done_arima": [o for o in arima_fresh if _new_path(o, ARIMA_ID).exists()],
+        "reuse_weekly_arima": weekly if variant == "v52" else [],
     }
 
 
@@ -215,8 +220,8 @@ def print_plan(p: dict[str, list[pd.Timestamp]], variant: str) -> None:
         return ", ".join(str(d.date()) for d in ds) if ds else "-"
 
     print(f"Plan (agent variant: {variant})")
-    print(f"  AutoARIMA Feb-Jun 2026, reused from {WEEKLY_SPEC_ID}: {len(p['reuse_weekly_arima'])}")
     if variant == "v52":
+        print(f"  AutoARIMA Feb-Jun 2026, reused from {WEEKLY_SPEC_ID}: {len(p['reuse_weekly_arima'])}")
         print(f"  v5.2 Feb-Jun 2026, reused from {WEEKLY_SPEC_ID}: {len(p['reuse_weekly_arima'])}")
         print(f"  v5.2 Jun 2025-Jan 2026, reused from {BIWEEKLY_2025_SPEC_ID}: {len(p['reuse_agent'])}")
         print(f"    {_fmt(p['reuse_agent'])}")
@@ -260,28 +265,29 @@ def _one_origin_spec(spec: dict[str, Any], origin: pd.Timestamp) -> Any:
     )
 
 
-def check_arima_reproduces(spec: dict[str, Any], data_service: Any) -> None:
-    """Recompute AutoARIMA on the cached Feb-Jun origins (unsaved) and compare scores."""
-    from aieng.forecasting.evaluation.backtest import backtest  # noqa: PLC0415
-    from aieng.forecasting.methods.numerical.darts_arima import DartsAutoARIMAPredictor  # noqa: PLC0415
+def check_data_unchanged(data_service: Any) -> None:
+    """Stop if today's WTI data differ from what the cached v5.2 runs saw at their origins."""
+    from energy_oil_forecasting.data import WTI_SERIES_ID  # noqa: PLC0415
 
-    cached = _load(STORE / WEEKLY_SPEC_ID / f"{ARIMA_ID}__{TASK_ID}.yaml")
-    old = {
-        (p["as_of"][:10], p["forecast_date"][:10]): s
-        for p, s in zip(cached["predictions"], cached["scores"], strict=True)
-    }
-    predictor = DartsAutoARIMAPredictor()
-    gaps = []
-    for origin in sorted({pd.Timestamp(k[0]) for k in old}):
-        result = backtest(predictor=predictor, spec=_one_origin_spec(spec, origin), data_service=data_service)
-        for p, s in zip(result.predictions, result.scores, strict=True):
-            key = (str(p.as_of)[:10], str(p.forecast_date)[:10])
-            if key in old:
-                gaps.append(abs(float(s) - old[key]))
-    worst = max(gaps) if gaps else float("nan")
-    print(f"AutoARIMA reproducibility on {len(gaps)} cached Feb-Jun forecasts: max |CRPS difference| = {worst:.4f}")
-    if not gaps or worst > 0.01:
-        raise SystemExit("Fresh AutoARIMA does not reproduce the cached Feb-Jun results; data differ. Stopping.")
+    seen: dict[pd.Timestamp, tuple[str, float]] = {}
+    for spec_id in (WEEKLY_SPEC_ID, BIWEEKLY_2025_SPEC_ID):
+        raw = _load(STORE / spec_id / f"{AGENT_IDS['v52']}__{TASK_ID}.yaml")
+        for pred in (raw or {}).get("predictions", []):
+            diag = (pred.get("metadata") or {}).get("market_diagnostics") or {}
+            if diag.get("latest_value") is not None:
+                seen[pd.Timestamp(pred["as_of"]).normalize()] = (diag["latest_observation_date"], diag["latest_value"])
+    if not seen:
+        raise SystemExit("No cached v5.2 forecasts to check the price data against.")
+    mismatches = []
+    for origin, (date_then, value_then) in sorted(seen.items()):
+        frame = data_service.context(as_of=origin.to_pydatetime()).get_series(WTI_SERIES_ID)
+        frame = frame.dropna(subset=["value"]).sort_values("timestamp")
+        date_now, value_now = str(pd.Timestamp(frame["timestamp"].iloc[-1]).date()), float(frame["value"].iloc[-1])
+        if date_now != date_then or abs(value_now - value_then) > 1e-6 * max(1.0, abs(value_then)):
+            mismatches.append(f"{origin.date()}: cached {date_then} {value_then:.4f}, now {date_now} {value_now:.4f}")
+    print(f"Price data check: last price before {len(seen)} cached origins, {len(mismatches)} differ")
+    if mismatches:
+        raise SystemExit("Price data differ from the cached runs:\n  " + "\n  ".join(mismatches[:10]))
 
 
 def run_missing(spec: dict[str, Any], p: dict[str, list[pd.Timestamp]], variant: str) -> None:
@@ -298,7 +304,7 @@ def run_missing(spec: dict[str, Any], p: dict[str, list[pd.Timestamp]], variant:
     (RESULTS_DIR / "v52_weekly_extended__served_model.json").write_text(json.dumps(served, indent=2))
 
     data_service = build_wti_multivariate_service()
-    check_arima_reproduces(spec, data_service)
+    check_data_unchanged(data_service)
 
     arima = DartsAutoARIMAPredictor()
     for i, origin in enumerate(p["run_arima"], 1):
@@ -377,8 +383,11 @@ def assemble(origins: list[pd.Timestamp], variant: str) -> pd.DataFrame:
     new = {o for o in origins if period_of(o) == "Jun 2025-Jan 2026"}
     weekly = {o for o in origins if period_of(o) == "Feb-Jun 2026"}
     frames: dict[str, list[dict[str, Any]]] = {agent_id: [], ARIMA_ID: []}
-    frames[ARIMA_ID] += _rows(_load(STORE / WEEKLY_SPEC_ID / f"{ARIMA_ID}__{TASK_ID}.yaml"), weekly, WEEKLY_SPEC_ID)
-    for origin in sorted(new):
+    arima_fresh = sorted(new) if variant == "v52" else list(origins)
+    if variant == "v52":
+        cached = _load(STORE / WEEKLY_SPEC_ID / f"{ARIMA_ID}__{TASK_ID}.yaml")
+        frames[ARIMA_ID] += _rows(cached, weekly, WEEKLY_SPEC_ID)
+    for origin in arima_fresh:
         raw = _load(_new_path(origin, ARIMA_ID))
         if raw:
             frames[ARIMA_ID] += _rows(raw, {origin}, NEW_SPEC_ID)
