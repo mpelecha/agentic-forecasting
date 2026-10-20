@@ -26,7 +26,7 @@ from energy_oil_forecasting.cfm_agent_v_5_2.tools.url_safety import validate_pub
 from energy_oil_forecasting.cfm_agent_v_5_2_dategated.date_gate import SourceDating, date_source
 
 
-GATE_ID = "publication_date_gate_v2"
+GATE_ID = "publication_date_gate_v3"
 # Hosts that only redirect to the real page. An error from one of these means the
 # destination is unknown; an error from any other host still tells us its address.
 REDIRECT_HOSTS = {"vertexaisearch.cloud.google.com"}

@@ -40,6 +40,11 @@ def test_url_dates_reads_the_formats_seen_in_v52_sources():
     ]
     assert url_dates("https://www150.statcan.gc.ca/n1/daily-quotidien/260820/dq260820a-eng.htm") == [date(2026, 8, 20)]
     assert url_dates("https://example.com/2025/13/40/not-a-date") == []
+    assert url_dates("https://www.spglobal.com/energy/en/news-research/latest-news/crude-oil/061025-crude-price") == [
+        date(2025, 6, 10)
+    ]
+    assert url_dates("https://example.com/news/061025-story") == []  # MMDDYY only where the format is known
+    assert date(2025, 6, 17) in url_dates("https://iea.blob.core.windows.net/assets/x/-17JUNE2025_OilMarketReport.pdf")
 
 
 @pytest.mark.parametrize(
@@ -53,10 +58,35 @@ def test_url_dates_reads_the_formats_seen_in_v52_sources():
         ("https://x.test/a", _page(), True, date_gate.ACCEPTED),
         ("https://x.test/2025/07/03/a", _page(), False, date_gate.ACCEPTED),
         (None, _page("2025-01-01"), False, date_gate.REJECT_UNRESOLVED),
+        # A month without a day can only reject: "may-2025" may name the period a later review covers.
+        ("https://x.test/oil-market-report-may-2025", _page(), False, date_gate.REJECT_UNDATED),
+        (
+            "https://x.test/oil-market-report-july-2025",
+            _page(),
+            False,
+            date_gate.REJECT_UNDATED,
+        ),  # month spans the cutoff
+        ("https://x.test/oil-market-report-august-2025", _page(), False, date_gate.REJECT_LATE),
     ],
 )
 def test_date_source_needs_an_earlier_date_and_no_later_one(url, page, allow_undated, decision):
     verdict = date_source(_source(url), CUTOFF, CfmV52Settings(), allow_undated=allow_undated, inspect=page)
+    assert verdict.decision == decision
+
+
+@pytest.mark.parametrize(
+    ("pdf_dates", "decision"),
+    [
+        ([date(2025, 6, 2)], date_gate.ACCEPTED),  # at least PDF_MARGIN_DAYS before the cutoff
+        ([date(2025, 7, 3)], date_gate.REJECT_UNDATED),  # too close: reports are often created before release
+        ([date(2025, 5, 1), date(2025, 7, 9)], date_gate.REJECT_LATE),  # modified after the cutoff
+        ([], date_gate.REJECT_UNDATED),
+    ],
+)
+def test_pdf_dates_pass_only_with_a_margin_and_reject_when_late(pdf_dates, decision):
+    verdict = date_source(
+        _source("https://x.test/report.pdf"), CUTOFF, CfmV52Settings(), inspect=_page(), read_pdf=lambda *_: pdf_dates
+    )
     assert verdict.decision == decision
 
 

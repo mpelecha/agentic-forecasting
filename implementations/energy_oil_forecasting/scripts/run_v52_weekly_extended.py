@@ -212,7 +212,6 @@ def plan(origins: list[pd.Timestamp], variant: str) -> dict[str, list[pd.Timesta
         reuse_agent = [o for o in new if o in reused]
     else:  # cached runs used the ungated search: run the gated agent on every origin
         candidates, reuse_agent = list(origins), []
-        _refuse_stale_gate(origins, agent_id)
     return {
         "reuse_agent": reuse_agent,
         "run_agent": [o for o in candidates if not _new_path(o, agent_id).exists()],
@@ -228,21 +227,41 @@ def _gate_audit(metadata: dict[str, Any]) -> dict[str, Any]:
     return ((metadata.get("research_execution_audit") or {}).get("date_gate") or metadata.get("date_gate")) or {}
 
 
-def _refuse_stale_gate(origins: list[pd.Timestamp], agent_id: str) -> None:
-    """Stop if a saved gated run was made under an earlier version of the date gate."""
+def check_gate_versions(origins: list[pd.Timestamp], variant: str, *, will_run: bool) -> None:
+    """Keep each variant's saved runs on one date-gate version.
+
+    Saved runs made entirely under an older gate stay usable for analysis (the version
+    is reported). Mixing versions is refused: within the saved runs, or by adding new
+    runs under the current gate to runs made with an older one.
+    """
+    if variant == "v52":
+        return
     from energy_oil_forecasting.cfm_agent_v_5_2_dategated.page_gate import GATE_ID  # noqa: PLC0415
 
-    stale = []
+    agent_id = AGENT_IDS[variant]
+    versions: dict[str, list[Path]] = {}
     for origin in origins:
         raw = _load(_new_path(origin, agent_id))
         for pred in (raw or {}).get("predictions", [])[:1]:
-            if _gate_audit(pred.get("metadata") or {}).get("gate_id") != GATE_ID:
-                stale.append(_new_path(origin, agent_id))
-    if stale:
-        listing = "\n".join(f"  rm {path}" for path in stale)
-        raise SystemExit(
-            f"{len(stale)} saved run(s) used an older date gate (current: {GATE_ID}). Delete them, then rerun:\n{listing}"
-        )
+            version = _gate_audit(pred.get("metadata") or {}).get("gate_id") or "unknown"
+            versions.setdefault(version, []).append(_new_path(origin, agent_id))
+    if not versions:
+        return
+    old = {v: paths for v, paths in versions.items() if v != GATE_ID}
+    if len(versions) == 1 and not old:
+        return
+    if len(versions) == 1 and not will_run:
+        print(f"Note: these {variant} runs used date gate {next(iter(versions))} (current code: {GATE_ID}).")
+        return
+    listing = [f"  rm {path}" for paths in old.values() for path in paths]
+    if variant == "memory_dategated":
+        from energy_oil_forecasting.wti_scenario_memory_agent.memory import _memory_path  # noqa: PLC0415
+
+        listing.append(f"  rm {_memory_path(agent_id, TASK_ID)}   # its scenario memory, built under the old gate")
+    raise SystemExit(
+        f"Saved {variant} runs used an older date gate ({', '.join(sorted(old))}; current: {GATE_ID}). "
+        "Mixing versions would compare different rules. Delete them, then rerun:\n" + "\n".join(listing)
+    )
 
 
 def print_plan(p: dict[str, list[pd.Timestamp]], variant: str) -> None:
@@ -849,6 +868,8 @@ def main() -> None:
     if args.audit_dates:
         audit_dates(origins, args.variant)
         return
+    if args.gate_report or args.direction:
+        check_gate_versions(origins, args.variant, will_run=False)
     if args.gate_report:
         gate_report(origins, args.variant)
         return
@@ -856,6 +877,7 @@ def main() -> None:
         direction_vs_arima(origins, args.variant, args.baseline)
         return
 
+    check_gate_versions(origins, args.variant, will_run=not args.analyze_only and bool(p["run_agent"]))
     protected = {sid: _hash_dir(STORE / sid) for sid in PROTECTED_SPEC_IDS}
     if not args.analyze_only:
         run_missing(spec, p, args.variant)

@@ -28,14 +28,19 @@ it. The variant then:
 
    | Page | Decision |
    |---|---|
-   | Any date in the URL or on the page is on or after the cutoff | rejected |
+   | Any date found is on or after the cutoff | rejected |
    | Live page whose content changes over time (quote pages, "latest" reports) | rejected |
-   | No date in the URL or on the page | rejected (unless `allow_undated=True`) |
+   | No date that proves an earlier publication | rejected (unless `allow_undated=True`) |
    | Redirect does not name a destination | rejected |
-   | At least one date, all strictly before the cutoff | accepted |
+   | At least one proving date, all dates strictly before the cutoff | accepted |
 
-   Page dates come from v5.2's own audit extractor (HTML metadata, JSON-LD, then
-   visible "Published" text). The page address is read from the search redirect's
+   Dates come from the URL (`/2025/10/14/`, `june-24-2025`, `17JUNE2025`, StatCan's
+   `daily-quotidien/YYMMDD`, S&P Global's `/061025-` MMDDYY), from the page (v5.2's own
+   audit extractor: HTML metadata, JSON-LD, then visible "Published" text), and for
+   PDFs from the file's own creation and modification dates. Two kinds of date can
+   only reject, never prove: a month without a day in the URL (`may-2025`,
+   `/2025/05/`), which may name the period a later review covers, and a PDF date less
+   than 7 days before the cutoff, since reports are often created days before release. The page address is read from the search redirect's
    `Location` header without fetching the page; v5.2's resolver fetches the page
    itself, so sites that refuse automated requests (HTTP 403) were left unresolved.
 2. **Keeps only sentences supported solely by accepted pages.** A sentence that
