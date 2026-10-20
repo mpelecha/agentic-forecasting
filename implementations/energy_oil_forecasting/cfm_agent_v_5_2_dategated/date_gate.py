@@ -2,9 +2,8 @@
 
 A search result reaches the agent as summary text written from its grounding
 pages, so a page published after the cutoff can leak into the summary even if
-the page itself is never shown. The date gate therefore judges every grounding
-page of a search result, and the research tool accepts the result only when all
-of them pass.
+the page itself is never shown. The date gate judges every grounding page; the
+research tool then keeps only the sentences supported solely by pages that pass.
 
 A page passes only with positive evidence of an earlier date and no evidence of
 a later one:

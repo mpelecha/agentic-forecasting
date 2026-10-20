@@ -205,6 +205,7 @@ def plan(origins: list[pd.Timestamp], variant: str) -> dict[str, list[pd.Timesta
         reuse_agent = [o for o in new if o in reused]
     else:  # cached runs used the ungated search: run the gated agent on every origin
         candidates, reuse_agent = list(origins), []
+        _refuse_stale_gate(origins, agent_id)
     return {
         "reuse_agent": reuse_agent,
         "run_agent": [o for o in candidates if not _new_path(o, agent_id).exists()],
@@ -213,6 +214,24 @@ def plan(origins: list[pd.Timestamp], variant: str) -> dict[str, list[pd.Timesta
         "done_arima": [o for o in arima_fresh if _new_path(o, ARIMA_ID).exists()],
         "reuse_weekly_arima": weekly if variant == "v52" else [],
     }
+
+
+def _refuse_stale_gate(origins: list[pd.Timestamp], agent_id: str) -> None:
+    """Stop if a saved gated run was made under an earlier version of the date gate."""
+    from energy_oil_forecasting.cfm_agent_v_5_2_dategated.research import GATE_ID  # noqa: PLC0415
+
+    stale = []
+    for origin in origins:
+        raw = _load(_new_path(origin, agent_id))
+        for pred in (raw or {}).get("predictions", [])[:1]:
+            gate = ((pred.get("metadata") or {}).get("research_execution_audit") or {}).get("date_gate") or {}
+            if gate.get("gate_id") != GATE_ID:
+                stale.append(_new_path(origin, agent_id))
+    if stale:
+        listing = "\n".join(f"  rm {path}" for path in stale)
+        raise SystemExit(
+            f"{len(stale)} saved run(s) used an older date gate (current: {GATE_ID}). Delete them, then rerun:\n{listing}"
+        )
 
 
 def print_plan(p: dict[str, list[pd.Timestamp]], variant: str) -> None:
@@ -363,6 +382,8 @@ def _gate_summary(metadata: dict[str, Any]) -> dict[str, Any]:
         "sources": len(packet.get("sources", [])),
         "search_attempts": len(gate.get("attempts", [])),
         "verifier_rejections": sum(a.get("outcome") == "verifier_rejected" for a in gate.get("attempts", [])),
+        "sentences_kept": sum(a.get("segments_kept", 0) for a in gate.get("attempts", [])),
+        "sentences_dropped": sum(a.get("segments_dropped", 0) for a in gate.get("attempts", [])),
         **{f"pages_rejected_{k}": v for k, v in sorted(reasons.items())},
     }
 

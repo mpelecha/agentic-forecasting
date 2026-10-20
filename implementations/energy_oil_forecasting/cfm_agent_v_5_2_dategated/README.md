@@ -20,35 +20,48 @@ does not remove its content from the summary.
 
 ## The gate
 
-For each of the four research topics, v5.2's search and LLM verifier run unchanged.
-A result the verifier accepts is then judged page by page (`date_gate.py`); the
-result is used only if **every** grounding page passes:
+Each research topic runs v5.2's grounded search. Google's grounding metadata lists
+the pages the answer drew on and, for each sentence, which of those pages support
+it. The variant then:
 
-| Page | Decision |
-|---|---|
-| Any date in the URL or on the page is on or after the cutoff | rejected |
-| Live page whose content changes over time (quote pages, "latest" reports) | rejected |
-| No date in the URL or on the page | rejected (unless `allow_undated=True`) |
-| Grounding redirect does not resolve | rejected |
-| At least one date, all strictly before the cutoff | accepted |
+1. **Dates every page** (`date_gate.py`):
 
-Page dates come from v5.2's own audit extractor (HTML metadata, JSON-LD, then
-visible "Published" text). On a rejection the search is retried, naming the rejected
-pages as off-limits, within v5.2's `search_verifier_max_attempts`. A topic with no
-passing attempt fails closed, exactly as when the verifier rejects every attempt.
+   | Page | Decision |
+   |---|---|
+   | Any date in the URL or on the page is on or after the cutoff | rejected |
+   | Live page whose content changes over time (quote pages, "latest" reports) | rejected |
+   | No date in the URL or on the page | rejected (unless `allow_undated=True`) |
+   | Redirect does not name a destination | rejected |
+   | At least one date, all strictly before the cutoff | accepted |
 
-Every attempt and every page verdict is recorded in each prediction's
-`research_execution_audit.date_gate`.
+   Page dates come from v5.2's own audit extractor (HTML metadata, JSON-LD, then
+   visible "Published" text). The page address is read from the search redirect's
+   `Location` header without fetching the page; v5.2's resolver fetches the page
+   itself, so sites that refuse automated requests (HTTP 403) were left unresolved.
+2. **Keeps only sentences supported solely by accepted pages.** A sentence that
+   cites any rejected page, or no page, is dropped.
+3. **Runs v5.2's LLM cutoff verifier on the kept text.**
+
+If no sentence survives or the verifier rejects the text, the search is retried
+(naming the rejected pages) within v5.2's `search_verifier_max_attempts`; a topic
+with no passing attempt fails closed, as in v5.2. The agent sees only the kept text
+and the accepted pages it cites.
+
+Every attempt — page verdicts, sentences kept and dropped, outcome — is recorded in
+each prediction's `research_execution_audit.date_gate`, tagged with the gate
+version (`GATE_ID`).
 
 ## What it does not fix
 
 - Searching today's web for a past date still shapes *which* pre-cutoff pages are
   found.
 - A page can carry an early date and later edits; only the date is checked.
-- The search model's own knowledge is not gated. For gemini-3.1-flash-lite-preview
-  (knowledge cutoff January 2025) this matters only for cutoffs before 2025.
-- The strict rule can leave a topic, or a whole origin, with no news; the agent then
-  forecasts from the numerical suite alone. Check how often with
+- Sentences with no supporting page are dropped, which removes most of the search
+  model's own knowledge, but a supported sentence is still worded by the model. For
+  gemini-3.1-flash-lite-preview (knowledge cutoff January 2025) its memory matters
+  only for cutoffs before 2025.
+- The strict rule can still leave a topic, or a whole origin, with no news; the agent
+  then forecasts from the numerical suite alone. Check how often with
   `scripts/run_v52_weekly_extended.py --gate-report`.
 
 ## Build

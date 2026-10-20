@@ -2,9 +2,10 @@
 
 v5.2 searches today's web for past cutoffs and relies on an LLM to remove
 post-cutoff content. Cached v5.2 backtests show that this lets through pages
-published after the cutoff. This variant accepts a search result only if every
-page it was grounded on is provably dated strictly before the cutoff; see
-``date_gate`` for the rule. Nothing else differs from v5.2, including the prompt.
+published after the cutoff. This variant passes on only the sentences that the
+search's grounding metadata attributes to pages provably dated strictly before the
+cutoff; see ``date_gate`` for the page rule and ``research`` for the filtering.
+Nothing else differs from v5.2, including the prompt.
 """
 
 from energy_oil_forecasting.cfm_agent_v_5_2_dategated.agent import (
