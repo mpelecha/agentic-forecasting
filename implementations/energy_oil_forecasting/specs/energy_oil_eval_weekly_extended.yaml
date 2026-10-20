@@ -1,0 +1,38 @@
+# Energy Oil Eval Spec — weekly, extended back to June 2025
+#
+# Every Monday from 2026-06-01 back to 2025-06-02: 53 weekly origins, horizons
+# 5, 10, 21 business days. Same task, stride, and warmup as the weekly 2026
+# eval (energy_oil_eval.yaml with spec_id energy_oil_eval_weekly); only the
+# window is longer.
+#
+# The task block is copied verbatim from energy_oil_eval.yaml: CFM v5.2's
+# prompt includes task.description, so changing it would change the prompt.
+# The spec description below is not shown to any predictor.
+#
+# Results are assembled by scripts/run_v52_weekly_extended.py from three caches
+# without rerunning or overwriting any of them:
+#   * 2026-02-02 .. 2026-06-01 (18 origins): energy_oil_eval_weekly
+#   * 2025-06-02 .. 2026-01-26 (35 origins): new runs under
+#     energy_oil_eval_weekly_extended/<origin>/, plus the v5.2 ARIMA-only lite
+#     origins already in energy_oil_backtest_biweekly.
+# Target is WTI Crude Oil price (yfinance ticker: CL=F).
+
+spec_id: energy_oil_eval_weekly_extended
+
+description: >-
+  Weekly evaluation of daily WTI crude oil forecasts on every Monday from
+  2025-06-02 to 2026-06-01 (53 origins), horizons 5, 10 and 21 business days.
+
+tasks:
+  - task_id: wti_oil_price_forecast
+    target_series_id: wti_crude_oil_price
+    horizons: [5, 10, 21]
+    frequency: B
+    description: >-
+      WTI Crude Oil continuous front-month futures Close price (yfinance symbol: CL=F),
+      projected 5, 10, and 21 trading days ahead.
+
+start: "2025-06-02"
+end: "2026-06-01"
+stride: 5
+warmup: 250
