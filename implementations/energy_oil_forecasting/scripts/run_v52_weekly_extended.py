@@ -49,6 +49,7 @@ Usage (repo root, on the branch with cfm_agent_v_5_2; keys in the environment)::
     uv run python $S --analyze-only                      # analyse what is on disk
     uv run python $S --audit-dates                       # check source publication dates (fetches pages)
     uv run python $S --direction                         # did the agent move the right way vs AutoARIMA?
+    uv run python $S --direction --baseline own          # ... vs its own unadjusted ARIMA (the LLM's change)
 
 The analysis prints and saves (to ``results/``) a summary per period (Jun 2025-Jan 2026,
 Feb-Jun 2026, all) and horizon — 5-day is the primary result — plus a per-origin CSV.
@@ -636,10 +637,14 @@ def gate_report(origins: list[pd.Timestamp], variant: str) -> None:
     print(f"Wrote {path}")
 
 
-# ── direction relative to AutoARIMA ──────────────────────────────────────────
+# ── direction relative to a baseline forecast ────────────────────────────────
 
-CALL_EPS = 0.05  # gaps under 5 cents count as "same as AutoARIMA", as on cfm_coach's corpus page
-CALL_ROWS = ["Above AutoARIMA", "Same as AutoARIMA", "Below AutoARIMA"]
+CALL_EPS = 0.05  # gaps under 5 cents count as "same", as on cfm_coach's corpus page
+# --baseline autoarima: the separately run AutoARIMA. Its median carries Monte Carlo
+#   noise, so small gaps can be noise rather than the agent's judgment.
+# --baseline own: the agent's own unadjusted ARIMA (metadata.unadjusted_ensemble),
+#   so the call is exactly what the LLM layer changed; no change means "same".
+BASELINE_NAMES = {"autoarima": "AutoARIMA", "own": "its own ARIMA"}
 
 
 def _p50s(raws: list[dict[str, Any] | None], keep: set[pd.Timestamp]) -> dict[tuple, dict[str, Any]]:
@@ -657,9 +662,11 @@ def _p50s(raws: list[dict[str, Any] | None], keep: set[pd.Timestamp]) -> dict[tu
                 for a in (meta.get("llm_context_assessment") or {}).get("horizon_actions", [])
             }
             horizon = _horizon(origin, fdate)
+            unadjusted = (meta.get("unadjusted_ensemble") or {}).get("point_forecast")
             out[(origin, fdate)] = {
                 "horizon": horizon,
                 "p50": float(pred["payload"]["point_forecast"]),
+                "own_p50": float(unadjusted) if unadjusted is not None else None,
                 "llm_center_action": calls.get(horizon),
             }
     return out
@@ -675,8 +682,8 @@ def _binom_p(k: int, n: int) -> float:
     return min(1.0, sum(pr for pr in probs if pr <= probs[k] + 1e-12))
 
 
-def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
-    """Grid of the agent's call (above/below AutoARIMA's median) against where the price ended up."""
+def direction_vs_arima(origins: list[pd.Timestamp], variant: str, baseline: str = "autoarima") -> None:
+    """Grid of the agent's call (above/below the baseline's median) against where the price ended up."""
     from datetime import datetime as _dt  # noqa: PLC0415
 
     from energy_oil_forecasting.data import WTI_SERIES_ID, build_wti_multivariate_service  # noqa: PLC0415
@@ -690,13 +697,16 @@ def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
     prices = build_wti_multivariate_service().get_series(WTI_SERIES_ID, as_of=_dt.now())
     actual = {pd.Timestamp(t).normalize(): float(v) for t, v in zip(prices["timestamp"], prices["value"], strict=True)}
 
+    name = BASELINE_NAMES[baseline]
+    call_rows = [f"Above {name}", f"Same as {name}", f"Below {name}"]
     rows = []
     for key in sorted(set(agent) & set(arima)):
         origin, fdate = key
-        if fdate not in actual:
+        base = arima[key]["p50"] if baseline == "autoarima" else agent[key]["own_p50"]
+        if fdate not in actual or base is None:
             continue
-        gap = agent[key]["p50"] - arima[key]["p50"]
-        moved = actual[fdate] - arima[key]["p50"]
+        gap = agent[key]["p50"] - base
+        moved = actual[fdate] - base
         call = 0 if abs(gap) < CALL_EPS else (1 if gap > 0 else -1)
         outcome = 0 if abs(moved) < CALL_EPS else (1 if moved > 0 else -1)
         rows.append(
@@ -706,11 +716,14 @@ def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
                 "period": period_of(origin),
                 "horizon": agent[key]["horizon"],
                 "agent_p50": agent[key]["p50"],
+                "baseline": name,
+                "baseline_p50": base,
                 "autoarima_p50": arima[key]["p50"],
+                "own_arima_p50": agent[key]["own_p50"],
                 "actual": actual[fdate],
-                "agent_minus_autoarima": gap,
-                "actual_minus_autoarima": moved,
-                "call": CALL_ROWS[1 - call],
+                "agent_minus_baseline": gap,
+                "actual_minus_baseline": moved,
+                "call": call_rows[1 - call],
                 "outcome": {1: "Ended above", -1: "Ended below", 0: "Ended at"}[outcome],
                 "right": None if call == 0 or outcome == 0 else call == outcome,
                 "llm_center_action": agent[key]["llm_center_action"],
@@ -722,7 +735,7 @@ def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
 
     summary = []
     pd.set_option("display.width", 200)
-    print(f"Agent ({variant}) median vs AutoARIMA median; right = price ended on the side the agent moved to.")
+    print(f"Agent ({variant}) median vs {name}'s median; right = price ended on the side the agent moved to.")
     for period in [*PERIODS, "All dates"]:
         sub_p = df if period == "All dates" else df[df["period"] == period]
         for h in HORIZONS:
@@ -736,9 +749,10 @@ def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
                     "period": period,
                     "horizon": f"{h}-day",
                     "forecasts": len(sub),
-                    "called_above": int((sub["call"] == CALL_ROWS[0]).sum()),
-                    "called_same": int((sub["call"] == CALL_ROWS[1]).sum()),
-                    "called_below": int((sub["call"] == CALL_ROWS[2]).sum()),
+                    "baseline": name,
+                    "called_above": int((sub["call"] == call_rows[0]).sum()),
+                    "called_same": int((sub["call"] == call_rows[1]).sum()),
+                    "called_below": int((sub["call"] == call_rows[2]).sum()),
                     "calls_right": k,
                     "calls_scored": n,
                     "calls_right_pct": 100 * k / n if n else np.nan,
@@ -748,7 +762,7 @@ def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
                 }
             )
             if period == "All dates":
-                grid = pd.crosstab(sub["call"], sub["outcome"]).reindex(index=CALL_ROWS).fillna(0).astype(int)
+                grid = pd.crosstab(sub["call"], sub["outcome"]).reindex(index=call_rows).fillna(0).astype(int)
                 print(f"\n--- {h}-day, all dates ({len(sub)} forecasts) ---")
                 print(grid.to_string())
                 print(
@@ -759,10 +773,10 @@ def direction_vs_arima(origins: list[pd.Timestamp], variant: str) -> None:
     print(table.round({"calls_right_pct": 0, "p_value_vs_coin": 2}).to_string(index=False))
 
     RESULTS_DIR.mkdir(exist_ok=True)
-    base = RESULTS_DIR / f"v52_weekly_extended__{variant}__direction_vs_autoarima"
-    table.to_csv(f"{base}.csv", index=False, float_format="%.4f")
-    df.to_csv(f"{base}__by_forecast.csv", index=False, float_format="%.4f", date_format="%Y-%m-%d")
-    print(f"\nWrote {base}.csv\nWrote {base}__by_forecast.csv")
+    out = RESULTS_DIR / f"v52_weekly_extended__{variant}__direction_vs_{baseline}"
+    table.to_csv(f"{out}.csv", index=False, float_format="%.4f")
+    df.to_csv(f"{out}__by_forecast.csv", index=False, float_format="%.4f", date_format="%Y-%m-%d")
+    print(f"\nWrote {out}.csv\nWrote {out}__by_forecast.csv")
 
 
 def main() -> None:
@@ -771,7 +785,13 @@ def main() -> None:
     parser.add_argument("--analyze-only", action="store_true", help="skip running; analyse what is on disk")
     parser.add_argument("--audit-dates", action="store_true", help="check source publication dates and stop")
     parser.add_argument("--gate-report", action="store_true", help="show how the date gate treated each origin")
-    parser.add_argument("--direction", action="store_true", help="agent's up/down call vs AutoARIMA, and if right")
+    parser.add_argument("--direction", action="store_true", help="agent's up/down call vs a baseline, and if right")
+    parser.add_argument(
+        "--baseline",
+        choices=sorted(BASELINE_NAMES),
+        default="autoarima",
+        help="for --direction: AutoARIMA, or the agent's own unadjusted ARIMA (isolates the LLM's change)",
+    )
     parser.add_argument("--variant", choices=sorted(AGENT_IDS), default="dategated", help="agent to run/analyse")
     parser.add_argument("--origins", help="comma-separated origin dates: run the agent only on these (pilot)")
     args = parser.parse_args()
@@ -802,7 +822,7 @@ def main() -> None:
         gate_report(origins, args.variant)
         return
     if args.direction:
-        direction_vs_arima(origins, args.variant)
+        direction_vs_arima(origins, args.variant, args.baseline)
         return
 
     protected = {sid: _hash_dir(STORE / sid) for sid in PROTECTED_SPEC_IDS}
