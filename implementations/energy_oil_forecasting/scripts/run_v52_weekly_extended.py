@@ -9,6 +9,10 @@ Two agent variants (``--variant``):
 * ``dategated`` (default): ``cfm_agent_v_5_2_dategated``, v5.2 with a deterministic
   publication-date gate on its news search. Cached v5.2 runs used the ungated search,
   so none are reused: the agent runs fresh on all 53 origins.
+* ``memory_dategated``: the scenario-memory agent (``wti_scenario_memory_agent``) with
+  the same date gate swapped into its ``search_web`` tool
+  (``wti_scenario_memory_agent_dategated``). Runs fresh on all 53 origins, in date
+  order, so its scenario memory builds up as it would in a live run.
 * ``v52``: the original v5.2, reusing cached runs as in the table below. Its search can
   return pages published after the origin; see ``scan_source_url_dates.py``.
 
@@ -101,6 +105,7 @@ MODEL = "gemini-3.1-flash-lite-preview"
 AGENT_IDS = {
     "v52": f"agent_predictor_cfm_agent_v_5_2_arima_only_{MODEL}_continuous",
     "dategated": f"agent_predictor_cfm_agent_v_5_2_arima_only_dategated_{MODEL}_continuous",
+    "memory_dategated": f"agent_predictor_wti_analyst_news_scenario_schema_anchored_enhanced_dategated_{MODEL}_continuous",
 }
 ARIMA_ID = "darts_autoarima"
 TASK_ID = "wti_oil_price_forecast"
@@ -218,16 +223,20 @@ def plan(origins: list[pd.Timestamp], variant: str) -> dict[str, list[pd.Timesta
     }
 
 
+def _gate_audit(metadata: dict[str, Any]) -> dict[str, Any]:
+    """Return a run's date-gate audit, wherever the agent records it."""
+    return ((metadata.get("research_execution_audit") or {}).get("date_gate") or metadata.get("date_gate")) or {}
+
+
 def _refuse_stale_gate(origins: list[pd.Timestamp], agent_id: str) -> None:
     """Stop if a saved gated run was made under an earlier version of the date gate."""
-    from energy_oil_forecasting.cfm_agent_v_5_2_dategated.research import GATE_ID  # noqa: PLC0415
+    from energy_oil_forecasting.cfm_agent_v_5_2_dategated.page_gate import GATE_ID  # noqa: PLC0415
 
     stale = []
     for origin in origins:
         raw = _load(_new_path(origin, agent_id))
         for pred in (raw or {}).get("predictions", [])[:1]:
-            gate = ((pred.get("metadata") or {}).get("research_execution_audit") or {}).get("date_gate") or {}
-            if gate.get("gate_id") != GATE_ID:
+            if _gate_audit(pred.get("metadata") or {}).get("gate_id") != GATE_ID:
                 stale.append(_new_path(origin, agent_id))
     if stale:
         listing = "\n".join(f"  rm {path}" for path in stale)
@@ -360,6 +369,10 @@ def _build_agent(variant: str) -> Any:
         )
 
         return build_cfm_agent_predictor_arima_only(build_cfm_agent_config_arima_only())
+    if variant == "memory_dategated":
+        from energy_oil_forecasting.wti_scenario_memory_agent_dategated import build_agent_dategated  # noqa: PLC0415
+
+        return build_agent_dategated()  # same defaults as wti_scenario_memory_agent.build_agent()
     from energy_oil_forecasting.cfm_agent_v_5_2_dategated import (  # noqa: PLC0415
         build_cfm_agent_config_arima_only_dategated,
         build_cfm_agent_predictor_arima_only_dategated,
@@ -372,16 +385,28 @@ def _gate_summary(metadata: dict[str, Any]) -> dict[str, Any]:
     """Summarise one origin's research: topics accepted, and why the gate rejected pages."""
     packet = metadata.get("active_research_packet") or {}
     summaries = packet.get("verified_summaries", [])
-    gate = (metadata.get("research_execution_audit") or {}).get("date_gate") or {}
+    gate = _gate_audit(metadata)
     reasons: dict[str, int] = {}
     for attempt in gate.get("attempts", []):
         for page in attempt.get("pages", []):
             if not page.get("accepted"):
                 reasons[page["decision"]] = reasons.get(page["decision"], 0) + 1
+    if summaries:  # v5.2: four fixed research topics
+        topics_accepted, topics = sum(s.get("status") == "accepted" for s in summaries), len(summaries)
+        sources = len(packet.get("sources", []))
+    else:  # search_web agents: each distinct query is a topic
+        queries = {a.get("query") for a in gate.get("attempts", [])}
+        accepted = {a.get("query") for a in gate.get("attempts", []) if a.get("outcome") == "accepted"}
+        topics_accepted, topics = len(accepted), len(queries)
+        sources = sum(
+            sum(1 for page in a.get("pages", []) if page.get("accepted"))
+            for a in gate.get("attempts", [])
+            if a.get("outcome") == "accepted"
+        )
     return {
-        "topics_accepted": sum(s.get("status") == "accepted" for s in summaries),
-        "topics": len(summaries),
-        "sources": len(packet.get("sources", [])),
+        "topics_accepted": topics_accepted,
+        "topics": topics,
+        "sources": sources,
         "search_attempts": len(gate.get("attempts", [])),
         "verifier_rejections": sum(a.get("outcome") == "verifier_rejected" for a in gate.get("attempts", [])),
         "sentences_kept": sum(a.get("segments_kept", 0) for a in gate.get("attempts", [])),
@@ -512,7 +537,12 @@ def report(summary: pd.DataFrame, per_origin: pd.DataFrame) -> None:
     print(f"Model knowledge cutoff ({MODEL}): {MODEL_KNOWLEDGE_CUTOFF_NOTE}")
     print(f"Origins on or before it: {before} of {len(origins)}")
     print("\nAgent results by source and structured-output outcome:")
-    print(per_origin.groupby(["period", "v52_source", "v52_disposition"]).size().to_string())
+    print(
+        per_origin.fillna({"v52_disposition": "n/a"})
+        .groupby(["period", "v52_source", "v52_disposition"])
+        .size()
+        .to_string()
+    )
 
 
 # ── source publication dates ─────────────────────────────────────────────────
@@ -662,7 +692,8 @@ def _p50s(raws: list[dict[str, Any] | None], keep: set[pd.Timestamp]) -> dict[tu
                 for a in (meta.get("llm_context_assessment") or {}).get("horizon_actions", [])
             }
             horizon = _horizon(origin, fdate)
-            unadjusted = (meta.get("unadjusted_ensemble") or {}).get("point_forecast")
+            # The numerical forecast the agent started from: CFM's ensemble, or the memory agent's anchor.
+            unadjusted = (meta.get("unadjusted_ensemble") or meta.get("arima_anchor") or {}).get("point_forecast")
             out[(origin, fdate)] = {
                 "horizon": horizon,
                 "p50": float(pred["payload"]["point_forecast"]),

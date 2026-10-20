@@ -51,6 +51,16 @@ Every attempt — page verdicts, sentences kept and dropped, outcome — is reco
 each prediction's `research_execution_audit.date_gate`, tagged with the gate
 version (`GATE_ID`).
 
+## Modules
+
+| Module | Role |
+|---|---|
+| `date_gate.py` | The per-page rule (table above) |
+| `page_gate.py` | Shared mechanics: redirect resolution, page dating, sentence filtering |
+| `research.py` | v5.2's research tool with the gate |
+| `search_web.py` | A gated drop-in for the shared `aieng` `search_web` tool, used by `wti_scenario_memory_agent_dategated` |
+| `agent.py` | v5.2 ARIMA-only builder with the gated research tool |
+
 ## What it does not fix
 
 - Searching today's web for a past date still shapes *which* pre-cutoff pages are

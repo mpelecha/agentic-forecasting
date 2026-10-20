@@ -6,7 +6,7 @@ from urllib.error import HTTPError
 import pytest
 from energy_oil_forecasting.cfm_agent_v_5_2.config import CfmV52Settings
 from energy_oil_forecasting.cfm_agent_v_5_2.schemas import ActiveSource
-from energy_oil_forecasting.cfm_agent_v_5_2_dategated import date_gate, research
+from energy_oil_forecasting.cfm_agent_v_5_2_dategated import date_gate, page_gate
 from energy_oil_forecasting.cfm_agent_v_5_2_dategated.date_gate import date_source, url_dates
 from energy_oil_forecasting.cfm_agent_v_5_2_dategated.research import DateGatedResearchPipelineTool
 
@@ -98,7 +98,9 @@ def _gated_tool(monkeypatch, page_dates):
     monkeypatch.setattr(
         "energy_oil_forecasting.cfm_agent_v_5_2.tools.research_pipeline._verify_no_leakage", fake_verify
     )
-    monkeypatch.setattr(tool, "_resolve_uncached", lambda url, title: _source(url.replace("redirect", "site"), url))
+    monkeypatch.setattr(
+        tool.gate, "_resolve_uncached", lambda url, title: _source(url.replace("redirect", "site"), url)
+    )
     monkeypatch.setattr(date_gate, "_inspect_source", lambda source, *_: _page(page_dates.get(source.resolved_url))())
     return tool, verified
 
@@ -144,8 +146,8 @@ def test_redirect_is_read_without_fetching_the_destination(monkeypatch):
             fetched.append(request.full_url)
             raise HTTPError(request.full_url, 302, "Found", {"Location": "https://news.test/2025/07/01/a"}, None)
 
-    monkeypatch.setattr(research, "build_opener", lambda *_: _Opener())
-    monkeypatch.setattr(research, "validate_public_url", lambda url: None)
+    monkeypatch.setattr(page_gate, "build_opener", lambda *_: _Opener())
+    monkeypatch.setattr(page_gate, "validate_public_url", lambda url: None)
     tool = DateGatedResearchPipelineTool(CfmV52Settings(), search_model="test")
     grounding = "https://vertexaisearch.cloud.google.com/grounding-api-redirect/abc"
 
