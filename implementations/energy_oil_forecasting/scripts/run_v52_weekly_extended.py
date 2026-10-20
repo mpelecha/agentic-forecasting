@@ -1,11 +1,19 @@
-"""Extend the v5.2 ARIMA-only lite vs AutoARIMA comparison to every Monday from June 2025.
+"""Compare v5.2 ARIMA-only lite with AutoARIMA on every Monday from June 2025.
 
 The weekly comparison (``energy_oil_eval_weekly``) covers 18 Mondays, 2026-02-02 to
 2026-06-01. ``specs/energy_oil_eval_weekly_extended.yaml`` extends the grid back to
 2025-06-02: 53 Mondays, horizons 5/10/21, same task, stride, and warmup.
 
+Two agent variants (``--variant``):
+
+* ``dategated`` (default): ``cfm_agent_v_5_2_dategated``, v5.2 with a deterministic
+  publication-date gate on its news search. Cached v5.2 runs used the ungated search,
+  so none are reused: the agent runs fresh on all 53 origins.
+* ``v52``: the original v5.2, reusing cached runs as in the table below. Its search can
+  return pages published after the origin; see ``scan_source_url_dates.py``.
+
 Nothing that already exists is rerun or overwritten (each existing cache folder is
-hash-checked before and after). Results come from three places:
+hash-checked before and after). For ``--variant v52``, results come from three places:
 
 ==========================  =====================================  ============================
 Origins                     v5.2 ARIMA-only lite                   AutoARIMA
@@ -17,8 +25,9 @@ Origins                     v5.2 ARIMA-only lite                   AutoARIMA
 
 New runs are saved one origin at a time under
 ``data/predictions/energy_oil_eval_weekly_extended/<origin>/``, so an interrupted run
-resumes from the next missing origin. The predictor and its settings are exactly the
-weekly lite run's: ``build_cfm_agent_config_arima_only()`` with its defaults.
+resumes from the next missing origin. Settings are the weekly lite run's defaults
+(``build_cfm_agent_config_arima_only()`` or its date-gated twin). AutoARIMA does not
+search, so its cached Feb-Jun results are reused for both variants.
 
 Before running, a one-token request to the proxy records which model actually serves
 ``gemini-3.1-flash-lite-preview`` (the predictions do not record it). A fresh
@@ -28,10 +37,12 @@ reproduces the cached forecasts before old and new results are combined.
 Usage (repo root, on the branch with cfm_agent_v_5_2; keys in the environment)::
 
     S=implementations/energy_oil_forecasting/scripts/run_v52_weekly_extended.py
-    uv run python $S --plan          # list what will run and what is reused; no calls
-    uv run python $S                 # run the missing origins, then analyse
-    uv run python $S --analyze-only  # analyse what is on disk
-    uv run python $S --audit-dates   # check source publication dates (fetches pages)
+    uv run python $S --plan                              # what will run / be reused; no calls
+    uv run python $S --origins 2025-06-02,2026-03-02     # pilot on a few origins
+    uv run python $S --gate-report                       # how the date gate treated each origin
+    uv run python $S                                     # run every missing origin, then analyse
+    uv run python $S --analyze-only                      # analyse what is on disk
+    uv run python $S --audit-dates                       # check source publication dates (fetches pages)
 
 The analysis prints and saves (to ``results/``) a summary per period (Jun 2025-Jan 2026,
 Feb-Jun 2026, all) and horizon — 5-day is the primary result — plus a per-origin CSV.
@@ -80,7 +91,10 @@ BIWEEKLY_2025_SPEC_ID = "energy_oil_backtest_biweekly"
 PROTECTED_SPEC_IDS = (WEEKLY_SPEC_ID, BIWEEKLY_2025_SPEC_ID, "energy_oil_eval_biweekly", "energy_oil_backtest")
 
 MODEL = "gemini-3.1-flash-lite-preview"
-AGENT_ID = f"agent_predictor_cfm_agent_v_5_2_arima_only_{MODEL}_continuous"
+AGENT_IDS = {
+    "v52": f"agent_predictor_cfm_agent_v_5_2_arima_only_{MODEL}_continuous",
+    "dategated": f"agent_predictor_cfm_agent_v_5_2_arima_only_dategated_{MODEL}_continuous",
+}
 ARIMA_ID = "darts_autoarima"
 TASK_ID = "wti_oil_price_forecast"
 HORIZONS = (5, 10, 21)
@@ -170,34 +184,43 @@ def _rows(raw: dict[str, Any], keep: set[pd.Timestamp], source: str) -> list[dic
     return rows
 
 
-def plan(origins: list[pd.Timestamp]) -> dict[str, list[pd.Timestamp]]:
-    """Which origins each predictor still needs, after every reusable cache is counted."""
+def plan(origins: list[pd.Timestamp], variant: str) -> dict[str, list[pd.Timestamp]]:
+    """Return the origins each predictor still needs, after every reusable cache is counted."""
+    agent_id = AGENT_IDS[variant]
     new = [o for o in origins if period_of(o) == "Jun 2025-Jan 2026"]
     weekly = [o for o in origins if period_of(o) == "Feb-Jun 2026"]
-    biweekly_agent = _origins_in(_load(STORE / BIWEEKLY_2025_SPEC_ID / f"{AGENT_ID}__{TASK_ID}.yaml"))
-    for pid in (AGENT_ID, ARIMA_ID):
+    reused_ids = (agent_id, ARIMA_ID) if variant == "v52" else (ARIMA_ID,)
+    for pid in reused_ids:
         have = _origins_in(_load(STORE / WEEKLY_SPEC_ID / f"{pid}__{TASK_ID}.yaml"))
         if not set(weekly) <= have:
             raise SystemExit(f"{WEEKLY_SPEC_ID} is missing {pid} origins: {sorted(set(weekly) - have)}")
+    if variant == "v52":
+        reused = _origins_in(_load(STORE / BIWEEKLY_2025_SPEC_ID / f"{agent_id}__{TASK_ID}.yaml"))
+        candidates = [o for o in new if o not in reused]
+        reuse_agent = [o for o in new if o in reused]
+    else:  # cached runs used the ungated search: run the gated agent on every origin
+        candidates, reuse_agent = list(origins), []
     return {
-        "reuse_agent_biweekly": [o for o in new if o in biweekly_agent],
-        "run_agent": [o for o in new if o not in biweekly_agent and not _new_path(o, AGENT_ID).exists()],
-        "done_agent": [o for o in new if o not in biweekly_agent and _new_path(o, AGENT_ID).exists()],
+        "reuse_agent": reuse_agent,
+        "run_agent": [o for o in candidates if not _new_path(o, agent_id).exists()],
+        "done_agent": [o for o in candidates if _new_path(o, agent_id).exists()],
         "run_arima": [o for o in new if not _new_path(o, ARIMA_ID).exists()],
         "done_arima": [o for o in new if _new_path(o, ARIMA_ID).exists()],
-        "reuse_weekly": weekly,
+        "reuse_weekly_arima": weekly,
     }
 
 
-def print_plan(p: dict[str, list[pd.Timestamp]]) -> None:
+def print_plan(p: dict[str, list[pd.Timestamp]], variant: str) -> None:
     def _fmt(ds: list[pd.Timestamp]) -> str:
         return ", ".join(str(d.date()) for d in ds) if ds else "-"
 
-    print("Plan")
-    print(f"  Feb-Jun 2026, both predictors, reused from {WEEKLY_SPEC_ID}: {len(p['reuse_weekly'])}")
-    print(f"  Jun 2025-Jan 2026, v5.2 reused from {BIWEEKLY_2025_SPEC_ID}: {len(p['reuse_agent_biweekly'])}")
-    print(f"    {_fmt(p['reuse_agent_biweekly'])}")
-    print(f"  v5.2 already run here: {len(p['done_agent'])};  to run now: {len(p['run_agent'])}")
+    print(f"Plan (agent variant: {variant})")
+    print(f"  AutoARIMA Feb-Jun 2026, reused from {WEEKLY_SPEC_ID}: {len(p['reuse_weekly_arima'])}")
+    if variant == "v52":
+        print(f"  v5.2 Feb-Jun 2026, reused from {WEEKLY_SPEC_ID}: {len(p['reuse_weekly_arima'])}")
+        print(f"  v5.2 Jun 2025-Jan 2026, reused from {BIWEEKLY_2025_SPEC_ID}: {len(p['reuse_agent'])}")
+        print(f"    {_fmt(p['reuse_agent'])}")
+    print(f"  Agent already run here: {len(p['done_agent'])};  to run now: {len(p['run_agent'])}")
     print(f"    {_fmt(p['run_agent'])}")
     print(f"  AutoARIMA already run here: {len(p['done_arima'])};  to run now: {len(p['run_arima'])}")
 
@@ -261,17 +284,13 @@ def check_arima_reproduces(spec: dict[str, Any], data_service: Any) -> None:
         raise SystemExit("Fresh AutoARIMA does not reproduce the cached Feb-Jun results; data differ. Stopping.")
 
 
-def run_missing(spec: dict[str, Any], p: dict[str, list[pd.Timestamp]]) -> None:
+def run_missing(spec: dict[str, Any], p: dict[str, list[pd.Timestamp]], variant: str) -> None:
     for var in ("OPENAI_BASE_URL", "OPENAI_API_KEY"):
         if not os.getenv(var):
             raise SystemExit(f"{var} is not set.")
 
     from aieng.forecasting.evaluation import cached_backtest  # noqa: PLC0415
     from aieng.forecasting.methods.numerical.darts_arima import DartsAutoARIMAPredictor  # noqa: PLC0415
-    from energy_oil_forecasting.cfm_agent_v_5_2 import (  # noqa: PLC0415
-        build_cfm_agent_config_arima_only,
-        build_cfm_agent_predictor_arima_only,
-    )
     from energy_oil_forecasting.data import build_wti_multivariate_service  # noqa: PLC0415
 
     RESULTS_DIR.mkdir(exist_ok=True)
@@ -289,8 +308,8 @@ def run_missing(spec: dict[str, Any], p: dict[str, list[pd.Timestamp]]) -> None:
         print(f"  AutoARIMA {i}/{len(p['run_arima'])} {origin.date()} done", flush=True)
 
     if p["run_agent"]:
-        agent = build_cfm_agent_predictor_arima_only(build_cfm_agent_config_arima_only())  # weekly lite settings
-        if agent.predictor_id != AGENT_ID:
+        agent = _build_agent(variant)
+        if agent.predictor_id != AGENT_IDS[variant]:
             raise SystemExit(f"Unexpected predictor_id {agent.predictor_id!r}")
         for i, origin in enumerate(p["run_agent"], 1):
             started = datetime.now()
@@ -299,32 +318,87 @@ def run_missing(spec: dict[str, Any], p: dict[str, list[pd.Timestamp]]) -> None:
             )
             took = (datetime.now() - started).total_seconds() / 60
             print(
-                f"  v5.2 {i}/{len(p['run_agent'])} {origin.date()} done in {took:.1f} min ({len(result.predictions)} forecasts)",
+                f"  {variant} {i}/{len(p['run_agent'])} {origin.date()} done in {took:.1f} min "
+                f"({len(result.predictions)} forecasts; {_gate_line(result.predictions)})",
                 flush=True,
             )
+
+
+def _build_agent(variant: str) -> Any:
+    """Build the agent with the weekly lite run's default settings."""
+    if variant == "v52":
+        from energy_oil_forecasting.cfm_agent_v_5_2 import (  # noqa: PLC0415
+            build_cfm_agent_config_arima_only,
+            build_cfm_agent_predictor_arima_only,
+        )
+
+        return build_cfm_agent_predictor_arima_only(build_cfm_agent_config_arima_only())
+    from energy_oil_forecasting.cfm_agent_v_5_2_dategated import (  # noqa: PLC0415
+        build_cfm_agent_config_arima_only_dategated,
+        build_cfm_agent_predictor_arima_only_dategated,
+    )
+
+    return build_cfm_agent_predictor_arima_only_dategated(build_cfm_agent_config_arima_only_dategated())
+
+
+def _gate_summary(metadata: dict[str, Any]) -> dict[str, Any]:
+    """Summarise one origin's research: topics accepted, and why the gate rejected pages."""
+    packet = metadata.get("active_research_packet") or {}
+    summaries = packet.get("verified_summaries", [])
+    gate = (metadata.get("research_execution_audit") or {}).get("date_gate") or {}
+    reasons: dict[str, int] = {}
+    for attempt in gate.get("attempts", []):
+        for page in attempt.get("pages", []):
+            if not page.get("accepted"):
+                reasons[page["decision"]] = reasons.get(page["decision"], 0) + 1
+    return {
+        "topics_accepted": sum(s.get("status") == "accepted" for s in summaries),
+        "topics": len(summaries),
+        "sources": len(packet.get("sources", [])),
+        "search_attempts": len(gate.get("attempts", [])),
+        "verifier_rejections": sum(a.get("outcome") == "verifier_rejected" for a in gate.get("attempts", [])),
+        **{f"pages_rejected_{k}": v for k, v in sorted(reasons.items())},
+    }
+
+
+def _gate_line(predictions: list[Any]) -> str:
+    if not predictions:
+        return "no forecasts"
+    g = _gate_summary(predictions[0].metadata)
+    return f"{g['topics_accepted']}/{g['topics']} news topics passed, {g['sources']} sources"
 
 
 # ── analysis ──────────────────────────────────────────────────────────────────
 
 
-def assemble(origins: list[pd.Timestamp]) -> pd.DataFrame:
-    """Pair v5.2 and AutoARIMA on identical (origin, forecast date) across all three caches."""
+def assemble(origins: list[pd.Timestamp], variant: str) -> pd.DataFrame:
+    """Pair the agent and AutoARIMA on identical (origin, forecast date) across the caches."""
+    agent_id = AGENT_IDS[variant]
     new = {o for o in origins if period_of(o) == "Jun 2025-Jan 2026"}
     weekly = {o for o in origins if period_of(o) == "Feb-Jun 2026"}
-    frames = {AGENT_ID: [], ARIMA_ID: []}
-    for pid in (AGENT_ID, ARIMA_ID):
-        raw = _load(STORE / WEEKLY_SPEC_ID / f"{pid}__{TASK_ID}.yaml")
-        frames[pid] += _rows(raw, weekly, WEEKLY_SPEC_ID)
-        for origin in sorted(new):
-            raw = _load(_new_path(origin, pid))
-            if raw:
-                frames[pid] += _rows(raw, {origin}, NEW_SPEC_ID)
-    biweekly = _load(STORE / BIWEEKLY_2025_SPEC_ID / f"{AGENT_ID}__{TASK_ID}.yaml")
-    if biweekly:
-        frames[AGENT_ID] += _rows(biweekly, new, BIWEEKLY_2025_SPEC_ID)
+    frames: dict[str, list[dict[str, Any]]] = {agent_id: [], ARIMA_ID: []}
+    frames[ARIMA_ID] += _rows(_load(STORE / WEEKLY_SPEC_ID / f"{ARIMA_ID}__{TASK_ID}.yaml"), weekly, WEEKLY_SPEC_ID)
+    for origin in sorted(new):
+        raw = _load(_new_path(origin, ARIMA_ID))
+        if raw:
+            frames[ARIMA_ID] += _rows(raw, {origin}, NEW_SPEC_ID)
+    if variant == "v52":
+        frames[agent_id] += _rows(_load(STORE / WEEKLY_SPEC_ID / f"{agent_id}__{TASK_ID}.yaml"), weekly, WEEKLY_SPEC_ID)
+        biweekly = _load(STORE / BIWEEKLY_2025_SPEC_ID / f"{agent_id}__{TASK_ID}.yaml")
+        if biweekly:
+            frames[agent_id] += _rows(biweekly, new, BIWEEKLY_2025_SPEC_ID)
+        fresh = [o for o in sorted(new) if not any(r["origin"] == o for r in frames[agent_id])]
+    else:
+        fresh = list(origins)
+    for origin in fresh:
+        raw = _load(_new_path(origin, agent_id))
+        if raw:
+            frames[agent_id] += _rows(raw, {origin}, NEW_SPEC_ID)
 
-    agent = pd.DataFrame(frames[AGENT_ID])
+    agent = pd.DataFrame(frames[agent_id])
     arima = pd.DataFrame(frames[ARIMA_ID])
+    if agent.empty:
+        raise SystemExit(f"No {variant} agent results on disk yet.")
     for name, df in (("v5.2", agent), ("AutoARIMA", arima)):
         dup = df.duplicated(["origin", "forecast_date"])
         if dup.any():
@@ -392,7 +466,7 @@ def per_origin_table(pairs: pd.DataFrame) -> pd.DataFrame:
 def report(summary: pd.DataFrame, per_origin: pd.DataFrame) -> None:
     pd.set_option("display.width", 200)
     show = summary.drop(columns="role").copy()
-    print("\nPaired diff = v5.2 ARIMA-only lite CRPS minus AutoARIMA CRPS (negative = v5.2 better).")
+    print("\nPaired diff = agent CRPS minus AutoARIMA CRPS (negative = agent better).")
     print(
         f"Primary result: {PRIMARY_HORIZON}-day. 10- and 21-day forecasts overlap week to week, so their SEs are too small.\n"
     )
@@ -405,18 +479,25 @@ def report(summary: pd.DataFrame, per_origin: pd.DataFrame) -> None:
     before = int((origins <= MODEL_KNOWLEDGE_CUTOFF).sum())
     print(f"Model knowledge cutoff ({MODEL}): {MODEL_KNOWLEDGE_CUTOFF_NOTE}")
     print(f"Origins on or before it: {before} of {len(origins)}")
-    print("\nv5.2 results by source and structured-output outcome:")
+    print("\nAgent results by source and structured-output outcome:")
     print(per_origin.groupby(["period", "v52_source", "v52_disposition"]).size().to_string())
 
 
 # ── source publication dates ─────────────────────────────────────────────────
 
 
-def _sources_by_origin(origins: list[pd.Timestamp]) -> dict[pd.Timestamp, list[dict[str, Any]]]:
+def _agent_raws(origins: list[pd.Timestamp], variant: str) -> list[dict[str, Any] | None]:
+    agent_id = AGENT_IDS[variant]
+    raws = [_load(_new_path(o, agent_id)) for o in origins]
+    if variant == "v52":
+        raws += [_load(STORE / WEEKLY_SPEC_ID / f"{agent_id}__{TASK_ID}.yaml")]
+        raws += [_load(STORE / BIWEEKLY_2025_SPEC_ID / f"{agent_id}__{TASK_ID}.yaml")]
+    return raws
+
+
+def _sources_by_origin(origins: list[pd.Timestamp], variant: str) -> dict[pd.Timestamp, list[dict[str, Any]]]:
     """Return the agent's research-packet sources per origin, from the caches the analysis uses."""
-    raws = [_load(STORE / WEEKLY_SPEC_ID / f"{AGENT_ID}__{TASK_ID}.yaml")]
-    raws += [_load(STORE / BIWEEKLY_2025_SPEC_ID / f"{AGENT_ID}__{TASK_ID}.yaml")]
-    raws += [_load(_new_path(o, AGENT_ID)) for o in origins]
+    raws = _agent_raws(origins, variant)
     wanted = set(origins)
     out: dict[pd.Timestamp, list[dict[str, Any]]] = {}
     for raw in raws:
@@ -428,14 +509,14 @@ def _sources_by_origin(origins: list[pd.Timestamp]) -> dict[pd.Timestamp, list[d
     return out
 
 
-def audit_dates(origins: list[pd.Timestamp]) -> None:
+def audit_dates(origins: list[pd.Timestamp], variant: str) -> None:
     from concurrent.futures import ThreadPoolExecutor  # noqa: PLC0415
 
     from energy_oil_forecasting.cfm_agent_v_5_2 import DEFAULT_SETTINGS  # noqa: PLC0415
     from energy_oil_forecasting.cfm_agent_v_5_2.schemas import ActiveSource  # noqa: PLC0415
     from energy_oil_forecasting.cfm_agent_v_5_2.source_validator import _inspect_source  # noqa: PLC0415
 
-    by_origin = _sources_by_origin(origins)
+    by_origin = _sources_by_origin(origins, variant)
     unique = {}
     for sources in by_origin.values():
         for src in sources:
@@ -496,9 +577,32 @@ def audit_dates(origins: list[pd.Timestamp]) -> None:
     print(f"Sources flagged as live pages (content can change after the origin): {int(df['live_page'].sum())}")
 
     RESULTS_DIR.mkdir(exist_ok=True)
-    path = RESULTS_DIR / "v52_weekly_extended__source_dates.csv"
+    path = RESULTS_DIR / f"v52_weekly_extended__{variant}__source_dates.csv"
     df.to_csv(path, index=False, date_format="%Y-%m-%d")
     print(f"\nWrote {path}")
+
+
+def gate_report(origins: list[pd.Timestamp], variant: str) -> None:
+    """Print, per origin, how many news topics passed the date gate and why pages were rejected."""
+    rows = []
+    for origin in origins:
+        raw = _load(_new_path(origin, AGENT_IDS[variant]))
+        if raw and raw.get("predictions"):
+            rows.append({"origin": origin.date(), **_gate_summary(raw["predictions"][0].get("metadata") or {})})
+    if not rows:
+        print(f"No {variant} runs on disk yet.")
+        return
+    df = pd.DataFrame(rows).fillna(0)
+    pd.set_option("display.width", 200)
+    print(df.to_string(index=False))
+    print(
+        f"\nTopics passed: {int(df['topics_accepted'].sum())}/{int(df['topics'].sum())}; "
+        f"origins with no news at all: {int((df['topics_accepted'] == 0).sum())}/{len(df)}"
+    )
+    RESULTS_DIR.mkdir(exist_ok=True)
+    path = RESULTS_DIR / f"v52_weekly_extended__{variant}__gate_report.csv"
+    df.to_csv(path, index=False)
+    print(f"Wrote {path}")
 
 
 def main() -> None:
@@ -506,6 +610,9 @@ def main() -> None:
     parser.add_argument("--plan", action="store_true", help="print the plan and stop")
     parser.add_argument("--analyze-only", action="store_true", help="skip running; analyse what is on disk")
     parser.add_argument("--audit-dates", action="store_true", help="check source publication dates and stop")
+    parser.add_argument("--gate-report", action="store_true", help="show how the date gate treated each origin")
+    parser.add_argument("--variant", choices=sorted(AGENT_IDS), default="dategated", help="agent to run/analyse")
+    parser.add_argument("--origins", help="comma-separated origin dates: run the agent only on these (pilot)")
     args = parser.parse_args()
 
     try:
@@ -517,19 +624,28 @@ def main() -> None:
 
     spec = load_spec()
     origins = all_origins(spec)
-    p = plan(origins)
-    print_plan(p)
+    p = plan(origins, args.variant)
+    if args.origins:
+        chosen = {pd.Timestamp(d.strip()) for d in args.origins.split(",")}
+        unknown = chosen - set(origins)
+        if unknown:
+            raise SystemExit(f"Not origins of the extended spec: {sorted(str(d.date()) for d in unknown)}")
+        p["run_agent"] = [o for o in p["run_agent"] if o in chosen]
+    print_plan(p, args.variant)
     if args.plan:
         return
     if args.audit_dates:
-        audit_dates(origins)
+        audit_dates(origins, args.variant)
+        return
+    if args.gate_report:
+        gate_report(origins, args.variant)
         return
 
     protected = {sid: _hash_dir(STORE / sid) for sid in PROTECTED_SPEC_IDS}
     if not args.analyze_only:
-        run_missing(spec, p)
+        run_missing(spec, p, args.variant)
 
-    pairs = assemble(origins)
+    pairs = assemble(origins, args.variant)
     summary = summarise(pairs)
     per_origin = per_origin_table(pairs)
     for sid, before in protected.items():
@@ -539,8 +655,8 @@ def main() -> None:
 
     report(summary, per_origin)
     RESULTS_DIR.mkdir(exist_ok=True)
-    summary_path = RESULTS_DIR / "v52_weekly_extended__summary.csv"
-    origin_path = RESULTS_DIR / "v52_weekly_extended__by_origin.csv"
+    summary_path = RESULTS_DIR / f"v52_weekly_extended__{args.variant}__summary.csv"
+    origin_path = RESULTS_DIR / f"v52_weekly_extended__{args.variant}__by_origin.csv"
     summary.to_csv(summary_path, index=False, float_format="%.4f")
     per_origin.to_csv(origin_path, index=False, float_format="%.4f", date_format="%Y-%m-%d")
     print(f"\nWrote {summary_path}\nWrote {origin_path}")
