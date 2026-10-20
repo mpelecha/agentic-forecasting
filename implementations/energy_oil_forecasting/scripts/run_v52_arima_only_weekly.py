@@ -75,6 +75,7 @@ ARIMA_ID = "darts_autoarima"
 TASK_ID = "wti_oil_price_forecast"
 HORIZONS = (5, 10, 21)
 FLAT_EPS = 0.05  # moves under 5 cents are "no call", as on cfm_coach's corpus page
+FALLBACK_LABEL = "No answer (fallback)"
 EXPECTED_ORIGINS = pd.date_range("2026-02-02", "2026-06-01", freq="W-MON")
 
 
@@ -215,6 +216,8 @@ def direction_rows(spec_id: str, model_key: str, actual: dict[pd.Timestamp, floa
     rows = []
     for pred in _load_result(spec_id, agent_id(model_key))["predictions"]:
         meta = pred["metadata"]
+        control = meta.get("structured_output_control_audit") or {}
+        fallback = bool(control.get("neutral_fallback_applied"))
         horizon = meta["policy_decision"]["horizon"]
         last = meta["market_diagnostics"]["latest_value"]
         realised = actual[pd.Timestamp(pred["forecast_date"]).normalize()]
@@ -229,7 +232,15 @@ def direction_rows(spec_id: str, model_key: str, actual: dict[pd.Timestamp, floa
                 "origin": pd.Timestamp(pred["as_of"]).normalize(),
                 "horizon": horizon,
                 "llm_center_action": calls.get(horizon, "no_change"),
-                "call": _call_label(calls.get(horizon, "no_change")),
+                # A neutral fallback is not the LLM calling "neutral": its answer failed
+                # validation twice and Python substituted no_change for every horizon.
+                "call": FALLBACK_LABEL if fallback else _call_label(calls.get(horizon, "no_change")),
+                "neutral_fallback": fallback,
+                "disposition": control.get("final_disposition", "unknown"),
+                "validation_errors": "; ".join(
+                    str(e)
+                    for e in (control.get("retry_validation_errors") or control.get("initial_validation_errors") or [])
+                )[:500],
                 "last_close": last,
                 "unadjusted_p50": base,
                 "final_p50": final,
@@ -252,8 +263,11 @@ def direction_summary(df: pd.DataFrame, label: str) -> pd.DataFrame:
     for h in HORIZONS:
         s = df[df["horizon"] == h]
         grid = pd.crosstab(s["call"], s["wti_move"].map({1: "Rose", -1: "Fell", 0: "Flat"}))
-        grid = grid.reindex(index=["Called up", "Neutral", "Called down"]).fillna(0).astype(int)
-        called = s[(s["call"] != "Neutral") & (s["wti_move"] != 0)]
+        rows_order = ["Called up", "Neutral", "Called down"]
+        if (s["call"] == FALLBACK_LABEL).any():
+            rows_order.append(FALLBACK_LABEL)
+        grid = grid.reindex(index=rows_order).fillna(0).astype(int)
+        called = s[s["call"].isin(["Called up", "Called down"]) & (s["wti_move"] != 0)]
         right = ((called["call"] == "Called up") & (called["wti_move"] == 1)) | (
             (called["call"] == "Called down") & (called["wti_move"] == -1)
         )
@@ -269,6 +283,7 @@ def direction_summary(df: pd.DataFrame, label: str) -> pd.DataFrame:
             "calls_up": int((s["call"] == "Called up").sum()),
             "calls_neutral": int((s["call"] == "Neutral").sum()),
             "calls_down": int((s["call"] == "Called down").sum()),
+            "neutral_fallbacks": int(s["neutral_fallback"].sum()),
             "calls_right": int(right.sum()),
             "calls_scored": len(called),
             "calls_right_pct": right.mean() * 100 if len(called) else np.nan,
@@ -284,6 +299,10 @@ def direction_summary(df: pd.DataFrame, label: str) -> pd.DataFrame:
             f"WTI {row['outcomes_up']} up / {row['outcomes_down']} down) ---"
         )
         print(grid.to_string())
+        if row["neutral_fallbacks"]:
+            print(
+                f"WARNING: {row['neutral_fallbacks']}/{row['forecasts']} forecasts are neutral fallbacks, not LLM calls"
+            )
         print(
             f"LLM calls right {row['calls_right']}/{row['calls_scored']} = {row['calls_right_pct']:.0f}%"
             f"  | base ARIMA {row['base_right_pct']:.0f}%  | always-up {row['always_up_right_pct']:.0f}%"
@@ -373,10 +392,17 @@ def main() -> None:
     prices = build_wti_multivariate_service().get_series(WTI_SERIES_ID, as_of=datetime.now())
     actual = {pd.Timestamp(t).normalize(): float(v) for t, v in zip(prices["timestamp"], prices["value"], strict=True)}
     directions = direction_rows(args.spec_id, args.model, actual)
+    per_run = directions.drop_duplicates("origin")
+    print(f"\nStructured-output outcome per origin ({args.model}):")
+    print(per_run["disposition"].value_counts().to_string())
+    errors = per_run.loc[per_run["neutral_fallback"], "validation_errors"]
+    if len(errors):
+        print(f"{len(errors)}/{len(per_run)} origins fell back to neutral. Most common validation errors:")
+        print(errors.str.slice(0, 200).value_counts().head(3).to_string())
     dir_tables = [direction_summary(directions, args.model)]
     # Pool lite and advanced (as the deck's direction slide does) once both exist.
     if all((STORE / args.spec_id / f"{agent_id(k)}__{TASK_ID}.yaml").exists() for k in MODELS):
-        pooled = pd.concat([direction_rows(args.spec_id, k, actual) for k in MODELS])
+        pooled = pd.concat([direction_rows(args.spec_id, k, actual) for k in MODELS], ignore_index=True)
         dir_tables.append(direction_summary(pooled, "lite + advanced pooled"))
 
     if _hash_dir(protected) != before:
