@@ -275,7 +275,9 @@ def build_wti_scenario_schema_anchored_predictor(
     -------
     ScenarioSchemaAnchoredPredictor
     """
-    return ScenarioSchemaAnchoredPredictor(config, arima_num_samples=arima_num_samples)
+    return ScenarioSchemaAnchoredPredictor(
+        config, arima_num_samples=arima_num_samples, anchor_log_returns=anchor_log_returns
+    )
 
 
 __all__ = ["ScenarioSchemaAnchoredPredictor", "build_wti_scenario_schema_anchored_predictor"]
