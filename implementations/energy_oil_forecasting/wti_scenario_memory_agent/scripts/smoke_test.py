@@ -76,7 +76,7 @@ def main() -> None:
     # See ScenarioSchemaAnchoredEnhancedPredictor's memory docstring: memory
     # is scoped per predictor_id, exactly for this reason.
     config = config.model_copy(update={"name": config.name + "_smoketest"})
-    predictor = build_wti_scenario_schema_anchored_enhanced_predictor(config, anchor_log_returns=False)
+    predictor = build_wti_scenario_schema_anchored_enhanced_predictor(config, anchor_log_returns=True)
 
     origins = spec.origins() if hasattr(spec, "origins") else None
     print(f"Predictor:  {predictor.predictor_id}")

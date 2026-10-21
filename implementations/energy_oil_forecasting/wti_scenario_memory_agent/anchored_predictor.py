@@ -160,7 +160,7 @@ class ScenarioSchemaAnchoredPredictor(Predictor):
     """
 
     def __init__(
-        self, config: AgentConfig, *, arima_num_samples: int = 1_000, anchor_log_returns: bool = False
+        self, config: AgentConfig, *, arima_num_samples: int = 1_000, anchor_log_returns: bool = True
     ):
         self.arima_num_samples = arima_num_samples
         self.anchor_log_returns = anchor_log_returns

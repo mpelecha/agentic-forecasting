@@ -193,7 +193,7 @@ _WTI_ANALYST_INSTRUCTION_SCENARIO_SCHEMA_ANCHORED_ENHANCED = (
 def build_wti_news_scenario_schema_anchored_enhanced_config(
     model: str = LITE_MODEL,
     *,
-    log_returns: bool = False,
+    log_returns: bool = True,
     search_model: str = LITE_MODEL,
     max_output_tokens: int = 16_384,
     verifier_model: str = ADVANCED_MODEL,
@@ -208,7 +208,7 @@ def build_wti_news_scenario_schema_anchored_enhanced_config(
     ----------
     model : str
         Model for the analyst agent.
-    log_returns : bool, default=False
+    log_returns : bool, default=True
         Passed through to the predictor's ARIMA anchor — see
         :class:`~energy_oil_forecasting.wti_scenario_memory_agent.anchored_predictor.ScenarioSchemaAnchoredPredictor`.
         Must match what the predictor is constructed with, or the cache name

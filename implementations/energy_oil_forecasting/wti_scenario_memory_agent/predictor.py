@@ -71,7 +71,7 @@ class ScenarioSchemaAnchoredEnhancedPredictor(ScenarioSchemaAnchoredPredictor):
         config: AgentConfig,
         *,
         arima_num_samples: int = 1_000,
-        anchor_log_returns: bool = False,
+        anchor_log_returns: bool = True,
         memory_limit: int = 2,
     ) -> None:
         self.arima_num_samples = arima_num_samples
@@ -134,7 +134,7 @@ def build_wti_scenario_schema_anchored_enhanced_predictor(
     config: AgentConfig,
     *,
     arima_num_samples: int = 1_000,
-    anchor_log_returns: bool = False,
+    anchor_log_returns: bool = True,
     memory_limit: int = 2,
 ) -> ScenarioSchemaAnchoredEnhancedPredictor:
     """Wrap an :class:`AgentConfig` in a :class:`ScenarioSchemaAnchoredEnhancedPredictor`.
@@ -145,7 +145,7 @@ def build_wti_scenario_schema_anchored_enhanced_predictor(
         Config from :func:`~energy_oil_forecasting.wti_scenario_memory_agent.agent.build_wti_news_scenario_schema_anchored_enhanced_config`.
     arima_num_samples : int, default=1_000
         Monte Carlo sample count for the AutoARIMA anchor.
-    anchor_log_returns : bool, default=False
+    anchor_log_returns : bool, default=True
         Fit the anchor on log returns rather than the price level. Must
         match the ``log_returns`` passed to the config builder, or the
         cache name will not describe what actually ran.

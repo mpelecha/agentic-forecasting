@@ -23,13 +23,13 @@ from energy_oil_forecasting.wti_scenario_memory_agent.predictor import (
 
 
 def build_agent(
-    model: str = LITE_MODEL, *, log_returns: bool = False, memory_limit: int = 2
+    model: str = LITE_MODEL, *, log_returns: bool = True, memory_limit: int = 2
 ) -> ScenarioSchemaAnchoredEnhancedPredictor:
     """Build the agent with config and predictor guaranteed to agree on ``log_returns``.
 
-    Defaults reproduce the variant scored in the NB04b backtest/eval
-    (lite model, level-price ARIMA anchor), so its predictor_id — and
-    therefore its prediction cache and memory file — match those results.
+    Defaults to the lite model and the log-return ARIMA anchor — the same
+    variant NB04b's "News Agent SS Anchored + Memory" entry runs, so its
+    predictor_id, prediction cache, and memory file all line up.
     """
     config = build_wti_news_scenario_schema_anchored_enhanced_config(model=model, log_returns=log_returns)
     return build_wti_scenario_schema_anchored_enhanced_predictor(

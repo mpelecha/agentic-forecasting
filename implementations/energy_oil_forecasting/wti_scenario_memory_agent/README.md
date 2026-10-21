@@ -36,15 +36,16 @@ Nothing else needs to change.
 ```python
 from energy_oil_forecasting.wti_scenario_memory_agent import build_agent
 
-predictor = build_agent()          # lite model, level-price ARIMA anchor
+predictor = build_agent()          # lite model, log-return ARIMA anchor
 predictions = predictor.predict(task, context)
 ```
 
-`build_agent()` defaults reproduce the variant scored in the NB04b
-quarterly backtest/eval, so its `predictor_id`
-(`agent_predictor_wti_analyst_news_scenario_schema_anchored_enhanced_gemini-3.1-flash-lite-preview_continuous`)
-matches those results. Pass `log_returns=True` for the log-return anchor
-variant; this changes `predictor_id`, so it gets its own cache and memory.
+`build_agent()` uses the log-return ARIMA anchor, the same variant NB04b's
+"News Agent SS Anchored + Memory" entry and the daily script run, so they share
+one `predictor_id`
+(`agent_predictor_wti_analyst_news_scenario_schema_anchored_enhanced_logret_gemini-3.1-flash-lite-preview_continuous`)
+and one memory file. Pass `log_returns=False` for the price-level anchor; this
+changes `predictor_id`, so it gets its own cache and memory.
 
 To add it to a backtest registry:
 
@@ -89,10 +90,14 @@ scenario name).
   continuity.
 - **Memory is scoped by `predictor_id`.** Changing model, `log_returns`, or
   the config name starts a fresh memory file.
-- **Results so far.** On the 10-year quarterly grid this agent scored mean
-  CRPS 4.13 (backtest, 43 origins) and 5.10 (eval, 8 origins). Its eval score
-  is dominated by the 2026-04-01 origin (Strait of Hormuz closure), where the
-  63-day forecast missed badly.
+- **Results so far are from the price-level anchor.** On the 10-year
+  quarterly grid the level-anchored variant scored mean CRPS 4.13 (backtest,
+  43 origins) and 5.10 (eval, 8 origins), with the eval score dominated by the
+  2026-04-01 origin (Strait of Hormuz closure), where the 63-day forecast
+  missed badly. The log-return default has not been scored yet.
+- **Log returns may under-cover at short horizons.** A level-vs-log-return
+  re-test of the anchor found no CRPS gain (+0.018, inside noise) and 80%
+  coverage falling to ~75–78% at h=5 and h=10.
 
 ## Files
 

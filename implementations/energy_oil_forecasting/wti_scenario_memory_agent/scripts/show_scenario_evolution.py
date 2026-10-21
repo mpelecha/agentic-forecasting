@@ -10,7 +10,7 @@ Usage::
 
     uv run python wti_scenario_memory_agent/scripts/show_scenario_evolution.py
     uv run python wti_scenario_memory_agent/scripts/show_scenario_evolution.py --spec-id energy_oil_eval_10yr_quarterly
-    uv run python wti_scenario_memory_agent/scripts/show_scenario_evolution.py --predictor-id agent_predictor_wti_analyst_news_scenario_schema_anchored_enhanced_logret_gemini-3.1-flash-lite-preview_continuous
+    uv run python wti_scenario_memory_agent/scripts/show_scenario_evolution.py --predictor-id agent_predictor_wti_analyst_news_scenario_schema_anchored_enhanced_gemini-3.1-flash-lite-preview_continuous  # earlier level-anchor run
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from aieng.forecasting.evaluation.artifacts import load_backtest_result
 
 DEFAULT_SPEC_ID = "energy_oil_backtest_10yr_quarterly"
 DEFAULT_PREDICTOR_ID = (
-    "agent_predictor_wti_analyst_news_scenario_schema_anchored_enhanced_gemini-3.1-flash-lite-preview_continuous"
+    "agent_predictor_wti_analyst_news_scenario_schema_anchored_enhanced_logret_gemini-3.1-flash-lite-preview_continuous"
 )
 DEFAULT_TASK_ID = "wti_oil_price_forecast"
 
